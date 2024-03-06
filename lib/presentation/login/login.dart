@@ -9,6 +9,7 @@ import 'package:boilerplate/core/widgets/textfield_widget.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
+import 'package:boilerplate/presentation/sign_up/sign_up.dart';
 import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
@@ -69,7 +70,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 )
-              : Center(child: _buildRightSide()),
+              : Align(
+                  alignment: Alignment.topLeft,
+                  child: _buildRightSide(),
+                ),
           Observer(
             builder: (context) {
               return _userStore.success
@@ -106,14 +110,51 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            AppIconWidget(image: 'assets/icons/ic_appicon.png'),
+            SizedBox(height: 24.0),
+            Text(
+              'Login with StudentHub',
+              style: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            // AppIconWidget(image: 'assets/icons/ic_appicon.png'),
             SizedBox(height: 24.0),
             _buildUserIdField(),
             _buildPasswordField(),
             _buildForgotPasswordButton(),
-            _buildSignInButton()
+            SizedBox(height: 24.0),
+            _buildSignInButton(),
+            SizedBox(height: 274.0),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Center(
+                child: Column(
+                  mainAxisSize:
+                      MainAxisSize.min, // Adjust this based on your design
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Don't have a StudentHub Account?",
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                    SizedBox(height: 8.0),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SignUpScreen()),
+                        );
+                      },
+                      child: Text('Sign up'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
