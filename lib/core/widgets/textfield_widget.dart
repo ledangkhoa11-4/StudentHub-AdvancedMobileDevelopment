@@ -29,15 +29,26 @@ class TextFieldWidget extends StatelessWidget {
         autofocus: autoFocus,
         textInputAction: inputAction,
         obscureText: this.isObscure,
-        maxLength: 25,
         keyboardType: this.inputType,
-        style: Theme.of(context).textTheme.bodyText1,
+        maxLines: this.inputType == TextInputType.multiline ? 5 : 1,
+        minLines: 1,
+        style: Theme.of(context).textTheme.bodyLarge,
         decoration: InputDecoration(
             hintText: this.hint,
-            hintStyle:
-                Theme.of(context).textTheme.bodyText1!.copyWith(color: hintColor),
-            errorText: errorText,
-            counterText: '',
+            hintStyle: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .copyWith(color: hintColor),
+            errorStyle: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .copyWith(color: Colors.red, fontWeight: FontWeight.bold),
+            counterText: null,
+            errorText: errorText != null && !errorText!.isEmpty ? errorText : null,
+            enabledBorder: OutlineInputBorder(borderSide: BorderSide()),
+            focusedBorder: OutlineInputBorder(borderSide: BorderSide()),
+            errorBorder:   OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+            border:   OutlineInputBorder( borderSide: BorderSide(width: 1)),
             icon: this.isIcon ? Icon(this.icon, color: iconColor) : null),
       ),
     );
@@ -61,5 +72,4 @@ class TextFieldWidget extends StatelessWidget {
     this.autoFocus = false,
     this.inputAction,
   }) : super(key: key);
-
 }

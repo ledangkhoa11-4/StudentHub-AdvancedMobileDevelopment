@@ -61,6 +61,8 @@ dependencies:
   # W
   # X
   xxtea: ^2.1.0
+  bootstrap_icons: ^1.11.3
+  text_area: ^0.0.3
   # Y
   # Z
 
@@ -112,12 +114,12 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-  - family: ProductSans
+  - family: Montserrat
     fonts:
-    - asset: assets/fonts/Product-Sans-Regular.ttf
-    - asset: assets/fonts/Product-Sans-Italic.ttf
+    - asset: assets/fonts/Montserrat-Regular.ttf
+    - asset: assets/fonts/Montserrat-Italic.ttf
       style: italic
-    - asset: assets/fonts/Product-Sans-Bold.ttf
+    - asset: assets/fonts/Montserrat-Bold.ttf
       weight: 700
 
   # For details regarding fonts from package dependencies,
