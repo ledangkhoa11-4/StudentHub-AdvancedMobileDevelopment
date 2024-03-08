@@ -61,6 +61,7 @@ dependencies:
   # W
   # X
   xxtea: ^2.1.0
+  font_awesome_flutter: ^10.7.0
   # Y
   # Z
 
