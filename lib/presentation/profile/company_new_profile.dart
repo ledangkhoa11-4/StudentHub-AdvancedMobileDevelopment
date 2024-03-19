@@ -12,9 +12,7 @@ class CompanyNewProfile extends StatefulWidget {
 class _CompanyNewProfileState extends State<CompanyNewProfile> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
-      appBar: UserAppBar.buildAppBar(context),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(

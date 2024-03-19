@@ -31,7 +31,7 @@ class TextFieldWidget extends StatelessWidget {
         obscureText: this.isObscure,
         keyboardType: this.inputType,
         maxLines: this.inputType == TextInputType.multiline ? 5 : 1,
-        minLines: 1,
+        minLines: this.inputType == TextInputType.multiline ? 3 : 1,
         style: Theme.of(context).textTheme.bodyLarge,
         decoration: InputDecoration(
             hintText: this.hint,
