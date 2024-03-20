@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'project_item.dart';
+import 'project_detail.dart';
 
 class ProjectList extends StatefulWidget {
   ProjectList({Key? key}) : super(key: key);
@@ -94,6 +95,18 @@ class _ProjectListState extends State<ProjectList> {
     });
   }
 
+  // void _viewProjectDetail(String title, String description) {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => ProjectDetail(
+  //         title: title,
+  //         description: description,
+  //       ),
+  //     ),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,6 +163,12 @@ class _ProjectListState extends State<ProjectList> {
                       (project['descriptions'] as List).cast<String>(),
                   proposal: project['proposal'] as String,
                   isLiked: project['isLiked'] as bool,
+                  // Pass a function to handle the like status change
+                  onLikeChanged: (isLiked) {
+                    setState(() {
+                      project['isLiked'] = isLiked;
+                    });
+                  },
                 );
               },
             ),
