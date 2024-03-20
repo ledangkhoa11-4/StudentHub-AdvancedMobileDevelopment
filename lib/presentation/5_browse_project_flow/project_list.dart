@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'project_item.dart';
-import 'project_detail.dart';
 
 class ProjectList extends StatefulWidget {
   ProjectList({Key? key}) : super(key: key);
@@ -63,6 +62,8 @@ class _ProjectListState extends State<ProjectList> {
 
   List<Map<String, dynamic>> _filteredProjects = [];
   bool _showLikedOnly = false;
+  String _searchQuery = '';
+  bool _isSearching = false;
 
   @override
   void initState() {
@@ -80,11 +81,15 @@ class _ProjectListState extends State<ProjectList> {
   void _filterProjects({String query = ''}) {
     final lowerCaseQuery = query.toLowerCase();
     setState(() {
+      if (query.isNotEmpty) {
+        _isSearching = true;
+      } else {
+        _isSearching = false;
+      }
       if (_showLikedOnly) {
         _filteredProjects = _allProjects.where((project) {
           final titleLower = project['title'].toLowerCase();
-          final matchesQuery = titleLower.contains(lowerCaseQuery);
-          return project['isLiked'] && matchesQuery;
+          return project['isLiked'] && titleLower.contains(lowerCaseQuery);
         }).toList();
       } else {
         _filteredProjects = _allProjects.where((project) {
@@ -95,24 +100,12 @@ class _ProjectListState extends State<ProjectList> {
     });
   }
 
-  // void _viewProjectDetail(String title, String description) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => ProjectDetail(
-  //         title: title,
-  //         description: description,
-  //       ),
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('Project List'),
+        title: Text(_isSearching ? 'Search Result' : 'Project List'),
       ),
       body: Column(
         children: [
@@ -128,7 +121,12 @@ class _ProjectListState extends State<ProjectList> {
                       borderRadius: BorderRadius.circular(18),
                     ),
                     child: TextField(
-                      onChanged: (value) => _filterProjects(query: value),
+                      onChanged: (value) {
+                        setState(() {
+                          _searchQuery = value;
+                          _filterProjects(query: value);
+                        });
+                      },
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search, color: Colors.black),
                         hintText: 'Search...',
@@ -142,9 +140,14 @@ class _ProjectListState extends State<ProjectList> {
                 ),
                 IconButton(
                   icon: Icon(
-                      _showLikedOnly ? Icons.favorite : Icons.favorite_border),
+                    _isSearching
+                        ? Icons.filter_alt_outlined
+                        : _showLikedOnly
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                  ),
                   onPressed: _toggleShowLiked,
-                  color: Colors.red,
+                  color: _isSearching ? Colors.black : Colors.red,
                 ),
               ],
             ),
