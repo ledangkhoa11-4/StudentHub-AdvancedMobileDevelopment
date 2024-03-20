@@ -1,3 +1,4 @@
+import 'package:boilerplate/presentation/5_browse_project_flow/filter_table.dart';
 import 'package:flutter/material.dart';
 import 'project_item.dart';
 
@@ -100,6 +101,19 @@ class _ProjectListState extends State<ProjectList> {
     });
   }
 
+  void _showFilterDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return FilterTable(
+          onFilter: (projectLength, studentsNeeded, proposalsLessThan) {
+            // Apply filter logic here
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,7 +160,13 @@ class _ProjectListState extends State<ProjectList> {
                             ? Icons.favorite
                             : Icons.favorite_border,
                   ),
-                  onPressed: _toggleShowLiked,
+                  onPressed: () {
+                    if (_isSearching) {
+                      _showFilterDialog(context);
+                    } else {
+                      _toggleShowLiked();
+                    }
+                  },
                   color: _isSearching ? Colors.black : Colors.red,
                 ),
               ],
