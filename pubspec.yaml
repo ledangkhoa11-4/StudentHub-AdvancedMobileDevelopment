@@ -63,6 +63,10 @@ dependencies:
   xxtea: ^2.1.0
   bootstrap_icons: ^1.11.3
   text_area: ^0.0.3
+  dropdown_button2: ^2.3.9
+  multi_dropdown: ^2.1.4
+  flutter_form_builder: ^9.2.1
+  form_builder_validators: ^9.1.0
   # Y
   # Z
 

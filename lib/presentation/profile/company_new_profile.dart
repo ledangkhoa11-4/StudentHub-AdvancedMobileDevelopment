@@ -40,7 +40,8 @@ class _CompanyNewProfileState extends State<CompanyNewProfile> {
                           .textTheme
                           .displaySmall
                           ?.copyWith(fontSize: 14))),
-              CompanyProfileForm()
+              CompanyProfileForm(),
+              SizedBox(height: 30,)
             ],
           ),
         ),
