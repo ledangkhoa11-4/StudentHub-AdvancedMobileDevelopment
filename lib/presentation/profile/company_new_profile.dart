@@ -1,8 +1,5 @@
-import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/profile/company_profile_form.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CompanyNewProfile extends StatefulWidget {
   @override

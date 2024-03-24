@@ -1,21 +1,20 @@
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
-import 'package:boilerplate/presentation/profile/education.dart';
-import 'package:boilerplate/presentation/profile/language.dart';
-import 'package:boilerplate/presentation/profile/skillset.dart';
+import 'package:boilerplate/presentation/app_bar/app_bar.dart';
+import 'package:boilerplate/presentation/profile/project.dart';
 import 'package:boilerplate/presentation/profile/student_profile_stepper.dart';
-import 'package:boilerplate/presentation/profile/tech_stack.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 
-class StudentNewProfile extends StatefulWidget {
+class StudentNewProfileStep2 extends StatefulWidget {
   @override
-  State<StudentNewProfile> createState() => _StudentNewProfileState();
+  State<StudentNewProfileStep2> createState() => _StudentNewProfileStep2State();
 }
 
-class _StudentNewProfileState extends State<StudentNewProfile> {
+class _StudentNewProfileStep2State extends State<StudentNewProfileStep2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: UserAppBar.buildAppBar(context),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
@@ -25,10 +24,10 @@ class _StudentNewProfileState extends State<StudentNewProfile> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              StudentFormStepper(activeStep: 0),
+              StudentFormStepper(activeStep: 1),
               Center(
                   child: Text(
-                "Welcome to StudentHub",
+                "Experiences",
                 style: Theme.of(context)
                     .textTheme
                     .labelLarge
@@ -37,23 +36,13 @@ class _StudentNewProfileState extends State<StudentNewProfile> {
               SizedBox(height: 10),
               Center(
                   child: Text(
-                      "Tell us about your self and you will be on your way connect with real-world project",
+                      "Tell us about your self and you will be on your \nway connect with real-world project",
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
                           .displaySmall
                           ?.copyWith(fontSize: 14))),
-              SizedBox(height: 20),
-              TechStackWiget(),
-              SizedBox(
-                height: 20,
-              ),
-              SkillsetWidget(),
-              SizedBox(
-                height: 20,
-              ),
-              LanguageWidget(),
-              EducationWidget(),
+              ProjectWidget(),
               SizedBox(
                 height: 20,
               ),
@@ -62,8 +51,7 @@ class _StudentNewProfileState extends State<StudentNewProfile> {
                 buttonColor: Theme.of(context).colorScheme.primary,
                 textColor: Colors.white,
                 onPressed: () {
-                  Navigator.of(context).pushNamed(Routes.studentProfileExperience);
-
+                  Navigator.of(context).pushNamed(Routes.studentProfileCV);
                 },
               ),
               SizedBox(

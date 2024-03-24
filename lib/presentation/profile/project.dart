@@ -4,12 +4,12 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 
-class EducationWidget extends StatefulWidget {
+class ProjectWidget extends StatefulWidget {
   @override
-  State<EducationWidget> createState() => _EducationWidgetState();
+  State<ProjectWidget> createState() => _ProjectWidgetState();
 }
 
-class _EducationWidgetState extends State<EducationWidget> {
+class _ProjectWidgetState extends State<ProjectWidget> {
   final _formKey = GlobalKey<FormBuilderState>();
   final List<Widget> fields = [];
   String savedValue = '';
@@ -32,7 +32,7 @@ class _EducationWidgetState extends State<EducationWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Education:",
+                "Projects:",
                 style: Theme.of(context).textTheme.labelLarge,
               ),
               IconButton.outlined(
@@ -64,49 +64,6 @@ class _EducationWidgetState extends State<EducationWidget> {
               children: [
                 SizedBox(
                   height: 10,
-                ),
-                Container(
-                  padding:
-                      const EdgeInsets.only(left: 16, right: 16, bottom: 20),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.grey)),
-                  child: Column(
-                    children: [
-                      FormBuilderTextField(
-                        name: 'schoolname',
-                        validator: FormBuilderValidators.required(),
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.zero,
-                            label: Text('School name'),
-                            errorStyle: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
-                                .copyWith(
-                                    color: Theme.of(context).colorScheme.error,
-                                    fontSize: 10),
-                            floatingLabelAlignment:
-                                FloatingLabelAlignment.center,
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.grey, strokeAlign: 0))),
-                      ),
-                      CustomDateRangePicker(
-                        name: 'schoolYear',
-                        label: "School Year",
-                        onSubmit: ({required range}) {
-                          if (range != null &&
-                              range.startDate != null &&
-                              range.endDate != null) {
-                            _formKey.currentState!.patchValue({
-                              'schoolYear':
-                                  '${formatter.format(range!.startDate!)} - ${formatter.format(range!.endDate!)}'
-                            });
-                          }
-                        },
-                      )
-                    ],
-                  ),
                 ),
                 ...fields,
               ],
@@ -150,7 +107,7 @@ class NewTextField extends StatelessWidget {
                     validator: FormBuilderValidators.required(),
                     decoration: InputDecoration(
                         contentPadding: EdgeInsets.zero,
-                        label: Text('School name'),
+                        label: Text('Project name'),
                         errorStyle: Theme.of(context)
                             .textTheme
                             .bodySmall!
@@ -163,7 +120,7 @@ class NewTextField extends StatelessWidget {
                                 color: Colors.grey, strokeAlign: 0))),
                   ),
                   CustomDateRangePicker(
-                    label: "School year",
+                    label: "Date",
                     name: schoolyear,
                     onSubmit: ({required range}) {
                       if (range != null &&
@@ -175,7 +132,32 @@ class NewTextField extends StatelessWidget {
                         });
                       }
                     },
-                  )
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  FormBuilderTextField(
+                    name: schoolname,
+                    validator: FormBuilderValidators.required(),
+                    maxLines: 4,
+                    minLines: 1,
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(10),
+                        label: Text('Description'),
+                        errorStyle: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(
+                                color: Theme.of(context).colorScheme.error,
+                                fontSize: 10),
+                        floatingLabelAlignment: FloatingLabelAlignment.center,
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.grey, strokeAlign: 0)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.grey, strokeAlign: 0))),
+                  ),
                 ],
               ),
             ),
