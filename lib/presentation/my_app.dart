@@ -1,5 +1,6 @@
 import 'package:boilerplate/constants/app_theme.dart';
 import 'package:boilerplate/constants/strings.dart';
+import 'package:boilerplate/presentation/Project_dashboard_student/Project_student/Project_student.dart';
 import 'package:boilerplate/presentation/home/store/language/language_store.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/login/login.dart';
@@ -10,8 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:boilerplate/presentation/profile/swicth_account.dart';
-
-
+//import 'package:boilerplate/presentation/Project_dashboard_company/project_dashboard_company.dart';
+//import 'package:boilerplate/presentation/Project_dashboard_company/dashboard_company/proposal_company.dart';
+import 'package:boilerplate/presentation/Project_dashboard_student/project_dashboard_student.dart';
+import 'package:boilerplate/presentation/Project_dashboard_student/Project_student/proposal_student.dart';
+import 'package:boilerplate/presentation/Project_dashboard_student/Project_student/Submit_Proposal_student.dart';
 import '../di/service_locator.dart';
 
 class MyApp extends StatelessWidget {
@@ -48,7 +52,7 @@ class MyApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           //home: _userStore.isLoggedIn ? LoginScreen() : HomeScreen(),
-          home: Switchaccount(),
+          home: SubmitProposal(),
         );
       },
     );
