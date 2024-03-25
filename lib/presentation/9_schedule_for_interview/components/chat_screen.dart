@@ -1,3 +1,4 @@
+import 'package:boilerplate/presentation/9_schedule_for_interview/components/shedule_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'chat_message_obj.dart';
 import 'models.dart';
@@ -42,30 +43,30 @@ class ChatScreenState extends State<ChatScreen> {
 
   void _loadSampleData() {
     List<ChatMessage> sampleData = [
-      ChatMessage(
-        userName: 'User1',
-        timeSent: '10:00 AM',
-        dateSent: '2024-03-21',
-        content: 'Hello there!',
-      ),
-      ChatMessage(
-        userName: 'User 2',
-        timeSent: '10:05 AM',
-        dateSent: '2024-03-21',
-        content: 'Hi! How are you?',
-      ),
-      ChatMessage(
-        userName: 'User1',
-        timeSent: '10:10 AM',
-        dateSent: '2024-03-22',
-        content: 'I\'m good, thanks!',
-      ),
-      ChatMessage(
-        userName: 'User2',
-        timeSent: '10:10 AM',
-        dateSent: '2024-03-22',
-        content: 'Oke!',
-      ),
+      // ChatMessage(
+      //   userName: 'User1',
+      //   timeSent: '10:00 AM',
+      //   dateSent: '2024-03-21',
+      //   content: 'Hello there!',
+      // ),
+      // ChatMessage(
+      //   userName: 'User 2',
+      //   timeSent: '10:05 AM',
+      //   dateSent: '2024-03-21',
+      //   content: 'Hi! How are you?',
+      // ),
+      // ChatMessage(
+      //   userName: 'User1',
+      //   timeSent: '10:10 AM',
+      //   dateSent: '2024-03-22',
+      //   content: 'I\'m good, thanks!',
+      // ),
+      // ChatMessage(
+      //   userName: 'User2',
+      //   timeSent: '10:10 AM',
+      //   dateSent: '2024-03-22',
+      //   content: 'Oke!',
+      // ),
       // ChatMessage(
       //   userName: 'User2',
       //   timeSent: '10:10 AM',
@@ -115,11 +116,14 @@ class ChatScreenState extends State<ChatScreen> {
       margin: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       child: Row(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: Icon(
-              Icons.calendar_today, // Calendar icon
-              color: Theme.of(context).primaryColor,
+          GestureDetector(
+            onTap: _showScheduleBottomSheet,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Icon(
+                Icons.calendar_today, // Calendar icon
+                color: Theme.of(context).primaryColor,
+              ),
             ),
           ),
           Flexible(
@@ -223,6 +227,16 @@ class ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showScheduleBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Set to true for full width
+      builder: (BuildContext context) {
+        return ScheduleBottomSheet();
+      },
     );
   }
 }
