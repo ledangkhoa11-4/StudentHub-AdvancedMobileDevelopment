@@ -17,3 +17,17 @@ class ChatMessage {
     required this.userName,
   });
 }
+
+class Meeting {
+  final String dateSent;
+  final String timeSent;
+  final DateTime startTime;
+  final DateTime endTime;
+
+  Meeting({
+    required this.dateSent,
+    required this.timeSent,
+    required this.startTime,
+    required this.endTime,
+  });
+}

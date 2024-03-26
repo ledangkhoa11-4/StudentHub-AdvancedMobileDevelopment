@@ -1,3 +1,4 @@
+import 'package:boilerplate/presentation/9_schedule_for_interview/components/meeting_obj.dart';
 import 'package:boilerplate/presentation/9_schedule_for_interview/components/shedule_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'chat_message_obj.dart';
@@ -10,7 +11,7 @@ class ChatScreen extends StatefulWidget {
 
 class ChatScreenState extends State<ChatScreen> {
   final TextEditingController _textController = TextEditingController();
-  final List<ChatMessage> _messages = [];
+  final List<dynamic> _messages = [];
   final ScrollController _scrollController = ScrollController();
   final FocusNode focusNode = FocusNode();
   bool _isInitialScroll = true;
@@ -42,19 +43,25 @@ class ChatScreenState extends State<ChatScreen> {
   }
 
   void _loadSampleData() {
-    List<ChatMessage> sampleData = [
-      // ChatMessage(
-      //   userName: 'User1',
-      //   timeSent: '10:00 AM',
-      //   dateSent: '2024-03-21',
-      //   content: 'Hello there!',
-      // ),
-      // ChatMessage(
-      //   userName: 'User 2',
-      //   timeSent: '10:05 AM',
-      //   dateSent: '2024-03-21',
-      //   content: 'Hi! How are you?',
-      // ),
+    List<dynamic> sampleData = [
+      ChatMessage(
+        userName: 'User1',
+        timeSent: '10:00 AM',
+        dateSent: '2024-03-21',
+        content: 'Hello there!',
+      ),
+      ChatMessage(
+        userName: 'User 2',
+        timeSent: '10:05 AM',
+        dateSent: '2024-03-21',
+        content: 'Hi! How are you?',
+      ),
+      Meeting(
+        timeSent: '10:00 AM',
+        dateSent: '2024-03-21',
+        startTime: DateTime(2024, 3, 26, 9, 0),
+        endTime: DateTime(2024, 3, 26, 9, 0),
+      ),
       // ChatMessage(
       //   userName: 'User1',
       //   timeSent: '10:10 AM',
@@ -106,7 +113,7 @@ class ChatScreenState extends State<ChatScreen> {
     ];
 
     setState(() {
-      _messages.addAll(sampleData.toList());
+      _messages.addAll(sampleData);
       WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
     });
   }
@@ -196,17 +203,18 @@ class ChatScreenState extends State<ChatScreen> {
                   bool shouldDisplayDate = index == 0 ||
                       _messages[index].dateSent !=
                           _messages[index - 1].dateSent;
-                  return Column(
-                    children: [
-                      if (shouldDisplayDate)
-                        ListTile(
-                          title: Center(
-                            child: Text(_messages[index].dateSent),
-                          ),
+                  return Column(children: [
+                    if (shouldDisplayDate)
+                      ListTile(
+                        title: Center(
+                          child: Text(_messages[index].dateSent),
                         ),
-                      ChatMessageObj(_messages[index]),
-                    ],
-                  );
+                      ),
+                    if (_messages[index] is ChatMessage)
+                      ChatMessageObj(_messages[index])
+                    else
+                      MeetingObj(_messages[index])
+                  ]);
                 },
                 childCount: _messages.length,
               ),
