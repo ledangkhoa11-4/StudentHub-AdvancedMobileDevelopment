@@ -1,3 +1,4 @@
+import 'package:boilerplate/presentation/9_schedule_for_interview/components/video_call.dart';
 import 'package:flutter/material.dart';
 import 'package:boilerplate/presentation/9_schedule_for_interview/components/models.dart';
 
@@ -62,7 +63,11 @@ class _MeetingObjState extends State<MeetingObj> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          // Add your action here
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => VideoCall()),
+                          );
                         },
                         child: Text('Join'),
                       ),
