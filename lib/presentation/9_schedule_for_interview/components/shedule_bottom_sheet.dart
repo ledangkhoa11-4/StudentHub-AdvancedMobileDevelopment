@@ -25,10 +25,22 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
       widget.onMeetingCreated(startTime, endTime);
       Navigator.pop(context); // Close the bottom sheet
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('End time must be after start time'),
-        ),
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('End time must be after start time'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
       );
     }
   }
