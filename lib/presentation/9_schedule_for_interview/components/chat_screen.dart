@@ -304,6 +304,7 @@ class ChatScreenState extends State<ChatScreen> {
         if (_messages[i] is Meeting &&
             _messages[i].dateSent == updatedMeeting.dateSent) {
           _messages[i] = updatedMeeting;
+          print(updatedMeeting.endTime);
           break;
         }
       }

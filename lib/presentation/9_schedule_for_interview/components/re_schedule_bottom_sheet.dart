@@ -32,7 +32,7 @@ class _ReScheduleBottomSheetState extends State<ReScheduleBottomSheet> {
   void _handleScheduleMeeting() {
     if (endTime.isAfter(startTime)) {
       Meeting updatedMeeting = Meeting(
-        title: widget.meeting.title,
+        title: title,
         dateSent: widget.meeting.dateSent,
         timeSent: widget.meeting.timeSent,
         isCancelled: widget.meeting.isCancelled,
