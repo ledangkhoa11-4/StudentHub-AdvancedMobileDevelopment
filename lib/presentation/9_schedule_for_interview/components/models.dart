@@ -21,12 +21,15 @@ class ChatMessage {
 class Meeting {
   final String dateSent;
   final String timeSent;
+  // final String title;
+  late final bool isCancelled;
   final DateTime startTime;
   final DateTime endTime;
 
   Meeting({
     required this.dateSent,
     required this.timeSent,
+    required this.isCancelled,
     required this.startTime,
     required this.endTime,
   });

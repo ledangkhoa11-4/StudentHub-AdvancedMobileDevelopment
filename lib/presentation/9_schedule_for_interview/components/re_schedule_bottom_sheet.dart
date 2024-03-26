@@ -1,28 +1,40 @@
-import 'package:boilerplate/presentation/9_schedule_for_interview/components/models.dart';
 import 'package:flutter/material.dart';
+import 'package:boilerplate/presentation/9_schedule_for_interview/components/models.dart';
 
-class ScheduleBottomSheet extends StatefulWidget {
-  final Function(DateTime, DateTime) onMeetingCreated;
+class ReScheduleBottomSheet extends StatefulWidget {
+  final Meeting meeting;
+  final Function(Meeting) onMeetingSchedule;
 
-  ScheduleBottomSheet({required this.onMeetingCreated});
+  ReScheduleBottomSheet({
+    required this.meeting,
+    required this.onMeetingSchedule,
+  });
+
   @override
-  _ScheduleBottomSheetState createState() => _ScheduleBottomSheetState();
+  _ReScheduleBottomSheetState createState() => _ReScheduleBottomSheetState();
 }
 
-class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
+class _ReScheduleBottomSheetState extends State<ReScheduleBottomSheet> {
   late DateTime startTime;
   late DateTime endTime;
 
   @override
   void initState() {
     super.initState();
-    startTime = DateTime.now();
-    endTime = DateTime.now();
+    startTime = widget.meeting.startTime;
+    endTime = widget.meeting.endTime;
   }
 
   void _handleScheduleMeeting() {
     if (endTime.isAfter(startTime)) {
-      widget.onMeetingCreated(startTime, endTime);
+      Meeting updatedMeeting = Meeting(
+        dateSent: widget.meeting.dateSent,
+        timeSent: widget.meeting.timeSent,
+        isCancelled: widget.meeting.isCancelled,
+        startTime: startTime,
+        endTime: endTime,
+      );
+      widget.onMeetingSchedule(updatedMeeting);
       Navigator.pop(context); // Close the bottom sheet
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -181,7 +193,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
               ),
               ElevatedButton(
                 onPressed: _handleScheduleMeeting,
-                child: Text('Send Invite'),
+                child: Text('Save'),
               ),
             ],
           ),

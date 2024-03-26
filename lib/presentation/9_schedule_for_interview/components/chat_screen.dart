@@ -1,4 +1,5 @@
 import 'package:boilerplate/presentation/9_schedule_for_interview/components/meeting_obj.dart';
+import 'package:boilerplate/presentation/9_schedule_for_interview/components/re_schedule_bottom_sheet.dart';
 import 'package:boilerplate/presentation/9_schedule_for_interview/components/shedule_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'chat_message_obj.dart';
@@ -57,11 +58,11 @@ class ChatScreenState extends State<ChatScreen> {
         content: 'Hi! How are you?',
       ),
       Meeting(
-        timeSent: '10:00 AM',
-        dateSent: '2024-03-21',
-        startTime: DateTime(2024, 3, 26, 9, 0),
-        endTime: DateTime(2024, 3, 26, 9, 0),
-      ),
+          timeSent: '10:00 AM',
+          dateSent: '2024-03-21',
+          startTime: DateTime(2024, 3, 26, 9, 0),
+          endTime: DateTime(2024, 3, 26, 9, 0),
+          isCancelled: false),
       // ChatMessage(
       //   userName: 'User1',
       //   timeSent: '10:10 AM',
@@ -213,7 +214,12 @@ class ChatScreenState extends State<ChatScreen> {
                     if (_messages[index] is ChatMessage)
                       ChatMessageObj(_messages[index])
                     else
-                      MeetingObj(_messages[index])
+                      MeetingObj(
+                        meeting: _messages[index],
+                        onReschedule: () =>
+                            _showReScheduleBottomSheet(_messages[index]),
+                        onCancel: () => _cancelMeeting(_messages[index]),
+                      )
                   ]);
                 },
                 childCount: _messages.length,
@@ -241,10 +247,68 @@ class ChatScreenState extends State<ChatScreen> {
   void _showScheduleBottomSheet() {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // Set to true for full width
+      isScrollControlled: true,
       builder: (BuildContext context) {
-        return ScheduleBottomSheet();
+        return ScheduleBottomSheet(
+          onMeetingCreated: (DateTime startTime, DateTime endTime) {
+            _handleMeetingCreation(startTime, endTime);
+          },
+        );
       },
     );
+  }
+
+  void _handleMeetingCreation(DateTime startTime, DateTime endTime) {
+    DateTime now = DateTime.now();
+    String formattedDate =
+        '${now.year}-${_addLeadingZero(now.month)}-${_addLeadingZero(now.day)}';
+    String formattedTime =
+        '${_addLeadingZero(now.hour)}:${_addLeadingZero(now.minute)}';
+
+    // Create a Meeting object with the provided startTime and endTime
+    Meeting newMeeting = Meeting(
+      dateSent: formattedDate,
+      timeSent: formattedTime,
+      isCancelled: false,
+      startTime: startTime,
+      endTime: endTime,
+    );
+
+    setState(() {
+      _messages.add(newMeeting);
+    });
+  }
+
+  void _showReScheduleBottomSheet(Meeting meeting) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return ReScheduleBottomSheet(
+          meeting: meeting,
+          onMeetingSchedule: (updatedMeeting) {
+            _handleMeetingReScheduled(updatedMeeting);
+          },
+        );
+      },
+    );
+  }
+
+  void _handleMeetingReScheduled(Meeting updatedMeeting) {
+    setState(() {
+      for (int i = 0; i < _messages.length; i++) {
+        if (_messages[i] is Meeting &&
+            _messages[i].dateSent == updatedMeeting.dateSent) {
+          _messages[i] = updatedMeeting;
+          break;
+        }
+      }
+    });
+  }
+
+  void _cancelMeeting(Meeting meeting) {
+    setState(() {
+      meeting.isCancelled = true;
+    });
   }
 }
