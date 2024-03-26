@@ -17,10 +17,14 @@ class ReScheduleBottomSheet extends StatefulWidget {
 class _ReScheduleBottomSheetState extends State<ReScheduleBottomSheet> {
   late DateTime startTime;
   late DateTime endTime;
+  late String title;
+  TextEditingController _titleController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    _titleController = TextEditingController(text: widget.meeting.title);
+    title = widget.meeting.title;
     startTime = widget.meeting.startTime;
     endTime = widget.meeting.endTime;
   }
@@ -28,6 +32,7 @@ class _ReScheduleBottomSheetState extends State<ReScheduleBottomSheet> {
   void _handleScheduleMeeting() {
     if (endTime.isAfter(startTime)) {
       Meeting updatedMeeting = Meeting(
+        title: widget.meeting.title,
         dateSent: widget.meeting.dateSent,
         timeSent: widget.meeting.timeSent,
         isCancelled: widget.meeting.isCancelled,
@@ -77,15 +82,15 @@ class _ReScheduleBottomSheetState extends State<ReScheduleBottomSheet> {
           SizedBox(height: 16.0),
           Text('Title:'),
           TextField(
+            controller: _titleController,
             decoration: InputDecoration(
-              // labelText: 'Title',
               border: OutlineInputBorder(),
               contentPadding:
                   EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
             ),
             onChanged: (value) {
               setState(() {
-                // title = value; // Update title when user types
+                title = value; // Update title when user types
               });
             },
           ),

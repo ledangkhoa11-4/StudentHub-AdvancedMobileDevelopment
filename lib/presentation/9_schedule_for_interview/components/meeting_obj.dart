@@ -32,7 +32,7 @@ class _MeetingObjState extends State<MeetingObj> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Catch up meeting',
+            '${widget.meeting.title}',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,

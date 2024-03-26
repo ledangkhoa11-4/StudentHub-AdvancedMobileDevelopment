@@ -2,7 +2,7 @@ import 'package:boilerplate/presentation/9_schedule_for_interview/components/mod
 import 'package:flutter/material.dart';
 
 class ScheduleBottomSheet extends StatefulWidget {
-  final Function(DateTime, DateTime) onMeetingCreated;
+  final Function(String, DateTime, DateTime) onMeetingCreated;
 
   ScheduleBottomSheet({required this.onMeetingCreated});
   @override
@@ -10,19 +10,21 @@ class ScheduleBottomSheet extends StatefulWidget {
 }
 
 class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
+  late String title;
   late DateTime startTime;
   late DateTime endTime;
 
   @override
   void initState() {
     super.initState();
+    title = '';
     startTime = DateTime.now();
     endTime = DateTime.now();
   }
 
   void _handleScheduleMeeting() {
     if (endTime.isAfter(startTime)) {
-      widget.onMeetingCreated(startTime, endTime);
+      widget.onMeetingCreated(title, startTime, endTime);
       Navigator.pop(context); // Close the bottom sheet
     } else {
       showDialog(
@@ -73,7 +75,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
             ),
             onChanged: (value) {
               setState(() {
-                // title = value; // Update title when user types
+                title = value; // Update title when user types
               });
             },
           ),

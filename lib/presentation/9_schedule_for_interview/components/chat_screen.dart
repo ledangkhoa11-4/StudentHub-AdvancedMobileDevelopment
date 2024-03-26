@@ -58,6 +58,7 @@ class ChatScreenState extends State<ChatScreen> {
         content: 'Hi! How are you?',
       ),
       Meeting(
+          title: "Interview meeting",
           timeSent: '10:00 AM',
           dateSent: '2024-03-21',
           startTime: DateTime(2024, 3, 26, 9, 0),
@@ -250,15 +251,17 @@ class ChatScreenState extends State<ChatScreen> {
       isScrollControlled: true,
       builder: (BuildContext context) {
         return ScheduleBottomSheet(
-          onMeetingCreated: (DateTime startTime, DateTime endTime) {
-            _handleMeetingCreation(startTime, endTime);
+          onMeetingCreated:
+              (String title, DateTime startTime, DateTime endTime) {
+            _handleMeetingCreation(title, startTime, endTime);
           },
         );
       },
     );
   }
 
-  void _handleMeetingCreation(DateTime startTime, DateTime endTime) {
+  void _handleMeetingCreation(
+      String title, DateTime startTime, DateTime endTime) {
     DateTime now = DateTime.now();
     String formattedDate =
         '${now.year}-${_addLeadingZero(now.month)}-${_addLeadingZero(now.day)}';
@@ -267,6 +270,7 @@ class ChatScreenState extends State<ChatScreen> {
 
     // Create a Meeting object with the provided startTime and endTime
     Meeting newMeeting = Meeting(
+      title: title,
       dateSent: formattedDate,
       timeSent: formattedTime,
       isCancelled: false,
