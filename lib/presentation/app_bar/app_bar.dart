@@ -1,8 +1,9 @@
+
 import 'package:flutter/material.dart';
 
 class UserAppBar {
 
-
+  
   static PreferredSizeWidget buildAppBar(BuildContext context) {
     return AppBar(
       title: Text("Student Hub"),
@@ -18,7 +19,7 @@ class UserAppBar {
    static Widget buildSettingButton() {
     return IconButton(
       onPressed: () {
-
+        
       },
       icon: Icon(
         Icons.account_circle_rounded,
