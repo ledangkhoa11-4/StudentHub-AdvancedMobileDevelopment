@@ -33,7 +33,7 @@ dependencies:
   # F
   flutter_mobx: ^2.0.6+5
   # G
-  get_it: ^7.2.0
+  get_it: ^7.6.7
   google_fonts: 6.1.0
   # H
   http: ^1.2.0
@@ -63,6 +63,17 @@ dependencies:
   # W
   # X
   xxtea: ^2.1.0
+  bootstrap_icons: ^1.11.3
+  text_area: ^0.0.3
+  dropdown_button2: ^2.3.9
+  multi_dropdown: ^2.1.4
+  flutter_form_builder: ^9.2.1
+  form_builder_validators: ^9.1.0
+  syncfusion_flutter_datepicker: ^25.1.35
+  easy_stepper: ^0.8.3
+  file_picker: ^8.0.0+1
+  dotted_border: ^2.1.0
+  fluttertoast: ^8.2.4
   # Y
   # Z
 
@@ -114,12 +125,12 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-  - family: ProductSans
+  - family: Montserrat
     fonts:
-    - asset: assets/fonts/Product-Sans-Regular.ttf
-    - asset: assets/fonts/Product-Sans-Italic.ttf
+    - asset: assets/fonts/Montserrat-Regular.ttf
+    - asset: assets/fonts/Montserrat-Italic.ttf
       style: italic
-    - asset: assets/fonts/Product-Sans-Bold.ttf
+    - asset: assets/fonts/Montserrat-Bold.ttf
       weight: 700
 
   # For details regarding fonts from package dependencies,
