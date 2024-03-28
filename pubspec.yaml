@@ -15,6 +15,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  scroll_to_index: ^2.0.0
+  flutter_keyboard_visibility: ^5.2.0
 
   flutter_localizations:
     sdk: flutter
