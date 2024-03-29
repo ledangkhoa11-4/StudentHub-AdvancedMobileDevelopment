@@ -1,18 +1,23 @@
 import 'package:boilerplate/constants/app_theme.dart';
 import 'package:boilerplate/constants/strings.dart';
+import 'package:boilerplate/presentation/9_schedule_for_interview/components/chat_screen.dart';
+import 'package:boilerplate/presentation/app_bar/app_bar.dart';
+import 'package:boilerplate/presentation/home/home.dart';
 import 'package:boilerplate/presentation/home/store/language/language_store.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/login/login.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
+import 'package:boilerplate/presentation/profile/company_new_profile.dart';
+import 'package:boilerplate/presentation/profile/student_new_profile.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:boilerplate/presentation/profile/swicth_account.dart';
-
+import 'package:boilerplate/presentation/5_browse_project_flow/project_list.dart';
 
 import '../di/service_locator.dart';
+import '9_schedule_for_interview/chat.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -47,8 +52,7 @@ class MyApp extends StatelessWidget {
             // Built-in localization of basic text for Cupertino widgets
             GlobalCupertinoLocalizations.delegate,
           ],
-          //home: _userStore.isLoggedIn ? LoginScreen() : HomeScreen(),
-          home: Switchaccount(),
+          home: _userStore.isLoggedIn ? HomeScreen() : Chat(),
         );
       },
     );
