@@ -1,3 +1,4 @@
+import 'package:boilerplate/presentation/5_browse_project_flow/submit_screen.dart';
 import 'package:flutter/material.dart';
 import 'project_item.dart';
 
@@ -14,6 +15,14 @@ class ProjectDetail extends StatefulWidget {
 }
 
 class _ProjectDetailState extends State<ProjectDetail> {
+  late bool isProjectLiked = false; // Initialize with a default value
+
+  @override
+  void initState() {
+    super.initState();
+    isProjectLiked = widget.projectItem.isLiked; // Assign initial value
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,18 +134,24 @@ class _ProjectDetailState extends State<ProjectDetail> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    // Apply button pressed
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SubmitScreen(),
+                      ),
+                    );
                   },
                   child: Text('Apply'),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     setState(() {
+                      isProjectLiked = !isProjectLiked;
                       widget.projectItem
                           .onLikeChanged(!widget.projectItem.isLiked);
                     });
                   },
-                  child: Text(widget.projectItem.isLiked ? 'Unsaved' : 'Saved'),
+                  child: Text(isProjectLiked ? 'Unsaved' : 'Saved'),
                 ),
               ],
             ),
