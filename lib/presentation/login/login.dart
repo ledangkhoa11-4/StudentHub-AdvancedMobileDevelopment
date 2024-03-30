@@ -143,12 +143,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(height: 8.0),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SignUpStep1()),
-                        );
+                        Navigator.pushNamed(context, Routes.signupStep1);
                       },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                          foregroundColor: Colors.white),
                       child: Text('Sign up'),
                     ),
                   ],
@@ -215,7 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
           style: Theme.of(context)
               .textTheme
               .caption
-              ?.copyWith(color: Colors.orangeAccent),
+              ?.copyWith(color: Theme.of(context).colorScheme.primary),
         ),
         onPressed: () {},
       ),
@@ -225,7 +225,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildSignInButton() {
     return RoundedButtonWidget(
       buttonText: AppLocalizations.of(context).translate('login_btn_sign_in'),
-      buttonColor: Colors.orangeAccent,
+      buttonColor: Theme.of(context).colorScheme.primary,
       textColor: Colors.white,
       onPressed: () async {
         if (_formStore.canLogin) {
