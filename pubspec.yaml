@@ -68,6 +68,7 @@ dependencies:
   dropdown_button2: ^2.3.9
   multi_dropdown: ^2.1.4
   flutter_form_builder: ^9.2.1
+  font_awesome_flutter: ^10.7.0
   form_builder_validators: ^9.1.0
   syncfusion_flutter_datepicker: ^25.1.35
   easy_stepper: ^0.8.3
