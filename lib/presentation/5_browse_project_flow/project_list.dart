@@ -117,10 +117,10 @@ class _ProjectListState extends State<ProjectList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(_isSearching ? 'Search Result' : 'Project List'),
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      //   title: Text(_isSearching ? 'Search Result' : 'Project List'),
+      // ),
       body: Column(
         children: [
           Padding(
