@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:boilerplate/core/stores/error/error_store.dart';
 import 'package:boilerplate/core/stores/form/form_company_profile_store.dart' as CompanyProfileFormStore;
+import 'package:boilerplate/core/stores/form/form_post_project_store.dart' as PostProjectFromStore;
 import 'package:boilerplate/core/stores/form/form_store.dart';
 import 'package:boilerplate/domain/repository/setting/setting_repository.dart';
 import 'package:boilerplate/domain/usecase/post/get_post_usecase.dart';
@@ -21,11 +22,15 @@ mixin StoreModule {
     getIt.registerFactory(() => ErrorStore());
     getIt.registerFactory(() => FormErrorStore());
     getIt.registerFactory(() => CompanyProfileFormStore.FormErrorStore());
+    getIt.registerFactory(() => PostProjectFromStore.FormErrorStore());
     getIt.registerFactory(
       () => FormStore(getIt<FormErrorStore>(), getIt<ErrorStore>()),
     );
     getIt.registerFactory(
       () => CompanyProfileFormStore.FormCompanyProfileStore(getIt<CompanyProfileFormStore.FormErrorStore>(), getIt<ErrorStore>()),
+    );
+     getIt.registerFactory(
+      () => PostProjectFromStore.FormPostProjectStore(getIt<PostProjectFromStore.FormErrorStore>(), getIt<ErrorStore>()),
     );
 
     // stores:------------------------------------------------------------------

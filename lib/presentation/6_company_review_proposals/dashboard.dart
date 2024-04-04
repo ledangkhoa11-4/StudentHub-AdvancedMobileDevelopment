@@ -1,4 +1,6 @@
+import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/presentation/6_company_review_proposals/components/project_view_list.dart';
+import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 
 class DashBoardCompany extends StatefulWidget {
@@ -26,7 +28,20 @@ class _DashBoardState extends State<DashBoardCompany>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // title: Text('Dashboard'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Dashboard'),
+            RoundedButtonWidget(
+              buttonText: "Post new project",
+              buttonColor: Theme.of(context).colorScheme.primary,
+              textColor: Colors.white,
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.postProject);
+              },
+            )
+          ],
+        ),
         bottom: TabBar(
           controller: _tabController,
           tabs: [
