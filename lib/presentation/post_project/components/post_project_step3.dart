@@ -83,7 +83,9 @@ class _PostProjectStep3State extends State<PostProjectStep3> {
               SizedBox(
                 height: 10,
               ),
-              const QuillToolbar(),
+              const QuillToolbar(configurations:  const QuillToolbarConfigurations(
+                fontSizesValues: const {'Small': '8', 'Medium': '24.5', 'Large': '46', 'Clear': '14'}
+              ),),
               Expanded(
                 child: QuillEditor.basic(
                   configurations: const QuillEditorConfigurations(

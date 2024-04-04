@@ -7,6 +7,7 @@ import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/post_project/components/post_project_stepper.dart';
 import 'package:boilerplate/presentation/post_project/components/unordered_list.dart';
+import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
@@ -142,11 +143,18 @@ class _PostProjectStep2State extends State<PostProjectStep2> {
                       buttonColor: Theme.of(context).colorScheme.primary,
                       textColor: Colors.white,
                       onPressed: () {
-                        // Navigator.of(context).pushNamed(Routes.companyWelcome);
-                        Navigator.of(context)
-                            .pushNamed(Routes.postProjectStep3, arguments: {
-                          'formStore': widget.formStore,
-                        });
+                        widget.formStore.setDuration(currentOption);
+                        widget.formStore.validateNumberStudents(
+                            int.tryParse(_numberStudents.text) ?? 0);
+
+                        if (widget.formStore.formErrorStore.numberStudents == null) {
+                          Navigator.of(context)
+                              .pushNamed(Routes.postProjectStep3, arguments: {
+                            'formStore': widget.formStore,
+                          });
+                        } else {
+                          ToastHelper.error("Please enter required fields");
+                        }
                       },
                     )
                   ],
