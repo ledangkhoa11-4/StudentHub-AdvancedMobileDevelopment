@@ -1,4 +1,7 @@
+import 'package:boilerplate/constants/assets.dart';
+import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
+import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,7 +14,6 @@ class Homescreen extends StatefulWidget {
 class _HomescreenState extends State<Homescreen> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context),
       body: SingleChildScrollView(
@@ -24,15 +26,23 @@ class _HomescreenState extends State<Homescreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(height: 20),
+              SizedBox(
+                height: 400,
+                child: Image.asset(
+                  Assets.welcomeImage,
+                  fit: BoxFit.cover,
+                ),
+              ),
               Center(
                   child: Text(
                 "Build your product with high-skilled student",
+                textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
                     .labelLarge
                     ?.copyWith(fontSize: 16),
               )),
-              SizedBox(height: 30),
+              SizedBox(height: 10),
               Center(
                   child: Text(
                       "Find and onboard best-skilled  student for your product Student works to gain experience & skills form real-world projects",
@@ -40,63 +50,33 @@ class _HomescreenState extends State<Homescreen> {
                       style: Theme.of(context)
                           .textTheme
                           .displaySmall
-                          ?.copyWith(fontSize: 14)
-                  )
-              ),
-              SizedBox(height: 50),
+                          ?.copyWith(fontSize: 14))),
+              SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 170.0,  // Đặt chiều rộng của container là 100
-                    height: 30.0,  // Đặt chiều cao của container là 50
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Xử lý khi nút bấm được nhấn
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0),
-                          side: BorderSide(color: Colors.black),
-                        ),
-                      ),
-                      child: Text(
-                        "Company",
-                        style: TextStyle(color: Colors.black), // Đặt màu văn bản là màu trắng
-                      ),
-                    ),
+                  RoundedButtonWidget(
+                    buttonText: "Company",
+                    buttonColor: Theme.of(context).colorScheme.primary,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(Routes.login);
+                    },
+                  ),
+                  SizedBox(
+                    width: 30,
+                  ),
+                  RoundedButtonWidget(
+                    buttonText: "Student",
+                    buttonColor: Theme.of(context).colorScheme.primary,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(Routes.login);
+                    },
                   ),
                 ],
               ),
               SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 170.0,  // Đặt chiều rộng của container là 100
-                    height: 30.0,  // Đặt chiều cao của container là 50
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Xử lý khi nút bấm được nhấn
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0),
-                          side: BorderSide(color: Colors.black),
-                        ),
-                      ),
-                      child: Text(
-                        "Student",
-                        style: TextStyle(color: Colors.black), // Đặt màu văn bản là màu trắng
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              
-              SizedBox(height: 30),
               Center(
                   child: Text(
                       "StudentHub is university market place to connect high-skilled student and company on a real-world project",
@@ -104,9 +84,7 @@ class _HomescreenState extends State<Homescreen> {
                       style: Theme.of(context)
                           .textTheme
                           .displaySmall
-                          ?.copyWith(fontSize: 14)
-                  )
-              ),
+                          ?.copyWith(fontSize: 14))),
             ],
           ),
         ),

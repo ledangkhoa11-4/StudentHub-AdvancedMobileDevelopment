@@ -1,3 +1,5 @@
+import 'package:boilerplate/core/extensions/cap_extension.dart';
+import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:flutter/material.dart';
 
 class SignUpStep2 extends StatefulWidget {
@@ -17,7 +19,11 @@ class _SignUpStep2State extends State<SignUpStep2> {
 
   @override
   Widget build(BuildContext context) {
+    var anotherOption =
+        widget.selectedOption == "company" ? "student" : "company";
+
     return Scaffold(
+      appBar: UserAppBar.buildAppBar(context),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -26,7 +32,7 @@ class _SignUpStep2State extends State<SignUpStep2> {
             SizedBox(height: 24),
             Center(
               child: Text(
-                'Sign up as ${widget.selectedOption}',
+                'Sign up as ${widget.selectedOption.toTitleCase()}',
                 style: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
@@ -85,13 +91,22 @@ class _SignUpStep2State extends State<SignUpStep2> {
                     fontSize: 13,
                   ),
                 ),
-                Text(
-                  'Apply as student',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    decoration: TextDecoration.underline,
-                    fontSize: 13,
+                InkWell(
+                  child: Text(
+                    'Apply as ${anotherOption}',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      decoration: TextDecoration.underline,
+                      fontSize: 13,
+                    ),
                   ),
+                  onTap: () {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              SignUpStep2(selectedOption: anotherOption)),
+                    );
+                  },
                 ),
               ],
             ),

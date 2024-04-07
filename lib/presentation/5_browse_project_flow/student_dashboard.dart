@@ -1,4 +1,7 @@
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:boilerplate/presentation/5_browse_project_flow/project_list_type2.dart';
+import 'package:boilerplate/presentation/app_bar/app_bar.dart';
+import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -28,17 +31,17 @@ class _DashBoardState extends State<DashBoardStudent>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        // title: Text('Dashboard'),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: [
-            Tab(icon: Icon(Icons.dashboard), text: "All Projects"),
-            Tab(icon: Icon(Icons.settings), text: "Working"),
-            Tab(icon: Icon(Icons.sticky_note_2), text: "Archieved"),
-          ],
-        ),
-      ),
+      appBar: UserAppBar.buildAppBar(context,
+          tabBar: TabBar(
+            controller: _tabController,
+            tabs: [
+              Tab(icon: Icon(Icons.dashboard), text: "All Projects"),
+              Tab(icon: Icon(Icons.settings), text: "Working"),
+              Tab(icon: Icon(Icons.sticky_note_2), text: "Archieved"),
+            ],
+          )),
+      bottomNavigationBar: UserNavigationBar.buildNavigationBar(context,
+          setState: setState),
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[

@@ -1,3 +1,4 @@
+import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/login/login.dart';
 import 'package:boilerplate/presentation/sign_up/sign_up_step2.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class _SignUpStep1State extends State<SignUpStep1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: UserAppBar.buildAppBar(context),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -96,7 +98,7 @@ class _SignUpStep1State extends State<SignUpStep1> {
                   Text(
                     'Login',
                     style: TextStyle(
-                      color: Colors.blue, // Set the color as needed
+                      color: Theme.of(context).colorScheme.primary,
                       decoration: TextDecoration.underline,
                     ),
                   ),

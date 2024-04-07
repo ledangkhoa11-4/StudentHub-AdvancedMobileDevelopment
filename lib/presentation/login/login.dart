@@ -7,6 +7,9 @@ import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/core/widgets/textfield_widget.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/presentation/5_browse_project_flow/student_dashboard.dart';
+import 'package:boilerplate/presentation/6_company_review_proposals/dashboard.dart';
+import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/sign_up/sign_up_step1.dart';
@@ -47,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       primary: true,
-      appBar: EmptyAppBar(),
+      appBar: UserAppBar.buildAppBar(context),
       body: _buildBody(),
     );
   }
@@ -128,32 +131,25 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(height: 24.0),
             _buildSignInButton(),
             SizedBox(height: 274.0),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Center(
-                child: Column(
-                  mainAxisSize:
-                      MainAxisSize.min, // Adjust this based on your design
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Don't have a StudentHub Account?",
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    SizedBox(height: 8.0),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, Routes.signupStep1);
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          foregroundColor: Colors.white),
-                      child: Text('Sign up'),
-                    ),
-                  ],
+            Column(
+              mainAxisSize:
+                  MainAxisSize.min, // Adjust this based on your design
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "Don't have a StudentHub Account?",
+                  style: TextStyle(fontSize: 14.0),
                 ),
-              ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, Routes.signupStep1);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Colors.white),
+                  child: Text('Sign up'),
+                ),
+              ],
             ),
           ],
         ),
@@ -244,8 +240,9 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     Future.delayed(Duration(milliseconds: 0), () {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          Routes.home, (Route<dynamic> route) => false);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => DashBoardStudent()),
+          (Route<dynamic> route) => false);
     });
 
     return Container();

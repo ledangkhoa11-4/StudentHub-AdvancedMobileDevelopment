@@ -42,14 +42,16 @@ class TextFieldWidget extends StatelessWidget {
             errorStyle: Theme.of(context)
                 .textTheme
                 .bodyLarge!
-                .copyWith(color: Colors.red, fontWeight: FontWeight.bold),
+                .copyWith(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 12),
             counterText: null,
             errorText: errorText != null && !errorText!.isEmpty ? errorText : null,
+            errorMaxLines: 2,
             enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
             focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+            focusedErrorBorder:  OutlineInputBorder(borderSide: BorderSide(color: Colors.red)) ,
             errorBorder:   OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
             border:   OutlineInputBorder( borderSide: BorderSide(width: 1)),
-            icon: this.isIcon ? Icon(this.icon, color: iconColor) : null),
+            icon: this.isIcon ? Icon(this.icon, color:   errorText != null && !errorText!.isEmpty ? Theme.of(context).colorScheme.error : iconColor) : null),
       ),
     );
   }
