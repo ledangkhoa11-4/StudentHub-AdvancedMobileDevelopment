@@ -1,14 +1,19 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/presentation/5_browse_project_flow/project_list.dart';
+import 'package:boilerplate/presentation/5_browse_project_flow/student_dashboard.dart';
+import 'package:boilerplate/presentation/alert/alert.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
+import 'package:boilerplate/presentation/message/message.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 class TabData {
-  const TabData({required this.icon, required this.text});
+  const TabData({required this.icon, required this.text, required this.screen});
 
   final IconData icon;
   final String text;
+  final Widget screen;
 }
 
 class UserNavigationBar {
@@ -16,10 +21,17 @@ class UserNavigationBar {
   static AnimatedBottomNavigationBar buildNavigationBar(BuildContext context,
       {void Function(void Function())? setState = null}) {
     final iconList = <TabData>[
-      TabData(icon: BootstrapIcons.kanban, text: "Project"),
-      TabData(icon: BootstrapIcons.clipboard_data, text: "Dashboard"),
-      TabData(icon: BootstrapIcons.chat_dots, text: "Message"),
-      TabData(icon: BootstrapIcons.bell, text: "Alert"),
+      TabData(
+          icon: BootstrapIcons.kanban, text: "Project", screen: ProjectList()),
+      TabData(
+          icon: BootstrapIcons.clipboard_data,
+          text: "Dashboard",
+          screen: DashBoardStudent()),
+      TabData(
+          icon: BootstrapIcons.chat_dots,
+          text: "Message",
+          screen: MessageScreen()),
+      TabData(icon: BootstrapIcons.bell, text: "Alert", screen: AlertScreen()),
     ];
     return AnimatedBottomNavigationBar.builder(
       height: 80,
@@ -70,6 +82,16 @@ class UserNavigationBar {
       activeIndex: bottomNavIndex,
       onTap: (index) {
         bottomNavIndex = index;
+        Navigator.of(context).pushAndRemoveUntil(
+            PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  iconList[index].screen,
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return child;
+              },
+            ),
+            (Route<dynamic> route) => false);
         if (setState != null) {
           setState(() {});
         }

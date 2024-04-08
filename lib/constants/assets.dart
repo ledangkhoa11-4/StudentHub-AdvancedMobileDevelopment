@@ -9,4 +9,8 @@ class Assets {
 
   static const String welcomeImage = "assets/images/img_welcome.png";
 
+  static const String projectImage = "assets/images/img_project.png";
+
+  static const String inviteImage = "assets/images/img_invite.png";
+
 }

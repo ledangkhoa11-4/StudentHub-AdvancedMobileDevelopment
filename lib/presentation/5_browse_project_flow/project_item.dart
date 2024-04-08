@@ -42,11 +42,15 @@ class ProjectItem extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
                 'Created: $createdDate',
-                style: TextStyle(color: grayColor),
+                style: TextStyle(
+                    color: grayColor,
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic),
+                textAlign: TextAlign.right,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -54,10 +58,8 @@ class ProjectItem extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6!
-                          .copyWith(color: greenColor),
+                      style: Theme.of(context).textTheme.headline6!.copyWith(
+                          color: Theme.of(context).colorScheme.primary),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -73,14 +75,29 @@ class ProjectItem extends StatelessWidget {
                   ),
                 ],
               ),
-              Text(
-                'Time: $timeDuration, $numberOfStudents students needed',
-                style: TextStyle(color: grayColor),
+              RichText(
+                text: TextSpan(
+                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                      color: grayColor,
+                      fontWeight: FontWeight.w100,
+                      fontSize: 14),
+                  text: 'Time: ',
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: '$timeDuration',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: ', '),
+                    TextSpan(
+                        text: '$numberOfStudents students',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: ' needed '),
+                  ],
+                ),
               ),
               SizedBox(height: 8.0),
               Text(
                 'Students are looking for:',
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 14),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,9 +109,20 @@ class ProjectItem extends StatelessWidget {
                     .toList(),
               ),
               SizedBox(height: 8.0),
-              Text(
-                'Proposal: $proposal',
-                style: TextStyle(color: grayColor),
+             RichText(
+                text: TextSpan(
+                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                      color: grayColor,
+                      fontWeight: FontWeight.w100,
+                      fontSize: 14),
+                  text: 'Proposal: ',
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: '$proposal',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    
+                  ],
+                ),
               ),
             ],
           ),

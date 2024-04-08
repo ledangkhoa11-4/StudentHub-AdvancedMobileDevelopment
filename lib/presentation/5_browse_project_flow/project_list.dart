@@ -1,4 +1,6 @@
 import 'package:boilerplate/presentation/5_browse_project_flow/filter_table.dart';
+import 'package:boilerplate/presentation/app_bar/app_bar.dart';
+import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'project_item.dart';
 
@@ -117,10 +119,9 @@ class _ProjectListState extends State<ProjectList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Colors.white,
-      //   title: Text(_isSearching ? 'Search Result' : 'Project List'),
-      // ),
+      appBar: UserAppBar.buildAppBar(context),
+      bottomNavigationBar:
+          UserNavigationBar.buildNavigationBar(context, setState: setState),
       body: Column(
         children: [
           Padding(

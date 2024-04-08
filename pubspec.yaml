@@ -78,6 +78,7 @@ dependencies:
   just_the_tooltip: ^0.0.12
   flutter_quill: ^8.6.4
   animated_bottom_navigation_bar: ^1.3.3
+  transparent_image: ^2.0.1
   # Y
   # Z
 

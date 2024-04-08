@@ -1,4 +1,7 @@
 import 'package:boilerplate/presentation/5_browse_project_flow/submit_screen.dart';
+import 'package:boilerplate/presentation/app_bar/app_bar.dart';
+import 'package:boilerplate/presentation/post_project/components/gradient_divider.dart';
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'project_item.dart';
 
@@ -26,9 +29,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          // title: Text('Project detail'),
-          ),
+      appBar: UserAppBar.buildAppBar(context),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -37,25 +38,36 @@ class _ProjectDetailState extends State<ProjectDetail> {
             Text(
               'Project detail',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
+                
               ),
             ),
             SizedBox(height: 8),
-            Text(
-              widget.projectItem.title,
-              style: TextStyle(
-                fontSize: 16,
-                color: Color.fromARGB(255, 23, 158, 27),
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Text(
+                widget.projectItem.title,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             SizedBox(height: 16),
-            Divider(color: Colors.black),
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
+              child: CustomPaint(
+                painter: PointedLinePainter(
+                    MediaQuery.of(context).size.width - 40, context),
+              ),
+            ),
             SizedBox(height: 16),
             Text(
               'Students are looking for:',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -70,15 +82,24 @@ class _ProjectDetailState extends State<ProjectDetail> {
                   .toList(),
             ),
             SizedBox(height: 16),
-            Divider(color: Colors.black),
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
+              child: CustomPaint(
+                painter: PointedLinePainter(
+                    MediaQuery.of(context).size.width - 40, context),
+              ),
+            ),
             SizedBox(height: 16),
             Row(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(Icons.access_alarm_rounded, size: 40),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(BootstrapIcons.calendar2_week, size: 30),
+                    ],
+                  ),
                 ),
                 SizedBox(width: 8),
                 Column(
@@ -87,7 +108,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                     Text(
                       'Project scope:',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -102,11 +123,14 @@ class _ProjectDetailState extends State<ProjectDetail> {
             SizedBox(height: 16),
             Row(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(Icons.people, size: 40),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(BootstrapIcons.people_fill, size: 30),
+                    ],
+                  ),
                 ),
                 SizedBox(width: 8),
                 Column(
@@ -115,7 +139,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                     Text(
                       'Number of Students:',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -151,7 +175,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                           .onLikeChanged(!widget.projectItem.isLiked);
                     });
                   },
-                  child: Text(isProjectLiked ? 'Unsaved' : 'Saved'),
+                  child: Text(isProjectLiked ? 'Unlike it' : 'Like it'),
                 ),
               ],
             ),
