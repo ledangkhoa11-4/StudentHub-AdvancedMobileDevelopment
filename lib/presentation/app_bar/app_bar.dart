@@ -1,15 +1,35 @@
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/profile/swicth_account.dart';
+import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
+
+import 'switch_account_screen.dart';
 
 class UserAppBar {
   static PreferredSizeWidget buildAppBar(BuildContext context,
       {TabBar? tabBar = null}) {
     return AppBar(
       title: Text("Student Hub"),
-      actions: buildActions(context),
+      actions: [
+        ...buildActions(context),
+        buildLeadingIcon(context),
+      ],
       bottom: tabBar,
+    );
+  }
+
+  static Widget buildLeadingIcon(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        // Navigator.pushNamed(context, Routes.switchAccount);
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => SwitchAccountScreen(),
+          ),
+        );
+      },
+      icon: Icon(Icons.account_circle_rounded),
     );
   }
 
@@ -17,7 +37,7 @@ class UserAppBar {
     final UserStore _userStore = getIt<UserStore>();
 
     if (_userStore.isLoggedIn) {
-      return <Widget>[
+      return [
         buildSettingButton(context),
       ];
     } else {
