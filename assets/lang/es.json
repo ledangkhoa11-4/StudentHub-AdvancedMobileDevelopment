@@ -6,6 +6,11 @@
   "login_btn_sign_in": "Registrarse",
   "login_btn_login_in": "Login",
   "login_error_fill_fields": "Por favor complete todos los campos e",
+  "logout": "Đăng xuất",
+  "profile": "Hồ sơ",
+  "language": "Ngôn ngữ",
+  "light_theme": "Nền sáng",
+  "dark_theme": "Nền tối",
   "login_end": "------------------------------------------------------------------------------------",
 
   "home_start": "Below are list of strings for home",

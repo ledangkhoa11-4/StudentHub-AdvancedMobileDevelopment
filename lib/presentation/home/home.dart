@@ -43,10 +43,10 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
   }
 
-
   Widget _buildLogoutButton() {
     return IconButton(
-      onPressed: null,  /*() {
+      onPressed: null,
+      /*() {
         SharedPreferences.getInstance().then((preference) {
           preference.setBool(Preferences.is_logged_in, false);
           Navigator.of(context).pushReplacementNamed(Routes.login);

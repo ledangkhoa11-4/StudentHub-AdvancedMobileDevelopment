@@ -6,6 +6,11 @@
   "login_btn_sign_in": "Sign In",
   "login_btn_login_in": "Login",
   "login_error_fill_fields": "Please fill in all fields",
+  "logout": "Logout",
+  "profile": "Profile",
+  "language": "Language",
+  "light_theme": "Light Theme",
+  "dark_theme": "Dark Theme",
   "login_end": "------------------------------------------------------------------------------------",
 
   "home_start": "Below are list of strings for home",
