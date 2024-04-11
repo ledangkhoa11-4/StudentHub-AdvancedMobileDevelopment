@@ -3,6 +3,7 @@ import 'package:boilerplate/constants/strings.dart';
 import 'package:boilerplate/presentation/5_browse_project_flow/submit_screen.dart';
 import 'package:boilerplate/presentation/9_schedule_for_interview/components/chat_screen.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
+import 'package:boilerplate/presentation/auth_widget/auth_widget.dart';
 import 'package:boilerplate/presentation/home/home.dart';
 import 'package:boilerplate/presentation/home/store/language/language_store.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
             // Built-in localization of basic text for Cupertino widgets
             GlobalCupertinoLocalizations.delegate,
           ],
-          home: _userStore.isLoggedIn ?  Homescreen() : DashBoardStudent(),
+          home: _userStore.isLoggedIn ?  AuthWidget() : Homescreen(),
         );
       },
     );

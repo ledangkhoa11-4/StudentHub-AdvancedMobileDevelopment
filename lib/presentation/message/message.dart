@@ -70,7 +70,7 @@ class _MessageScreenState extends State<MessageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: UserAppBar.buildAppBar(context),
+      appBar: UserAppBar.buildAppBar(context, titleWidget: Text("Message")),
       bottomNavigationBar:
           UserNavigationBar.buildNavigationBar(context, setState: setState),
       body: SingleChildScrollView(

@@ -7,10 +7,10 @@ part 'login_usecase.g.dart';
 
 @JsonSerializable()
 class LoginParams {
-  final String username;
+  final String email;
   final String password;
 
-  LoginParams({required this.username, required this.password});
+  LoginParams({required this.email, required this.password});
 
   factory LoginParams.fromJson(Map<String, dynamic> json) =>
       _$LoginParamsFromJson(json);
@@ -18,13 +18,13 @@ class LoginParams {
   Map<String, dynamic> toJson() => _$LoginParamsToJson(this);
 }
 
-class LoginUseCase implements UseCase<User?, LoginParams> {
+class LoginUseCase implements UseCase<dynamic, LoginParams> {
   final UserRepository _userRepository;
 
   LoginUseCase(this._userRepository);
 
   @override
-  Future<User?> call({required LoginParams params}) async {
+  Future<dynamic> call({required LoginParams params}) async {
     return _userRepository.login(params);
   }
 }

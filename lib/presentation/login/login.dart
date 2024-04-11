@@ -10,9 +10,11 @@ import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
 import 'package:boilerplate/presentation/5_browse_project_flow/student_dashboard.dart';
 import 'package:boilerplate/presentation/6_company_review_proposals/dashboard.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
+import 'package:boilerplate/presentation/auth_widget/auth_widget.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/sign_up/sign_up_step1.dart';
+import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
@@ -79,9 +81,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
           Observer(
             builder: (context) {
-              return _userStore.success
+              return _userStore.success == true
                   ? navigate(context)
-                  : _showErrorMessage(_formStore.errorStore.errorMessage);
+                  : _showErrorMessage(_userStore.siginMessage);
             },
           ),
           Observer(
@@ -91,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: CustomProgressIndicatorWidget(),
               );
             },
-          )
+          ),
         ],
       ),
     );
@@ -186,7 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
         return TextFieldWidget(
           hint:
               AppLocalizations.of(context).translate('login_et_user_password'),
-          isObscure: true,
+          inputType: TextInputType.visiblePassword,
           padding: EdgeInsets.only(top: 16.0),
           icon: Icons.lock,
           iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
@@ -224,6 +226,7 @@ class _LoginScreenState extends State<LoginScreen> {
       buttonColor: Theme.of(context).colorScheme.primary,
       textColor: Colors.white,
       onPressed: () async {
+        _formStore.validateAll();
         if (_formStore.canLogin) {
           DeviceUtils.hideKeyboard(context);
           _userStore.login(_userEmailController.text, _passwordController.text);
@@ -235,14 +238,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget navigate(BuildContext context) {
-    SharedPreferences.getInstance().then((prefs) {
-      prefs.setBool(Preferences.is_logged_in, true);
-    });
-
     Future.delayed(Duration(milliseconds: 0), () {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => DashBoardStudent()),
-          (Route<dynamic> route) => false);
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => AuthWidget()),
+      );
+      _userStore.resetLoginState();
     });
 
     return Container();
@@ -251,17 +251,9 @@ class _LoginScreenState extends State<LoginScreen> {
   // General Methods:-----------------------------------------------------------
   _showErrorMessage(String message) {
     if (message.isNotEmpty) {
-      Future.delayed(Duration(milliseconds: 0), () {
-        if (message.isNotEmpty) {
-          FlushbarHelper.createError(
-            message: message,
-            title: AppLocalizations.of(context).translate('home_tv_error'),
-            duration: Duration(seconds: 3),
-          )..show(context);
-        }
-      });
+      ToastHelper.error(message);
     }
-
+    _userStore.resetLoginState();
     return SizedBox.shrink();
   }
 

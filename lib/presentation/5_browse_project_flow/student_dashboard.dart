@@ -32,6 +32,7 @@ class _DashBoardState extends State<DashBoardStudent>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context,
+          titleWidget: Text("Your Projects"),
           tabBar: TabBar(
             controller: _tabController,
             tabs: [

@@ -1,6 +1,9 @@
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/presentation/6_company_review_proposals/components/project_view_list.dart';
+import 'package:boilerplate/presentation/app_bar/app_bar.dart';
+import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 class DashBoardCompany extends StatefulWidget {
@@ -27,30 +30,36 @@ class _DashBoardState extends State<DashBoardCompany>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Dashboard'),
-            RoundedButtonWidget(
-              buttonText: "Post new project",
-              buttonColor: Theme.of(context).colorScheme.primary,
-              textColor: Colors.white,
-              onPressed: () {
-                Navigator.pushNamed(context, Routes.postProject);
-              },
-            )
-          ],
+      appBar: UserAppBar.buildAppBar(context,
+          titleWidget: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Dashboard'),
+            ],
+          ),
+          tabBar: TabBar(
+            controller: _tabController,
+            tabs: [
+              Tab(icon: Icon(Icons.dashboard), text: "All Projects"),
+              Tab(icon: Icon(Icons.settings), text: "Working"),
+              Tab(icon: Icon(Icons.sticky_note_2), text: "Archieved"),
+            ],
+          )),
+      bottomNavigationBar:
+          UserNavigationBar.buildNavigationBar(context, setState: setState),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+        child: Icon(
+          BootstrapIcons.plus,
+          size: 30,
+          color: Theme.of(context).colorScheme.secondary,
         ),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: [
-            Tab(icon: Icon(Icons.dashboard), text: "All Projects"),
-            Tab(icon: Icon(Icons.settings), text: "Working"),
-            Tab(icon: Icon(Icons.sticky_note_2), text: "Archieved"),
-          ],
-        ),
+        onPressed: () {
+          Navigator.pushNamed(context, Routes.postProject);
+        },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[

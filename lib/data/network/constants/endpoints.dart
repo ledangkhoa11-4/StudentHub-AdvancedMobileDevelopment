@@ -2,7 +2,7 @@ class Endpoints {
   Endpoints._();
 
   // base url
-  static const String baseUrl = "http://jsonplaceholder.typicode.com";
+  static const String baseUrl = "https://api.studenthub.dev";
 
   // receiveTimeout
   static const int receiveTimeout = 15000;
@@ -12,4 +12,11 @@ class Endpoints {
 
   // booking endpoints
   static const String getPosts = baseUrl + "/posts";
+
+  static const String signup = baseUrl + "/api/auth/sign-up";
+
+  static const String signin = baseUrl + "/api/auth/sign-in";
+
+  static const String getMe = baseUrl + "/api/auth/me";
+  
 }

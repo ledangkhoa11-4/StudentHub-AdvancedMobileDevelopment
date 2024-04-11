@@ -5,18 +5,18 @@ import 'package:flutter/material.dart';
 
 class UserAppBar {
   static PreferredSizeWidget buildAppBar(BuildContext context,
-      {TabBar? tabBar = null}) {
+      {TabBar? tabBar = null, bool disableSettingAccount = false, Widget? titleWidget = null}) {
     return AppBar(
-      title: Text("Student Hub"),
-      actions: buildActions(context),
+      title: titleWidget != null ? titleWidget : Text("Student Hub"),
+      actions: buildActions(context, disableSettingAccount),
       bottom: tabBar,
     );
   }
 
-  static List<Widget> buildActions(BuildContext context) {
+  static List<Widget> buildActions(BuildContext context, bool disableSettingAccount) {
     final UserStore _userStore = getIt<UserStore>();
 
-    if (_userStore.isLoggedIn) {
+    if (_userStore.isLoggedIn && !disableSettingAccount) {
       return <Widget>[
         buildSettingButton(context),
       ];

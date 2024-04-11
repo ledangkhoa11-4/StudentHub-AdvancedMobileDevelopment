@@ -1,8 +1,17 @@
+import 'dart:convert';
+
 import 'package:boilerplate/core/stores/error/error_store.dart';
 import 'package:boilerplate/core/stores/form/form_store.dart';
+import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
+import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/is_logged_in_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/save_auth_token_usercase.dart';
+import 'package:boilerplate/domain/usecase/user/save_current_profile_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/save_login_in_status_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
 import 'package:mobx/mobx.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../domain/entity/user/user.dart';
 import '../../../domain/usecase/user/login_usecase.dart';
@@ -16,9 +25,13 @@ abstract class _UserStore with Store {
   _UserStore(
     this._isLoggedInUseCase,
     this._saveLoginStatusUseCase,
+    this._saveAuthTokenUseCase,
+    this._saveCurrentProfileUseCase,
     this._loginUseCase,
+    this._signupUseCase,
     this.formErrorStore,
     this.errorStore,
+    this._getMeUseCase
   ) {
     // setting up disposers
     _setupDisposers();
@@ -32,7 +45,11 @@ abstract class _UserStore with Store {
   // use cases:-----------------------------------------------------------------
   final IsLoggedInUseCase _isLoggedInUseCase;
   final SaveLoginStatusUseCase _saveLoginStatusUseCase;
+  final SaveAuthTokenUseCase _saveAuthTokenUseCase;
+  final SaveCurrentProfileUseCase _saveCurrentProfileUseCase;
   final LoginUseCase _loginUseCase;
+  final SignupUseCase _signupUseCase;
+  final GetMeUseCase _getMeUseCase;
 
   // stores:--------------------------------------------------------------------
   // for handling form errors
@@ -58,39 +75,130 @@ abstract class _UserStore with Store {
   bool isLoggedIn = false;
 
   @observable
-  bool success = false;
+  User? user = null;
 
   @observable
-  ObservableFuture<User?> loginFuture = emptyLoginResponse;
+  int? currentRole = null;
+
+  @observable
+  bool? success = null;
+
+  @observable
+  bool? signupSuccess = null;
+
+  @observable
+  bool? getMeSuccess = null;
+
+  @observable
+  String signupMessage = "";
+
+  @observable
+  String siginMessage = "";
+
+  @observable
+  ObservableFuture<dynamic> loginFuture = emptyLoginResponse;
+
+  @observable
+  ObservableFuture<dynamic> signinFuture = emptyLoginResponse;
+
+  @observable
+  ObservableFuture<dynamic> getMeFuture = emptyLoginResponse;
 
   @computed
-  bool get isLoading => loginFuture.status == FutureStatus.pending;
+  bool get isLoading => loginFuture.status == FutureStatus.pending || getMeFuture.status == FutureStatus.pending;
+
+  @computed
+  bool get isSignin => signinFuture.status == FutureStatus.pending;
 
   // actions:-------------------------------------------------------------------
   @action
   Future login(String email, String password) async {
     final LoginParams loginParams =
-        LoginParams(username: email, password: password);
+        LoginParams(email: email, password: password);
     final future = _loginUseCase.call(params: loginParams);
     loginFuture = ObservableFuture(future);
 
     await future.then((value) async {
       if (value != null) {
+        String message = value.toString();
+        final response = jsonDecode(message);
+        final token = response["result"]["token"].toString();
+        await _saveAuthTokenUseCase.call(params: token);
         await _saveLoginStatusUseCase.call(params: true);
         this.isLoggedIn = true;
         this.success = true;
+        this.siginMessage = "";
       }
     }).catchError((e) {
-      print(e);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
       this.isLoggedIn = false;
       this.success = false;
-      throw e;
+      this.siginMessage = response["errorDetails"].toString();
+    });
+  }
+
+  @action
+  Future signup(
+      String fullname, String email, String password, int role) async {
+    final SignupParam signupParam = SignupParam(
+        fullname: fullname, email: email, password: password, role: role);
+    final future = _signupUseCase.call(params: signupParam);
+    signinFuture = ObservableFuture(future);
+    await future.then((value) async {
+      if (value != null) {
+        String message = value.toString();
+        final response = jsonDecode(message);
+        this.signupMessage = response["result"]["message"].toString();
+        this.signupSuccess = true;
+      }
+    }).catchError((e) {
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.signupSuccess = false;
+      this.signupMessage = response["errorDetails"].first.toString();
+    });
+  }
+
+  @action
+  Future getMe() async {
+    final GetMeParam getMeParam = GetMeParam();
+    final future = _getMeUseCase.call(params: getMeParam);
+    getMeFuture = ObservableFuture(future);
+    await future.then((value) async {
+      if (value != null) {
+        final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
+        if (currentProfile == null) {
+           getIt<SharedPreferenceHelper>().saveCurrentProfile(value.roles!.first);
+        }
+        this.user = value;
+        this.getMeSuccess = true;
+
+      }
+    }).catchError((e) {
+        print(e);
     });
   }
 
   logout() async {
     this.isLoggedIn = false;
     await _saveLoginStatusUseCase.call(params: false);
+    getIt<SharedPreferenceHelper>().removeAuthToken();
+    getIt<SharedPreferenceHelper>().removeCurrentProfile();
+  }
+
+  resetSigninState() {
+    this.signupSuccess = null;
+    this.signupMessage = "";
+  }
+
+  resetLoginState() {
+    this.siginMessage = "";
+    this.success = null;
+  }
+
+  resetGetMeSuccessState() {
+    this.getMeSuccess = null;
   }
 
   // general methods:-----------------------------------------------------------
