@@ -1,7 +1,13 @@
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/entity/user/user.dart';
 import 'package:boilerplate/presentation/home/store/language/language_store.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
+import 'package:boilerplate/presentation/login/login.dart';
+import 'package:boilerplate/presentation/login/store/login_store.dart';
+import 'package:boilerplate/presentation/profile/company_new_profile.dart';
+import 'package:boilerplate/presentation/profile/student_new_profile.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
@@ -20,22 +26,45 @@ class SwitchAccountScreen extends StatefulWidget {
 
 class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
   late Account _selectedAccount;
-
+  late String _fullname;
   final ThemeStore _themeStore = getIt<ThemeStore>();
   final LanguageStore _languageStore = getIt<LanguageStore>();
+  final UserStore _userStore = getIt<UserStore>();
+
+  late List<Account> accounts;
+
+  @override
+  void initState() {
+    _fullname = _userStore?.user?.fullname ?? "";
+    accounts = (_userStore?.user?.roles?.map((e) => Account(
+                  name: _fullname,
+                  nickname: e == UserRole.COMPANY.value ? "Company" : "Student",
+                )) ??
+            [])
+        .toList();
+    if (_userStore.user?.roles != null && _userStore.user!.roles!.length < 2) {
+      if (_userStore.user!.roles!.first == UserRole.COMPANY.value) {
+        accounts.add(Account(name: "Create student profile", nickname: ""));
+      } else {
+        accounts.add(Account(name: "Create company profile", nickname: ""));
+      }
+    }
+    _selectedAccount = accounts[0];
+
+    super.initState();
+  }
 
   Widget _buildThemeButton() {
     return Observer(
       builder: (context) {
-        return TextButton.icon(
-          onPressed: () {
-            _themeStore.changeBrightnessToDark(!_themeStore.darkMode);
-          },
-          icon: Icon(
-            _themeStore.darkMode ? Icons.brightness_5 : Icons.brightness_3,
+        return ListTile(
+          leading: Icon(
+            _themeStore.darkMode
+                ? BootstrapIcons.sun_fill
+                : BootstrapIcons.moon_stars_fill,
             size: 24,
           ),
-          label: Text(
+          title: Text(
             _themeStore.darkMode
                 ? AppLocalizations.of(context).translate('light_theme')
                 : AppLocalizations.of(context).translate('dark_theme'),
@@ -43,42 +72,35 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
               fontSize: 16,
             ),
           ),
+          onTap: () {
+            _themeStore.changeBrightnessToDark(!_themeStore.darkMode);
+          },
         );
       },
     );
   }
 
   Widget _buildLanguageButton() {
-    return TextButton.icon(
-      onPressed: () {
+    return ListTile(
+      leading: Icon(BootstrapIcons.translate),
+      title: Text(AppLocalizations.of(context).translate('language'),
+          style: TextStyle(
+            fontSize: 16,
+          )),
+      onTap: () {
         _buildLanguageDialog();
       },
-      icon: Icon(
-        Icons.language,
-        size: 24,
-      ),
-      label: Text(
-        AppLocalizations.of(context).translate('language'),
-        style: TextStyle(
-          fontSize: 16,
-        ),
-      ),
     );
   }
 
   Widget _buildProfileButton() {
-    return TextButton.icon(
-      onPressed: () {},
-      icon: Icon(
-        Icons.account_circle,
-        size: 24,
-      ),
-      label: Text(
-        AppLocalizations.of(context).translate('profile'),
-        style: TextStyle(
-          fontSize: 16,
-        ),
-      ),
+    return ListTile(
+      leading: Icon(BootstrapIcons.person_lines_fill),
+      title: Text(AppLocalizations.of(context).translate('profile'),
+          style: TextStyle(
+            fontSize: 16,
+          )),
+      onTap: () {},
     );
   }
 
@@ -140,17 +162,10 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    // Initialize selected account
-    _selectedAccount = accounts[0];
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Switch Account'),
+        title: Text('Account settings'),
       ),
       body: SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),
@@ -166,7 +181,17 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
                   value: _selectedAccount,
                   onChanged: (Account? newValue) {
                     setState(() {
-                      _selectedAccount = newValue!;
+                      if (newValue?.nickname != "") {
+                        _selectedAccount = newValue!;
+                      } else {
+                        if (newValue!.name!.contains("student")) {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => StudentNewProfile()));
+                        } else {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => CompanyNewProfile()));
+                        }
+                      }
                     });
                   },
                   items: accounts.map((Account account) {
@@ -180,12 +205,18 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
                             SizedBox(width: 10),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   account.name,
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
-                                Text(account.nickname),
+                                !account.nickname.isEmpty
+                                    ? Text(
+                                        account.nickname,
+                                        style: TextStyle(fontSize: 10),
+                                      )
+                                    : SizedBox(),
                               ],
                             ),
                             SizedBox(width: 15),
@@ -201,10 +232,13 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
               _buildThemeButton(),
               _buildLanguageButton(),
               ListTile(
-                leading: Icon(Icons.exit_to_app),
-                title: Text(AppLocalizations.of(context).translate('logout')),
+                leading: Icon(BootstrapIcons.box_arrow_left),
+                title: Text(AppLocalizations.of(context).translate('logout'), style: TextStyle(fontSize: 16),),
                 onTap: () {
-                  // Handle logout
+                  _userStore.logout();
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                      (Route<dynamic> route) => false);
                 },
               ),
             ],
@@ -214,14 +248,3 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
     );
   }
 }
-
-final List<Account> accounts = [
-  Account(
-    name: 'Phong Tran',
-    nickname: 'Student',
-  ),
-  Account(
-    name: 'Phong Tran',
-    nickname: 'Company',
-  ),
-];

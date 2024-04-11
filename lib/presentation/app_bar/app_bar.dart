@@ -1,4 +1,5 @@
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/presentation/app_bar/switch_account_screen.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/profile/swicth_account.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class UserAppBar {
       onPressed: () {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
-              Switchaccount(),
+              SwitchAccountScreen(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(1.0, 0);
             const end = Offset.zero;
