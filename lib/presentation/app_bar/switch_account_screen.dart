@@ -33,10 +33,15 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
           },
           icon: Icon(
             _themeStore.darkMode ? Icons.brightness_5 : Icons.brightness_3,
-            color: null,
+            size: 24,
           ),
           label: Text(
-            _themeStore.darkMode ? "Light Theme" : "Dark Theme",
+            _themeStore.darkMode
+                ? AppLocalizations.of(context).translate('light_theme')
+                : AppLocalizations.of(context).translate('dark_theme'),
+            style: TextStyle(
+              fontSize: 16,
+            ),
           ),
         );
       },
@@ -50,9 +55,29 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
       },
       icon: Icon(
         Icons.language,
+        size: 24,
       ),
       label: Text(
-        'Language',
+        AppLocalizations.of(context).translate('language'),
+        style: TextStyle(
+          fontSize: 16,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileButton() {
+    return TextButton.icon(
+      onPressed: () {},
+      icon: Icon(
+        Icons.account_circle,
+        size: 24,
+      ),
+      label: Text(
+        AppLocalizations.of(context).translate('profile'),
+        style: TextStyle(
+          fontSize: 16,
+        ),
       ),
     );
   }
@@ -172,6 +197,7 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
                   }).toList(),
                 ),
               ),
+              _buildProfileButton(),
               _buildThemeButton(),
               _buildLanguageButton(),
               ListTile(
