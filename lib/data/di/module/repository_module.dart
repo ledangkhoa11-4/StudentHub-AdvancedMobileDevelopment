@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:boilerplate/data/local/datasources/post/post_datasource.dart';
 import 'package:boilerplate/data/network/apis/posts/post_api.dart';
+import 'package:boilerplate/data/network/apis/users/user_api.dart';
 import 'package:boilerplate/data/repository/post/post_repository_impl.dart';
 import 'package:boilerplate/data/repository/setting/setting_repository_impl.dart';
 import 'package:boilerplate/data/repository/user/user_repository_impl.dart';
@@ -21,6 +22,7 @@ mixin RepositoryModule {
 
     getIt.registerSingleton<UserRepository>(UserRepositoryImpl(
       getIt<SharedPreferenceHelper>(),
+      getIt<UserApi>(),
     ));
 
     getIt.registerSingleton<PostRepository>(PostRepositoryImpl(

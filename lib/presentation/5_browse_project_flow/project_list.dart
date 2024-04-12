@@ -119,7 +119,7 @@ class _ProjectListState extends State<ProjectList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: UserAppBar.buildAppBar(context),
+      appBar: UserAppBar.buildAppBar(context, titleWidget: Text("Discovery Projects")),
       bottomNavigationBar:
           UserNavigationBar.buildNavigationBar(context, setState: setState),
       body: Column(

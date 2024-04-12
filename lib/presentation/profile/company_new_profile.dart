@@ -1,3 +1,4 @@
+import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/profile/company_profile_form.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,7 @@ class _CompanyNewProfileState extends State<CompanyNewProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: UserAppBar.buildAppBar(context, disableSettingAccount: true, titleWidget: Text("Create new profile")),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(

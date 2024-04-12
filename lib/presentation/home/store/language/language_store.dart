@@ -19,8 +19,9 @@ abstract class _LanguageStore with Store {
   // supported languages
   List<Language> supportedLanguages = [
     Language(code: 'US', locale: 'en', language: 'English'),
-    Language(code: 'DK', locale: 'da', language: 'Danish'),
-    Language(code: 'ES', locale: 'es', language: 'España'),
+    // Language(code: 'VN', locale: 'vn', language: 'Vietnam'),
+    // Language(code: 'DK', locale: 'da', language: 'Danish'),
+    Language(code: 'VN', locale: 'es', language: 'VietNam'),
   ];
 
   // constructor:---------------------------------------------------------------
@@ -50,11 +51,19 @@ abstract class _LanguageStore with Store {
 
     if (_locale == 'en') {
       code = "US";
-    } else if (_locale == 'da') {
-      code = "DK";
     } else if (_locale == 'es') {
-      code = "ES";
+      code = "VN";
     }
+
+    // if (_locale == 'en') {
+    //   code = "US";
+    // } else if (_locale == 'da') {
+    //   code = "DK";
+    // } else if (_locale == 'es') {
+    //   code = "ES";
+    // } else if (_locale == 'vn') {
+    //   code = "VN";
+    // }
 
     return code;
   }

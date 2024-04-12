@@ -1,22 +1,23 @@
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/presentation/app_bar/switch_account_screen.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/profile/swicth_account.dart';
 import 'package:flutter/material.dart';
 
 class UserAppBar {
   static PreferredSizeWidget buildAppBar(BuildContext context,
-      {TabBar? tabBar = null}) {
+      {TabBar? tabBar = null, bool disableSettingAccount = false, Widget? titleWidget = null}) {
     return AppBar(
-      title: Text("Student Hub"),
-      actions: buildActions(context),
+      title: titleWidget != null ? titleWidget : Text("Student Hub"),
+      actions: buildActions(context, disableSettingAccount),
       bottom: tabBar,
     );
   }
 
-  static List<Widget> buildActions(BuildContext context) {
+  static List<Widget> buildActions(BuildContext context, bool disableSettingAccount) {
     final UserStore _userStore = getIt<UserStore>();
 
-    if (_userStore.isLoggedIn) {
+    if (_userStore.isLoggedIn && !disableSettingAccount) {
       return <Widget>[
         buildSettingButton(context),
       ];
@@ -30,7 +31,7 @@ class UserAppBar {
       onPressed: () {
         Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
-              Switchaccount(),
+              SwitchAccountScreen(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(1.0, 0);
             const end = Offset.zero;

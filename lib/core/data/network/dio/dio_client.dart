@@ -9,6 +9,7 @@ class DioClient {
   DioClient({required this.dioConfigs})
       : _dio = Dio()
     ..options.baseUrl = dioConfigs.baseUrl
+    ..options.contentType = Headers.jsonContentType
     ..options.connectTimeout = Duration(milliseconds: dioConfigs.connectionTimeout)
     ..options.receiveTimeout = Duration(milliseconds: dioConfigs.receiveTimeout);
 

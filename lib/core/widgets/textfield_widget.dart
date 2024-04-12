@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class TextFieldWidget extends StatelessWidget {
+class TextFieldWidget extends StatefulWidget {
   final IconData icon;
   final String? hint;
   final String? errorText;
@@ -18,43 +19,7 @@ class TextFieldWidget extends StatelessWidget {
   final TextInputAction? inputAction;
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: padding,
-      child: TextFormField(
-        controller: textController,
-        focusNode: focusNode,
-        onFieldSubmitted: onFieldSubmitted,
-        onChanged: onChanged,
-        autofocus: autoFocus,
-        textInputAction: inputAction,
-        obscureText: this.isObscure,
-        keyboardType: this.inputType,
-        maxLines: this.inputType == TextInputType.multiline ? 5 : 1,
-        minLines: this.inputType == TextInputType.multiline ? 3 : 1,
-        style: Theme.of(context).textTheme.bodyLarge,
-        decoration: InputDecoration(
-            hintText: this.hint,
-            hintStyle: Theme.of(context)
-                .textTheme
-                .bodyLarge!
-                .copyWith(color: hintColor),
-            errorStyle: Theme.of(context)
-                .textTheme
-                .bodyLarge!
-                .copyWith(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 12),
-            counterText: null,
-            errorText: errorText != null && !errorText!.isEmpty ? errorText : null,
-            errorMaxLines: 2,
-            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-            focusedErrorBorder:  OutlineInputBorder(borderSide: BorderSide(color: Colors.red)) ,
-            errorBorder:   OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
-            border:   OutlineInputBorder( borderSide: BorderSide(width: 1)),
-            icon: this.isIcon ? Icon(this.icon, color:   errorText != null && !errorText!.isEmpty ? Theme.of(context).colorScheme.error : iconColor) : null),
-      ),
-    );
-  }
+  State<TextFieldWidget> createState() => _TextFieldWidgetState();
 
   const TextFieldWidget({
     Key? key,
@@ -74,4 +39,78 @@ class TextFieldWidget extends StatelessWidget {
     this.autoFocus = false,
     this.inputAction,
   }) : super(key: key);
+}
+
+class _TextFieldWidgetState extends State<TextFieldWidget> {
+  bool _passwordVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _passwordVisible = widget.inputType == TextInputType.visiblePassword ? true : false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: widget.padding,
+      child: TextFormField(
+        controller: widget.textController,
+        focusNode: widget.focusNode,
+        onFieldSubmitted: widget.onFieldSubmitted,
+        onChanged: widget.onChanged,
+        autofocus: widget.autoFocus,
+        textInputAction: widget.inputAction,
+        obscureText: _passwordVisible,
+        keyboardType: this.widget.inputType,
+        maxLines: this.widget.inputType == TextInputType.multiline ? 5 : 1,
+        minLines: this.widget.inputType == TextInputType.multiline ? 3 : 1,
+        style: Theme.of(context).textTheme.bodyLarge,
+        decoration: InputDecoration(
+            hintText: this.widget.hint,
+            hintStyle: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .copyWith(color: widget.hintColor),
+            errorStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                color: Colors.red, fontWeight: FontWeight.bold, fontSize: 12),
+            counterText: null,
+            errorText: widget.errorText != null && !widget.errorText!.isEmpty
+                ? widget.errorText
+                : null,
+            errorMaxLines: 2,
+            enabledBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+            focusedBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+            focusedErrorBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+            errorBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+            border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
+            icon: this.widget.isIcon
+                ? Icon(this.widget.icon,
+                    color:
+                        widget.errorText != null && !widget.errorText!.isEmpty
+                            ? Theme.of(context).colorScheme.error
+                            : widget.iconColor)
+                : null,
+            suffixIcon: widget.inputType == TextInputType.visiblePassword
+                ? IconButton(
+                    icon: Icon(
+                      _passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _passwordVisible = !_passwordVisible;
+                      });
+                    },
+                  )
+                : null),
+      ),
+    );
+  }
 }

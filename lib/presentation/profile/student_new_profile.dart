@@ -1,4 +1,5 @@
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
+import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/profile/education.dart';
 import 'package:boilerplate/presentation/profile/language.dart';
 import 'package:boilerplate/presentation/profile/skillset.dart';
@@ -16,6 +17,7 @@ class _StudentNewProfileState extends State<StudentNewProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: UserAppBar.buildAppBar(context, titleWidget: Text("Create new profile"), disableSettingAccount: true),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(

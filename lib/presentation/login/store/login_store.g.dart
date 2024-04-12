@@ -15,19 +15,120 @@ mixin _$UserStore on _UserStore, Store {
   bool get isLoading => (_$isLoadingComputed ??=
           Computed<bool>(() => super.isLoading, name: '_UserStore.isLoading'))
       .value;
+  Computed<bool>? _$isSigninComputed;
+
+  @override
+  bool get isSignin => (_$isSigninComputed ??=
+          Computed<bool>(() => super.isSignin, name: '_UserStore.isSignin'))
+      .value;
+
+  late final _$userAtom = Atom(name: '_UserStore.user', context: context);
+
+  @override
+  User? get user {
+    _$userAtom.reportRead();
+    return super.user;
+  }
+
+  @override
+  set user(User? value) {
+    _$userAtom.reportWrite(value, super.user, () {
+      super.user = value;
+    });
+  }
+
+  late final _$currentRoleAtom =
+      Atom(name: '_UserStore.currentRole', context: context);
+
+  @override
+  int? get currentRole {
+    _$currentRoleAtom.reportRead();
+    return super.currentRole;
+  }
+
+  @override
+  set currentRole(int? value) {
+    _$currentRoleAtom.reportWrite(value, super.currentRole, () {
+      super.currentRole = value;
+    });
+  }
 
   late final _$successAtom = Atom(name: '_UserStore.success', context: context);
 
   @override
-  bool get success {
+  bool? get success {
     _$successAtom.reportRead();
     return super.success;
   }
 
   @override
-  set success(bool value) {
+  set success(bool? value) {
     _$successAtom.reportWrite(value, super.success, () {
       super.success = value;
+    });
+  }
+
+  late final _$signupSuccessAtom =
+      Atom(name: '_UserStore.signupSuccess', context: context);
+
+  @override
+  bool? get signupSuccess {
+    _$signupSuccessAtom.reportRead();
+    return super.signupSuccess;
+  }
+
+  @override
+  set signupSuccess(bool? value) {
+    _$signupSuccessAtom.reportWrite(value, super.signupSuccess, () {
+      super.signupSuccess = value;
+    });
+  }
+
+  late final _$getMeSuccessAtom =
+      Atom(name: '_UserStore.getMeSuccess', context: context);
+
+  @override
+  bool? get getMeSuccess {
+    _$getMeSuccessAtom.reportRead();
+    return super.getMeSuccess;
+  }
+
+  @override
+  set getMeSuccess(bool? value) {
+    _$getMeSuccessAtom.reportWrite(value, super.getMeSuccess, () {
+      super.getMeSuccess = value;
+    });
+  }
+
+  late final _$signupMessageAtom =
+      Atom(name: '_UserStore.signupMessage', context: context);
+
+  @override
+  String get signupMessage {
+    _$signupMessageAtom.reportRead();
+    return super.signupMessage;
+  }
+
+  @override
+  set signupMessage(String value) {
+    _$signupMessageAtom.reportWrite(value, super.signupMessage, () {
+      super.signupMessage = value;
+    });
+  }
+
+  late final _$siginMessageAtom =
+      Atom(name: '_UserStore.siginMessage', context: context);
+
+  @override
+  String get siginMessage {
+    _$siginMessageAtom.reportRead();
+    return super.siginMessage;
+  }
+
+  @override
+  set siginMessage(String value) {
+    _$siginMessageAtom.reportWrite(value, super.siginMessage, () {
+      super.siginMessage = value;
     });
   }
 
@@ -35,15 +136,47 @@ mixin _$UserStore on _UserStore, Store {
       Atom(name: '_UserStore.loginFuture', context: context);
 
   @override
-  ObservableFuture<User?> get loginFuture {
+  ObservableFuture<dynamic> get loginFuture {
     _$loginFutureAtom.reportRead();
     return super.loginFuture;
   }
 
   @override
-  set loginFuture(ObservableFuture<User?> value) {
+  set loginFuture(ObservableFuture<dynamic> value) {
     _$loginFutureAtom.reportWrite(value, super.loginFuture, () {
       super.loginFuture = value;
+    });
+  }
+
+  late final _$signinFutureAtom =
+      Atom(name: '_UserStore.signinFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get signinFuture {
+    _$signinFutureAtom.reportRead();
+    return super.signinFuture;
+  }
+
+  @override
+  set signinFuture(ObservableFuture<dynamic> value) {
+    _$signinFutureAtom.reportWrite(value, super.signinFuture, () {
+      super.signinFuture = value;
+    });
+  }
+
+  late final _$getMeFutureAtom =
+      Atom(name: '_UserStore.getMeFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get getMeFuture {
+    _$getMeFutureAtom.reportRead();
+    return super.getMeFuture;
+  }
+
+  @override
+  set getMeFuture(ObservableFuture<dynamic> value) {
+    _$getMeFutureAtom.reportWrite(value, super.getMeFuture, () {
+      super.getMeFuture = value;
     });
   }
 
@@ -55,12 +188,39 @@ mixin _$UserStore on _UserStore, Store {
     return _$loginAsyncAction.run(() => super.login(email, password));
   }
 
+  late final _$signupAsyncAction =
+      AsyncAction('_UserStore.signup', context: context);
+
+  @override
+  Future<dynamic> signup(
+      String fullname, String email, String password, int role) {
+    return _$signupAsyncAction
+        .run(() => super.signup(fullname, email, password, role));
+  }
+
+  late final _$getMeAsyncAction =
+      AsyncAction('_UserStore.getMe', context: context);
+
+  @override
+  Future<dynamic> getMe() {
+    return _$getMeAsyncAction.run(() => super.getMe());
+  }
+
   @override
   String toString() {
     return '''
+user: ${user},
+currentRole: ${currentRole},
 success: ${success},
+signupSuccess: ${signupSuccess},
+getMeSuccess: ${getMeSuccess},
+signupMessage: ${signupMessage},
+siginMessage: ${siginMessage},
 loginFuture: ${loginFuture},
-isLoading: ${isLoading}
+signinFuture: ${signinFuture},
+getMeFuture: ${getMeFuture},
+isLoading: ${isLoading},
+isSignin: ${isSignin}
     ''';
   }
 }
