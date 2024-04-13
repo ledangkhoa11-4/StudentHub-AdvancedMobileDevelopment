@@ -180,22 +180,6 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
-  late final _$isChangingProfileAtom =
-      Atom(name: '_UserStore.isChangingProfile', context: context);
-
-  @override
-  bool? get isChangingProfile {
-    _$isChangingProfileAtom.reportRead();
-    return super.isChangingProfile;
-  }
-
-  @override
-  set isChangingProfile(bool? value) {
-    _$isChangingProfileAtom.reportWrite(value, super.isChangingProfile, () {
-      super.isChangingProfile = value;
-    });
-  }
-
   late final _$loginFutureAtom =
       Atom(name: '_UserStore.loginFuture', context: context);
 
@@ -310,7 +294,6 @@ siginMessage: ${siginMessage},
 apiResponseMessage: ${apiResponseMessage},
 apiResponseSuccess: ${apiResponseSuccess},
 isCreateProfile: ${isCreateProfile},
-isChangingProfile: ${isChangingProfile},
 loginFuture: ${loginFuture},
 signinFuture: ${signinFuture},
 getMeFuture: ${getMeFuture},

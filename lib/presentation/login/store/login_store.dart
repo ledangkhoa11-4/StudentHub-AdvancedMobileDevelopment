@@ -107,9 +107,6 @@ abstract class _UserStore with Store {
   bool? isCreateProfile = null;
 
   @observable
-  bool? isChangingProfile = null;
-
-  @observable
   ObservableFuture<dynamic> loginFuture = emptyLoginResponse;
 
   @observable
@@ -250,10 +247,6 @@ abstract class _UserStore with Store {
 
   resetCreateProfileState() {
     this.isCreateProfile = null;
-  }
-
-  resetChangeProfileState() {
-    this.isChangingProfile = null;
   }
 
   // general methods:-----------------------------------------------------------
