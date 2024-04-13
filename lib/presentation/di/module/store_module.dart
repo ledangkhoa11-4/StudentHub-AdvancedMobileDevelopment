@@ -7,6 +7,7 @@ import 'package:boilerplate/core/stores/form/form_signin_store.dart' as SigninFr
 import 'package:boilerplate/core/stores/form/form_store.dart';
 import 'package:boilerplate/domain/repository/setting/setting_repository.dart';
 import 'package:boilerplate/domain/usecase/post/get_post_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/is_logged_in_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/login_usecase.dart';
@@ -55,7 +56,8 @@ mixin StoreModule {
         getIt<SignupUseCase>(),
         getIt<FormErrorStore>(),
         getIt<ErrorStore>(),
-        getIt<GetMeUseCase>()
+        getIt<GetMeUseCase>(),
+        getIt<CreateUpdateCompanyProfileUseCase>()
       ),
     );
 
