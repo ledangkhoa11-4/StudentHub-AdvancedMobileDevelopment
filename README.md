@@ -1,8 +1,7 @@
 # StudentHub-AdvancedMobileDevelopment
 
 ```
-Phasing 1: Mocking UI - https://www.youtube.com/watch?v=cpLQGUNOjnk
-```
+Phasing 1: Mocking UI - [Youtube Link](https://www.youtube.com/watch?v=cpLQGUNOjnk) 
 **Step 1:**
 
 Go to project root and execute the following command in console to get the required dependencies: 
