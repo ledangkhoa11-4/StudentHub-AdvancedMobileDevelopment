@@ -107,6 +107,9 @@ abstract class _UserStore with Store {
   bool? isCreateProfile = null;
 
   @observable
+  bool? isChangingProfile = null;
+
+  @observable
   ObservableFuture<dynamic> loginFuture = emptyLoginResponse;
 
   @observable
@@ -206,6 +209,7 @@ abstract class _UserStore with Store {
       if (value != null) {
         if (param.uid == null) {
           this.isCreateProfile = true;
+          this.getMe();
         }
         this.user!.setCompanyProfile(value);
         this.apiResponseSuccess = true;
@@ -246,6 +250,10 @@ abstract class _UserStore with Store {
 
   resetCreateProfileState() {
     this.isCreateProfile = null;
+  }
+
+  resetChangeProfileState() {
+    this.isChangingProfile = null;
   }
 
   // general methods:-----------------------------------------------------------
