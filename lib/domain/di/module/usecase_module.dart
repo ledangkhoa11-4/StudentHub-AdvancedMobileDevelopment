@@ -7,6 +7,7 @@ import 'package:boilerplate/domain/usecase/post/find_post_by_id_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/get_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/insert_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/udpate_post_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/is_logged_in_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/login_usecase.dart';
@@ -45,6 +46,10 @@ mixin UseCaseModule {
 
     getIt.registerSingleton<GetMeUseCase>(
       GetMeUseCase(getIt<UserRepository>()),
+    );
+
+     getIt.registerSingleton<CreateUpdateCompanyProfileUseCase>(
+      CreateUpdateCompanyProfileUseCase(getIt<UserRepository>()),
     );
 
     // post:--------------------------------------------------------------------

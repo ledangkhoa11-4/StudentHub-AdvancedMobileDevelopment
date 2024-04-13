@@ -4,6 +4,7 @@ import 'package:boilerplate/core/stores/error/error_store.dart';
 import 'package:boilerplate/core/stores/form/form_store.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/is_logged_in_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/save_auth_token_usercase.dart';
@@ -23,16 +24,16 @@ class UserStore = _UserStore with _$UserStore;
 abstract class _UserStore with Store {
   // constructor:---------------------------------------------------------------
   _UserStore(
-    this._isLoggedInUseCase,
-    this._saveLoginStatusUseCase,
-    this._saveAuthTokenUseCase,
-    this._saveCurrentProfileUseCase,
-    this._loginUseCase,
-    this._signupUseCase,
-    this.formErrorStore,
-    this.errorStore,
-    this._getMeUseCase
-  ) {
+      this._isLoggedInUseCase,
+      this._saveLoginStatusUseCase,
+      this._saveAuthTokenUseCase,
+      this._saveCurrentProfileUseCase,
+      this._loginUseCase,
+      this._signupUseCase,
+      this.formErrorStore,
+      this.errorStore,
+      this._getMeUseCase,
+      this._createCompanyProfileUseCase) {
     // setting up disposers
     _setupDisposers();
 
@@ -50,6 +51,7 @@ abstract class _UserStore with Store {
   final LoginUseCase _loginUseCase;
   final SignupUseCase _signupUseCase;
   final GetMeUseCase _getMeUseCase;
+  final CreateUpdateCompanyProfileUseCase _createCompanyProfileUseCase;
 
   // stores:--------------------------------------------------------------------
   // for handling form errors
@@ -96,6 +98,15 @@ abstract class _UserStore with Store {
   String siginMessage = "";
 
   @observable
+  String apiResponseMessage = "";
+
+  @observable
+  bool? apiResponseSuccess = null;
+
+  @observable
+  bool? isCreateProfile = null;
+
+  @observable
   ObservableFuture<dynamic> loginFuture = emptyLoginResponse;
 
   @observable
@@ -104,8 +115,14 @@ abstract class _UserStore with Store {
   @observable
   ObservableFuture<dynamic> getMeFuture = emptyLoginResponse;
 
+  @observable
+  ObservableFuture<dynamic> createCompanyProfileFuture = emptyLoginResponse;
+
   @computed
-  bool get isLoading => loginFuture.status == FutureStatus.pending || getMeFuture.status == FutureStatus.pending;
+  bool get isLoading =>
+      loginFuture.status == FutureStatus.pending ||
+      getMeFuture.status == FutureStatus.pending ||
+      createCompanyProfileFuture.status == FutureStatus.pending;
 
   @computed
   bool get isSignin => signinFuture.status == FutureStatus.pending;
@@ -169,14 +186,35 @@ abstract class _UserStore with Store {
       if (value != null) {
         final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
         if (currentProfile == null) {
-           getIt<SharedPreferenceHelper>().saveCurrentProfile(value.roles!.first);
+          getIt<SharedPreferenceHelper>()
+              .saveCurrentProfile(value.roles!.first);
         }
         this.user = value;
         this.getMeSuccess = true;
-
       }
     }).catchError((e) {
-        print(e);
+      print(e);
+    });
+  }
+
+  @action
+  Future createUpdateCompanyProfile(
+      CreateUpdateCompanyProfileParams param) async {
+    final future = _createCompanyProfileUseCase.call(params: param);
+    createCompanyProfileFuture = ObservableFuture(future);
+    await future.then((value) async {
+      if (value != null) {
+        if (param.uid == null) {
+          this.isCreateProfile = true;
+        }
+        this.user!.setCompanyProfile(value);
+        this.apiResponseSuccess = true;
+      }
+    }).catchError((e) {
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.apiResponseSuccess = false;
+      this.apiResponseMessage = response["errorDetails"].toString();
     });
   }
 
@@ -199,6 +237,15 @@ abstract class _UserStore with Store {
 
   resetGetMeSuccessState() {
     this.getMeSuccess = null;
+  }
+
+  resetApiResponse() {
+    this.apiResponseMessage = "";
+    this.apiResponseSuccess = null;
+  }
+
+  resetCreateProfileState() {
+    this.isCreateProfile = null;
   }
 
   // general methods:-----------------------------------------------------------

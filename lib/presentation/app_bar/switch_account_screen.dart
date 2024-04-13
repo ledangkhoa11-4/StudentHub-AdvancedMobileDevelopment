@@ -1,3 +1,4 @@
+import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/user/user.dart';
 import 'package:boilerplate/presentation/home/store/language/language_store.dart';
@@ -100,7 +101,14 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
           style: TextStyle(
             fontSize: 16,
           )),
-      onTap: () {},
+      onTap: () {
+        final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
+        print(currentProfile);
+        if (currentProfile == UserRole.COMPANY.value) {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => CompanyNewProfile()));
+        }
+      },
     );
   }
 
@@ -233,7 +241,10 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
               _buildLanguageButton(),
               ListTile(
                 leading: Icon(BootstrapIcons.box_arrow_left),
-                title: Text(AppLocalizations.of(context).translate('logout'), style: TextStyle(fontSize: 16),),
+                title: Text(
+                  AppLocalizations.of(context).translate('logout'),
+                  style: TextStyle(fontSize: 16),
+                ),
                 onTap: () {
                   _userStore.logout();
                   Navigator.of(context).pushAndRemoveUntil(
