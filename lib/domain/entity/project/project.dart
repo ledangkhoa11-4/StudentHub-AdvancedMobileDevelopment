@@ -1,26 +1,26 @@
 class Project {
-  int? companyId;
-  int? projectScopeFlag;
-  int? typeFlag;
+  int companyId;
+  int projectScopeFlag;
+  int typeFlag;
   int? id;
   String? createdAt;
   String? updatedAt;
   String? deletedAt;
-  String? title;
-  String? description;
-  int? numberOfStudents;
+  String title;
+  String description;
+  int numberOfStudents;
 
   Project({
-    this.companyId,
-    this.projectScopeFlag,
-    this.typeFlag,
+    required this.companyId,
+    required this.projectScopeFlag,
+    required this.typeFlag,
     this.id,
     this.createdAt,
     this.updatedAt,
     this.deletedAt,
-    this.title,
-    this.description,
-    this.numberOfStudents,
+    required this.title,
+    required this.description,
+    required this.numberOfStudents,
   });
 
   factory Project.fromMap(Map<String, dynamic> json) => Project(

@@ -1,3 +1,5 @@
+import 'package:boilerplate/domain/entity/user/profile_company.dart';
+
 enum UserRole { STUDENT, COMPANY, ADMIN, MANAGER }
 
 extension UserTypeExtension on UserRole {
@@ -22,9 +24,13 @@ class User {
   String? fullname;
   List<int>? roles;
   dynamic student;
-  dynamic company;
+  ProfileCompany? company;
 
   User({this.id, this.fullname, this.roles, this.student, this.company});
+
+  void setCompanyProfile(ProfileCompany? newProfile) {
+    this.company = newProfile;
+  }
 
   factory User.fromMap(Map<String, dynamic> json) {
     List<dynamic> rolesObj = json["roles"];
@@ -36,7 +42,9 @@ class User {
       fullname: json["fullname"],
       roles: roles,
       student: json["student"],
-      company: json["company"],
+      company: json["company"] != null
+          ? ProfileCompany.fromMap(json["company"])
+          : null,
     );
   }
 

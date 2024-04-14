@@ -1,9 +1,12 @@
+import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/user/user.dart';
+import 'package:boilerplate/presentation/auth_widget/auth_widget.dart';
 import 'package:boilerplate/presentation/home/store/language/language_store.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/login/login.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
+import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
 import 'package:boilerplate/presentation/profile/company_new_profile.dart';
 import 'package:boilerplate/presentation/profile/student_new_profile.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -13,10 +16,11 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
 
 class Account {
+  final int value;
   final String name;
   final String nickname;
 
-  Account({required this.name, required this.nickname});
+  Account({required this.name, required this.nickname, required this.value});
 }
 
 class SwitchAccountScreen extends StatefulWidget {
@@ -38,18 +42,24 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
     _fullname = _userStore?.user?.fullname ?? "";
     accounts = (_userStore?.user?.roles?.map((e) => Account(
                   name: _fullname,
+                  value: e,
                   nickname: e == UserRole.COMPANY.value ? "Company" : "Student",
                 )) ??
             [])
         .toList();
     if (_userStore.user?.roles != null && _userStore.user!.roles!.length < 2) {
       if (_userStore.user!.roles!.first == UserRole.COMPANY.value) {
-        accounts.add(Account(name: "Create student profile", nickname: ""));
+        accounts.add(
+            Account(name: "Create student profile", nickname: "", value: -1));
       } else {
-        accounts.add(Account(name: "Create company profile", nickname: ""));
+        accounts.add(
+            Account(name: "Create company profile", nickname: "", value: -1));
       }
     }
-    _selectedAccount = accounts[0];
+    final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
+    _selectedAccount = accounts.firstWhere(
+        (element) => element.value == currentProfile,
+        orElse: () => accounts[0]);
 
     super.initState();
   }
@@ -100,7 +110,14 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
           style: TextStyle(
             fontSize: 16,
           )),
-      onTap: () {},
+      onTap: () {
+        final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
+        print(currentProfile);
+        if (currentProfile == UserRole.COMPANY.value) {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => CompanyNewProfile()));
+        }
+      },
     );
   }
 
@@ -174,58 +191,70 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                height: 70,
-                child: DropdownButton<Account>(
-                  isExpanded: true,
-                  value: _selectedAccount,
-                  onChanged: (Account? newValue) {
-                    setState(() {
-                      if (newValue?.nickname != "") {
-                        _selectedAccount = newValue!;
-                      } else {
-                        if (newValue!.name!.contains("student")) {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => StudentNewProfile()));
+              Observer(
+                builder: (context) => Container(
+                  height: 70,
+                  child: DropdownButton<Account>(
+                    isExpanded: true,
+                    value: _selectedAccount,
+                    onChanged: (Account? newValue) {
+                      setState(() {
+                        if (newValue?.nickname != "") {
+                          _selectedAccount = newValue!;
+                          getIt<SharedPreferenceHelper>()
+                              .saveCurrentProfile(newValue.value);
+
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (context) => AuthWidget()),
+                              (Route<dynamic> route) => false);
+                          UserNavigationBar.bottomNavIndex = 0;
                         } else {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => CompanyNewProfile()));
+                          if (newValue!.name!.contains("student")) {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => StudentNewProfile()));
+                          } else {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => CompanyNewProfile()));
+                          }
                         }
-                      }
-                    });
-                  },
-                  items: accounts.map((Account account) {
-                    return DropdownMenuItem<Account>(
-                      value: account,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Row(
-                          children: [
-                            Icon(Icons.account_circle, size: 35),
-                            SizedBox(width: 10),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  account.name,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                !account.nickname.isEmpty
-                                    ? Text(
-                                        account.nickname,
-                                        style: TextStyle(fontSize: 10),
-                                      )
-                                    : SizedBox(),
-                              ],
-                            ),
-                            SizedBox(width: 15),
-                            if (account == _selectedAccount) Icon(Icons.check),
-                          ],
+                      });
+                    },
+                    items: accounts.map((Account account) {
+                      return DropdownMenuItem<Account>(
+                        value: account,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Row(
+                            children: [
+                              Icon(Icons.account_circle, size: 35),
+                              SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    account.name,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  !account.nickname.isEmpty
+                                      ? Text(
+                                          account.nickname,
+                                          style: TextStyle(fontSize: 10),
+                                        )
+                                      : SizedBox(),
+                                ],
+                              ),
+                              SizedBox(width: 15),
+                              if (account == _selectedAccount)
+                                Icon(Icons.check),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  }).toList(),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
               _buildProfileButton(),
@@ -233,7 +262,10 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
               _buildLanguageButton(),
               ListTile(
                 leading: Icon(BootstrapIcons.box_arrow_left),
-                title: Text(AppLocalizations.of(context).translate('logout'), style: TextStyle(fontSize: 16),),
+                title: Text(
+                  AppLocalizations.of(context).translate('logout'),
+                  style: TextStyle(fontSize: 16),
+                ),
                 onTap: () {
                   _userStore.logout();
                   Navigator.of(context).pushAndRemoveUntil(

@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:boilerplate/core/data/network/dio/dio_client.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
+import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/domain/entity/project/project_list.dart';
+import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 
 class ProjectApi {
   // dio instance
@@ -27,10 +30,12 @@ class ProjectApi {
   }
 
   /// Company posts a project
-  Future<ProjectList> insert() async {
+  Future<ProjectList> insert(InsertProjectParams params) async {
     try {
-      final res = await _dioClient.dio.post(Endpoints.postProject);
-      return ProjectList.fromJson(res.data);
+      final res =
+          await _dioClient.dio.post(Endpoints.postProject, data: params);
+      final result = jsonDecode(res.toString());
+      return ProjectList.fromJson(result["result"]);
     } catch (e) {
       print(e.toString());
       throw e;

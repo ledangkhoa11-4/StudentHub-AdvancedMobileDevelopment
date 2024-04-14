@@ -132,6 +132,54 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$apiResponseMessageAtom =
+      Atom(name: '_UserStore.apiResponseMessage', context: context);
+
+  @override
+  String get apiResponseMessage {
+    _$apiResponseMessageAtom.reportRead();
+    return super.apiResponseMessage;
+  }
+
+  @override
+  set apiResponseMessage(String value) {
+    _$apiResponseMessageAtom.reportWrite(value, super.apiResponseMessage, () {
+      super.apiResponseMessage = value;
+    });
+  }
+
+  late final _$apiResponseSuccessAtom =
+      Atom(name: '_UserStore.apiResponseSuccess', context: context);
+
+  @override
+  bool? get apiResponseSuccess {
+    _$apiResponseSuccessAtom.reportRead();
+    return super.apiResponseSuccess;
+  }
+
+  @override
+  set apiResponseSuccess(bool? value) {
+    _$apiResponseSuccessAtom.reportWrite(value, super.apiResponseSuccess, () {
+      super.apiResponseSuccess = value;
+    });
+  }
+
+  late final _$isCreateProfileAtom =
+      Atom(name: '_UserStore.isCreateProfile', context: context);
+
+  @override
+  bool? get isCreateProfile {
+    _$isCreateProfileAtom.reportRead();
+    return super.isCreateProfile;
+  }
+
+  @override
+  set isCreateProfile(bool? value) {
+    _$isCreateProfileAtom.reportWrite(value, super.isCreateProfile, () {
+      super.isCreateProfile = value;
+    });
+  }
+
   late final _$loginFutureAtom =
       Atom(name: '_UserStore.loginFuture', context: context);
 
@@ -180,6 +228,23 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$createCompanyProfileFutureAtom =
+      Atom(name: '_UserStore.createCompanyProfileFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get createCompanyProfileFuture {
+    _$createCompanyProfileFutureAtom.reportRead();
+    return super.createCompanyProfileFuture;
+  }
+
+  @override
+  set createCompanyProfileFuture(ObservableFuture<dynamic> value) {
+    _$createCompanyProfileFutureAtom
+        .reportWrite(value, super.createCompanyProfileFuture, () {
+      super.createCompanyProfileFuture = value;
+    });
+  }
+
   late final _$loginAsyncAction =
       AsyncAction('_UserStore.login', context: context);
 
@@ -206,6 +271,16 @@ mixin _$UserStore on _UserStore, Store {
     return _$getMeAsyncAction.run(() => super.getMe());
   }
 
+  late final _$createUpdateCompanyProfileAsyncAction =
+      AsyncAction('_UserStore.createUpdateCompanyProfile', context: context);
+
+  @override
+  Future<dynamic> createUpdateCompanyProfile(
+      CreateUpdateCompanyProfileParams param) {
+    return _$createUpdateCompanyProfileAsyncAction
+        .run(() => super.createUpdateCompanyProfile(param));
+  }
+
   @override
   String toString() {
     return '''
@@ -216,9 +291,13 @@ signupSuccess: ${signupSuccess},
 getMeSuccess: ${getMeSuccess},
 signupMessage: ${signupMessage},
 siginMessage: ${siginMessage},
+apiResponseMessage: ${apiResponseMessage},
+apiResponseSuccess: ${apiResponseSuccess},
+isCreateProfile: ${isCreateProfile},
 loginFuture: ${loginFuture},
 signinFuture: ${signinFuture},
 getMeFuture: ${getMeFuture},
+createCompanyProfileFuture: ${createCompanyProfileFuture},
 isLoading: ${isLoading},
 isSignin: ${isSignin}
     ''';

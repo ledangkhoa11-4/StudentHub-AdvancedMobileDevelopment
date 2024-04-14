@@ -1,6 +1,7 @@
 import 'package:boilerplate/core/stores/error/error_store.dart';
 import 'package:boilerplate/domain/entity/project/project.dart'; // Import Project entity
 import 'package:boilerplate/domain/usecase/project/get_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
 
@@ -15,11 +16,12 @@ class ProjectStore = _ProjectStore with _$ProjectStore;
 
 abstract class _ProjectStore with Store {
   // constructor:---------------------------------------------------------------
-  _ProjectStore(this._getProjectUseCase, this.errorStore,
-      this._projectRepository); // Add _projectRepository
+  _ProjectStore(this._getProjectUseCase, this._insertProjectUseCase,
+      this.errorStore, this._projectRepository); // Add _projectRepository
 
   // use cases:-----------------------------------------------------------------
   final GetProjectUseCase _getProjectUseCase;
+  final InsertProjectUseCase _insertProjectUseCase;
 
   // stores:--------------------------------------------------------------------
   // store for handling errors
@@ -61,8 +63,23 @@ abstract class _ProjectStore with Store {
   // insert a project
   @action
   Future insert(Project project) async {
+    final InsertProjectParams params = InsertProjectParams(
+        companyId: project.companyId,
+        projectScopeFlag: project.projectScopeFlag,
+        typeFlag: project.typeFlag,
+        title: project.title,
+        description: project.description,
+        numberOfStudents: project.numberOfStudents);
     try {
-      await _projectRepository.insert(project);
+      final future = _insertProjectUseCase.call(params: params);
+
+      await future.then((value) async {
+        if (value != null) {
+          print(value);
+        }
+      }).catchError((e) {
+        print(e);
+      });
     } catch (error) {
       if (error is DioException) {
         // Handle DioException

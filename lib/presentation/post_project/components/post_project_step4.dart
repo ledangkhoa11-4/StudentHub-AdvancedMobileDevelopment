@@ -61,7 +61,7 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
       numberOfStudents: widget.formStore.numberOfStudents,
       updatedAt: "",
       createdAt: "",
-      companyId: 1,
+      companyId: 111,
       typeFlag: 1,
       projectScopeFlag: 1,
     );

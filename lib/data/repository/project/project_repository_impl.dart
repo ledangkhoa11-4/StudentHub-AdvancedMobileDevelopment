@@ -6,6 +6,7 @@ import 'package:boilerplate/data/network/apis/projects/project_api.dart';
 import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/domain/entity/project/project_list.dart';
 import 'package:boilerplate/domain/repository/project/project_repository.dart';
+import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 import 'package:sembast/sembast.dart';
 
 class ProjectRepositoryImpl extends ProjectRepository {
@@ -50,10 +51,15 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<int> insert(Project project) => _projectDataSource
-      .insert(project)
-      .then((id) => id)
-      .catchError((error) => throw error);
+  Future<ProjectList> insert(InsertProjectParams params) async {
+    return await _projectApi.insert(params).then((res) {
+      print("+++++++++++++++++++");
+      return res;
+    }).catchError((error) {
+      print("------------------");
+      throw error;
+    });
+  }
 
   @override
   Future<int> update(Project project) => _projectDataSource
