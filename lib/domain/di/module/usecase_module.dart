@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:boilerplate/domain/repository/post/post_repository.dart';
+import 'package:boilerplate/domain/repository/project/project_repository.dart';
 import 'package:boilerplate/domain/repository/user/user_repository.dart';
 import 'package:boilerplate/domain/usecase/post/delete_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/find_post_by_id_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/get_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/insert_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/udpate_post_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/get_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/is_logged_in_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/login_usecase.dart';
@@ -16,6 +18,9 @@ import 'package:boilerplate/domain/usecase/user/save_login_in_status_usecase.dar
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
 
 import '../../../di/service_locator.dart';
+import '../../usecase/project/find_project_by_id_usecase.dart';
+import '../../usecase/project/insert_project_usecase.dart';
+import '../../usecase/project/udpate_project_usecase.dart';
 
 mixin UseCaseModule {
   static Future<void> configureUseCaseModuleInjection() async {
@@ -31,7 +36,7 @@ mixin UseCaseModule {
       SaveAuthTokenUseCase(getIt<UserRepository>()),
     );
 
-     getIt.registerSingleton<SaveCurrentProfileUseCase>(
+    getIt.registerSingleton<SaveCurrentProfileUseCase>(
       SaveCurrentProfileUseCase(getIt<UserRepository>()),
     );
 
@@ -63,5 +68,22 @@ mixin UseCaseModule {
     getIt.registerSingleton<DeletePostUseCase>(
       DeletePostUseCase(getIt<PostRepository>()),
     );
+
+    // Registering use cases related to the "project" domain
+    getIt.registerSingleton<GetProjectUseCase>(
+      GetProjectUseCase(getIt<ProjectRepository>()),
+    );
+    // getIt.registerSingleton<FindProjectByIdUseCase>(
+    //   FindProjectByIdUseCase(getIt<ProjectRepository>()),
+    // );
+    getIt.registerSingleton<InsertProjectUseCase>(
+      InsertProjectUseCase(getIt<ProjectRepository>()),
+    );
+    // getIt.registerSingleton<UpdateProjectUseCase>(
+    //   UpdateProjectUseCase(getIt<ProjectRepository>()),
+    // );
+    // getIt.registerSingleton<DeleteProjectUseCase>(
+    //   DeleteProjectUseCase(getIt<ProjectRepository>()),
+    // );
   }
 }

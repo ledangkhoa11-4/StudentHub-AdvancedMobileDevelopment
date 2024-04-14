@@ -6,9 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'get_me_usecase.g.dart';
 
 @JsonSerializable()
-class GetMeParam {
- 
-}
+class GetMeParam {}
 
 class GetMeUseCase implements UseCase<dynamic, GetMeParam> {
   final UserRepository _userRepository;

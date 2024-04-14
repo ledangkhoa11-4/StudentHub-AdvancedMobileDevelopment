@@ -17,6 +17,9 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 
+import '../../../domain/entity/project/project.dart';
+import '../store/post_project_store.dart';
+
 class PostProjectStep4 extends StatefulWidget {
   final FormPostProjectStore formStore;
 
@@ -26,10 +29,42 @@ class PostProjectStep4 extends StatefulWidget {
 }
 
 class _PostProjectStep4State extends State<PostProjectStep4> {
+  late QuillController _controller;
+  final ProjectStore _projectStore = getIt<ProjectStore>();
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // check to see if already called api
+    if (!_projectStore.loading) {
+      // _projectStore.getProjects();
+    }
+  }
+
   @override
   void initState() {
+    _controller = QuillController(
+      document: Document.fromJson(
+        jsonDecode(widget.formStore.description),
+      ),
+      selection: const TextSelection.collapsed(offset: 0),
+    );
     print(widget.formStore);
     super.initState();
+  }
+
+  Project _constructProjectFromFormData() {
+    return Project(
+      title: widget.formStore.title,
+      description: _controller.document.toPlainText(),
+      numberOfStudents: widget.formStore.numberOfStudents,
+      updatedAt: "",
+      createdAt: "",
+      companyId: 1,
+      typeFlag: 1,
+      projectScopeFlag: 1,
+    );
   }
 
   @override
@@ -159,18 +194,22 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   Text(
-                    '${widget.formStore.numberStudents} student(s)',
+                    '${widget.formStore.numberOfStudents} student(s)',
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ],
               ),
-              SizedBox(height: 40,),
+              SizedBox(
+                height: 40,
+              ),
               RoundedButtonWidget(
                 buttonText: "Post project",
                 buttonColor: Theme.of(context).colorScheme.primary,
                 textColor: Colors.white,
                 onPressed: () {
-                 
+                  Project project = _constructProjectFromFormData();
+                  // print(project.description);
+                  _projectStore.insert(project);
                 },
               ),
             ],

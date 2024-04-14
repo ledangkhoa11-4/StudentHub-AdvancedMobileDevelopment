@@ -9,6 +9,54 @@ part of 'form_post_project_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$FormPostProjectStore on _FormPostProjectStore, Store {
+  late final _$companyIdAtom =
+      Atom(name: '_FormPostProjectStore.companyId', context: context);
+
+  @override
+  int get companyId {
+    _$companyIdAtom.reportRead();
+    return super.companyId;
+  }
+
+  @override
+  set companyId(int value) {
+    _$companyIdAtom.reportWrite(value, super.companyId, () {
+      super.companyId = value;
+    });
+  }
+
+  late final _$projectScopeFlagAtom =
+      Atom(name: '_FormPostProjectStore.projectScopeFlag', context: context);
+
+  @override
+  int get projectScopeFlag {
+    _$projectScopeFlagAtom.reportRead();
+    return super.projectScopeFlag;
+  }
+
+  @override
+  set projectScopeFlag(int value) {
+    _$projectScopeFlagAtom.reportWrite(value, super.projectScopeFlag, () {
+      super.projectScopeFlag = value;
+    });
+  }
+
+  late final _$typeFlagAtom =
+      Atom(name: '_FormPostProjectStore.typeFlag', context: context);
+
+  @override
+  int get typeFlag {
+    _$typeFlagAtom.reportRead();
+    return super.typeFlag;
+  }
+
+  @override
+  set typeFlag(int value) {
+    _$typeFlagAtom.reportWrite(value, super.typeFlag, () {
+      super.typeFlag = value;
+    });
+  }
+
   late final _$titleAtom =
       Atom(name: '_FormPostProjectStore.title', context: context);
 
@@ -41,19 +89,19 @@ mixin _$FormPostProjectStore on _FormPostProjectStore, Store {
     });
   }
 
-  late final _$numberStudentsAtom =
-      Atom(name: '_FormPostProjectStore.numberStudents', context: context);
+  late final _$numberOfStudentsAtom =
+      Atom(name: '_FormPostProjectStore.numberOfStudents', context: context);
 
   @override
-  int get numberStudents {
-    _$numberStudentsAtom.reportRead();
-    return super.numberStudents;
+  int get numberOfStudents {
+    _$numberOfStudentsAtom.reportRead();
+    return super.numberOfStudents;
   }
 
   @override
-  set numberStudents(int value) {
-    _$numberStudentsAtom.reportWrite(value, super.numberStudents, () {
-      super.numberStudents = value;
+  set numberOfStudents(int value) {
+    _$numberOfStudentsAtom.reportWrite(value, super.numberOfStudents, () {
+      super.numberOfStudents = value;
     });
   }
 
@@ -167,9 +215,12 @@ mixin _$FormPostProjectStore on _FormPostProjectStore, Store {
   @override
   String toString() {
     return '''
+companyId: ${companyId},
+projectScopeFlag: ${projectScopeFlag},
+typeFlag: ${typeFlag},
 title: ${title},
 duration: ${duration},
-numberStudents: ${numberStudents},
+numberOfStudents: ${numberOfStudents},
 description: ${description}
     ''';
   }

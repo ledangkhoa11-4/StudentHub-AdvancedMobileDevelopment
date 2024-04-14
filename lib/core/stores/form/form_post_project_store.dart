@@ -4,8 +4,7 @@ import 'package:validators/validators.dart';
 
 part 'form_post_project_store.g.dart';
 
-class FormPostProjectStore = _FormPostProjectStore
-    with _$FormPostProjectStore;
+class FormPostProjectStore = _FormPostProjectStore with _$FormPostProjectStore;
 
 abstract class _FormPostProjectStore with Store {
   // store for handling form errors
@@ -25,12 +24,21 @@ abstract class _FormPostProjectStore with Store {
     _disposers = [
       reaction((_) => title, validateTitle),
       reaction((_) => duration, validateDuration),
-      reaction((_) => numberStudents, validateNumberStudents),
+      reaction((_) => numberOfStudents, validateNumberStudents),
       reaction((_) => description, validateDescription)
     ];
   }
 
   // store variables:-----------------------------------------------------------
+  @observable
+  int companyId = 1;
+
+  @observable
+  int projectScopeFlag = 1;
+
+  @observable
+  int typeFlag = 1;
+
   @observable
   String title = '';
 
@@ -38,7 +46,7 @@ abstract class _FormPostProjectStore with Store {
   String duration = '';
 
   @observable
-  int numberStudents = 0;
+  int numberOfStudents = 0;
 
   @observable
   String description = '';
@@ -56,7 +64,7 @@ abstract class _FormPostProjectStore with Store {
 
   @action
   void setNumberStudents(int value) {
-    numberStudents = value;
+    numberOfStudents = value;
   }
 
   @action
@@ -77,7 +85,7 @@ abstract class _FormPostProjectStore with Store {
   void validateDuration(String value) {
     if (value.isEmpty) {
       formErrorStore.duration = "Please tell us project's duration";
-    }  else {
+    } else {
       formErrorStore.duration = null;
     }
   }
@@ -86,7 +94,7 @@ abstract class _FormPostProjectStore with Store {
   void validateNumberStudents(int value) {
     if (value <= 0) {
       formErrorStore.numberStudents = "Please enter a number of students";
-    }  else {
+    } else {
       formErrorStore.numberStudents = null;
     }
   }
@@ -95,7 +103,7 @@ abstract class _FormPostProjectStore with Store {
   void validateDescription(String value) {
     if (value.isEmpty) {
       formErrorStore.description = "Please enter description";
-    }  else {
+    } else {
       formErrorStore.description = null;
     }
   }
@@ -110,7 +118,7 @@ abstract class _FormPostProjectStore with Store {
   void validateAll() {
     validateTitle(title);
     validateDuration(duration);
-    validateNumberStudents(numberStudents);
+    validateNumberStudents(numberOfStudents);
     validateDescription(description);
   }
 }
