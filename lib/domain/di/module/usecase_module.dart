@@ -9,6 +9,8 @@ import 'package:boilerplate/domain/usecase/post/insert_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/udpate_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/is_logged_in_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/login_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/save_auth_token_usercase.dart';
@@ -32,7 +34,7 @@ mixin UseCaseModule {
       SaveAuthTokenUseCase(getIt<UserRepository>()),
     );
 
-     getIt.registerSingleton<SaveCurrentProfileUseCase>(
+    getIt.registerSingleton<SaveCurrentProfileUseCase>(
       SaveCurrentProfileUseCase(getIt<UserRepository>()),
     );
 
@@ -48,8 +50,16 @@ mixin UseCaseModule {
       GetMeUseCase(getIt<UserRepository>()),
     );
 
-     getIt.registerSingleton<CreateUpdateCompanyProfileUseCase>(
+    getIt.registerSingleton<CreateUpdateCompanyProfileUseCase>(
       CreateUpdateCompanyProfileUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<GetTechStackUseCase>(
+      GetTechStackUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<GetSkillSetUseCase>(
+      GetSkillSetUseCase(getIt<UserRepository>()),
     );
 
     // post:--------------------------------------------------------------------

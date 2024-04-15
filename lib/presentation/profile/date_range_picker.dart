@@ -5,15 +5,20 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class CustomDateRangePicker extends StatefulWidget {
   const CustomDateRangePicker(
-      {this.selectedRange = null,
+      {this.error,
+      this.selectedRange = null,
       required this.label,
+      required this.key,
       required this.name,
       required this.onSubmit});
 
+  final Key key;
   final String label;
   final String name;
   final Function({required PickerDateRange range}) onSubmit;
   final PickerDateRange? selectedRange;
+  final String? error;
+
   @override
   State<CustomDateRangePicker> createState() => _CustomDateRangePickerState();
 }
@@ -35,6 +40,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
     final ThemeData theme = Theme.of(context);
 
     return (FormBuilderTextField(
+      key: widget.key,
       readOnly: true,
       name: widget.name,
       validator: FormBuilderValidators.required(),
@@ -49,11 +55,14 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                       extendableRangeSelectionDirection:
                           ExtendableRangeSelectionDirection.both,
                       enablePastDates: true,
+                      initialSelectedRange: widget.selectedRange,
                       minDate: DateTime(1950, 1, 1),
                       maxDate: DateTime(2050, 1, 1),
+                      selectionTextStyle: TextStyle(color: Colors.white),
                       enableMultiView: true,
                       allowViewNavigation: false,
-                      selectionMode: DateRangePickerSelectionMode.extendableRange,
+                      selectionMode:
+                          DateRangePickerSelectionMode.extendableRange,
                       controller: _controller,
                       navigationDirection:
                           DateRangePickerNavigationDirection.vertical,
@@ -70,10 +79,11 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
             });
       },
       decoration: InputDecoration(
+        errorText: widget.error,
           contentPadding: EdgeInsets.zero,
           label: Text(widget.label),
           errorStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
-              color: Theme.of(context).colorScheme.error, fontSize: 10),
+              color: Theme.of(context).colorScheme.error, fontSize: 0),
           floatingLabelAlignment: FloatingLabelAlignment.center,
           enabledBorder:
               UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey))),

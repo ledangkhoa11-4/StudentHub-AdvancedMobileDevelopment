@@ -117,6 +117,11 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => CompanyNewProfile()));
         }
+
+        if (currentProfile == UserRole.STUDENT.value) {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => StudentNewProfile()));
+        }
       },
     );
   }

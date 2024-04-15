@@ -37,6 +37,38 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$techstacksAtom =
+      Atom(name: '_UserStore.techstacks', context: context);
+
+  @override
+  List<TechStack>? get techstacks {
+    _$techstacksAtom.reportRead();
+    return super.techstacks;
+  }
+
+  @override
+  set techstacks(List<TechStack>? value) {
+    _$techstacksAtom.reportWrite(value, super.techstacks, () {
+      super.techstacks = value;
+    });
+  }
+
+  late final _$skillSetsAtom =
+      Atom(name: '_UserStore.skillSets', context: context);
+
+  @override
+  List<Skillset>? get skillSets {
+    _$skillSetsAtom.reportRead();
+    return super.skillSets;
+  }
+
+  @override
+  set skillSets(List<Skillset>? value) {
+    _$skillSetsAtom.reportWrite(value, super.skillSets, () {
+      super.skillSets = value;
+    });
+  }
+
   late final _$currentRoleAtom =
       Atom(name: '_UserStore.currentRole', context: context);
 
@@ -228,6 +260,23 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$getAllTechStackFutureAtom =
+      Atom(name: '_UserStore.getAllTechStackFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get getAllTechStackFuture {
+    _$getAllTechStackFutureAtom.reportRead();
+    return super.getAllTechStackFuture;
+  }
+
+  @override
+  set getAllTechStackFuture(ObservableFuture<dynamic> value) {
+    _$getAllTechStackFutureAtom.reportWrite(value, super.getAllTechStackFuture,
+        () {
+      super.getAllTechStackFuture = value;
+    });
+  }
+
   late final _$createCompanyProfileFutureAtom =
       Atom(name: '_UserStore.createCompanyProfileFuture', context: context);
 
@@ -281,10 +330,28 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.createUpdateCompanyProfile(param));
   }
 
+  late final _$getAllTechStackAsyncAction =
+      AsyncAction('_UserStore.getAllTechStack', context: context);
+
+  @override
+  Future<dynamic> getAllTechStack() {
+    return _$getAllTechStackAsyncAction.run(() => super.getAllTechStack());
+  }
+
+  late final _$getAllSkillsetAsyncAction =
+      AsyncAction('_UserStore.getAllSkillset', context: context);
+
+  @override
+  Future<dynamic> getAllSkillset() {
+    return _$getAllSkillsetAsyncAction.run(() => super.getAllSkillset());
+  }
+
   @override
   String toString() {
     return '''
 user: ${user},
+techstacks: ${techstacks},
+skillSets: ${skillSets},
 currentRole: ${currentRole},
 success: ${success},
 signupSuccess: ${signupSuccess},
@@ -297,6 +364,7 @@ isCreateProfile: ${isCreateProfile},
 loginFuture: ${loginFuture},
 signinFuture: ${signinFuture},
 getMeFuture: ${getMeFuture},
+getAllTechStackFuture: ${getAllTechStackFuture},
 createCompanyProfileFuture: ${createCompanyProfileFuture},
 isLoading: ${isLoading},
 isSignin: ${isSignin}

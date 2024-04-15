@@ -2,10 +2,14 @@ import 'dart:async';
 
 import 'package:boilerplate/data/network/apis/users/user_api.dart';
 import 'package:boilerplate/domain/entity/user/profile_company.dart';
+import 'package:boilerplate/domain/entity/user/skillset.dart';
+import 'package:boilerplate/domain/entity/user/tech_stack.dart';
 import 'package:boilerplate/domain/repository/user/user_repository.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
 
 import '../../../domain/entity/user/user.dart';
@@ -68,5 +72,19 @@ class UserRepositoryImpl extends UserRepository {
         return res;
       }).catchError((error) => throw error);
     }
+  }
+
+   @override
+  Future<List<TechStack>?> getTechstack(GetTechStackParams params) async {
+    return await _userApi.getTechstack(params).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+   @override
+  Future<List<Skillset>?> getSkillSet(GetSkillSetParams params) async {
+    return await _userApi.getSkillset(params).then((res) {
+      return res;
+    }).catchError((error) => throw error);
   }
 }

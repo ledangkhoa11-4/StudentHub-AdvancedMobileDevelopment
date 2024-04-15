@@ -4,8 +4,12 @@ import 'package:boilerplate/core/stores/error/error_store.dart';
 import 'package:boilerplate/core/stores/form/form_store.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/entity/user/skillset.dart';
+import 'package:boilerplate/domain/entity/user/tech_stack.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/is_logged_in_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/save_auth_token_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/save_current_profile_usecase.dart';
@@ -33,7 +37,9 @@ abstract class _UserStore with Store {
       this.formErrorStore,
       this.errorStore,
       this._getMeUseCase,
-      this._createCompanyProfileUseCase) {
+      this._createCompanyProfileUseCase,
+      this._getAllTechStackUseCase,
+      this._getAllSkillSetUseCase) {
     // setting up disposers
     _setupDisposers();
 
@@ -52,6 +58,8 @@ abstract class _UserStore with Store {
   final SignupUseCase _signupUseCase;
   final GetMeUseCase _getMeUseCase;
   final CreateUpdateCompanyProfileUseCase _createCompanyProfileUseCase;
+  final GetTechStackUseCase _getAllTechStackUseCase;
+  final GetSkillSetUseCase _getAllSkillSetUseCase;
 
   // stores:--------------------------------------------------------------------
   // for handling form errors
@@ -78,6 +86,13 @@ abstract class _UserStore with Store {
 
   @observable
   User? user = null;
+
+  @observable
+  List<TechStack>? techstacks = null;
+
+
+  @observable
+  List<Skillset>? skillSets = null;
 
   @observable
   int? currentRole = null;
@@ -116,13 +131,17 @@ abstract class _UserStore with Store {
   ObservableFuture<dynamic> getMeFuture = emptyLoginResponse;
 
   @observable
+  ObservableFuture<dynamic> getAllTechStackFuture = emptyLoginResponse;
+
+  @observable
   ObservableFuture<dynamic> createCompanyProfileFuture = emptyLoginResponse;
 
   @computed
   bool get isLoading =>
       loginFuture.status == FutureStatus.pending ||
       getMeFuture.status == FutureStatus.pending ||
-      createCompanyProfileFuture.status == FutureStatus.pending;
+      createCompanyProfileFuture.status == FutureStatus.pending ||
+      getAllTechStackFuture.status == FutureStatus.pending;
 
   @computed
   bool get isSignin => signinFuture.status == FutureStatus.pending;
@@ -217,6 +236,48 @@ abstract class _UserStore with Store {
       this.apiResponseSuccess = false;
       this.apiResponseMessage = response["errorDetails"].toString();
     });
+  }
+
+  @action
+  Future getAllTechStack() async {
+    if (this.techstacks == null) {
+      final prms = GetTechStackParams();
+      final future = _getAllTechStackUseCase.call(params: prms);
+      getAllTechStackFuture = ObservableFuture(future);
+      await future.then((value) async {
+        if (value != null) {
+          print(value);
+          this.techstacks = value;
+          this.apiResponseSuccess = true;
+        }
+      }).catchError((e) {
+        String message = e.response.toString();
+        final response = jsonDecode(message);
+        this.apiResponseSuccess = false;
+        this.apiResponseMessage = response["errorDetails"].toString();
+      });
+    }
+  }
+
+  @action
+  Future getAllSkillset() async {
+    if (this.skillSets == null) {
+      final prms = GetSkillSetParams();
+      final future = _getAllSkillSetUseCase.call(params: prms);
+      getAllTechStackFuture = ObservableFuture(future);
+      await future.then((value) async {
+        if (value != null) {
+          print(value);
+          this.skillSets = value;
+          this.apiResponseSuccess = true;
+        }
+      }).catchError((e) {
+        String message = e.response.toString();
+        final response = jsonDecode(message);
+        this.apiResponseSuccess = false;
+        this.apiResponseMessage = response["errorDetails"].toString();
+      });
+    }
   }
 
   logout() async {

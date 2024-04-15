@@ -5,9 +5,13 @@ import 'package:boilerplate/core/data/network/dio/dio_client.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/domain/entity/user/profile_company.dart';
+import 'package:boilerplate/domain/entity/user/skillset.dart';
+import 'package:boilerplate/domain/entity/user/tech_stack.dart';
 import 'package:boilerplate/domain/entity/user/user.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/login_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
 
@@ -53,9 +57,11 @@ class UserApi {
     }
   }
 
-  Future<ProfileCompany?> createCompanyProfile(CreateUpdateCompanyProfileParams param) async {
+  Future<ProfileCompany?> createCompanyProfile(
+      CreateUpdateCompanyProfileParams param) async {
     try {
-      final res = await _dioClient.dio.post(Endpoints.createCompanyProfile, data: param);
+      final res = await _dioClient.dio
+          .post(Endpoints.createCompanyProfile, data: param);
       final result = jsonDecode(res.toString());
       return ProfileCompany.fromMap(result["result"]);
     } catch (e) {
@@ -64,11 +70,41 @@ class UserApi {
     }
   }
 
-   Future<ProfileCompany?> updateCompanyProfile(CreateUpdateCompanyProfileParams param) async {
+  Future<ProfileCompany?> updateCompanyProfile(
+      CreateUpdateCompanyProfileParams param) async {
     try {
-      final res = await _dioClient.dio.put(Endpoints.createCompanyProfile+"/${param.uid}", data: param);
+      final res = await _dioClient.dio
+          .put(Endpoints.createCompanyProfile + "/${param.uid}", data: param);
       final result = jsonDecode(res.toString());
       return ProfileCompany.fromMap(result["result"]);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<List<TechStack>?> getTechstack(GetTechStackParams param) async {
+    try {
+      final res = await _dioClient.dio.get(Endpoints.getAllTechstack);
+      final result = jsonDecode(res.toString());
+      List<dynamic> techStackObj = result["result"];
+      return techStackObj
+          .map((techstack) => TechStack.fromJson(techstack))
+          .toList();
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<List<Skillset>?> getSkillset(GetSkillSetParams param) async {
+    try {
+      final res = await _dioClient.dio.get(Endpoints.getAllSkillset);
+      final result = jsonDecode(res.toString());
+      List<dynamic> techStackObj = result["result"];
+      return techStackObj
+          .map((techstack) => Skillset.fromJson(techstack))
+          .toList();
     } catch (e) {
       print(e.toString());
       throw e;

@@ -21,5 +21,8 @@ class Endpoints {
 
   static const String createCompanyProfile = baseUrl + "/api/profile/company";
 
-  
+  static const String getAllTechstack =
+      baseUrl + "/api/techstack/getAllTechStack";
+
+  static const String getAllSkillset = baseUrl + "/api/skillset/getAllSkillSet";
 }
