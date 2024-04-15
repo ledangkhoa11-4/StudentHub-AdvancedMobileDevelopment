@@ -1,4 +1,4 @@
-import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
+import 'package:boilerplate/core/stores/form/form_post_project_store.dart';
 import 'package:boilerplate/presentation/6_company_review_proposals/components/project_view_list.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
@@ -14,6 +14,7 @@ class DashBoardCompany extends StatefulWidget {
 class _DashBoardState extends State<DashBoardCompany>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
+  late final FormPostProjectStore formStore;
 
   @override
   void initState() {
@@ -63,7 +64,7 @@ class _DashBoardState extends State<DashBoardCompany>
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          Center(child: ProjectList()),
+          Center(child: CompanyProjectList()),
           Center(child: Text('Content of Tab 2')),
           Center(child: Text('Content of Tab 3')),
         ],

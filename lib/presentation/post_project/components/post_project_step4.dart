@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:boilerplate/core/stores/form/form_post_project_store.dart';
+import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/core/widgets/textfield_widget.dart';
 import 'package:boilerplate/di/service_locator.dart';
@@ -37,7 +38,7 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
     super.didChangeDependencies();
 
     // check to see if already called api
-    if (!_projectStore.loading) {
+    if (!_projectStore.isLoading) {
       // _projectStore.getProjects();
     }
   }
@@ -210,6 +211,41 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                   Project project = _constructProjectFromFormData();
                   // print(project.description);
                   _projectStore.insert(project);
+                },
+              ),
+              Observer(
+                builder: (context) {
+                  // Check if the isLoading is false && success = true, to show the success dialog
+                  if (!_projectStore.isLoading &&
+                      _projectStore.success == true) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Success"),
+                            content:
+                                Text("A new project is created successfully."),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text("OK"),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    });
+                  }
+
+                  // Return the Visibility widget for the loading indicator
+                  return Visibility(
+                    visible: _projectStore.isLoading,
+                    child: CustomProgressIndicatorWidget(),
+                  );
                 },
               ),
             ],

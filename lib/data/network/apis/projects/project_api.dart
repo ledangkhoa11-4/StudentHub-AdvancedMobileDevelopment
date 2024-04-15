@@ -21,7 +21,7 @@ class ProjectApi {
   /// Returns list of projects in response
   Future<ProjectList> getProjects() async {
     try {
-      final res = await _dioClient.dio.get(Endpoints.postProject);
+      final res = await _dioClient.dio.get(Endpoints.getCompanyProject);
       return ProjectList.fromJson(res.data);
     } catch (e) {
       print(e.toString());

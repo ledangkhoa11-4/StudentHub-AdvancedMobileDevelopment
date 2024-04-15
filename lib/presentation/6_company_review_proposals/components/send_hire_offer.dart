@@ -1,16 +1,15 @@
-import 'package:boilerplate/presentation/5_browse_project_flow/project_detail.dart';
-import 'package:boilerplate/presentation/6_company_review_proposals/components/project_view_item.dart';
+import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:flutter/material.dart';
 
 import 'candidate_list.dart';
 import 'detail.dart';
 
 class SendHireOffer extends StatefulWidget {
-  final ProjectItem projectItem;
+  final Project project;
 
   const SendHireOffer({
     Key? key,
-    required this.projectItem,
+    required this.project,
   }) : super(key: key);
 
   @override

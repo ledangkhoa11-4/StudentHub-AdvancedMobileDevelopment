@@ -9,6 +9,9 @@ class Project {
   String title;
   String description;
   int numberOfStudents;
+  int countProposals;
+  int countMessages;
+  int countHired;
 
   Project({
     required this.companyId,
@@ -21,6 +24,9 @@ class Project {
     required this.title,
     required this.description,
     required this.numberOfStudents,
+    this.countProposals = 0,
+    this.countMessages = 0,
+    this.countHired = 0,
   });
 
   factory Project.fromMap(Map<String, dynamic> json) => Project(
@@ -34,6 +40,9 @@ class Project {
         title: json["title"],
         description: json["description"],
         numberOfStudents: json["numberOfStudents"],
+        countProposals: json["countProposals"] ?? 0,
+        countMessages: json["countMessages"] ?? 0,
+        countHired: json["countHired"] ?? 0,
       );
 
   Map<String, dynamic> toMap() => {
@@ -47,5 +56,8 @@ class Project {
         "title": title,
         "description": description,
         "numberOfStudents": numberOfStudents,
+        "countProposals": countProposals,
+        "countMessages": countMessages,
+        "countHired": countHired,
       };
 }

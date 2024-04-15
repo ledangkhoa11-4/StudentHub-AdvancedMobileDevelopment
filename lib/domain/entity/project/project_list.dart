@@ -15,4 +15,8 @@ class ProjectList {
       projects: projects,
     );
   }
+
+  int get length => projects?.length ?? 0;
+
+  Project operator [](int index) => projects![index];
 }

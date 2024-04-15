@@ -9,12 +9,13 @@ part of 'post_project_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$ProjectStore on _ProjectStore, Store {
-  Computed<bool>? _$loadingComputed;
+  Computed<bool>? _$isLoadingComputed;
 
   @override
-  bool get loading => (_$loadingComputed ??=
-          Computed<bool>(() => super.loading, name: '_ProjectStore.loading'))
-      .value;
+  bool get isLoading =>
+      (_$isLoadingComputed ??= Computed<bool>(() => super.isLoading,
+              name: '_ProjectStore.isLoading'))
+          .value;
 
   late final _$fetchProjectsFutureAtom =
       Atom(name: '_ProjectStore.fetchProjectsFuture', context: context);
@@ -29,6 +30,38 @@ mixin _$ProjectStore on _ProjectStore, Store {
   set fetchProjectsFuture(ObservableFuture<ProjectList?> value) {
     _$fetchProjectsFutureAtom.reportWrite(value, super.fetchProjectsFuture, () {
       super.fetchProjectsFuture = value;
+    });
+  }
+
+  late final _$fetchProjectFutureAtom =
+      Atom(name: '_ProjectStore.fetchProjectFuture', context: context);
+
+  @override
+  ObservableFuture<Project?> get fetchProjectFuture {
+    _$fetchProjectFutureAtom.reportRead();
+    return super.fetchProjectFuture;
+  }
+
+  @override
+  set fetchProjectFuture(ObservableFuture<Project?> value) {
+    _$fetchProjectFutureAtom.reportWrite(value, super.fetchProjectFuture, () {
+      super.fetchProjectFuture = value;
+    });
+  }
+
+  late final _$getProjectFutureAtom =
+      Atom(name: '_ProjectStore.getProjectFuture', context: context);
+
+  @override
+  ObservableFuture<Project?> get getProjectFuture {
+    _$getProjectFutureAtom.reportRead();
+    return super.getProjectFuture;
+  }
+
+  @override
+  set getProjectFuture(ObservableFuture<Project?> value) {
+    _$getProjectFutureAtom.reportWrite(value, super.getProjectFuture, () {
+      super.getProjectFuture = value;
     });
   }
 
@@ -48,17 +81,49 @@ mixin _$ProjectStore on _ProjectStore, Store {
     });
   }
 
+  late final _$apiResponseMessageAtom =
+      Atom(name: '_ProjectStore.apiResponseMessage', context: context);
+
+  @override
+  String get apiResponseMessage {
+    _$apiResponseMessageAtom.reportRead();
+    return super.apiResponseMessage;
+  }
+
+  @override
+  set apiResponseMessage(String value) {
+    _$apiResponseMessageAtom.reportWrite(value, super.apiResponseMessage, () {
+      super.apiResponseMessage = value;
+    });
+  }
+
+  late final _$apiResponseSuccessAtom =
+      Atom(name: '_ProjectStore.apiResponseSuccess', context: context);
+
+  @override
+  bool? get apiResponseSuccess {
+    _$apiResponseSuccessAtom.reportRead();
+    return super.apiResponseSuccess;
+  }
+
+  @override
+  set apiResponseSuccess(bool? value) {
+    _$apiResponseSuccessAtom.reportWrite(value, super.apiResponseSuccess, () {
+      super.apiResponseSuccess = value;
+    });
+  }
+
   late final _$successAtom =
       Atom(name: '_ProjectStore.success', context: context);
 
   @override
-  bool get success {
+  bool? get success {
     _$successAtom.reportRead();
     return super.success;
   }
 
   @override
-  set success(bool value) {
+  set success(bool? value) {
     _$successAtom.reportWrite(value, super.success, () {
       super.success = value;
     });
@@ -84,9 +149,13 @@ mixin _$ProjectStore on _ProjectStore, Store {
   String toString() {
     return '''
 fetchProjectsFuture: ${fetchProjectsFuture},
+fetchProjectFuture: ${fetchProjectFuture},
+getProjectFuture: ${getProjectFuture},
 projectList: ${projectList},
+apiResponseMessage: ${apiResponseMessage},
+apiResponseSuccess: ${apiResponseSuccess},
 success: ${success},
-loading: ${loading}
+isLoading: ${isLoading}
     ''';
   }
 }
