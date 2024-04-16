@@ -3,11 +3,13 @@ import 'package:boilerplate/domain/entity/user/education.dart';
 import 'package:boilerplate/domain/entity/user/experience.dart';
 import 'package:boilerplate/domain/entity/user/language.dart';
 import 'package:boilerplate/domain/entity/user/skillset.dart';
+import 'package:boilerplate/domain/entity/user/tech_stack.dart';
 
 class ProfileStudent {
   int? id;
   int userId;
   int? stechStackId;
+  TechStack? techStack;
   List<Skillset>? skillSets;
   String? resume;
   String? transcript;
@@ -22,6 +24,7 @@ class ProfileStudent {
       this.skillSets,
       this.resume,
       this.transcript,
+      this.techStack,
       this.languages,
       this.educations,
       this.experiences});
@@ -47,6 +50,7 @@ class ProfileStudent {
         stechStackId: json["techStackId"],
         skillSets: skillSets,
         resume: json["resume"],
+        techStack: TechStack.fromJson(json['techStack']),
         transcript: json["transcript"],
         languages: languages,
         educations: educations,

@@ -8,6 +8,7 @@ import 'package:boilerplate/presentation/login/login.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
 import 'package:boilerplate/presentation/profile/company_new_profile.dart';
+import 'package:boilerplate/presentation/profile/review_student_profile.dart';
 import 'package:boilerplate/presentation/profile/student_new_profile.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
@@ -112,15 +113,19 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
           )),
       onTap: () {
         final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
-        print(currentProfile);
         if (currentProfile == UserRole.COMPANY.value) {
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => CompanyNewProfile()));
         }
 
         if (currentProfile == UserRole.STUDENT.value) {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => StudentNewProfile()));
+          if (_userStore.user!.student != null) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ReviewStudentProfile()));
+          } else {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => StudentNewProfile()));
+          }
         }
       },
     );

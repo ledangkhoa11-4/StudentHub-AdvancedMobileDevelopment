@@ -19,6 +19,7 @@ class TechStackWiget extends StatefulWidget {
 class _TechStackWigetState extends State<TechStackWiget> {
   TechStack? selectedValue;
   final textEditingController = new TextEditingController();
+  final UserStore _userStore = getIt<UserStore>();
 
   @override
   void dispose() {
@@ -31,11 +32,27 @@ class _TechStackWigetState extends State<TechStackWiget> {
     final UserStore _userStore = getIt<UserStore>();
 
     return Observer(builder: (context) {
+      if (_userStore.user!.student != null &&
+          _userStore.user!.student!.id != null &&
+          _userStore.techstacks != null) {
+        Future.delayed(Duration.zero, () async {
+          setState(() {
+            selectedValue = _userStore.techstacks!.firstWhere(
+                (element) =>
+                    element.id == _userStore.user!.student!.stechStackId,
+                orElse: null);
+            if (selectedValue != null) {
+              widget.formStore.setTechStackId(selectedValue!.id);
+            }
+          });
+        });
+      }
       return (Column(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          // _userStore.techstacks!= null ? startEditMode() : SizedBox.shrink()
           Text(
             "Your Techstack:",
             style: Theme.of(context).textTheme.labelLarge,
@@ -150,5 +167,9 @@ class _TechStackWigetState extends State<TechStackWiget> {
         ],
       ));
     });
+  }
+
+  Widget startEditMode() {
+    return SizedBox.shrink();
   }
 }

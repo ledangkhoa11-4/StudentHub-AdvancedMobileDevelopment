@@ -260,6 +260,90 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$uploadResumeFutureAtom =
+      Atom(name: '_UserStore.uploadResumeFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get uploadResumeFuture {
+    _$uploadResumeFutureAtom.reportRead();
+    return super.uploadResumeFuture;
+  }
+
+  @override
+  set uploadResumeFuture(ObservableFuture<dynamic> value) {
+    _$uploadResumeFutureAtom.reportWrite(value, super.uploadResumeFuture, () {
+      super.uploadResumeFuture = value;
+    });
+  }
+
+  late final _$uploadTranscriptFutureAtom =
+      Atom(name: '_UserStore.uploadTranscriptFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get uploadTranscriptFuture {
+    _$uploadTranscriptFutureAtom.reportRead();
+    return super.uploadTranscriptFuture;
+  }
+
+  @override
+  set uploadTranscriptFuture(ObservableFuture<dynamic> value) {
+    _$uploadTranscriptFutureAtom
+        .reportWrite(value, super.uploadTranscriptFuture, () {
+      super.uploadTranscriptFuture = value;
+    });
+  }
+
+  late final _$createLanguageFutureAtom =
+      Atom(name: '_UserStore.createLanguageFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get createLanguageFuture {
+    _$createLanguageFutureAtom.reportRead();
+    return super.createLanguageFuture;
+  }
+
+  @override
+  set createLanguageFuture(ObservableFuture<dynamic> value) {
+    _$createLanguageFutureAtom.reportWrite(value, super.createLanguageFuture,
+        () {
+      super.createLanguageFuture = value;
+    });
+  }
+
+  late final _$createEducationFutureAtom =
+      Atom(name: '_UserStore.createEducationFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get createEducationFuture {
+    _$createEducationFutureAtom.reportRead();
+    return super.createEducationFuture;
+  }
+
+  @override
+  set createEducationFuture(ObservableFuture<dynamic> value) {
+    _$createEducationFutureAtom.reportWrite(value, super.createEducationFuture,
+        () {
+      super.createEducationFuture = value;
+    });
+  }
+
+  late final _$createExperienceFutureAtom =
+      Atom(name: '_UserStore.createExperienceFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get createExperienceFuture {
+    _$createExperienceFutureAtom.reportRead();
+    return super.createExperienceFuture;
+  }
+
+  @override
+  set createExperienceFuture(ObservableFuture<dynamic> value) {
+    _$createExperienceFutureAtom
+        .reportWrite(value, super.createExperienceFuture, () {
+      super.createExperienceFuture = value;
+    });
+  }
+
   late final _$getAllTechStackFutureAtom =
       Atom(name: '_UserStore.getAllTechStackFuture', context: context);
 
@@ -291,6 +375,23 @@ mixin _$UserStore on _UserStore, Store {
     _$createCompanyProfileFutureAtom
         .reportWrite(value, super.createCompanyProfileFuture, () {
       super.createCompanyProfileFuture = value;
+    });
+  }
+
+  late final _$createStudentProfileFutureAtom =
+      Atom(name: '_UserStore.createStudentProfileFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get createStudentProfileFuture {
+    _$createStudentProfileFutureAtom.reportRead();
+    return super.createStudentProfileFuture;
+  }
+
+  @override
+  set createStudentProfileFuture(ObservableFuture<dynamic> value) {
+    _$createStudentProfileFutureAtom
+        .reportWrite(value, super.createStudentProfileFuture, () {
+      super.createStudentProfileFuture = value;
     });
   }
 
@@ -346,6 +447,71 @@ mixin _$UserStore on _UserStore, Store {
     return _$getAllSkillsetAsyncAction.run(() => super.getAllSkillset());
   }
 
+  late final _$uploadResumeAsyncAction =
+      AsyncAction('_UserStore.uploadResume', context: context);
+
+  @override
+  Future<dynamic> uploadResume(PlatformFile file) {
+    return _$uploadResumeAsyncAction.run(() => super.uploadResume(file));
+  }
+
+  late final _$uploadTranscriptAsyncAction =
+      AsyncAction('_UserStore.uploadTranscript', context: context);
+
+  @override
+  Future<dynamic> uploadTranscript(PlatformFile file) {
+    return _$uploadTranscriptAsyncAction
+        .run(() => super.uploadTranscript(file));
+  }
+
+  late final _$createLanguagesAsyncAction =
+      AsyncAction('_UserStore.createLanguages', context: context);
+
+  @override
+  Future<dynamic> createLanguages(List<ProfileLanguage?> languages) {
+    return _$createLanguagesAsyncAction
+        .run(() => super.createLanguages(languages));
+  }
+
+  late final _$createEducationsAsyncAction =
+      AsyncAction('_UserStore.createEducations', context: context);
+
+  @override
+  Future<dynamic> createEducations(List<Education?> educations) {
+    return _$createEducationsAsyncAction
+        .run(() => super.createEducations(educations));
+  }
+
+  late final _$createExperiencesAsyncAction =
+      AsyncAction('_UserStore.createExperiences', context: context);
+
+  @override
+  Future<dynamic> createExperiences(List<Experience?> experiences) {
+    return _$createExperiencesAsyncAction
+        .run(() => super.createExperiences(experiences));
+  }
+
+  late final _$createUpdateStudentProfileAsyncAction =
+      AsyncAction('_UserStore.createUpdateStudentProfile', context: context);
+
+  @override
+  Future<dynamic> createUpdateStudentProfile(
+      CreateUpdateStudentProfileParams param) {
+    return _$createUpdateStudentProfileAsyncAction
+        .run(() => super.createUpdateStudentProfile(param));
+  }
+
+  late final _$bulkCreateUpdateStudentProfileAsyncAction = AsyncAction(
+      '_UserStore.bulkCreateUpdateStudentProfile',
+      context: context);
+
+  @override
+  Future<dynamic> bulkCreateUpdateStudentProfile(
+      FormStudent.FormStudentProfileStore formStore) {
+    return _$bulkCreateUpdateStudentProfileAsyncAction
+        .run(() => super.bulkCreateUpdateStudentProfile(formStore));
+  }
+
   @override
   String toString() {
     return '''
@@ -364,8 +530,14 @@ isCreateProfile: ${isCreateProfile},
 loginFuture: ${loginFuture},
 signinFuture: ${signinFuture},
 getMeFuture: ${getMeFuture},
+uploadResumeFuture: ${uploadResumeFuture},
+uploadTranscriptFuture: ${uploadTranscriptFuture},
+createLanguageFuture: ${createLanguageFuture},
+createEducationFuture: ${createEducationFuture},
+createExperienceFuture: ${createExperienceFuture},
 getAllTechStackFuture: ${getAllTechStackFuture},
 createCompanyProfileFuture: ${createCompanyProfileFuture},
+createStudentProfileFuture: ${createStudentProfileFuture},
 isLoading: ${isLoading},
 isSignin: ${isSignin}
     ''';

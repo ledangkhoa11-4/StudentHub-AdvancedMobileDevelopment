@@ -1,5 +1,7 @@
 import 'package:boilerplate/core/stores/form/form_student_profile_store.dart';
+import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/user/education.dart';
+import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/profile/date_range_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -23,6 +25,8 @@ class _EducationWidgetState extends State<EducationWidget> {
   final List<NewTextField> fields = [];
   String savedValue = '';
   final DateFormat formatter = DateFormat('MMM, yyyy');
+  bool isBind = false;
+  final UserStore _userStore = getIt<UserStore>();
 
   @override
   void initState() {
@@ -33,6 +37,66 @@ class _EducationWidgetState extends State<EducationWidget> {
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
+      if (!isBind &&
+          _userStore.user!.student != null &&
+          _userStore.user!.student!.educations != null) {
+        Future.delayed(Duration.zero, () async {
+          setState(() {
+            isBind = true;
+          });
+          setState(() {
+            isBind = true;
+            final needMore = _userStore.user!.student!.educations!.length - 1;
+            if (_userStore.user!.student!.educations!.length > 0) {
+              widget.formStore.setEducationAtIndex(
+                  Education(
+                    schoolName:
+                        _userStore.user!.student!.educations![0].schoolName,
+                    startYear:
+                        _userStore.user!.student!.educations![0].startYear,
+                    endYear: _userStore.user!.student!.educations![0].endYear,
+                  ),
+                  0);
+            }
+            for (int i = 1; i <= needMore; i++) {
+              var uuid = Uuid();
+              final id = uuid.v4();
+              final index = widget.formStore.educations.length;
+              widget.formStore.setAddEducation(Education(
+                  schoolName:
+                      _userStore.user!.student!.educations![i].schoolName,
+                  startYear: _userStore.user!.student!.educations![i].startYear,
+                  endYear: _userStore.user!.student!.educations![i].endYear));
+              setState(() {
+                fields.add(NewTextField(
+                  formKey: _formKey,
+                  id: id,
+                  formIndex: index,
+                  formstore: widget.formStore,
+                  initialValue1:
+                      _userStore.user!.student!.educations![i].schoolName,
+                  initialValue2:
+                      '${_userStore.user!.student!.educations![i].startYear} - ${_userStore.user!.student!.educations![i].endYear}',
+                  key1: UniqueKey(),
+                  key2: UniqueKey(),
+                  name1: UniqueKey().toString(),
+                  name2: UniqueKey().toString(),
+                  onDelete: () {
+                    setState(() {
+                      final element =
+                          fields.firstWhere((element) => element.id == id);
+                      fields.remove(element);
+                      _formKey.currentState!.save();
+                      widget.formStore.setRemoveEducation(index);
+                    });
+                  },
+                ));
+              });
+            }
+          });
+        });
+      }
+
       return (Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -60,6 +124,8 @@ class _EducationWidgetState extends State<EducationWidget> {
                           id: id,
                           formIndex: index,
                           formstore: widget.formStore,
+                          initialValue1: "",
+                          initialValue2: "",
                           key1: UniqueKey(),
                           key2: UniqueKey(),
                           name1: UniqueKey().toString(),
@@ -70,13 +136,7 @@ class _EducationWidgetState extends State<EducationWidget> {
                                   .firstWhere((element) => element.id == id);
                               fields.remove(element);
                               _formKey.currentState!.save();
-                              if (widget.formStore.formErrorStore.educations !=
-                                      null &&
-                                  widget.formStore.formErrorStore.educations!
-                                          .length >=
-                                      index + 1) {
-                                widget.formStore.setRemoveEducation(index);
-                              }
+                              widget.formStore.setRemoveEducation(index);
                             });
                           },
                         ));
@@ -104,9 +164,10 @@ class _EducationWidgetState extends State<EducationWidget> {
                     child: Column(
                       children: [
                         FormBuilderTextField(
-                          key: UniqueKey(),
                           name: 'schoolname',
                           validator: FormBuilderValidators.required(),
+                          initialValue: _userStore
+                              .user!.student!.educations![0].schoolName,
                           onChanged: (value) {
                             widget.formStore.setEducationAtIndex(
                                 Education(
@@ -150,6 +211,8 @@ class _EducationWidgetState extends State<EducationWidget> {
                           key: UniqueKey(),
                           name: 'schoolYear',
                           label: "School Year",
+                          initialValue:
+                              '${_userStore.user!.student!.educations![0].startYear} - ${_userStore.user!.student!.educations![0].endYear}',
                           error: widget.formStore.formErrorStore.educations !=
                                       null &&
                                   (widget.formStore.formErrorStore
@@ -195,6 +258,8 @@ class NewTextField extends StatelessWidget {
       required this.id,
       required this.formIndex,
       required this.formstore,
+      required this.initialValue1,
+      required this.initialValue2,
       required this.onDelete,
       required this.key1,
       required this.key2,
@@ -211,6 +276,8 @@ class NewTextField extends StatelessWidget {
   final FormStudentProfileStore formstore;
   final VoidCallback onDelete;
   final GlobalKey<FormBuilderState> formKey;
+  final String initialValue1;
+  final String initialValue2;
 
   @override
   Widget build(BuildContext context) {
@@ -234,6 +301,7 @@ class NewTextField extends StatelessWidget {
                       key: key1,
                       name: name1,
                       validator: FormBuilderValidators.required(),
+                      initialValue: initialValue1,
                       onChanged: (value) {
                         formstore.setEducationAtIndex(
                             Education(
@@ -272,6 +340,7 @@ class NewTextField extends StatelessWidget {
                     ),
                     CustomDateRangePicker(
                       label: "School year",
+                      initialValue: initialValue2,
                       key: key2,
                       name: name2,
                       error: formstore.formErrorStore.educations != null &&

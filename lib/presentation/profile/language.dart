@@ -1,5 +1,7 @@
 import 'package:boilerplate/core/stores/form/form_student_profile_store.dart';
+import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/user/language.dart';
+import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -19,6 +21,8 @@ class _LanguageWidgetState extends State<LanguageWidget> {
   final _formKey = GlobalKey<FormBuilderState>();
   final List<NewTextField> fields = [];
   String savedValue = '';
+  final UserStore _userStore = getIt<UserStore>();
+  bool isBind = false;
 
   @override
   void initState() {
@@ -29,6 +33,58 @@ class _LanguageWidgetState extends State<LanguageWidget> {
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
+      if (!isBind &&
+          _userStore.user!.student != null &&
+          _userStore.user!.student!.languages != null) {
+        Future.delayed(Duration.zero, () async {
+          setState(() {
+            isBind = true;
+          });
+          setState(() {
+            isBind = true;
+            final needMore = _userStore.user!.student!.languages!.length - 1;
+            if (_userStore.user!.student!.languages!.length > 0) {
+              widget.formStore.setLanguageAtIndex(
+                  ProfileLanguage(
+                      languageName:
+                          _userStore.user!.student!.languages![0].languageName,
+                      level: _userStore.user!.student!.languages![0].level),
+                  0);
+            }
+            for (int i = 1; i <= needMore; i++) {
+              var uuid = Uuid();
+              final id = uuid.v4();
+              final index = widget.formStore.languages.length;
+              widget.formStore.setAddLanguage(ProfileLanguage(
+                  languageName:
+                      _userStore.user!.student!.languages![i].languageName,
+                  level: _userStore.user!.student!.languages![i].level));
+              fields.add(NewTextField(
+                id: id,
+                formIndex: index,
+                formstore: widget.formStore,
+                initialValue1:
+                    _userStore.user!.student!.languages![i].languageName,
+                initialValue2: _userStore.user!.student!.languages![i].level,
+                key1: UniqueKey(),
+                key2: UniqueKey(),
+                name1: UniqueKey().toString(),
+                name2: UniqueKey().toString(),
+                onDelete: () {
+                  setState(() {
+                    final element =
+                        fields.firstWhere((element) => element.id == id);
+                    fields.remove(element);
+                    _formKey.currentState!.save();
+                    widget.formStore.setRemoveLanguage(index);
+                  });
+                },
+              ));
+            }
+          });
+        });
+      }
+
       return (Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -55,6 +111,8 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                           id: id,
                           formIndex: index,
                           formstore: widget.formStore,
+                          initialValue1: "",
+                          initialValue2: "",
                           key1: UniqueKey(),
                           key2: UniqueKey(),
                           name1: UniqueKey().toString(),
@@ -65,13 +123,7 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                                   .firstWhere((element) => element.id == id);
                               fields.remove(element);
                               _formKey.currentState!.save();
-                              if (widget.formStore.formErrorStore.languages !=
-                                      null &&
-                                  widget.formStore.formErrorStore.languages!
-                                          .length >=
-                                      index + 1) {
-                                widget.formStore.setRemoveLanguage(index);
-                              }
+                              widget.formStore.setRemoveLanguage(index);
                             });
                           },
                         ));
@@ -103,6 +155,8 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                           flex: 2,
                           child: FormBuilderTextField(
                             name: 'language1',
+                            initialValue: _userStore
+                                .user?.student?.languages?[0].languageName,
                             onChanged: (value) {
                               widget.formStore.setLanguageAtIndex(
                                   ProfileLanguage(
@@ -147,6 +201,8 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                           flex: 1,
                           child: FormBuilderTextField(
                             name: 'level1',
+                            initialValue:
+                                _userStore.user?.student?.languages?[0].level,
                             onChanged: (value) {
                               widget.formStore.setLanguageAtIndex(
                                   ProfileLanguage(
@@ -197,6 +253,8 @@ class NewTextField extends StatelessWidget {
       {super.key,
       required this.id,
       required this.formIndex,
+      required this.initialValue1,
+      required this.initialValue2,
       required this.formstore,
       required this.onDelete,
       required this.key1,
@@ -211,6 +269,8 @@ class NewTextField extends StatelessWidget {
   final String name2;
   final FormStudentProfileStore formstore;
   final VoidCallback onDelete;
+  final String initialValue1;
+  final String initialValue2;
 
   @override
   Widget build(BuildContext context) {
@@ -235,6 +295,7 @@ class NewTextField extends StatelessWidget {
                         key: key1,
                         name: name1,
                         validator: FormBuilderValidators.required(),
+                        initialValue: initialValue1,
                         onChanged: (value) {
                           formstore.setLanguageAtIndex(
                               ProfileLanguage(
@@ -282,6 +343,7 @@ class NewTextField extends StatelessWidget {
                         key: key2,
                         name: name2,
                         validator: FormBuilderValidators.required(),
+                        initialValue: initialValue2,
                         onChanged: (value) {
                           formstore.setLanguageAtIndex(
                               ProfileLanguage(

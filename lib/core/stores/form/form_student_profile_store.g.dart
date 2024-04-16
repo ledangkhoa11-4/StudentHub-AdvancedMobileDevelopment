@@ -125,7 +125,7 @@ mixin _$FormStudentProfileStore on _FormStudentProfileStore, Store {
       ActionController(name: '_FormStudentProfileStore', context: context);
 
   @override
-  dynamic setFile(String label, PlatformFile? file) {
+  void setFile(String label, PlatformFile? file) {
     final _$actionInfo = _$_FormStudentProfileStoreActionController.startAction(
         name: '_FormStudentProfileStore.setFile');
     try {

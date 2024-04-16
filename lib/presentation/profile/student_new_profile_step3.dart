@@ -1,7 +1,12 @@
 import 'package:boilerplate/core/stores/form/form_student_profile_store.dart';
 import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
+import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
+import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/entity/user/user.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
+import 'package:boilerplate/presentation/auth_widget/auth_widget.dart';
+import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/profile/file_picker.dart';
 import 'package:boilerplate/presentation/profile/student_profile_stepper.dart';
 import 'package:boilerplate/presentation/toast/toast.dart';
@@ -19,9 +24,11 @@ class StudentNewProfileStep3 extends StatefulWidget {
 
 class _StudentNewProfileStep3State extends State<StudentNewProfileStep3> {
   bool loading = false;
+  final _userStore = getIt<UserStore>();
 
   @override
   Widget build(BuildContext context) {
+    _userStore.resetApiResponse();
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context),
       body: Stack(
@@ -88,10 +95,13 @@ class _StudentNewProfileStep3State extends State<StudentNewProfileStep3> {
                       buttonColor: Theme.of(context).colorScheme.primary,
                       textColor: Colors.white,
                       onPressed: () {
-                        if (widget.formStore.resume == null || widget.formStore.transcript == null) {
-                          ToastHelper.error("Please attatch your resume and transcript");
+                        if (widget.formStore.resume == null ||
+                            widget.formStore.transcript == null) {
+                          ToastHelper.error(
+                              "Please attatch your resume and transcript");
                         } else {
-                          print(widget.formStore.experiences[0]!.title);
+                          _userStore
+                              .bulkCreateUpdateStudentProfile(widget.formStore);
                         }
                       },
                     ),
@@ -103,13 +113,68 @@ class _StudentNewProfileStep3State extends State<StudentNewProfileStep3> {
               }),
             ),
           ),
-          Visibility(
-            visible: loading,
-            child: CustomProgressIndicatorWidget(),
+          Observer(builder: (context) {
+            return Visibility(
+              visible: loading || _userStore.isLoading,
+              child: CustomProgressIndicatorWidget(),
+            );
+          }),
+          Observer(
+            builder: (context) {
+              return !_userStore.isLoading &&
+                      _userStore.apiResponseSuccess == true
+                  ? navigate(context)
+                  : _showErrorMessage(_userStore.apiResponseMessage);
+            },
           ),
+          Observer(
+            builder: (context) {
+              return !_userStore.isLoading &&
+                      _userStore.onFinishStudentProfile == true
+                  ? navigate2(context)
+                  : SizedBox.shrink();
+            },
+          )
         ],
       ),
     );
+  }
+
+  Widget navigate(BuildContext context) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (_userStore.isCreateProfile == true) {
+        getIt<SharedPreferenceHelper>()
+            .saveCurrentProfile(UserRole.STUDENT.value);
+        _userStore.resetCreateProfileState();
+        ToastHelper.success("Create profile successfully");
+      }
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => AuthWidget()),
+          (Route<dynamic> route) => false);
+      _userStore.resetApiResponse();
+    });
+
+    return Container();
+  }
+
+  Widget navigate2(BuildContext context) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => AuthWidget()),
+          (Route<dynamic> route) => false);
+      _userStore.resetFinishProfile();
+    });
+
+    return Container();
+  }
+
+  // General Methods:-----------------------------------------------------------
+  _showErrorMessage(String message) {
+    if (message.isNotEmpty) {
+      ToastHelper.error(message);
+    }
+    _userStore.resetApiResponse();
+    return SizedBox.shrink();
   }
 
   void onPicked(PlatformFile file, String name) {

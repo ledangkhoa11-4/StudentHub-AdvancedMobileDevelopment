@@ -62,6 +62,7 @@ class _StudentNewProfileStep2State extends State<StudentNewProfileStep2> {
                   widget.formStore.validateAll();
                   if (widget.formStore.formErrorStore.hasErrorsInStep2 ==
                       true) {
+                        widget.formStore.formErrorStore.experiences!.forEach((e) => print(e.title));
                     ToastHelper.error("Please fill all fields");
                   } else {
                     Navigator.push(

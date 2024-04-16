@@ -23,6 +23,7 @@ class StudentNewProfile extends StatefulWidget {
 class _StudentNewProfileState extends State<StudentNewProfile> {
   final UserStore _userStore = getIt<UserStore>();
   final FormStudentProfileStore _formStore = getIt<FormStudentProfileStore>();
+  late final bool isEdit;
 
   @override
   void didChangeDependencies() {
@@ -32,10 +33,19 @@ class _StudentNewProfileState extends State<StudentNewProfile> {
   }
 
   @override
+  void initState() {
+    isEdit = _userStore.user?.student?.id != null;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context,
-          titleWidget: Text("Create new profile"), disableSettingAccount: true),
+          titleWidget: isEdit
+              ? Text("Edit company profile")
+              : Text("Create new profile"),
+          disableSettingAccount: true),
       body: Stack(
         children: [
           SingleChildScrollView(

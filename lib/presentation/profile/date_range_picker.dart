@@ -9,6 +9,7 @@ class CustomDateRangePicker extends StatefulWidget {
       this.selectedRange = null,
       required this.label,
       required this.key,
+      this.initialValue = "",
       required this.name,
       required this.onSubmit});
 
@@ -18,6 +19,7 @@ class CustomDateRangePicker extends StatefulWidget {
   final Function({required PickerDateRange range}) onSubmit;
   final PickerDateRange? selectedRange;
   final String? error;
+  final String initialValue;
 
   @override
   State<CustomDateRangePicker> createState() => _CustomDateRangePickerState();
@@ -44,6 +46,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
       readOnly: true,
       name: widget.name,
       validator: FormBuilderValidators.required(),
+      initialValue: widget.initialValue,
       onTap: () async {
         final DateTime? result = await showDialog<DateTime>(
             context: context,

@@ -19,9 +19,37 @@ class SkillsetWidget extends StatefulWidget {
 class _SkillsetWidgetState extends State<SkillsetWidget> {
   final UserStore _userStore = getIt<UserStore>();
 
+  List<ValueItem<int>> selectedOptions = [];
+  List<ValueItem<int>> optionsList = [];
+
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
+      if (_userStore.skillSets != null) {
+        Future.delayed(Duration.zero, () async {
+          setState(() {
+            optionsList = _userStore.skillSets!
+                .map((e) => ValueItem(label: e.name, value: e.id))
+                .toList();
+          });
+        });
+      }
+      if (_userStore.user!.student != null &&
+          _userStore.user!.student!.id != null &&
+          _userStore.skillSets != null) {
+        Future.delayed(Duration.zero, () async {
+          setState(() {
+            selectedOptions = optionsList
+                .where((option) => _userStore.user!.student!.skillSets!
+                    .any((element) => element.id == option.value))
+                .toList();
+            if (selectedOptions.length > 0) {
+              widget.formStore
+                  .setSkillsets(selectedOptions.map((e) => e.value!).toList());
+            }
+          });
+        });
+      }
       return (Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -37,7 +65,9 @@ class _SkillsetWidgetState extends State<SkillsetWidget> {
             MultiSelectDropDown<int>(
                 hint: "Select your skillset",
                 fieldBackgroundColor: Colors.transparent,
-                borderColor: widget.formStore.formErrorStore.skillset == null ? Colors.grey : Colors.red,
+                borderColor: widget.formStore.formErrorStore.skillset == null
+                    ? Colors.grey
+                    : Colors.red,
                 borderWidth: 1,
                 hintStyle: TextStyle(
                   fontSize: 14,
@@ -56,6 +86,7 @@ class _SkillsetWidgetState extends State<SkillsetWidget> {
                         .copyWith(fontSize: 10, color: Colors.white)),
                 dropdownHeight: 300,
                 optionTextStyle: const TextStyle(fontSize: 14),
+                selectedOptions: selectedOptions,
                 selectedOptionIcon: Icon(
                   Icons.check_circle,
                   size: 20,
@@ -66,15 +97,12 @@ class _SkillsetWidgetState extends State<SkillsetWidget> {
                       .where((element) => element.value != null)
                       .map((e) => e.value!)
                       .toList();
-                  if (selected.length > 0 || widget.formStore.skillSets.length > 0) {
+                  if (selected.length > 0 ||
+                      widget.formStore.skillSets.length > 0) {
                     widget.formStore.setSkillsets(selected);
                   }
                 },
-                options: _userStore.skillSets != null
-                    ? _userStore.skillSets!
-                        .map((e) => ValueItem(label: e.name, value: e.id))
-                        .toList()
-                    : [])
+                options: optionsList)
           ]));
     });
   }
