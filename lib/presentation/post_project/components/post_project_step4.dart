@@ -6,6 +6,7 @@ import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/core/widgets/textfield_widget.dart';
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/presentation/auth_widget/auth_widget.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/post_project/components/gradient_divider.dart';
 import 'package:boilerplate/presentation/post_project/components/post_project_stepper.dart';
@@ -209,7 +210,8 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                 textColor: Colors.white,
                 onPressed: () {
                   Project project = _constructProjectFromFormData();
-                  _projectStore.insert(project);
+                  // _projectStore.insert(project);
+                  _completeAndBackToHomeScreen();
                 },
               ),
               Observer(
@@ -251,6 +253,14 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
           ),
         ),
       ),
+    );
+  }
+
+  void _completeAndBackToHomeScreen() {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => AuthWidget()),
+      (Route<dynamic> route) =>
+          false, // This removes all routes below the new route
     );
   }
 }
