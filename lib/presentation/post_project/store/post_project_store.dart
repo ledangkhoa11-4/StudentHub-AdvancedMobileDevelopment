@@ -49,6 +49,9 @@ abstract class _ProjectStore with Store {
   ObservableFuture<Project?> getProjectFuture = _emptyProjectResponse;
 
   @observable
+  ObservableFuture<Project?> getProjectFuture2 = _emptyProjectResponse;
+
+  @observable
   ProjectList? projectList;
 
   @observable

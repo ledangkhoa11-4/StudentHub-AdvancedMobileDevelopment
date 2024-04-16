@@ -22,7 +22,7 @@ class ProjectApi {
   Future<ProjectList> getProjects() async {
     try {
       final res = await _dioClient.dio.get(Endpoints.getCompanyProject);
-      print("ttttttttttttttttttttttttttttt");
+      // print("ttttttttttttttttttttttttttttt");
       return ProjectList.fromJson(res.data['result']);
     } catch (e) {
       print(e.toString());

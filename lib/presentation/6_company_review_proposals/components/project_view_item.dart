@@ -73,8 +73,10 @@ class ProjectItem extends StatelessWidget {
                 style: Theme.of(context).textTheme.subtitle1,
               ),
               Text(
-                project!.description,
-                style: Theme.of(context).textTheme.bodyText1,
+                " • " + project!.description,
+                style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                      fontStyle: FontStyle.italic,
+                    ),
               ),
               SizedBox(height: 8.0),
               Row(
