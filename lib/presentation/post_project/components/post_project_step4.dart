@@ -210,7 +210,7 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                 textColor: Colors.white,
                 onPressed: () {
                   Project project = _constructProjectFromFormData();
-                  // _projectStore.insert(project);
+                  _projectStore.insert(project);
                   _completeAndBackToHomeScreen();
                 },
               ),
