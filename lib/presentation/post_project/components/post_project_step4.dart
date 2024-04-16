@@ -8,6 +8,7 @@ import 'package:boilerplate/core/widgets/textfield_widget.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/presentation/auth_widget/auth_widget.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
+import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/post_project/components/gradient_divider.dart';
 import 'package:boilerplate/presentation/post_project/components/post_project_stepper.dart';
 import 'package:boilerplate/presentation/post_project/components/unordered_list.dart';
@@ -17,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 
 import '../../../domain/entity/project/project.dart';
@@ -33,6 +35,7 @@ class PostProjectStep4 extends StatefulWidget {
 class _PostProjectStep4State extends State<PostProjectStep4> {
   late QuillController _controller;
   final ProjectStore _projectStore = getIt<ProjectStore>();
+  final UserStore _userStore = getIt<UserStore>();
 
   @override
   void didChangeDependencies() {
@@ -63,7 +66,7 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
       numberOfStudents: widget.formStore.numberOfStudents,
       updatedAt: "",
       createdAt: "",
-      companyId: 111,
+      companyId: int.parse(_userStore.user!.company!.id as String),
       typeFlag: 1,
       projectScopeFlag: 1,
     );
@@ -209,9 +212,21 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                 buttonColor: Theme.of(context).colorScheme.primary,
                 textColor: Colors.white,
                 onPressed: () {
-                  Project project = _constructProjectFromFormData();
-                  _projectStore.insert(project);
-                  _completeAndBackToHomeScreen();
+                  if (_userStore.user?.company != null) {
+                    Project project = _constructProjectFromFormData();
+                    _projectStore.insert(project);
+                    _completeAndBackToHomeScreen();
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: "You have to create your profile compnay first",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
+                  }
                 },
               ),
               Observer(
