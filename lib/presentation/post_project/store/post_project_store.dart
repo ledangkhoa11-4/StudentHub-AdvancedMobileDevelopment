@@ -74,7 +74,11 @@ abstract class _ProjectStore with Store {
 
     future.then((projectList) {
       this.projectList = projectList;
+      // print('==projectList: ');
+      // print(projectList[0].companyId.toString() + " - " + projectList[0].title);
     }).catchError((error) {
+      print('---------------------------------');
+      print(error);
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
   }

@@ -41,8 +41,8 @@ class _DashBoardState extends State<DashBoardStudent>
               Tab(icon: Icon(Icons.sticky_note_2), text: "Archieved"),
             ],
           )),
-      bottomNavigationBar: UserNavigationBar.buildNavigationBar(context,
-          setState: setState),
+      bottomNavigationBar:
+          UserNavigationBar.buildNavigationBar(context, setState: setState),
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
@@ -65,7 +65,7 @@ class _DashBoardState extends State<DashBoardStudent>
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              ProjectListType2(),
+              // ProjectListType2(),
             ],
           ),
           Center(child: Text('Content of Tab 2')),

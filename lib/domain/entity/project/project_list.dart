@@ -1,7 +1,7 @@
 import 'project.dart';
 
 class ProjectList {
-  final List<Project>? projects;
+  List<Project>? projects;
 
   ProjectList({
     this.projects,
@@ -9,6 +9,8 @@ class ProjectList {
 
   factory ProjectList.fromJson(List<dynamic> json) {
     List<Project> projects = <Project>[];
+    // print("JSONNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
+    // print(json);
     projects = json.map((project) => Project.fromMap(project)).toList();
 
     return ProjectList(

@@ -1,5 +1,6 @@
 import 'package:boilerplate/presentation/6_company_review_proposals/components/send_hire_offer.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../../domain/entity/project/project.dart';
 
 class ProjectItem extends StatelessWidget {
@@ -11,6 +12,14 @@ class ProjectItem extends StatelessWidget {
     required this.project,
     required this.onLikeChanged,
   }) : super(key: key);
+
+  String formatDate(String? isoDate) {
+    if (isoDate == null) {
+      return 'No date';
+    }
+    DateTime dateTime = DateTime.parse(isoDate);
+    return DateFormat('yyyy/MM/dd - HH:mm').format(dateTime);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +47,7 @@ class ProjectItem extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      project.title,
+                      project!.title,
                       style: Theme.of(context)
                           .textTheme
                           .headline6!
@@ -55,7 +64,7 @@ class ProjectItem extends StatelessWidget {
                 ],
               ),
               Text(
-                'Created: ${project.createdAt}',
+                'Created: ' + formatDate('${project!.createdAt}'),
                 style: TextStyle(color: grayColor),
               ),
               SizedBox(height: 8.0),
@@ -64,7 +73,7 @@ class ProjectItem extends StatelessWidget {
                 style: Theme.of(context).textTheme.subtitle1,
               ),
               Text(
-                project.description,
+                project!.description,
                 style: Theme.of(context).textTheme.bodyText1,
               ),
               SizedBox(height: 8.0),
@@ -73,21 +82,21 @@ class ProjectItem extends StatelessWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text('2'), // Replace with actual data
+                      Text('${project.countProposals}'),
                       Text('Proposals'),
                     ],
                   ),
                   SizedBox(width: 32.0),
                   Column(
                     children: [
-                      Text('8'), // Replace with actual data
+                      Text('${project.countMessages}'),
                       Text('Messages'),
                     ],
                   ),
                   SizedBox(width: 32.0),
                   Column(
                     children: [
-                      Text('2'), // Replace with actual data
+                      Text('${project.countHired}'),
                       Text('Hired'),
                     ],
                   ),

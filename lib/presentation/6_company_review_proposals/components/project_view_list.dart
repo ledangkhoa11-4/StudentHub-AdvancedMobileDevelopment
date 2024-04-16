@@ -1,9 +1,11 @@
+import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/di/service_locator.dart';
-import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/domain/entity/project/project_list.dart';
 import 'package:boilerplate/presentation/post_project/store/post_project_store.dart';
 import 'package:flutter/material.dart';
 import 'package:boilerplate/presentation/6_company_review_proposals/components/project_view_item.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 
 class CompanyProjectList extends StatefulWidget {
   CompanyProjectList({Key? key}) : super(key: key);
@@ -13,18 +15,15 @@ class CompanyProjectList extends StatefulWidget {
 }
 
 class _ProjectListState extends State<CompanyProjectList> {
-  late ProjectList _allProjects = ProjectList(projects: []);
+  // late ProjectList _allProjects = ProjectList(projects: []);
   final ProjectStore _projectStore = getIt<ProjectStore>();
 
   @override
-  Future<void> didChangeDependencies() async {
+  void didChangeDependencies() {
     super.didChangeDependencies();
 
     if (!_projectStore.isLoading) {
-      final ProjectList projects = await _projectStore.getProjects();
-      setState(() {
-        _allProjects = projects;
-      });
+      _projectStore.getProjects();
     }
   }
 
@@ -54,11 +53,17 @@ class _ProjectListState extends State<CompanyProjectList> {
     return Scaffold(
       body: Column(
         children: [
+          Observer(builder: (context) {
+            return Visibility(
+              visible: _projectStore.isLoading,
+              child: CustomProgressIndicatorWidget(),
+            );
+          }),
           Expanded(
             child: ListView.builder(
-              itemCount: _allProjects.length,
+              itemCount: _projectStore.projectList?.length,
               itemBuilder: (context, index) {
-                final project = _allProjects[index];
+                final project = _projectStore.projectList![index];
                 return ProjectItem(
                   project: project,
                   onLikeChanged: (bool) {},

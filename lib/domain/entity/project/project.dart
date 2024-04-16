@@ -30,7 +30,7 @@ class Project {
   });
 
   factory Project.fromMap(Map<String, dynamic> json) => Project(
-        companyId: json["companyId"],
+        companyId: int.parse(json["companyId"]),
         projectScopeFlag: json["projectScopeFlag"],
         typeFlag: json["typeFlag"],
         id: json["id"],
@@ -40,9 +40,9 @@ class Project {
         title: json["title"],
         description: json["description"],
         numberOfStudents: json["numberOfStudents"],
-        countProposals: json["countProposals"] ?? 0,
-        countMessages: json["countMessages"] ?? 0,
-        countHired: json["countHired"] ?? 0,
+        countProposals: json["countProposals"],
+        countMessages: json["countMessages"],
+        countHired: json["countHired"],
       );
 
   Map<String, dynamic> toMap() => {
