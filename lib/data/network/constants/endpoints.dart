@@ -23,5 +23,5 @@ class Endpoints {
 
   static const String createCompanyProfile = baseUrl + "/api/profile/company";
 
-  static const String getCompanyProject = baseUrl + "/api/project/company/111";
+  static const String getCompanyProject = baseUrl + "/api/project/company";
 }

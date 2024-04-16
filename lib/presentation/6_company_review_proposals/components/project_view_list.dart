@@ -1,6 +1,7 @@
 import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/project/project_list.dart';
+import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/post_project/store/post_project_store.dart';
 import 'package:flutter/material.dart';
 import 'package:boilerplate/presentation/6_company_review_proposals/components/project_view_item.dart';
@@ -17,6 +18,7 @@ class CompanyProjectList extends StatefulWidget {
 class _ProjectListState extends State<CompanyProjectList> {
   // late ProjectList _allProjects = ProjectList(projects: []);
   final ProjectStore _projectStore = getIt<ProjectStore>();
+  final UserStore _userStore = getIt<UserStore>();
 
   @override
   void didChangeDependencies() {
@@ -53,23 +55,26 @@ class _ProjectListState extends State<CompanyProjectList> {
     return Scaffold(
       body: Column(
         children: [
-          Observer(builder: (context) {
-            return Visibility(
-              visible: _projectStore.isLoading,
-              child: CustomProgressIndicatorWidget(),
-            );
-          }),
+          // Text(_userStore.user!.company!.id.toString()),
+          // Observer(builder: (context) {
+          //   return Visibility(
+          //     visible: _projectStore.isLoading,
+          //     child: CustomProgressIndicatorWidget(),
+          //   );
+          // }),
           Expanded(
-            child: ListView.builder(
-              itemCount: _projectStore.projectList?.length,
-              itemBuilder: (context, index) {
-                final project = _projectStore.projectList![index];
-                return ProjectItem(
-                  project: project,
-                  onLikeChanged: (bool) {},
-                );
-              },
-            ),
+            child: Observer(builder: (context) {
+              return ListView.builder(
+                itemCount: _projectStore.projectList?.length ?? 0,
+                itemBuilder: (context, index) {
+                  final project = _projectStore.projectList![index];
+                  return ProjectItem(
+                    project: project,
+                    onLikeChanged: (bool) {},
+                  );
+                },
+              );
+            }),
           ),
         ],
       ),
