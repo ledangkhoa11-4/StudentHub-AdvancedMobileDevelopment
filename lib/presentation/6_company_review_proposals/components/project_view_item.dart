@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:boilerplate/presentation/6_company_review_proposals/components/send_hire_offer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:intl/intl.dart';
 import '../../../domain/entity/project/project.dart';
 
@@ -26,6 +29,22 @@ class ProjectItem extends StatelessWidget {
     final Color greenColor = Color.fromARGB(255, 48, 121, 51);
     final Color grayColor = const Color.fromARGB(255, 134, 132, 132);
 
+    bool isJsonString(String str) {
+      try {
+        jsonDecode(str);
+        return true;
+      } catch (_) {
+        return false;
+      }
+    }
+
+    // print(isJsonString(project.description));
+    QuillController? _controller = null;
+    if (isJsonString(project.description))
+      _controller = QuillController(
+          document: Document.fromJson(jsonDecode(project.description)),
+          selection: const TextSelection.collapsed(offset: 0));
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -47,7 +66,7 @@ class ProjectItem extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      project!.title,
+                      project.title,
                       style: Theme.of(context)
                           .textTheme
                           .headline6!
@@ -72,12 +91,30 @@ class ProjectItem extends StatelessWidget {
                 'Students are looking for:',
                 style: Theme.of(context).textTheme.subtitle1,
               ),
-              Text(
-                " • " + project!.description,
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                      fontStyle: FontStyle.italic,
+              if (_controller != null)
+                IgnorePointer(
+                  ignoring: true,
+                  child: QuillProvider(
+                    configurations: QuillConfigurations(
+                      controller: _controller,
+                      sharedConfigurations: const QuillSharedConfigurations(
+                        locale: Locale('en'),
+                      ),
                     ),
-              ),
+                    child: QuillEditor.basic(
+                      configurations: const QuillEditorConfigurations(
+                        readOnly: true,
+                      ),
+                    ),
+                  ),
+                ),
+              if (_controller == null)
+                Text(
+                  project.description,
+                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                        fontStyle: FontStyle.italic,
+                      ),
+                ),
               SizedBox(height: 8.0),
               Row(
                 children: [

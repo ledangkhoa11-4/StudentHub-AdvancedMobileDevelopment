@@ -24,7 +24,7 @@ class _ProjectListState extends State<CompanyProjectList> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    if (!_projectStore.isLoading) {
+    if (_projectStore.projectList == null) {
       _projectStore.getProjects();
     }
   }
@@ -65,9 +65,11 @@ class _ProjectListState extends State<CompanyProjectList> {
           Expanded(
             child: Observer(builder: (context) {
               return ListView.builder(
-                itemCount: _projectStore.projectList?.length ?? 0,
+                itemCount: _projectStore.projectList?.projects?.length ?? 0,
                 itemBuilder: (context, index) {
                   final project = _projectStore.projectList![index];
+                  // print(project.toMap());
+                  // print("+++++++++++");
                   return ProjectItem(
                     project: project,
                     onLikeChanged: (bool) {},

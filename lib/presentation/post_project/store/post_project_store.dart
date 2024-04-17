@@ -72,7 +72,7 @@ abstract class _ProjectStore with Store {
     final future = _getProjectUseCase.call(params: null);
     fetchProjectsFuture = ObservableFuture(future);
 
-    future.then((projectList) {
+    await future.then((projectList) {
       this.projectList = projectList;
       // print('==projectList: ');
       // print(projectList[0].companyId.toString() + " - " + projectList[0].title);

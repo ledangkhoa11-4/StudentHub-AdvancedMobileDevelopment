@@ -34,7 +34,6 @@ class PostProjectStep4 extends StatefulWidget {
 }
 
 class _PostProjectStep4State extends State<PostProjectStep4> {
-  late QuillController _controller;
   final ProjectStore _projectStore = getIt<ProjectStore>();
   final UserStore _userStore = getIt<UserStore>();
 
@@ -48,26 +47,15 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
     }
   }
 
-  @override
-  void initState() {
-    _controller = QuillController(
-      document: Document.fromJson(
-        jsonDecode(widget.formStore.description),
-      ),
-      selection: const TextSelection.collapsed(offset: 0),
-    );
-    print(widget.formStore);
-    super.initState();
-  }
-
   Project _constructProjectFromFormData() {
     return Project(
       title: widget.formStore.title,
-      description: _controller.document.toPlainText(),
+      description:
+          widget.formStore.description, // controller.document.toPlainText(),
       numberOfStudents: widget.formStore.numberOfStudents,
       updatedAt: "",
       createdAt: "",
-      companyId: int.parse(_userStore.user!.company!.id as String),
+      companyId: int.parse(_userStore.user!.company!.id.toString()),
       typeFlag: 1,
       projectScopeFlag: 1,
     );
@@ -215,7 +203,9 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                 onPressed: () {
                   if (_userStore.user?.company != null) {
                     Project project = _constructProjectFromFormData();
-                    // _projectStore.insert(project);
+                    _projectStore.insert(project);
+                    // print("++++++++++++++++++++++++++++++++");
+                    // print("description: " + project.description);
                     _completeAndBackToHomeScreen();
                   } else {
                     ToastHelper.error(
