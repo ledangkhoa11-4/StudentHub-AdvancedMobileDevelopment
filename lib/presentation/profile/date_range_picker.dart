@@ -55,6 +55,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
                 child: Theme(
                     data: theme,
                     child: SfDateRangePicker(
+                      backgroundColor: Colors.white,
                       extendableRangeSelectionDirection:
                           ExtendableRangeSelectionDirection.both,
                       enablePastDates: true,

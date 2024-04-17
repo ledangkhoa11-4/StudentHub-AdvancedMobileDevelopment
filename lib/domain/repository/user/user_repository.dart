@@ -10,6 +10,7 @@ import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_student_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/login_usecase.dart';
@@ -48,6 +49,8 @@ abstract class UserRepository {
   Future<dynamic> createEducations(CreateEducationsParams params);
 
   Future<dynamic> createExperiences(CreateExperiencesParams params);
+
+  Future<String?> getProfileFile(GetProfileFileParams params);
 
   Future<bool> get isLoggedIn;
 }

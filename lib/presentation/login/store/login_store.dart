@@ -18,6 +18,7 @@ import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_student_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/is_logged_in_usecase.dart';
@@ -60,7 +61,8 @@ abstract class _UserStore with Store {
       this._createLanguageUseCase,
       this._createEducationUseCase,
       this._createExperiencesUseCase,
-      this._createStudentProfileUseCase) {
+      this._createStudentProfileUseCase,
+      this._getProfileFileUseCase) {
     // setting up disposers
     _setupDisposers();
 
@@ -87,6 +89,7 @@ abstract class _UserStore with Store {
   final CreateEducationUseCase _createEducationUseCase;
   final CreateExperiencesUseCase _createExperiencesUseCase;
   final CreateUpdateStudentProfileUseCase _createStudentProfileUseCase;
+  final GetProfileFileUseCase _getProfileFileUseCase;
 
   // stores:--------------------------------------------------------------------
   // for handling form errors
@@ -113,6 +116,12 @@ abstract class _UserStore with Store {
 
   @observable
   User? user = null;
+
+  @observable
+  String transcriptFile = "";
+
+  @observable
+  String resumeFile = "";
 
   @observable
   List<TechStack>? techstacks = null;
@@ -183,6 +192,9 @@ abstract class _UserStore with Store {
   @observable
   ObservableFuture<dynamic> createStudentProfileFuture = emptyLoginResponse;
 
+  @observable
+  ObservableFuture<dynamic> apiCallingFeature = emptyLoginResponse;
+
   @computed
   bool get isLoading =>
       loginFuture.status == FutureStatus.pending ||
@@ -193,7 +205,8 @@ abstract class _UserStore with Store {
       uploadTranscriptFuture.status == FutureStatus.pending ||
       createEducationFuture.status == FutureStatus.pending ||
       createExperienceFuture.status == FutureStatus.pending ||
-      createLanguageFuture.status == FutureStatus.pending;
+      createLanguageFuture.status == FutureStatus.pending ||
+      apiCallingFeature.status == FutureStatus.pending;
 
   @computed
   bool get isSignin => signinFuture.status == FutureStatus.pending;
@@ -241,8 +254,8 @@ abstract class _UserStore with Store {
         this.signupSuccess = true;
       }
     }).catchError((e) {
-        String message = e.response.toString();
-        final response = jsonDecode(message);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
       this.signupSuccess = false;
       this.signupMessage = response["errorDetails"].first.toString();
     });
@@ -284,8 +297,8 @@ abstract class _UserStore with Store {
         this.apiResponseSuccess = true;
       }
     }).catchError((e) {
-        String message = e.response.toString();
-        final response = jsonDecode(message);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
       this.apiResponseSuccess = false;
       this.apiResponseMessage = response["errorDetails"].toString();
     });
@@ -304,8 +317,8 @@ abstract class _UserStore with Store {
           this.apiResponseSuccess = true;
         }
       }).catchError((e) {
-          String message = e.response.toString();
-          final response = jsonDecode(message);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
         this.apiResponseSuccess = false;
         this.apiResponseMessage = response["errorDetails"].toString();
       });
@@ -325,8 +338,8 @@ abstract class _UserStore with Store {
           this.apiResponseSuccess = true;
         }
       }).catchError((e) {
-          String message = e.response.toString();
-          final response = jsonDecode(message);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
         this.apiResponseSuccess = false;
         this.apiResponseMessage = response["errorDetails"].toString();
       });
@@ -361,8 +374,8 @@ abstract class _UserStore with Store {
     }).catchError((e) {
       print(e.response);
       print("2---------------");
-        String message = e.response.toString();
-        final response = jsonDecode(message);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
       this.apiResponseSuccess = false;
       this.apiResponseMessage = response["errorDetails"].toString();
     });
@@ -396,8 +409,8 @@ abstract class _UserStore with Store {
     }).catchError((e) {
       print(e.response);
       print("3---------------");
-        String message = e.response.toString();
-        final response = jsonDecode(message);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
       this.apiResponseSuccess = false;
       this.apiResponseMessage = response["errorDetails"].toString();
     });
@@ -422,8 +435,8 @@ abstract class _UserStore with Store {
     }).catchError((e) {
       print(e.response);
       print("4---------------");
-        String message = e.response.toString();
-        final response = jsonDecode(message);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
       this.apiResponseSuccess = false;
       this.apiResponseMessage = response["errorDetails"].toString();
     });
@@ -452,8 +465,8 @@ abstract class _UserStore with Store {
     }).catchError((e) {
       print(e.response);
       print("5---------------");
-        String message = e.response.toString();
-        final response = jsonDecode(message);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
       this.apiResponseSuccess = false;
       this.apiResponseMessage = response["errorDetails"].toString();
     });
@@ -485,8 +498,8 @@ abstract class _UserStore with Store {
     }).catchError((e) {
       print(e.response);
       print("6---------------");
-        String message = e.response.toString();
-        final response = jsonDecode(message);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
       this.apiResponseSuccess = false;
       this.apiResponseMessage = response["errorDetails"].toString();
     });
@@ -507,8 +520,8 @@ abstract class _UserStore with Store {
     }).catchError((e) {
       print("1---------------");
       print(e);
-        String message = e.response.toString();
-        final response = jsonDecode(message);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
       this.apiResponseSuccess = false;
       this.apiResponseMessage = response["errorDetails"].toString();
     });
@@ -558,6 +571,52 @@ abstract class _UserStore with Store {
         this.onFinishStudentProfile = true;
       }).catchError((e) {
         print(e);
+      });
+    }
+  }
+
+  @action
+  Future getTranscriptFile() async {
+    if (this.transcriptFile.isEmpty) {
+      GetProfileFileParams param = GetProfileFileParams(studentId: this.user!.student!.id!, type: "transcript");
+      final future = _getProfileFileUseCase.call(params: param);
+      apiCallingFeature = ObservableFuture(future);
+      await future.then((value) async {
+        if (value != null) {
+          this.transcriptFile = value;
+          this.apiResponseSuccess = true;
+        }
+      }).catchError((e) {
+        print("---------------");
+        print(e);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
+        this.apiResponseSuccess = false;
+        this.apiResponseMessage = response["errorDetails"].toString();
+      });
+    }
+  }
+
+  @action
+  Future getResumeFile() async {
+    if (this.resumeFile.isEmpty) {
+      GetProfileFileParams param = GetProfileFileParams(studentId: this.user!.student!.id!, type: "resume");
+      final future = _getProfileFileUseCase.call(params: param);
+      apiCallingFeature = ObservableFuture(future);
+      await future.then((value) async {
+        if (value != null) {
+                                  print(123);
+
+          this.resumeFile = value;
+          this.apiResponseSuccess = true;
+        }
+      }).catchError((e) {
+        print("---------------");
+        print(e);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
+        this.apiResponseSuccess = false;
+        this.apiResponseMessage = response["errorDetails"].toString();
       });
     }
   }

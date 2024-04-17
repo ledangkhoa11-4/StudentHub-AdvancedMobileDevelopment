@@ -16,6 +16,7 @@ import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_student_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/login_usecase.dart';
@@ -234,6 +235,33 @@ class UserApi {
           .put(Endpoints.createStudentProfile + "/${param.uid}", data: param);
       final result = jsonDecode(res.toString());
       return ProfileStudent.fromMap(result["result"]);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<String?> getResumeFile(GetProfileFileParams param) async {
+    try {
+      if (param.type == "resume") {
+        final res = await _dioClient.dio.get(
+            Endpoints.getResumeFile
+                .replaceFirst(":studentId", '${param.studentId}'),
+            data: param);
+        final result = jsonDecode(res.toString());
+        return result["result"];
+      }
+
+      if (param.type == "transcript") {
+        final res = await _dioClient.dio.get(
+            Endpoints.getTranscriptFile
+                .replaceFirst(":studentId", '${param.studentId}'),
+            data: param);
+        final result = jsonDecode(res.toString());
+        return result["result"];
+      }
+
+      return null;
     } catch (e) {
       print(e.toString());
       throw e;

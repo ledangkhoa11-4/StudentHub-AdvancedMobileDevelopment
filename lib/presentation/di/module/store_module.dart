@@ -18,6 +18,7 @@ import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_student_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/is_logged_in_usecase.dart';
@@ -70,24 +71,26 @@ mixin StoreModule {
     // stores:------------------------------------------------------------------
     getIt.registerSingleton<UserStore>(
       UserStore(
-          getIt<IsLoggedInUseCase>(),
-          getIt<SaveLoginStatusUseCase>(),
-          getIt<SaveAuthTokenUseCase>(),
-          getIt<SaveCurrentProfileUseCase>(),
-          getIt<LoginUseCase>(),
-          getIt<SignupUseCase>(),
-          getIt<FormErrorStore>(),
-          getIt<ErrorStore>(),
-          getIt<GetMeUseCase>(),
-          getIt<CreateUpdateCompanyProfileUseCase>(),
-          getIt<GetTechStackUseCase>(),
-          getIt<GetSkillSetUseCase>(),
-          getIt<UploadResumeUseCase>(),
-          getIt<UploadTranscriptUseCase>(),
-          getIt<CreateLanguageUseCase>(),
-          getIt<CreateEducationUseCase>(),
-          getIt<CreateExperiencesUseCase>(),
-          getIt<CreateUpdateStudentProfileUseCase>()),
+        getIt<IsLoggedInUseCase>(),
+        getIt<SaveLoginStatusUseCase>(),
+        getIt<SaveAuthTokenUseCase>(),
+        getIt<SaveCurrentProfileUseCase>(),
+        getIt<LoginUseCase>(),
+        getIt<SignupUseCase>(),
+        getIt<FormErrorStore>(),
+        getIt<ErrorStore>(),
+        getIt<GetMeUseCase>(),
+        getIt<CreateUpdateCompanyProfileUseCase>(),
+        getIt<GetTechStackUseCase>(),
+        getIt<GetSkillSetUseCase>(),
+        getIt<UploadResumeUseCase>(),
+        getIt<UploadTranscriptUseCase>(),
+        getIt<CreateLanguageUseCase>(),
+        getIt<CreateEducationUseCase>(),
+        getIt<CreateExperiencesUseCase>(),
+        getIt<CreateUpdateStudentProfileUseCase>(),
+        getIt<GetProfileFileUseCase>(),
+      ),
     );
 
     getIt.registerSingleton<PostStore>(

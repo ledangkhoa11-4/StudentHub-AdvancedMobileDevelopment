@@ -37,6 +37,38 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$transcriptFileAtom =
+      Atom(name: '_UserStore.transcriptFile', context: context);
+
+  @override
+  String get transcriptFile {
+    _$transcriptFileAtom.reportRead();
+    return super.transcriptFile;
+  }
+
+  @override
+  set transcriptFile(String value) {
+    _$transcriptFileAtom.reportWrite(value, super.transcriptFile, () {
+      super.transcriptFile = value;
+    });
+  }
+
+  late final _$resumeFileAtom =
+      Atom(name: '_UserStore.resumeFile', context: context);
+
+  @override
+  String get resumeFile {
+    _$resumeFileAtom.reportRead();
+    return super.resumeFile;
+  }
+
+  @override
+  set resumeFile(String value) {
+    _$resumeFileAtom.reportWrite(value, super.resumeFile, () {
+      super.resumeFile = value;
+    });
+  }
+
   late final _$techstacksAtom =
       Atom(name: '_UserStore.techstacks', context: context);
 
@@ -193,6 +225,23 @@ mixin _$UserStore on _UserStore, Store {
   set apiResponseSuccess(bool? value) {
     _$apiResponseSuccessAtom.reportWrite(value, super.apiResponseSuccess, () {
       super.apiResponseSuccess = value;
+    });
+  }
+
+  late final _$onFinishStudentProfileAtom =
+      Atom(name: '_UserStore.onFinishStudentProfile', context: context);
+
+  @override
+  bool? get onFinishStudentProfile {
+    _$onFinishStudentProfileAtom.reportRead();
+    return super.onFinishStudentProfile;
+  }
+
+  @override
+  set onFinishStudentProfile(bool? value) {
+    _$onFinishStudentProfileAtom
+        .reportWrite(value, super.onFinishStudentProfile, () {
+      super.onFinishStudentProfile = value;
     });
   }
 
@@ -395,6 +444,22 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$apiCallingFeatureAtom =
+      Atom(name: '_UserStore.apiCallingFeature', context: context);
+
+  @override
+  ObservableFuture<dynamic> get apiCallingFeature {
+    _$apiCallingFeatureAtom.reportRead();
+    return super.apiCallingFeature;
+  }
+
+  @override
+  set apiCallingFeature(ObservableFuture<dynamic> value) {
+    _$apiCallingFeatureAtom.reportWrite(value, super.apiCallingFeature, () {
+      super.apiCallingFeature = value;
+    });
+  }
+
   late final _$loginAsyncAction =
       AsyncAction('_UserStore.login', context: context);
 
@@ -512,10 +577,28 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.bulkCreateUpdateStudentProfile(formStore));
   }
 
+  late final _$getTranscriptFileAsyncAction =
+      AsyncAction('_UserStore.getTranscriptFile', context: context);
+
+  @override
+  Future<dynamic> getTranscriptFile() {
+    return _$getTranscriptFileAsyncAction.run(() => super.getTranscriptFile());
+  }
+
+  late final _$getResumeFileAsyncAction =
+      AsyncAction('_UserStore.getResumeFile', context: context);
+
+  @override
+  Future<dynamic> getResumeFile() {
+    return _$getResumeFileAsyncAction.run(() => super.getResumeFile());
+  }
+
   @override
   String toString() {
     return '''
 user: ${user},
+transcriptFile: ${transcriptFile},
+resumeFile: ${resumeFile},
 techstacks: ${techstacks},
 skillSets: ${skillSets},
 currentRole: ${currentRole},
@@ -526,6 +609,7 @@ signupMessage: ${signupMessage},
 siginMessage: ${siginMessage},
 apiResponseMessage: ${apiResponseMessage},
 apiResponseSuccess: ${apiResponseSuccess},
+onFinishStudentProfile: ${onFinishStudentProfile},
 isCreateProfile: ${isCreateProfile},
 loginFuture: ${loginFuture},
 signinFuture: ${signinFuture},
@@ -538,6 +622,7 @@ createExperienceFuture: ${createExperienceFuture},
 getAllTechStackFuture: ${getAllTechStackFuture},
 createCompanyProfileFuture: ${createCompanyProfileFuture},
 createStudentProfileFuture: ${createStudentProfileFuture},
+apiCallingFeature: ${apiCallingFeature},
 isLoading: ${isLoading},
 isSignin: ${isSignin}
     ''';

@@ -38,5 +38,8 @@ class Endpoints {
 
   static const String createExperience = baseUrl + "/api/experience/updateByStudentId/:studentId";
 
+  static const String getResumeFile = baseUrl + "/api/profile/student/:studentId/resume";
+
+  static const String getTranscriptFile = baseUrl + "/api/profile/student/:studentId/transcript";
 
 }

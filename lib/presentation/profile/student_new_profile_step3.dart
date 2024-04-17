@@ -27,6 +27,13 @@ class _StudentNewProfileStep3State extends State<StudentNewProfileStep3> {
   final _userStore = getIt<UserStore>();
 
   @override
+  void initState() {
+    _userStore.resetApiResponse();
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context),

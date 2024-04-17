@@ -13,6 +13,7 @@ import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_student_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
@@ -141,5 +142,12 @@ class UserRepositoryImpl extends UserRepository {
         return res;
       }).catchError((error) => throw error);
     }
+  }
+
+  @override
+  Future<String?> getProfileFile(GetProfileFileParams params) async {
+    return await _userApi.getResumeFile(params).then((res) {
+      return res;
+    }).catchError((error) => throw error);
   }
 }
