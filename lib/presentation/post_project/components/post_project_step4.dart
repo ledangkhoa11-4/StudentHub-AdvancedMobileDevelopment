@@ -12,6 +12,7 @@ import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/post_project/components/gradient_divider.dart';
 import 'package:boilerplate/presentation/post_project/components/post_project_stepper.dart';
 import 'package:boilerplate/presentation/post_project/components/unordered_list.dart';
+import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
@@ -214,18 +215,11 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                 onPressed: () {
                   if (_userStore.user?.company != null) {
                     Project project = _constructProjectFromFormData();
-                    _projectStore.insert(project);
+                    // _projectStore.insert(project);
                     _completeAndBackToHomeScreen();
                   } else {
-                    Fluttertoast.showToast(
-                      msg: "You have to create your profile compnay first",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white,
-                      fontSize: 16.0,
-                    );
+                    ToastHelper.error(
+                        "You have to create your profile compnay first");
                   }
                 },
               ),
@@ -235,25 +229,7 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                   if (!_projectStore.isLoading &&
                       _projectStore.success == true) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text("Success"),
-                            content:
-                                Text("A new project is created successfully."),
-                            actions: <Widget>[
-                              TextButton(
-                                child: Text("OK"),
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                      ToastHelper.success("Create project successfully!");
                     });
                   }
 
