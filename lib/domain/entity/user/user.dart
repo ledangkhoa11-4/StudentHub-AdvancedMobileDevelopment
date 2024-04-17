@@ -1,4 +1,5 @@
 import 'package:boilerplate/domain/entity/user/profile_company.dart';
+import 'package:boilerplate/domain/entity/user/profile_student.dart';
 
 enum UserRole { STUDENT, COMPANY, ADMIN, MANAGER }
 
@@ -23,13 +24,17 @@ class User {
   int? id;
   String? fullname;
   List<int>? roles;
-  dynamic student;
+  ProfileStudent? student;
   ProfileCompany? company;
 
   User({this.id, this.fullname, this.roles, this.student, this.company});
 
   void setCompanyProfile(ProfileCompany? newProfile) {
     this.company = newProfile;
+  }
+
+  void setStudentProfile(ProfileStudent? newProfile) {
+    this.student = newProfile;
   }
 
   factory User.fromMap(Map<String, dynamic> json) {
@@ -41,7 +46,9 @@ class User {
       id: json["id"],
       fullname: json["fullname"],
       roles: roles,
-      student: json["student"],
+      student: json["student"] != null
+          ? ProfileStudent.fromMap(json["student"])
+          : null,
       company: json["company"] != null
           ? ProfileCompany.fromMap(json["company"])
           : null,

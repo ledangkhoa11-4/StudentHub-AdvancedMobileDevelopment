@@ -37,6 +37,70 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$transcriptFileAtom =
+      Atom(name: '_UserStore.transcriptFile', context: context);
+
+  @override
+  String get transcriptFile {
+    _$transcriptFileAtom.reportRead();
+    return super.transcriptFile;
+  }
+
+  @override
+  set transcriptFile(String value) {
+    _$transcriptFileAtom.reportWrite(value, super.transcriptFile, () {
+      super.transcriptFile = value;
+    });
+  }
+
+  late final _$resumeFileAtom =
+      Atom(name: '_UserStore.resumeFile', context: context);
+
+  @override
+  String get resumeFile {
+    _$resumeFileAtom.reportRead();
+    return super.resumeFile;
+  }
+
+  @override
+  set resumeFile(String value) {
+    _$resumeFileAtom.reportWrite(value, super.resumeFile, () {
+      super.resumeFile = value;
+    });
+  }
+
+  late final _$techstacksAtom =
+      Atom(name: '_UserStore.techstacks', context: context);
+
+  @override
+  List<TechStack>? get techstacks {
+    _$techstacksAtom.reportRead();
+    return super.techstacks;
+  }
+
+  @override
+  set techstacks(List<TechStack>? value) {
+    _$techstacksAtom.reportWrite(value, super.techstacks, () {
+      super.techstacks = value;
+    });
+  }
+
+  late final _$skillSetsAtom =
+      Atom(name: '_UserStore.skillSets', context: context);
+
+  @override
+  List<Skillset>? get skillSets {
+    _$skillSetsAtom.reportRead();
+    return super.skillSets;
+  }
+
+  @override
+  set skillSets(List<Skillset>? value) {
+    _$skillSetsAtom.reportWrite(value, super.skillSets, () {
+      super.skillSets = value;
+    });
+  }
+
   late final _$currentRoleAtom =
       Atom(name: '_UserStore.currentRole', context: context);
 
@@ -164,6 +228,23 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$onFinishStudentProfileAtom =
+      Atom(name: '_UserStore.onFinishStudentProfile', context: context);
+
+  @override
+  bool? get onFinishStudentProfile {
+    _$onFinishStudentProfileAtom.reportRead();
+    return super.onFinishStudentProfile;
+  }
+
+  @override
+  set onFinishStudentProfile(bool? value) {
+    _$onFinishStudentProfileAtom
+        .reportWrite(value, super.onFinishStudentProfile, () {
+      super.onFinishStudentProfile = value;
+    });
+  }
+
   late final _$isCreateProfileAtom =
       Atom(name: '_UserStore.isCreateProfile', context: context);
 
@@ -228,6 +309,107 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$uploadResumeFutureAtom =
+      Atom(name: '_UserStore.uploadResumeFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get uploadResumeFuture {
+    _$uploadResumeFutureAtom.reportRead();
+    return super.uploadResumeFuture;
+  }
+
+  @override
+  set uploadResumeFuture(ObservableFuture<dynamic> value) {
+    _$uploadResumeFutureAtom.reportWrite(value, super.uploadResumeFuture, () {
+      super.uploadResumeFuture = value;
+    });
+  }
+
+  late final _$uploadTranscriptFutureAtom =
+      Atom(name: '_UserStore.uploadTranscriptFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get uploadTranscriptFuture {
+    _$uploadTranscriptFutureAtom.reportRead();
+    return super.uploadTranscriptFuture;
+  }
+
+  @override
+  set uploadTranscriptFuture(ObservableFuture<dynamic> value) {
+    _$uploadTranscriptFutureAtom
+        .reportWrite(value, super.uploadTranscriptFuture, () {
+      super.uploadTranscriptFuture = value;
+    });
+  }
+
+  late final _$createLanguageFutureAtom =
+      Atom(name: '_UserStore.createLanguageFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get createLanguageFuture {
+    _$createLanguageFutureAtom.reportRead();
+    return super.createLanguageFuture;
+  }
+
+  @override
+  set createLanguageFuture(ObservableFuture<dynamic> value) {
+    _$createLanguageFutureAtom.reportWrite(value, super.createLanguageFuture,
+        () {
+      super.createLanguageFuture = value;
+    });
+  }
+
+  late final _$createEducationFutureAtom =
+      Atom(name: '_UserStore.createEducationFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get createEducationFuture {
+    _$createEducationFutureAtom.reportRead();
+    return super.createEducationFuture;
+  }
+
+  @override
+  set createEducationFuture(ObservableFuture<dynamic> value) {
+    _$createEducationFutureAtom.reportWrite(value, super.createEducationFuture,
+        () {
+      super.createEducationFuture = value;
+    });
+  }
+
+  late final _$createExperienceFutureAtom =
+      Atom(name: '_UserStore.createExperienceFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get createExperienceFuture {
+    _$createExperienceFutureAtom.reportRead();
+    return super.createExperienceFuture;
+  }
+
+  @override
+  set createExperienceFuture(ObservableFuture<dynamic> value) {
+    _$createExperienceFutureAtom
+        .reportWrite(value, super.createExperienceFuture, () {
+      super.createExperienceFuture = value;
+    });
+  }
+
+  late final _$getAllTechStackFutureAtom =
+      Atom(name: '_UserStore.getAllTechStackFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get getAllTechStackFuture {
+    _$getAllTechStackFutureAtom.reportRead();
+    return super.getAllTechStackFuture;
+  }
+
+  @override
+  set getAllTechStackFuture(ObservableFuture<dynamic> value) {
+    _$getAllTechStackFutureAtom.reportWrite(value, super.getAllTechStackFuture,
+        () {
+      super.getAllTechStackFuture = value;
+    });
+  }
+
   late final _$createCompanyProfileFutureAtom =
       Atom(name: '_UserStore.createCompanyProfileFuture', context: context);
 
@@ -242,6 +424,39 @@ mixin _$UserStore on _UserStore, Store {
     _$createCompanyProfileFutureAtom
         .reportWrite(value, super.createCompanyProfileFuture, () {
       super.createCompanyProfileFuture = value;
+    });
+  }
+
+  late final _$createStudentProfileFutureAtom =
+      Atom(name: '_UserStore.createStudentProfileFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get createStudentProfileFuture {
+    _$createStudentProfileFutureAtom.reportRead();
+    return super.createStudentProfileFuture;
+  }
+
+  @override
+  set createStudentProfileFuture(ObservableFuture<dynamic> value) {
+    _$createStudentProfileFutureAtom
+        .reportWrite(value, super.createStudentProfileFuture, () {
+      super.createStudentProfileFuture = value;
+    });
+  }
+
+  late final _$apiCallingFeatureAtom =
+      Atom(name: '_UserStore.apiCallingFeature', context: context);
+
+  @override
+  ObservableFuture<dynamic> get apiCallingFeature {
+    _$apiCallingFeatureAtom.reportRead();
+    return super.apiCallingFeature;
+  }
+
+  @override
+  set apiCallingFeature(ObservableFuture<dynamic> value) {
+    _$apiCallingFeatureAtom.reportWrite(value, super.apiCallingFeature, () {
+      super.apiCallingFeature = value;
     });
   }
 
@@ -281,10 +496,111 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.createUpdateCompanyProfile(param));
   }
 
+  late final _$getAllTechStackAsyncAction =
+      AsyncAction('_UserStore.getAllTechStack', context: context);
+
+  @override
+  Future<dynamic> getAllTechStack() {
+    return _$getAllTechStackAsyncAction.run(() => super.getAllTechStack());
+  }
+
+  late final _$getAllSkillsetAsyncAction =
+      AsyncAction('_UserStore.getAllSkillset', context: context);
+
+  @override
+  Future<dynamic> getAllSkillset() {
+    return _$getAllSkillsetAsyncAction.run(() => super.getAllSkillset());
+  }
+
+  late final _$uploadResumeAsyncAction =
+      AsyncAction('_UserStore.uploadResume', context: context);
+
+  @override
+  Future<dynamic> uploadResume(PlatformFile file) {
+    return _$uploadResumeAsyncAction.run(() => super.uploadResume(file));
+  }
+
+  late final _$uploadTranscriptAsyncAction =
+      AsyncAction('_UserStore.uploadTranscript', context: context);
+
+  @override
+  Future<dynamic> uploadTranscript(PlatformFile file) {
+    return _$uploadTranscriptAsyncAction
+        .run(() => super.uploadTranscript(file));
+  }
+
+  late final _$createLanguagesAsyncAction =
+      AsyncAction('_UserStore.createLanguages', context: context);
+
+  @override
+  Future<dynamic> createLanguages(List<ProfileLanguage?> languages) {
+    return _$createLanguagesAsyncAction
+        .run(() => super.createLanguages(languages));
+  }
+
+  late final _$createEducationsAsyncAction =
+      AsyncAction('_UserStore.createEducations', context: context);
+
+  @override
+  Future<dynamic> createEducations(List<Education?> educations) {
+    return _$createEducationsAsyncAction
+        .run(() => super.createEducations(educations));
+  }
+
+  late final _$createExperiencesAsyncAction =
+      AsyncAction('_UserStore.createExperiences', context: context);
+
+  @override
+  Future<dynamic> createExperiences(List<Experience?> experiences) {
+    return _$createExperiencesAsyncAction
+        .run(() => super.createExperiences(experiences));
+  }
+
+  late final _$createUpdateStudentProfileAsyncAction =
+      AsyncAction('_UserStore.createUpdateStudentProfile', context: context);
+
+  @override
+  Future<dynamic> createUpdateStudentProfile(
+      CreateUpdateStudentProfileParams param) {
+    return _$createUpdateStudentProfileAsyncAction
+        .run(() => super.createUpdateStudentProfile(param));
+  }
+
+  late final _$bulkCreateUpdateStudentProfileAsyncAction = AsyncAction(
+      '_UserStore.bulkCreateUpdateStudentProfile',
+      context: context);
+
+  @override
+  Future<dynamic> bulkCreateUpdateStudentProfile(
+      FormStudent.FormStudentProfileStore formStore) {
+    return _$bulkCreateUpdateStudentProfileAsyncAction
+        .run(() => super.bulkCreateUpdateStudentProfile(formStore));
+  }
+
+  late final _$getTranscriptFileAsyncAction =
+      AsyncAction('_UserStore.getTranscriptFile', context: context);
+
+  @override
+  Future<dynamic> getTranscriptFile() {
+    return _$getTranscriptFileAsyncAction.run(() => super.getTranscriptFile());
+  }
+
+  late final _$getResumeFileAsyncAction =
+      AsyncAction('_UserStore.getResumeFile', context: context);
+
+  @override
+  Future<dynamic> getResumeFile() {
+    return _$getResumeFileAsyncAction.run(() => super.getResumeFile());
+  }
+
   @override
   String toString() {
     return '''
 user: ${user},
+transcriptFile: ${transcriptFile},
+resumeFile: ${resumeFile},
+techstacks: ${techstacks},
+skillSets: ${skillSets},
 currentRole: ${currentRole},
 success: ${success},
 signupSuccess: ${signupSuccess},
@@ -293,11 +609,20 @@ signupMessage: ${signupMessage},
 siginMessage: ${siginMessage},
 apiResponseMessage: ${apiResponseMessage},
 apiResponseSuccess: ${apiResponseSuccess},
+onFinishStudentProfile: ${onFinishStudentProfile},
 isCreateProfile: ${isCreateProfile},
 loginFuture: ${loginFuture},
 signinFuture: ${signinFuture},
 getMeFuture: ${getMeFuture},
+uploadResumeFuture: ${uploadResumeFuture},
+uploadTranscriptFuture: ${uploadTranscriptFuture},
+createLanguageFuture: ${createLanguageFuture},
+createEducationFuture: ${createEducationFuture},
+createExperienceFuture: ${createExperienceFuture},
+getAllTechStackFuture: ${getAllTechStackFuture},
 createCompanyProfileFuture: ${createCompanyProfileFuture},
+createStudentProfileFuture: ${createStudentProfileFuture},
+apiCallingFeature: ${apiCallingFeature},
 isLoading: ${isLoading},
 isSignin: ${isSignin}
     ''';

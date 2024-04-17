@@ -7,14 +7,23 @@ import 'package:boilerplate/domain/usecase/post/find_post_by_id_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/get_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/insert_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/udpate_post_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
+import 'package:boilerplate/domain/usecase/user/create_update_student_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/is_logged_in_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/login_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/save_auth_token_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/save_current_profile_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/save_login_in_status_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/upload_resume_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/upload_transcript_usecase.dart';
 
 import '../../../di/service_locator.dart';
 
@@ -32,7 +41,7 @@ mixin UseCaseModule {
       SaveAuthTokenUseCase(getIt<UserRepository>()),
     );
 
-     getIt.registerSingleton<SaveCurrentProfileUseCase>(
+    getIt.registerSingleton<SaveCurrentProfileUseCase>(
       SaveCurrentProfileUseCase(getIt<UserRepository>()),
     );
 
@@ -48,8 +57,44 @@ mixin UseCaseModule {
       GetMeUseCase(getIt<UserRepository>()),
     );
 
-     getIt.registerSingleton<CreateUpdateCompanyProfileUseCase>(
+    getIt.registerSingleton<CreateUpdateCompanyProfileUseCase>(
       CreateUpdateCompanyProfileUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<GetTechStackUseCase>(
+      GetTechStackUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<GetSkillSetUseCase>(
+      GetSkillSetUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<UploadResumeUseCase>(
+      UploadResumeUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<UploadTranscriptUseCase>(
+      UploadTranscriptUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<CreateLanguageUseCase>(
+      CreateLanguageUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<CreateEducationUseCase>(
+      CreateEducationUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<CreateExperiencesUseCase>(
+      CreateExperiencesUseCase(getIt<UserRepository>()),
+    );
+
+     getIt.registerSingleton<CreateUpdateStudentProfileUseCase>(
+      CreateUpdateStudentProfileUseCase(getIt<UserRepository>()),
+    );
+
+     getIt.registerSingleton<GetProfileFileUseCase>(
+      GetProfileFileUseCase(getIt<UserRepository>()),
     );
 
     // post:--------------------------------------------------------------------

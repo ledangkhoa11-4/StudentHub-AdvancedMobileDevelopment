@@ -1,3 +1,4 @@
+import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/user/user.dart';
@@ -8,6 +9,7 @@ import 'package:boilerplate/presentation/login/login.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
 import 'package:boilerplate/presentation/profile/company_new_profile.dart';
+import 'package:boilerplate/presentation/profile/review_student_profile.dart';
 import 'package:boilerplate/presentation/profile/student_new_profile.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
@@ -19,8 +21,13 @@ class Account {
   final int value;
   final String name;
   final String nickname;
+  final ClipRRect avatar;
 
-  Account({required this.name, required this.nickname, required this.value});
+  Account(
+      {required this.name,
+      required this.nickname,
+      required this.value,
+      required this.avatar});
 }
 
 class SwitchAccountScreen extends StatefulWidget {
@@ -43,17 +50,49 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
     accounts = (_userStore?.user?.roles?.map((e) => Account(
                   name: _fullname,
                   value: e,
+                  avatar: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset(
+                      width: 40,
+                      e == UserRole.COMPANY.value
+                          ? Assets.companyAvatar
+                          : Assets.studentAvatar,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                   nickname: e == UserRole.COMPANY.value ? "Company" : "Student",
                 )) ??
             [])
         .toList();
     if (_userStore.user?.roles != null && _userStore.user!.roles!.length < 2) {
       if (_userStore.user!.roles!.first == UserRole.COMPANY.value) {
-        accounts.add(
-            Account(name: "Create student profile", nickname: "", value: -1));
+        accounts.add(Account(
+          name: "Create student profile",
+          nickname: "",
+          value: -1,
+          avatar: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image.asset(
+              width: 40,
+              Assets.studentAvatar,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ));
       } else {
-        accounts.add(
-            Account(name: "Create company profile", nickname: "", value: -1));
+        accounts.add(Account(
+          name: "Create company profile",
+          nickname: "",
+          value: -1,
+          avatar: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image.asset(
+              width: 40,
+              Assets.companyAvatar,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ));
       }
     }
     final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
@@ -112,10 +151,19 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
           )),
       onTap: () {
         final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
-        print(currentProfile);
         if (currentProfile == UserRole.COMPANY.value) {
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => CompanyNewProfile()));
+        }
+
+        if (currentProfile == UserRole.STUDENT.value) {
+          if (_userStore.user!.student != null) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ReviewStudentProfile()));
+          } else {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => StudentNewProfile()));
+          }
         }
       },
     );
@@ -227,7 +275,7 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
                           padding: EdgeInsets.symmetric(horizontal: 10),
                           child: Row(
                             children: [
-                              Icon(Icons.account_circle, size: 35),
+                              account.avatar,
                               SizedBox(width: 10),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
