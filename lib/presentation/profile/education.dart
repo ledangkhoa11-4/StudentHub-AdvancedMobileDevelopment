@@ -166,8 +166,7 @@ class _EducationWidgetState extends State<EducationWidget> {
                         FormBuilderTextField(
                           name: 'schoolname',
                           validator: FormBuilderValidators.required(),
-                          initialValue: _userStore
-                              .user!.student!.educations![0].schoolName,
+                          initialValue: _userStore.user!.student?.educations != null && _userStore.user!.student!.educations!.length > 0 ? _userStore.user!.student?.educations![0].schoolName : "",
                           onChanged: (value) {
                             widget.formStore.setEducationAtIndex(
                                 Education(
@@ -211,8 +210,8 @@ class _EducationWidgetState extends State<EducationWidget> {
                           key: UniqueKey(),
                           name: 'schoolYear',
                           label: "School Year",
-                          initialValue:
-                              '${_userStore.user!.student!.educations![0].startYear} - ${_userStore.user!.student!.educations![0].endYear}',
+                          initialValue: _userStore.user!.student != null && _userStore.user!.student!.educations!.length > 0 ?
+                              '${_userStore.user!.student!.educations![0].startYear} - ${_userStore.user!.student!.educations![0].endYear}' : "",
                           error: widget.formStore.formErrorStore.educations !=
                                       null &&
                                   (widget.formStore.formErrorStore

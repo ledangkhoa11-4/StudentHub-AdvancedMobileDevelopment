@@ -30,17 +30,21 @@ class ProfileStudent {
       this.experiences});
 
   factory ProfileStudent.fromMap(Map<String, dynamic> json) {
-    List<dynamic> skillSetsObj = json["skillSets"];
+    List<dynamic> skillSetsObj =
+        json["skillSets"] != null ? json["skillSets"] : [];
     final skillSets = skillSetsObj.map((e) => Skillset.fromJson(e)).toList();
 
-    List<dynamic> educationsObj = json["educations"];
+    List<dynamic> educationsObj =
+        json["educations"] != null ? json["educations"] : [];
     final educations = educationsObj.map((e) => Education.fromJson(e)).toList();
 
-    List<dynamic> languagesObj = json["languages"];
+    List<dynamic> languagesObj =
+        json["languages"] != null ? json["languages"] : [];
     final languages =
         languagesObj.map((e) => ProfileLanguage.fromJson(e)).toList();
 
-    List<dynamic> experiencesObj = json["experiences"];
+    List<dynamic> experiencesObj =
+        json["experiences"] != null ? json["experiences"] : [];
     final experiences =
         experiencesObj.map((e) => Experience.fromJson(e)).toList();
 

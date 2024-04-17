@@ -28,7 +28,6 @@ class _StudentNewProfileStep3State extends State<StudentNewProfileStep3> {
 
   @override
   Widget build(BuildContext context) {
-    _userStore.resetApiResponse();
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context),
       body: Stack(
@@ -124,17 +123,17 @@ class _StudentNewProfileStep3State extends State<StudentNewProfileStep3> {
               return !_userStore.isLoading &&
                       _userStore.apiResponseSuccess == true
                   ? navigate(context)
-                  : _showErrorMessage(_userStore.apiResponseMessage);
+                  : SizedBox.shrink();
             },
           ),
           Observer(
             builder: (context) {
               return !_userStore.isLoading &&
-                      _userStore.onFinishStudentProfile == true
-                  ? navigate2(context)
+                      _userStore.apiResponseSuccess == false
+                  ? _showErrorMessage(_userStore.apiResponseMessage)
                   : SizedBox.shrink();
             },
-          )
+          ),
         ],
       ),
     );
@@ -148,6 +147,8 @@ class _StudentNewProfileStep3State extends State<StudentNewProfileStep3> {
         _userStore.resetCreateProfileState();
         ToastHelper.success("Create profile successfully");
       }
+      ToastHelper.success("Updated profile successfully");
+
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => AuthWidget()),
           (Route<dynamic> route) => false);
@@ -157,22 +158,20 @@ class _StudentNewProfileStep3State extends State<StudentNewProfileStep3> {
     return Container();
   }
 
-  Widget navigate2(BuildContext context) {
+  // General Methods:-----------------------------------------------------------
+  _showErrorMessage(String message) {
+    print(message);
+
+    if (message.isNotEmpty) {
+      ToastHelper.error(message);
+    }
+
     Future.delayed(Duration(milliseconds: 0), () {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => AuthWidget()),
           (Route<dynamic> route) => false);
-      _userStore.resetFinishProfile();
     });
 
-    return Container();
-  }
-
-  // General Methods:-----------------------------------------------------------
-  _showErrorMessage(String message) {
-    if (message.isNotEmpty) {
-      ToastHelper.error(message);
-    }
     _userStore.resetApiResponse();
     return SizedBox.shrink();
   }

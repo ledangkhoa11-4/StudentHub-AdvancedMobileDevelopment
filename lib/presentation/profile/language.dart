@@ -63,8 +63,7 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                 id: id,
                 formIndex: index,
                 formstore: widget.formStore,
-                initialValue1:
-                    _userStore.user!.student!.languages![i].languageName,
+                initialValue1: _userStore.user!.student!.languages![i].languageName,
                 initialValue2: _userStore.user!.student!.languages![i].level,
                 key1: UniqueKey(),
                 key2: UniqueKey(),

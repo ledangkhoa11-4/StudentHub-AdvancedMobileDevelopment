@@ -121,47 +121,11 @@ class _StudentNewProfileState extends State<StudentNewProfile> {
               ),
             ),
           ),
-          Observer(
-            builder: (context) {
-              return Visibility(
-                visible: _userStore.isLoading,
-                child: CustomProgressIndicatorWidget(),
-              );
-            },
-          ),
-          Observer(
-            builder: (context) {
-              return _userStore.apiResponseSuccess == false
-                  ? _showErrorMessage(_userStore.siginMessage)
-                  : SizedBox.shrink();
-            },
-          ),
         ],
       ),
     );
   }
 
-  Widget navigate(BuildContext context) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      if (_userStore.isCreateProfile == true) {
-        Navigator.of(context).pushNamed(Routes.companyWelcome);
-        _userStore.resetCreateProfileState();
-      } else {
-        ToastHelper.success("Update profile successfully");
-        Navigator.of(context).pop();
-      }
-      _userStore.resetApiResponse();
-    });
-
-    return Container();
-  }
-
-  // General Methods:-----------------------------------------------------------
-  _showErrorMessage(String message) {
-    if (message.isNotEmpty) {
-      ToastHelper.error(message);
-    }
-    _userStore.resetLoginState();
-    return SizedBox.shrink();
-  }
+  
+  
 }

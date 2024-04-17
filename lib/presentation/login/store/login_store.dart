@@ -241,8 +241,8 @@ abstract class _UserStore with Store {
         this.signupSuccess = true;
       }
     }).catchError((e) {
-      String message = e.response.toString();
-      final response = jsonDecode(message);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
       this.signupSuccess = false;
       this.signupMessage = response["errorDetails"].first.toString();
     });
@@ -264,6 +264,7 @@ abstract class _UserStore with Store {
         this.getMeSuccess = true;
       }
     }).catchError((e) {
+      this.getMeSuccess = false;
       print(e);
     });
   }
@@ -283,8 +284,8 @@ abstract class _UserStore with Store {
         this.apiResponseSuccess = true;
       }
     }).catchError((e) {
-      String message = e.response.toString();
-      final response = jsonDecode(message);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
       this.apiResponseSuccess = false;
       this.apiResponseMessage = response["errorDetails"].toString();
     });
@@ -303,8 +304,8 @@ abstract class _UserStore with Store {
           this.apiResponseSuccess = true;
         }
       }).catchError((e) {
-        String message = e.response.toString();
-        final response = jsonDecode(message);
+          String message = e.response.toString();
+          final response = jsonDecode(message);
         this.apiResponseSuccess = false;
         this.apiResponseMessage = response["errorDetails"].toString();
       });
@@ -324,8 +325,8 @@ abstract class _UserStore with Store {
           this.apiResponseSuccess = true;
         }
       }).catchError((e) {
-        String message = e.response.toString();
-        final response = jsonDecode(message);
+          String message = e.response.toString();
+          final response = jsonDecode(message);
         this.apiResponseSuccess = false;
         this.apiResponseMessage = response["errorDetails"].toString();
       });
@@ -360,8 +361,8 @@ abstract class _UserStore with Store {
     }).catchError((e) {
       print(e.response);
       print("2---------------");
-      String message = e.response.toString();
-      final response = jsonDecode(message);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
       this.apiResponseSuccess = false;
       this.apiResponseMessage = response["errorDetails"].toString();
     });
@@ -395,8 +396,8 @@ abstract class _UserStore with Store {
     }).catchError((e) {
       print(e.response);
       print("3---------------");
-      String message = e.response.toString();
-      final response = jsonDecode(message);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
       this.apiResponseSuccess = false;
       this.apiResponseMessage = response["errorDetails"].toString();
     });
@@ -421,8 +422,8 @@ abstract class _UserStore with Store {
     }).catchError((e) {
       print(e.response);
       print("4---------------");
-      String message = e.response.toString();
-      final response = jsonDecode(message);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
       this.apiResponseSuccess = false;
       this.apiResponseMessage = response["errorDetails"].toString();
     });
@@ -451,8 +452,8 @@ abstract class _UserStore with Store {
     }).catchError((e) {
       print(e.response);
       print("5---------------");
-      String message = e.response.toString();
-      final response = jsonDecode(message);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
       this.apiResponseSuccess = false;
       this.apiResponseMessage = response["errorDetails"].toString();
     });
@@ -484,8 +485,8 @@ abstract class _UserStore with Store {
     }).catchError((e) {
       print(e.response);
       print("6---------------");
-      String message = e.response.toString();
-      final response = jsonDecode(message);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
       this.apiResponseSuccess = false;
       this.apiResponseMessage = response["errorDetails"].toString();
     });
@@ -506,8 +507,8 @@ abstract class _UserStore with Store {
     }).catchError((e) {
       print("1---------------");
       print(e);
-      String message = e.response.toString();
-      final response = jsonDecode(message);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
       this.apiResponseSuccess = false;
       this.apiResponseMessage = response["errorDetails"].toString();
     });
@@ -548,12 +549,17 @@ abstract class _UserStore with Store {
       ]).then((value) async {
         await Future.wait([
           this.createLanguages(formStore.languages),
+          this.createEducations(formStore.educations),
+          this.createExperiences(formStore.experiences),
+          this.uploadResume(formStore.resume!),
+          this.uploadTranscript(formStore.transcript!),
         ]);
+
+        this.onFinishStudentProfile = true;
       }).catchError((e) {
         print(e);
       });
     }
-    onFinishStudentProfile = true;
   }
 
   logout() async {
