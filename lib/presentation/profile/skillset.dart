@@ -21,7 +21,7 @@ class _SkillsetWidgetState extends State<SkillsetWidget> {
 
   List<ValueItem<int>> selectedOptions = [];
   List<ValueItem<int>> optionsList = [];
-
+  bool isBind = false;
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
@@ -34,11 +34,13 @@ class _SkillsetWidgetState extends State<SkillsetWidget> {
           });
         });
       }
-      if (_userStore.user!.student != null &&
+      if (!isBind &&
+          _userStore.user!.student != null &&
           _userStore.user!.student!.id != null &&
           _userStore.skillSets != null) {
         Future.delayed(Duration.zero, () async {
           setState(() {
+            isBind = true;
             selectedOptions = optionsList
                 .where((option) => _userStore.user!.student!.skillSets!
                     .any((element) => element.id == option.value))
