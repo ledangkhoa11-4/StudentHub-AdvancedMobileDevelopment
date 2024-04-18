@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:intl/intl.dart';
 import 'project_detail.dart';
 
 class ProjectItem extends StatelessWidget {
@@ -16,8 +20,26 @@ class ProjectItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color greenColor = Color.fromARGB(255, 48, 121, 51);
-    final Color grayColor = const Color.fromARGB(255, 134, 132, 132);
+    String formatDate(String? isoDate) {
+      if (isoDate == null) {
+        return 'No date';
+      }
+      DateTime dateTime =
+          DateFormat(("yyyy-MM-ddTHH:mm:ssZ")).parseUTC(isoDate).toLocal();
+      return DateFormat('yyyy/MM/dd - HH:mm').format(dateTime);
+    }
+
+    QuillController? _controller;
+
+    try {
+      final controller = QuillController(
+          document: Document.fromJson(jsonDecode(project.description)),
+          selection: const TextSelection.collapsed(offset: 0));
+
+      _controller = controller;
+    } catch (e) {
+      _controller = null;
+    }
 
     return GestureDetector(
       onTap: () {
@@ -36,9 +58,9 @@ class ProjectItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Created: ${project.createdAt ?? 'Unknown'}',
+                'Created: ${formatDate(project.createdAt)}',
                 style: TextStyle(
-                  color: grayColor,
+                  color: Colors.grey,
                   fontSize: 14,
                   fontStyle: FontStyle.italic,
                 ),
@@ -71,14 +93,15 @@ class ProjectItem extends StatelessWidget {
               RichText(
                 text: TextSpan(
                   style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                        color: grayColor,
+                        color: Colors.grey,
                         fontWeight: FontWeight.w100,
                         fontSize: 14,
                       ),
                   text: 'Time: ',
                   children: <TextSpan>[
                     TextSpan(
-                      text: '${project.createdAt}',
+                      text:
+                          '${ProjectScopeType.fromValue(project.projectScopeFlag)}',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     TextSpan(text: ', '),
@@ -92,16 +115,37 @@ class ProjectItem extends StatelessWidget {
               ),
               SizedBox(height: 8.0),
               Text(
-                'Students are looking for:',
+                'The project requires candidates:',
                 style: Theme.of(context)
                     .textTheme
                     .subtitle1!
                     .copyWith(fontSize: 14),
               ),
-              Text(
-                project.description,
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
+              if (_controller != null)
+                IgnorePointer(
+                  ignoring: true,
+                  child: QuillProvider(
+                    configurations: QuillConfigurations(
+                      controller: _controller,
+                      sharedConfigurations: const QuillSharedConfigurations(
+                        locale: Locale('en'),
+                      ),
+                    ),
+                    child: QuillEditor.basic(
+                      configurations: const QuillEditorConfigurations(
+                        readOnly: true,
+                      ),
+                    ),
+                  ),
+                ),
+              if (_controller == null)
+                Text(
+                  project.description,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 4,
+                  style: Theme.of(context).textTheme.bodyText1?.copyWith(),
+                ),
+
               SizedBox(height: 8.0),
               // RichText(
               //   text: TextSpan(

@@ -129,6 +129,22 @@ mixin _$ProjectStore on _ProjectStore, Store {
     });
   }
 
+  late final _$allProjectListAtom =
+      Atom(name: '_ProjectStore.allProjectList', context: context);
+
+  @override
+  ProjectList? get allProjectList {
+    _$allProjectListAtom.reportRead();
+    return super.allProjectList;
+  }
+
+  @override
+  set allProjectList(ProjectList? value) {
+    _$allProjectListAtom.reportWrite(value, super.allProjectList, () {
+      super.allProjectList = value;
+    });
+  }
+
   late final _$getProjectsAsyncAction =
       AsyncAction('_ProjectStore.getProjects', context: context);
 
@@ -160,6 +176,17 @@ mixin _$ProjectStore on _ProjectStore, Store {
   }
 
   @override
+  void resetSuccess() {
+    final _$actionInfo = _$_ProjectStoreActionController.startAction(
+        name: '_ProjectStore.resetSuccess');
+    try {
+      return super.resetSuccess();
+    } finally {
+      _$_ProjectStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 fetchProjectsFuture: ${fetchProjectsFuture},
@@ -169,6 +196,7 @@ projectList: ${projectList},
 apiResponseMessage: ${apiResponseMessage},
 apiResponseSuccess: ${apiResponseSuccess},
 success: ${success},
+allProjectList: ${allProjectList},
 isLoading: ${isLoading}
     ''';
   }

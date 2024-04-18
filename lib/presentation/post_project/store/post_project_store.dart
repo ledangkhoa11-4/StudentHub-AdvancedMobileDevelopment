@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:boilerplate/core/stores/error/error_store.dart';
 import 'package:boilerplate/domain/entity/project/project.dart'; // Import Project entity
+import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 import 'package:dio/dio.dart';
@@ -16,8 +19,12 @@ class ProjectStore = _ProjectStore with _$ProjectStore;
 
 abstract class _ProjectStore with Store {
   // constructor:---------------------------------------------------------------
-  _ProjectStore(this._getProjectUseCase, this._insertProjectUseCase,
-      this.errorStore, this._projectRepository); // Add _projectRepository
+  _ProjectStore(
+      this._getProjectUseCase,
+      this._insertProjectUseCase,
+      this.errorStore,
+      this._projectRepository,
+      this._getAllProjectUseCase); // Add _projectRepository
 
   // use cases:-----------------------------------------------------------------
   final GetProjectUseCase _getProjectUseCase;
@@ -60,6 +67,16 @@ abstract class _ProjectStore with Store {
   @observable
   bool? success = null;
 
+/* KHOA */
+  @observable
+  ProjectList? allProjectList;
+
+  @observable
+  bool manualLoading = false;
+
+  final GetAllProjectUseCase _getAllProjectUseCase;
+
+/* KHOA */
   @computed
   bool get isLoading =>
       fetchProjectsFuture.status == FutureStatus.pending ||
@@ -126,6 +143,24 @@ abstract class _ProjectStore with Store {
         errorStore.errorMessage = 'An error occurred: $error';
       }
     }
+  }
+
+  @action
+  Future getAllProjects(GetAllProjectParams params) async {
+    final future = _getAllProjectUseCase.call(params: params);
+    fetchProjectsFuture = ObservableFuture(future);
+
+    await future.then((projectList) {
+      this.allProjectList = projectList;
+      this.apiResponseSuccess = true;
+    }).catchError((e) {
+      this.allProjectList = ProjectList(projects: []);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.apiResponseSuccess = false;
+      this.apiResponseMessage = response["errorDetails"].toString();
+    });
+    this.manualLoading = false;
   }
 
   resetApiResponse() {

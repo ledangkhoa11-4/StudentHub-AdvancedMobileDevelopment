@@ -51,4 +51,6 @@ class Endpoints {
 
   static const String getTranscriptFile =
       baseUrl + "/api/profile/student/:studentId/transcript";
+
+  static const String getAllProject = baseUrl + "/api/project";
 }

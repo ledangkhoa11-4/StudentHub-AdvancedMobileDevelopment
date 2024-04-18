@@ -6,6 +6,7 @@ import 'package:boilerplate/data/network/apis/projects/project_api.dart';
 import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/domain/entity/project/project_list.dart';
 import 'package:boilerplate/domain/repository/project/project_repository.dart';
+import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 import 'package:sembast/sembast.dart';
 
@@ -70,4 +71,11 @@ class ProjectRepositoryImpl extends ProjectRepository {
       .update(project)
       .then((id) => id)
       .catchError((error) => throw error);
+
+  @override
+  Future<ProjectList> getAllProject(GetAllProjectParams params) async {
+    return await _projectApi.getAllProject(params).then((projectsList) {
+      return projectsList;
+    }).catchError((error) => throw error);
+  }
 }

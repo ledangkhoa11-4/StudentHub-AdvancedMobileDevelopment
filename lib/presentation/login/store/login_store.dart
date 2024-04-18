@@ -632,6 +632,7 @@ abstract class _UserStore with Store {
     this.resumeFile = "";
     this.isLoggedIn = false;
     projectStore.projectList = null;
+    projectStore.allProjectList = null;
 
     await _saveLoginStatusUseCase.call(params: false);
     getIt<SharedPreferenceHelper>().removeAuthToken();
