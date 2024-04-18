@@ -10,7 +10,7 @@ abstract class ProjectRepository {
 
   Future<List<Project>> findProjectById(int id);
 
-  Future<ProjectList> insert(InsertProjectParams post);
+  Future<Project> insert(InsertProjectParams post);
 
   Future<int> update(Project post);
 

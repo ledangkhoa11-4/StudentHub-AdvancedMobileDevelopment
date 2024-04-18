@@ -37,12 +37,12 @@ class ProjectApi {
   }
 
   /// Company posts a project
-  Future<ProjectList> insert(InsertProjectParams params) async {
+  Future<Project> insert(InsertProjectParams params) async {
     try {
       final res =
           await _dioClient.dio.post(Endpoints.postProject, data: params);
       final result = jsonDecode(res.toString());
-      return ProjectList.fromJson(result["result"]);
+      return Project.fromMap(result["result"]);
     } catch (e) {
       print(e.toString());
       throw e;

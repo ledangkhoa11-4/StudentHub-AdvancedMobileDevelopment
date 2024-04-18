@@ -36,7 +36,7 @@ class InsertProjectUseCase implements UseCase<dynamic, InsertProjectParams> {
   InsertProjectUseCase(this._projectRepository);
 
   @override
-  Future<ProjectList> call({required InsertProjectParams params}) {
+  Future<Project> call({required InsertProjectParams params}) {
     return _projectRepository.insert(params);
   }
 }

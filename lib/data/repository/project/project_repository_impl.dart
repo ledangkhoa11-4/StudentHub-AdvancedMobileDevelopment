@@ -51,7 +51,7 @@ class ProjectRepositoryImpl extends ProjectRepository {
   }
 
   @override
-  Future<ProjectList> insert(InsertProjectParams params) async {
+  Future<Project> insert(InsertProjectParams params) async {
     return await _projectApi.insert(params).then((res) {
       return res;
     }).catchError((error) {
