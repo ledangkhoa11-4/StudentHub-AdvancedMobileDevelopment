@@ -84,8 +84,14 @@ abstract class _ProjectStore with Store {
   }
 
   @action
-   void resetProjectList()  {
-    this.projectList = projectList;
+  void resetProjectList() {
+    this.projectList = null;
+  }
+
+  @action
+  void resetSuccess() {
+    this.success = null;
+    this.errorStore.errorMessage = "";
   }
 
   // insert a project

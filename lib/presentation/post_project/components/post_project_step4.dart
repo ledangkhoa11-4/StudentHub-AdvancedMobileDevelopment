@@ -1,25 +1,21 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:boilerplate/core/stores/form/form_post_project_store.dart';
 import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
-import 'package:boilerplate/core/widgets/textfield_widget.dart';
 import 'package:boilerplate/di/service_locator.dart';
-import 'package:boilerplate/presentation/auth_widget/auth_widget.dart';
-import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
+import 'package:boilerplate/presentation/6_company_review_proposals/dashboard.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/post_project/components/gradient_divider.dart';
 import 'package:boilerplate/presentation/post_project/components/post_project_stepper.dart';
 import 'package:boilerplate/presentation/post_project/components/unordered_list.dart';
 import 'package:boilerplate/presentation/toast/toast.dart';
-import 'package:boilerplate/utils/routes/routes.dart';
+import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 
 import '../../../domain/entity/project/project.dart';
@@ -203,6 +199,7 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                     buttonColor: Theme.of(context).colorScheme.primary,
                     textColor: Colors.white,
                     onPressed: () {
+                      DeviceUtils.hideKeyboard(context);
                       if (_userStore.user?.company != null) {
                         Project project = _constructProjectFromFormData();
                         _projectStore.insert(project);
@@ -238,13 +235,15 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
 
   Widget navigate(BuildContext context) {
     _projectStore.resetProjectList();
+    _projectStore.resetSuccess();
     Future.delayed(Duration(milliseconds: 0), () {
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => AuthWidget()),
+        MaterialPageRoute(builder: (context) => DashBoardCompany()),
         (Route<dynamic> route) =>
             false, // This removes all routes below the new route
       );
     });
+    ToastHelper.success("Create project successfully");
     return SizedBox.shrink();
   }
 

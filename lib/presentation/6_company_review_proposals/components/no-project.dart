@@ -22,27 +22,31 @@ class _ProjectListState extends State<NoProject> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(
-              child: ClipRRect(
-                child: Image.asset(
-                  height: 200,
-                  Assets.noData,
-                  fit: BoxFit.cover,
+        Observer(
+          builder: (context) {
+            return !_projectStore.isLoading ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: ClipRRect(
+                    child: Image.asset(
+                      height: 200,
+                      Assets.noData,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Center(
-              child: Text(
-                "No project found. \nLet's start posting your first project",
-                style: Theme.of(context).textTheme.labelLarge,
-                textAlign: TextAlign.center,
-              ),
-            )
-          ],
+                Center(
+                  child: Text(
+                    "No project found. \nLet's start posting your first project",
+                    style: Theme.of(context).textTheme.labelLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              ],
+            ) : SizedBox.shrink();
+          }
         ),
         Observer(builder: (context) {
           return Visibility(
