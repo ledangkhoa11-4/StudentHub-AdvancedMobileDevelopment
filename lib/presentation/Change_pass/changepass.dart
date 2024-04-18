@@ -1,6 +1,6 @@
 import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:boilerplate/constants/assets.dart';
-import 'package:boilerplate/core/stores/form/form_store.dart';
+import 'package:boilerplate/core/stores/form/form_changepass_store.dart';
 // import 'package:boilerplate/core/widgets/app_icon_widget.dart';
 import 'package:boilerplate/core/widgets/empty_app_bar_widget.dart';
 import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
@@ -24,19 +24,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../di/service_locator.dart';
 
-class LoginScreen extends StatefulWidget {
+class ChangeScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _ChangeScreenState createState() => _ChangeScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ChangeScreenState extends State<ChangeScreen> {
   //text controllers:-----------------------------------------------------------
   TextEditingController _userEmailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _newpasswordController = TextEditingController();
 
   //stores:---------------------------------------------------------------------
   final ThemeStore _themeStore = getIt<ThemeStore>();
-  final FormStore _formStore = getIt<FormStore>();
+  final FormChangeStore _formStore = getIt<FormChangeStore>();
   final UserStore _userStore = getIt<UserStore>();
 
   //focus node:-----------------------------------------------------------------
@@ -119,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: <Widget>[
             SizedBox(height: 24.0),
             Text(
-              'Login with StudentHub',
+              'Change Password with StudentHub',
               style: TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
@@ -127,60 +128,17 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             // AppIconWidget(image: 'assets/icons/ic_appicon.png'),
             SizedBox(height: 24.0),
-            _buildUserIdField(),
             _buildPasswordField(),
-            _buildForgotPasswordButton(),
+            _buildnewPasswordField(),
             SizedBox(height: 24.0),
-            _buildSignInButton(),
-            SizedBox(height: 274.0),
-            Column(
-              mainAxisSize:
-                  MainAxisSize.min, // Adjust this based on your design
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  "Don't have a StudentHub Account?",
-                  style: TextStyle(fontSize: 14.0),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, Routes.signupStep1);
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Colors.white),
-                  child: Text('Sign up'),
-                ),
-              ],
-            ),
+            _buildChangeInButton(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildUserIdField() {
-    return Observer(
-      builder: (context) {
-        return TextFieldWidget(
-          hint: AppLocalizations.of(context).translate('login_et_user_email'),
-          inputType: TextInputType.emailAddress,
-          icon: Icons.person,
-          iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
-          textController: _userEmailController,
-          inputAction: TextInputAction.next,
-          autoFocus: false,
-          onChanged: (value) {
-            _formStore.setUserId(_userEmailController.text);
-          },
-          onFieldSubmitted: (value) {
-            FocusScope.of(context).requestFocus(_passwordFocusNode);
-          },
-          errorText: _formStore.formErrorStore.userEmail,
-        );
-      },
-    );
-  }
+
 
   Widget _buildPasswordField() {
     return Observer(
@@ -188,7 +146,6 @@ class _LoginScreenState extends State<LoginScreen> {
         return TextFieldWidget(
           hint:
               AppLocalizations.of(context).translate('login_et_user_password'),
-          inputType: TextInputType.visiblePassword,
           padding: EdgeInsets.only(top: 16.0),
           icon: Icons.lock,
           iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
@@ -203,35 +160,43 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildForgotPasswordButton() {
-    return Align(
-      alignment: FractionalOffset.centerRight,
-      child: MaterialButton(
-        padding: EdgeInsets.all(0.0),
-        child: Text(
-          AppLocalizations.of(context).translate('login_btn_forgot_password'),
-          style: Theme.of(context)
-              .textTheme
-              .caption
-              ?.copyWith(color: Theme.of(context).colorScheme.primary),
-        ),
-        onPressed: () {
-          Navigator.pushNamed(context, Routes.forgot);
-        },
-      ),
+  Widget _buildnewPasswordField() {
+    return Observer(
+      builder: (context) {
+        return TextFieldWidget(
+          hint:
+              AppLocalizations.of(context).translate('login_et_user_password'),
+          padding: EdgeInsets.only(top: 16.0),
+          icon: Icons.lock,
+          iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
+          textController: _newpasswordController,
+          //focusNode: _passwordFocusNode,
+          errorText: _formStore.formErrorStore.NewPassword,
+          onChanged: (value) {
+            _formStore.setNewPassword(_newpasswordController.text);
+          },
+        );
+      },
     );
   }
 
-  Widget _buildSignInButton() {
+
+
+  Widget _buildChangeInButton() {
     return RoundedButtonWidget(
-      buttonText: AppLocalizations.of(context).translate('login_btn_sign_in'),
+      buttonText: "Change Password",
       buttonColor: Theme.of(context).colorScheme.primary,
       textColor: Colors.white,
       onPressed: () async {
         _formStore.validateAll();
-        if (_formStore.canLogin) {
+        if (_formStore.formErrorStore.password == null && _formStore.formErrorStore.NewPassword == null) {
           DeviceUtils.hideKeyboard(context);
-          _userStore.login(_userEmailController.text, _passwordController.text);
+          _userStore.change(_passwordController.text, _newpasswordController.text);
+          if(_userStore.changeSuccess == true) {
+            _showSuccressMessage("Password changed successfully");
+          }else{
+            _showErrorMessage("Password change error");
+          }
         } else {
           _showErrorMessage('Please fill in all fields');
         }
@@ -259,6 +224,13 @@ class _LoginScreenState extends State<LoginScreen> {
     return SizedBox.shrink();
   }
 
+  _showSuccressMessage(String message) {
+    if (message.isNotEmpty) {
+      ToastHelper.success(message);
+    }
+    _userStore.resetLoginState();
+    return SizedBox.shrink();
+  }
   // dispose:-------------------------------------------------------------------
   @override
   void dispose() {

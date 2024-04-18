@@ -15,6 +15,8 @@ import 'package:boilerplate/domain/usecase/user/save_auth_token_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/save_current_profile_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/save_login_in_status_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
 
 import '../../../di/service_locator.dart';
 
@@ -50,6 +52,13 @@ mixin UseCaseModule {
 
      getIt.registerSingleton<CreateUpdateCompanyProfileUseCase>(
       CreateUpdateCompanyProfileUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<ForgotUseCase>(
+      ForgotUseCase(getIt<UserRepository>()),
+    );
+    getIt.registerSingleton<ChangeUseCase>(
+      ChangeUseCase(getIt<UserRepository>()),
     );
 
     // post:--------------------------------------------------------------------

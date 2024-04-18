@@ -11,6 +11,8 @@ import 'package:boilerplate/domain/usecase/user/save_auth_token_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/save_current_profile_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/save_login_in_status_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,6 +31,8 @@ abstract class _UserStore with Store {
       this._saveAuthTokenUseCase,
       this._saveCurrentProfileUseCase,
       this._loginUseCase,
+      this._changeUseCase,
+      this._forgotUseCase,
       this._signupUseCase,
       this.formErrorStore,
       this.errorStore,
@@ -49,6 +53,8 @@ abstract class _UserStore with Store {
   final SaveAuthTokenUseCase _saveAuthTokenUseCase;
   final SaveCurrentProfileUseCase _saveCurrentProfileUseCase;
   final LoginUseCase _loginUseCase;
+  final ChangeUseCase _changeUseCase;
+  final ForgotUseCase _forgotUseCase;
   final SignupUseCase _signupUseCase;
   final GetMeUseCase _getMeUseCase;
   final CreateUpdateCompanyProfileUseCase _createCompanyProfileUseCase;
@@ -89,10 +95,22 @@ abstract class _UserStore with Store {
   bool? signupSuccess = null;
 
   @observable
+  bool? forgotSuccess = null;
+  
+  @observable
+  bool? changeSuccess = null;
+
+  @observable
   bool? getMeSuccess = null;
 
   @observable
   String signupMessage = "";
+
+  @observable
+  String forgotMessage = "";
+
+  @observable
+  String changeMessage = "";
 
   @observable
   String siginMessage = "";
@@ -118,11 +136,19 @@ abstract class _UserStore with Store {
   @observable
   ObservableFuture<dynamic> createCompanyProfileFuture = emptyLoginResponse;
 
+  @observable
+  ObservableFuture<dynamic> forgotFuture = emptyLoginResponse;
+  
+  @observable
+  ObservableFuture<dynamic> changeFuture = emptyLoginResponse;
+
   @computed
   bool get isLoading =>
       loginFuture.status == FutureStatus.pending ||
       getMeFuture.status == FutureStatus.pending ||
-      createCompanyProfileFuture.status == FutureStatus.pending;
+      createCompanyProfileFuture.status == FutureStatus.pending ||
+      forgotFuture.status == FutureStatus.pending ||
+      changeFuture.status == FutureStatus.pending;
 
   @computed
   bool get isSignin => signinFuture.status == FutureStatus.pending;
@@ -156,8 +182,7 @@ abstract class _UserStore with Store {
   }
 
   @action
-  Future signup(
-      String fullname, String email, String password, int role) async {
+  Future signup(String fullname, String email, String password, int role) async {
     final SignupParam signupParam = SignupParam(
         fullname: fullname, email: email, password: password, role: role);
     final future = _signupUseCase.call(params: signupParam);
@@ -176,6 +201,45 @@ abstract class _UserStore with Store {
       this.signupMessage = response["errorDetails"].first.toString();
     });
   }
+
+  @action
+  Future forgot(String email) async {
+    final ForgotParams signupParam = ForgotParams(email: email);
+    final future = _forgotUseCase.call(params: signupParam);
+    signinFuture = ObservableFuture(future);
+    await future.then((value) async {
+      if (value != null) {
+        String message = value.toString();
+        final response = jsonDecode(message);
+        this.forgotMessage = response["result"]["message"].toString();
+        this.forgotSuccess = true;
+      }
+    }).catchError((e) {
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.forgotSuccess = false;
+      this.forgotMessage = response["errorDetails"].first.toString();
+    });
+  }
+
+  @action
+  Future change(String oldPassword, String newPassword) async {
+    final ChangeParams changeParam = ChangeParams(oldPassword: oldPassword, newPassword: newPassword);
+    final future = _changeUseCase.call(params: changeParam);
+    changeFuture = ObservableFuture(future);
+    await future.then((value) async {
+      if (value != null) {
+        String message = value.toString();
+        final response = jsonDecode(message);
+        this.changeSuccess = true;
+        this.changeMessage = response["result"]["message"].toString();
+      }
+    }).catchError((e) {
+      this.changeSuccess = false;
+    });
+  }
+
+
 
   @action
   Future getMe() async {

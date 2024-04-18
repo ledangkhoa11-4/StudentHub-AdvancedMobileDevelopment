@@ -11,6 +11,8 @@ import 'package:boilerplate/presentation/profile/student_new_profile_step2.dart'
 import 'package:boilerplate/presentation/profile/student_new_profile_step3.dart';
 import 'package:boilerplate/presentation/profile/swicth_account.dart';
 import 'package:boilerplate/presentation/sign_up/sign_up_step1.dart';
+import 'package:boilerplate/presentation/forgot_password/forgot_password.dart';
+import 'package:boilerplate/presentation/Change_pass/changepass.dart';
 import 'package:flutter/material.dart';
 
 class Routes {
@@ -19,6 +21,8 @@ class Routes {
   //static variables
   static const String splash = '/splash';
   static const String login = '/login';
+  static const String forgot = '/forgot_password';
+  static const String change = '/changepass';
   static const String home = '/post';
   static const String companyWelcome = '/company_welcome';
   static const String studentProfileExperience =
@@ -37,6 +41,8 @@ class Routes {
   static final routes = <String, WidgetBuilder>{
     login: (BuildContext context) => LoginScreen(),
     home: (BuildContext context) => HomeScreen(),
+    forgot: (BuildContext context) => ForgotScreen(),
+    change: (BuildContext context) => ChangeScreen(),
     companyWelcome: (BuildContext context) => CompanyWelcome(),
     studentProfileExperience: (BuildContext context) =>
         StudentNewProfileStep2(),

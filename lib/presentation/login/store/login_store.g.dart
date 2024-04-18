@@ -84,6 +84,38 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$forgotSuccessAtom =
+      Atom(name: '_UserStore.forgotSuccess', context: context);
+
+  @override
+  bool? get forgotSuccess {
+    _$forgotSuccessAtom.reportRead();
+    return super.forgotSuccess;
+  }
+
+  @override
+  set forgotSuccess(bool? value) {
+    _$forgotSuccessAtom.reportWrite(value, super.forgotSuccess, () {
+      super.forgotSuccess = value;
+    });
+  }
+
+  late final _$changeSuccessAtom =
+      Atom(name: '_UserStore.changeSuccess', context: context);
+
+  @override
+  bool? get changeSuccess {
+    _$changeSuccessAtom.reportRead();
+    return super.changeSuccess;
+  }
+
+  @override
+  set changeSuccess(bool? value) {
+    _$changeSuccessAtom.reportWrite(value, super.changeSuccess, () {
+      super.changeSuccess = value;
+    });
+  }
+
   late final _$getMeSuccessAtom =
       Atom(name: '_UserStore.getMeSuccess', context: context);
 
@@ -113,6 +145,38 @@ mixin _$UserStore on _UserStore, Store {
   set signupMessage(String value) {
     _$signupMessageAtom.reportWrite(value, super.signupMessage, () {
       super.signupMessage = value;
+    });
+  }
+
+  late final _$forgotMessageAtom =
+      Atom(name: '_UserStore.forgotMessage', context: context);
+
+  @override
+  String get forgotMessage {
+    _$forgotMessageAtom.reportRead();
+    return super.forgotMessage;
+  }
+
+  @override
+  set forgotMessage(String value) {
+    _$forgotMessageAtom.reportWrite(value, super.forgotMessage, () {
+      super.forgotMessage = value;
+    });
+  }
+
+  late final _$changeMessageAtom =
+      Atom(name: '_UserStore.changeMessage', context: context);
+
+  @override
+  String get changeMessage {
+    _$changeMessageAtom.reportRead();
+    return super.changeMessage;
+  }
+
+  @override
+  set changeMessage(String value) {
+    _$changeMessageAtom.reportWrite(value, super.changeMessage, () {
+      super.changeMessage = value;
     });
   }
 
@@ -245,6 +309,38 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$forgotFutureAtom =
+      Atom(name: '_UserStore.forgotFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get forgotFuture {
+    _$forgotFutureAtom.reportRead();
+    return super.forgotFuture;
+  }
+
+  @override
+  set forgotFuture(ObservableFuture<dynamic> value) {
+    _$forgotFutureAtom.reportWrite(value, super.forgotFuture, () {
+      super.forgotFuture = value;
+    });
+  }
+
+  late final _$changeFutureAtom =
+      Atom(name: '_UserStore.changeFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get changeFuture {
+    _$changeFutureAtom.reportRead();
+    return super.changeFuture;
+  }
+
+  @override
+  set changeFuture(ObservableFuture<dynamic> value) {
+    _$changeFutureAtom.reportWrite(value, super.changeFuture, () {
+      super.changeFuture = value;
+    });
+  }
+
   late final _$loginAsyncAction =
       AsyncAction('_UserStore.login', context: context);
 
@@ -261,6 +357,23 @@ mixin _$UserStore on _UserStore, Store {
       String fullname, String email, String password, int role) {
     return _$signupAsyncAction
         .run(() => super.signup(fullname, email, password, role));
+  }
+
+  late final _$forgotAsyncAction =
+      AsyncAction('_UserStore.forgot', context: context);
+
+  @override
+  Future<dynamic> forgot(String email) {
+    return _$forgotAsyncAction.run(() => super.forgot(email));
+  }
+
+  late final _$changeAsyncAction =
+      AsyncAction('_UserStore.change', context: context);
+
+  @override
+  Future<dynamic> change(String oldPassword, String newPassword) {
+    return _$changeAsyncAction
+        .run(() => super.change(oldPassword, newPassword));
   }
 
   late final _$getMeAsyncAction =
@@ -288,8 +401,12 @@ user: ${user},
 currentRole: ${currentRole},
 success: ${success},
 signupSuccess: ${signupSuccess},
+forgotSuccess: ${forgotSuccess},
+changeSuccess: ${changeSuccess},
 getMeSuccess: ${getMeSuccess},
 signupMessage: ${signupMessage},
+forgotMessage: ${forgotMessage},
+changeMessage: ${changeMessage},
 siginMessage: ${siginMessage},
 apiResponseMessage: ${apiResponseMessage},
 apiResponseSuccess: ${apiResponseSuccess},
@@ -298,6 +415,8 @@ loginFuture: ${loginFuture},
 signinFuture: ${signinFuture},
 getMeFuture: ${getMeFuture},
 createCompanyProfileFuture: ${createCompanyProfileFuture},
+forgotFuture: ${forgotFuture},
+changeFuture: ${changeFuture},
 isLoading: ${isLoading},
 isSignin: ${isSignin}
     ''';

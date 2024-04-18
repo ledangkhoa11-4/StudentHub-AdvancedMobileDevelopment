@@ -1,7 +1,9 @@
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/user/user.dart';
+import 'package:boilerplate/presentation/Change_pass/changepass.dart';
 import 'package:boilerplate/presentation/auth_widget/auth_widget.dart';
+import 'package:boilerplate/presentation/forgot_password/forgot_password.dart';
 import 'package:boilerplate/presentation/home/store/language/language_store.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/login/login.dart';
@@ -117,6 +119,26 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => CompanyNewProfile()));
         }
+      },
+    );
+  }
+
+  Widget _buildChangePassButton() {
+    return ListTile(
+      leading: Icon(BootstrapIcons.person_lines_fill),
+      title: Text("Change Password",
+          style: TextStyle(
+            fontSize: 16,
+          )),
+      onTap: () {
+        final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
+        print(currentProfile);
+        Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => ChangeScreen()));
+        /*if (currentProfile == UserRole.COMPANY.value) {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => CompanyNewProfile()));
+        }*/
       },
     );
   }
@@ -260,6 +282,7 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
               _buildProfileButton(),
               _buildThemeButton(),
               _buildLanguageButton(),
+              _buildChangePassButton(),
               ListTile(
                 leading: Icon(BootstrapIcons.box_arrow_left),
                 title: Text(

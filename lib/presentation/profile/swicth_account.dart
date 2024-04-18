@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:boilerplate/utils/routes/routes.dart';
 
 class Switchaccount extends StatefulWidget {
   @override
@@ -113,6 +114,42 @@ class _SwitchaccountState extends State<Switchaccount> {
                                     fontSize: 16),
                               ),
                             ],
+                          ),
+                        ],
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 60),
+                        height: 1,
+                        color: Colors.black,
+                      ),
+                      SizedBox(height: 15),
+                      Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, Routes.forgot);
+                            },
+                            child: Row(
+                              children: [
+                                SizedBox(width: 15),
+                                Icon(Icons.change_circle_outlined, color: Colors.black, size: 50.0),
+                                SizedBox(width: 5),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Change Password",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

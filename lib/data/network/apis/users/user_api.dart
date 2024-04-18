@@ -6,7 +6,9 @@ import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/domain/entity/user/profile_company.dart';
 import 'package:boilerplate/domain/entity/user/user.dart';
+import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
+import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/login_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
@@ -35,6 +37,26 @@ class UserApi {
   Future<dynamic> login(LoginParams param) async {
     try {
       final res = await _dioClient.dio.post(Endpoints.signin, data: param);
+      return res;
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+  
+   Future<dynamic> forgot(ForgotParams param) async {
+    try {
+      final res = await _dioClient.dio.post(Endpoints.forgot, data: param);
+      return res;
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<dynamic> change(ChangeParams param) async {
+    try {
+      final res = await _dioClient.dio.put(Endpoints.change, data: param);
       return res;
     } catch (e) {
       print(e.toString());
