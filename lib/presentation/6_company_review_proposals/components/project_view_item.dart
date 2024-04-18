@@ -30,22 +30,19 @@ class ProjectItem extends StatelessWidget {
     final Color greenColor = Color.fromARGB(255, 48, 121, 51);
     final Color grayColor = const Color.fromARGB(255, 134, 132, 132);
 
-    bool isJsonString(String str) {
-      try {
-        jsonDecode(str);
-        return true;
-      } catch (_) {
-        return false;
-      }
-    }
-
     // print("///////////////////");
     // print(isJsonString(project.description));
-    QuillController? _controller = isJsonString(project.description)
-        ? QuillController(
-            document: Document.fromJson(jsonDecode(project.description)),
-            selection: const TextSelection.collapsed(offset: 0))
-        : null;
+    QuillController? _controller;
+
+    try {
+      final controller = QuillController(
+          document: Document.fromJson(jsonDecode(project.description)),
+          selection: const TextSelection.collapsed(offset: 0));
+
+      _controller = controller;
+    } catch (e) {
+      _controller = null;
+    }
 
     return GestureDetector(
       onTap: () {

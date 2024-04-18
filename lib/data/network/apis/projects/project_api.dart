@@ -7,6 +7,7 @@ import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/domain/entity/project/project_list.dart';
+import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 
@@ -43,6 +44,19 @@ class ProjectApi {
           await _dioClient.dio.post(Endpoints.postProject, data: params);
       final result = jsonDecode(res.toString());
       return Project.fromMap(result["result"]);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<ProjectList> getAllProject(GetAllProjectParams params) async {
+    try {
+      final res =
+          await _dioClient.dio.get(Endpoints.getAllProject, data: params);
+      final result = jsonDecode(res.toString());
+
+      return ProjectList.fromJson(result["result"]);
     } catch (e) {
       print(e.toString());
       throw e;

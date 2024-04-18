@@ -35,6 +35,21 @@ extension ProjectScopeType on ProjectScope {
         return "";
     }
   }
+
+  static String fromValue(int value) {
+    switch (value) {
+      case 0:
+        return "Less Than 1 Month";
+      case 1:
+        return "1 to 3 Months";
+      case 2:
+        return "3 to 6 Months";
+      case 3:
+        return "More Than 6 Months";
+      default:
+        return "";
+    }
+  }
 }
 
 class Project {
@@ -89,7 +104,8 @@ class Project {
             int.parse(json["companyId"].toString()), // Safely parse to int
         projectScopeFlag: int.parse(
             json["projectScopeFlag"].toString()), // Safely parse to int
-        typeFlag: int.tryParse(json["typeFlag"].toString()), // Safely parse to int
+        typeFlag:
+            int.tryParse(json["typeFlag"].toString()), // Safely parse to int
         id: json["id"] != null
             ? int.parse(json["id"].toString())
             : null, // Nullable int parsed from string
