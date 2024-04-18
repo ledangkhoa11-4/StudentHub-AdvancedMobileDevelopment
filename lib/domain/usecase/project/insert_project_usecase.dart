@@ -1,6 +1,5 @@
 import 'package:boilerplate/core/domain/usecase/use_case.dart';
 import 'package:boilerplate/domain/entity/project/project.dart';
-import 'package:boilerplate/domain/entity/project/project_list.dart';
 import 'package:boilerplate/domain/repository/project/project_repository.dart';
 import 'package:json_annotation/json_annotation.dart';
 
