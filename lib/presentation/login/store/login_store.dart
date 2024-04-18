@@ -28,6 +28,7 @@ import 'package:boilerplate/domain/usecase/user/save_login_in_status_usecase.dar
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_resume_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_transcript_usecase.dart';
+import 'package:boilerplate/presentation/post_project/store/post_project_store.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http_parser/http_parser.dart';
@@ -578,7 +579,8 @@ abstract class _UserStore with Store {
   @action
   Future getTranscriptFile() async {
     if (this.transcriptFile.isEmpty) {
-      GetProfileFileParams param = GetProfileFileParams(studentId: this.user!.student!.id!, type: "transcript");
+      GetProfileFileParams param = GetProfileFileParams(
+          studentId: this.user!.student!.id!, type: "transcript");
       final future = _getProfileFileUseCase.call(params: param);
       apiCallingFeature = ObservableFuture(future);
       await future.then((value) async {
@@ -600,12 +602,13 @@ abstract class _UserStore with Store {
   @action
   Future getResumeFile() async {
     if (this.resumeFile.isEmpty) {
-      GetProfileFileParams param = GetProfileFileParams(studentId: this.user!.student!.id!, type: "resume");
+      GetProfileFileParams param = GetProfileFileParams(
+          studentId: this.user!.student!.id!, type: "resume");
       final future = _getProfileFileUseCase.call(params: param);
       apiCallingFeature = ObservableFuture(future);
       await future.then((value) async {
         if (value != null) {
-                                  print(123);
+          print(123);
 
           this.resumeFile = value;
           this.apiResponseSuccess = true;
@@ -622,7 +625,14 @@ abstract class _UserStore with Store {
   }
 
   logout() async {
+    final projectStore = getIt<ProjectStore>();
+
+    this.user = null;
+    this.transcriptFile = "";
+    this.resumeFile = "";
     this.isLoggedIn = false;
+    projectStore.projectList = null;
+
     await _saveLoginStatusUseCase.call(params: false);
     getIt<SharedPreferenceHelper>().removeAuthToken();
     getIt<SharedPreferenceHelper>().removeCurrentProfile();

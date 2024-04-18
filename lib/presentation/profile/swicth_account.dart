@@ -145,11 +145,11 @@ class _SwitchaccountState extends State<Switchaccount> {
                                       fontSize: 16),
                                 ),
                                 onTap: () {
-                                  _userStore.logout();
                                   Navigator.of(context).pushAndRemoveUntil(
                                       MaterialPageRoute(
                                           builder: (context) => LoginScreen()),
                                       (Route<dynamic> route) => false);
+                                  _userStore.logout();
                                 },
                               )
                             ],

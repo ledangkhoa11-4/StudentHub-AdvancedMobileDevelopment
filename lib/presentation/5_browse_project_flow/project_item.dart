@@ -1,24 +1,15 @@
+import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:flutter/material.dart';
-import 'project_detail.dart'; // Import the ProjectDetail page
+import 'project_detail.dart';
 
 class ProjectItem extends StatelessWidget {
-  final String createdDate;
-  final String title;
-  final String timeDuration;
-  final int numberOfStudents;
-  final List<String> descriptions;
-  final String proposal;
+  final Project project;
   final bool isLiked;
   final Function(bool) onLikeChanged;
 
   const ProjectItem({
     Key? key,
-    required this.createdDate,
-    required this.title,
-    required this.timeDuration,
-    required this.numberOfStudents,
-    required this.descriptions,
-    required this.proposal,
+    required this.project,
     required this.isLiked,
     required this.onLikeChanged,
   }) : super(key: key);
@@ -30,12 +21,12 @@ class ProjectItem extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProjectDetail(projectItem: this),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => ProjectDetail(projectItem: this),
+        //   ),
+        // );
       },
       child: Card(
         margin: const EdgeInsets.all(8.0),
@@ -45,11 +36,12 @@ class ProjectItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Created: $createdDate',
+                'Created: ${project.createdAt ?? 'Unknown'}',
                 style: TextStyle(
-                    color: grayColor,
-                    fontSize: 14,
-                    fontStyle: FontStyle.italic),
+                  color: grayColor,
+                  fontSize: 14,
+                  fontStyle: FontStyle.italic,
+                ),
                 textAlign: TextAlign.right,
               ),
               Row(
@@ -57,9 +49,10 @@ class ProjectItem extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      title,
+                      project.title,
                       style: Theme.of(context).textTheme.headline6!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -77,19 +70,22 @@ class ProjectItem extends StatelessWidget {
               ),
               RichText(
                 text: TextSpan(
-                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                      color: grayColor,
-                      fontWeight: FontWeight.w100,
-                      fontSize: 14),
+                  style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                        color: grayColor,
+                        fontWeight: FontWeight.w100,
+                        fontSize: 14,
+                      ),
                   text: 'Time: ',
                   children: <TextSpan>[
                     TextSpan(
-                        text: '$timeDuration',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                      text: '${project.createdAt}',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     TextSpan(text: ', '),
                     TextSpan(
-                        text: '$numberOfStudents students',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                      text: '${project.numberOfStudents} students',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     TextSpan(text: ' needed '),
                   ],
                 ),
@@ -97,33 +93,32 @@ class ProjectItem extends StatelessWidget {
               SizedBox(height: 8.0),
               Text(
                 'Students are looking for:',
-                style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 14),
+                style: Theme.of(context)
+                    .textTheme
+                    .subtitle1!
+                    .copyWith(fontSize: 14),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: descriptions
-                    .map((description) => Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: Text('• $description'),
-                        ))
-                    .toList(),
+              Text(
+                project.description,
+                style: Theme.of(context).textTheme.bodyText1,
               ),
               SizedBox(height: 8.0),
-             RichText(
-                text: TextSpan(
-                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                      color: grayColor,
-                      fontWeight: FontWeight.w100,
-                      fontSize: 14),
-                  text: 'Proposal: ',
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: '$proposal',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    
-                  ],
-                ),
-              ),
+              // RichText(
+              //   text: TextSpan(
+              //     style: Theme.of(context).textTheme.bodyText2!.copyWith(
+              //           color: grayColor,
+              //           fontWeight: FontWeight.w100,
+              //           fontSize: 14,
+              //         ),
+              //     text: 'Proposal: ',
+              //     children: <TextSpan>[
+              //       TextSpan(
+              //         text: '${project.proposal}',
+              //         style: TextStyle(fontWeight: FontWeight.bold),
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),

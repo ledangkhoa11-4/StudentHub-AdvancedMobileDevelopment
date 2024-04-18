@@ -19,8 +19,11 @@ class Endpoints {
 
   static const String getMe = baseUrl + "/api/auth/me";
 
+  static const String postProject = baseUrl + "/api/project";
+
   static const String createCompanyProfile = baseUrl + "/api/profile/company";
 
+  static const String getCompanyProject = baseUrl + "/api/project/company";
   static const String createStudentProfile = baseUrl + "/api/profile/student";
 
   static const String getAllTechstack =
@@ -28,18 +31,24 @@ class Endpoints {
 
   static const String getAllSkillset = baseUrl + "/api/skillset/getAllSkillSet";
 
-  static const String uploadResume = baseUrl + "/api/profile/student/:studentId/resume";
+  static const String uploadResume =
+      baseUrl + "/api/profile/student/:studentId/resume";
 
-  static const String uploadTranscript = baseUrl + "/api/profile/student/:studentId/transcript";
+  static const String uploadTranscript =
+      baseUrl + "/api/profile/student/:studentId/transcript";
 
-  static const String createLanguage = baseUrl + "/api/language/updateByStudentId/:studentId";
+  static const String createLanguage =
+      baseUrl + "/api/language/updateByStudentId/:studentId";
 
-  static const String createEducation = baseUrl + "/api/education/updateByStudentId/:studentId";
+  static const String createEducation =
+      baseUrl + "/api/education/updateByStudentId/:studentId";
 
-  static const String createExperience = baseUrl + "/api/experience/updateByStudentId/:studentId";
+  static const String createExperience =
+      baseUrl + "/api/experience/updateByStudentId/:studentId";
 
-  static const String getResumeFile = baseUrl + "/api/profile/student/:studentId/resume";
+  static const String getResumeFile =
+      baseUrl + "/api/profile/student/:studentId/resume";
 
-  static const String getTranscriptFile = baseUrl + "/api/profile/student/:studentId/transcript";
-
+  static const String getTranscriptFile =
+      baseUrl + "/api/profile/student/:studentId/transcript";
 }

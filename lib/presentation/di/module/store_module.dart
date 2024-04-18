@@ -10,8 +10,11 @@ import 'package:boilerplate/core/stores/form/form_post_project_store.dart'
 import 'package:boilerplate/core/stores/form/form_signin_store.dart'
     as SigninFromStore;
 import 'package:boilerplate/core/stores/form/form_store.dart';
+import 'package:boilerplate/domain/repository/project/project_repository.dart';
 import 'package:boilerplate/domain/repository/setting/setting_repository.dart';
 import 'package:boilerplate/domain/usecase/post/get_post_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/get_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
@@ -35,6 +38,7 @@ import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/post/store/post_store.dart';
 
 import '../../../di/service_locator.dart';
+import '../../post_project/store/post_project_store.dart';
 
 mixin StoreModule {
   static Future<void> configureStoreModuleInjection() async {
@@ -112,6 +116,11 @@ mixin StoreModule {
         getIt<SettingRepository>(),
         getIt<ErrorStore>(),
       ),
+    );
+
+    getIt.registerSingleton<ProjectStore>(
+      ProjectStore(getIt<GetProjectUseCase>(), getIt<InsertProjectUseCase>(),
+          getIt<ErrorStore>(), getIt<ProjectRepository>()),
     );
   }
 }

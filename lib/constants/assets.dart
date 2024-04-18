@@ -17,5 +17,6 @@ class Assets {
 
   static const String companyAvatar = "assets/images/img_company.png";
 
+  static const String noData = "assets/images/img_nodata.png";
 
 }
