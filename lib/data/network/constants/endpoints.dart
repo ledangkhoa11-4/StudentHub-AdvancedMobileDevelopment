@@ -24,4 +24,31 @@ class Endpoints {
   static const String createCompanyProfile = baseUrl + "/api/profile/company";
 
   static const String getCompanyProject = baseUrl + "/api/project/company";
+  static const String createStudentProfile = baseUrl + "/api/profile/student";
+
+  static const String getAllTechstack =
+      baseUrl + "/api/techstack/getAllTechStack";
+
+  static const String getAllSkillset = baseUrl + "/api/skillset/getAllSkillSet";
+
+  static const String uploadResume =
+      baseUrl + "/api/profile/student/:studentId/resume";
+
+  static const String uploadTranscript =
+      baseUrl + "/api/profile/student/:studentId/transcript";
+
+  static const String createLanguage =
+      baseUrl + "/api/language/updateByStudentId/:studentId";
+
+  static const String createEducation =
+      baseUrl + "/api/education/updateByStudentId/:studentId";
+
+  static const String createExperience =
+      baseUrl + "/api/experience/updateByStudentId/:studentId";
+
+  static const String getResumeFile =
+      baseUrl + "/api/profile/student/:studentId/resume";
+
+  static const String getTranscriptFile =
+      baseUrl + "/api/profile/student/:studentId/transcript";
 }

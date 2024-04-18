@@ -21,9 +21,6 @@ class Routes {
   static const String login = '/login';
   static const String home = '/post';
   static const String companyWelcome = '/company_welcome';
-  static const String studentProfileExperience =
-      '/profile/student_new_profile_step2';
-  static const String studentProfileCV = '/profile/student_new_profile_step3';
   static const String signupStep1 = '/sign_up/sign_up_step1';
   static const String postProject = '/post_project/post_project';
   static const String postProjectStep2 =
@@ -38,9 +35,6 @@ class Routes {
     login: (BuildContext context) => LoginScreen(),
     home: (BuildContext context) => HomeScreen(),
     companyWelcome: (BuildContext context) => CompanyWelcome(),
-    studentProfileExperience: (BuildContext context) =>
-        StudentNewProfileStep2(),
-    studentProfileCV: (BuildContext context) => StudentNewProfileStep3(),
     signupStep1: (BuildContext context) => SignUpStep1(),
     postProject: (BuildContext context) => PostProject(),
     switchAccount: (BuildContext context) => SwitchAccountScreen(),

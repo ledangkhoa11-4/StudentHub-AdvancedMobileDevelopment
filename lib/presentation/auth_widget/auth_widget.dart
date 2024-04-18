@@ -6,7 +6,9 @@ import 'package:boilerplate/presentation/5_browse_project_flow/project_list.dart
 import 'package:boilerplate/presentation/5_browse_project_flow/student_dashboard.dart';
 import 'package:boilerplate/presentation/6_company_review_proposals/dashboard.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
+import 'package:boilerplate/presentation/login/login.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
+import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -44,8 +46,15 @@ class _AuthWidgetState extends State<AuthWidget> {
             ),
             Observer(
               builder: (context) {
-                return _userStore.getMeSuccess == true
+                return !_userStore.isLoading && _userStore.getMeSuccess == true
                     ? navigate(context)
+                    : SizedBox.shrink();
+              },
+            ),
+            Observer(
+              builder: (context) {
+                return !_userStore.isLoading && _userStore.getMeSuccess == false
+                    ? navigateLogin(context)
                     : SizedBox.shrink();
               },
             ),
@@ -56,6 +65,8 @@ class _AuthWidgetState extends State<AuthWidget> {
   Widget navigate(BuildContext context) {
     Future.delayed(Duration(milliseconds: 0), () {
       final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
+      print(currentProfile);
+      print("++++++++++++++++++++++++");
       if (currentProfile == UserRole.COMPANY.value) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => DashBoardCompany()),
@@ -65,6 +76,19 @@ class _AuthWidgetState extends State<AuthWidget> {
             MaterialPageRoute(builder: (context) => ProjectList()),
             (Route<dynamic> route) => false);
       }
+      _userStore.resetGetMeSuccessState();
+    });
+
+    return Container();
+  }
+
+  Widget navigateLogin(BuildContext context) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+          (Route<dynamic> route) => false);
+
+          ToastHelper.error("Unknow Error");
     });
 
     return Container();
