@@ -38,8 +38,8 @@ class ProjectItem extends StatelessWidget {
       }
     }
 
-    print("///////////////////");
-    print(isJsonString(project.description));
+    // print("///////////////////");
+    // print(isJsonString(project.description));
     QuillController? _controller = isJsonString(project.description)
         ? QuillController(
             document: Document.fromJson(jsonDecode(project.description)),
@@ -92,30 +92,30 @@ class ProjectItem extends StatelessWidget {
                 'Students are looking for:',
                 style: Theme.of(context).textTheme.subtitle1,
               ),
-              // if (_controller != null)
-              //   IgnorePointer(
-              //     ignoring: true,
-              //     child: QuillProvider(
-              //       configurations: QuillConfigurations(
-              //         controller: _controller,
-              //         sharedConfigurations: const QuillSharedConfigurations(
-              //           locale: Locale('en'),
-              //         ),
-              //       ),
-              //       child: QuillEditor.basic(
-              //         configurations: const QuillEditorConfigurations(
-              //           readOnly: true,
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // if (_controller == null)
-              // Text(
-              //   project.description,
-              //   style: Theme.of(context).textTheme.bodyText1?.copyWith(
-              //         fontStyle: FontStyle.italic,
-              //       ),
-              // ),
+              if (_controller != null)
+                IgnorePointer(
+                  ignoring: true,
+                  child: QuillProvider(
+                    configurations: QuillConfigurations(
+                      controller: _controller,
+                      sharedConfigurations: const QuillSharedConfigurations(
+                        locale: Locale('en'),
+                      ),
+                    ),
+                    child: QuillEditor.basic(
+                      configurations: const QuillEditorConfigurations(
+                        readOnly: true,
+                      ),
+                    ),
+                  ),
+                ),
+              if (_controller == null)
+                Text(
+                  project.description,
+                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                        fontStyle: FontStyle.italic,
+                      ),
+                ),
               SizedBox(height: 8.0),
               Row(
                 children: [

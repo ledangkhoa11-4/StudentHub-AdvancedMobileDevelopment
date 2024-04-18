@@ -1,3 +1,42 @@
+enum ProjectScope {
+  LessThanOneMonth,
+  OneToThreeMonth,
+  ThreeToSixMonth,
+  MoreThanSixMonth
+}
+
+extension ProjectScopeType on ProjectScope {
+  int get value {
+    switch (this) {
+      case ProjectScope.LessThanOneMonth:
+        return 0;
+      case ProjectScope.OneToThreeMonth:
+        return 1;
+      case ProjectScope.ThreeToSixMonth:
+        return 2;
+      case ProjectScope.MoreThanSixMonth:
+        return 3;
+      default:
+        return -1;
+    }
+  }
+
+  String get nameFormatted {
+    switch (this) {
+      case ProjectScope.LessThanOneMonth:
+        return "Less Than 1 Month";
+      case ProjectScope.OneToThreeMonth:
+        return "1 to 3 Months";
+      case ProjectScope.ThreeToSixMonth:
+        return "3 to 6 Months";
+      case ProjectScope.MoreThanSixMonth:
+        return "More Than 6 Months";
+      default:
+        return "";
+    }
+  }
+}
+
 class Project {
   int companyId;
   int projectScopeFlag;
