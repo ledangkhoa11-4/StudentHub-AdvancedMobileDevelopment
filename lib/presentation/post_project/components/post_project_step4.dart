@@ -55,9 +55,9 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
       numberOfStudents: widget.formStore.numberOfStudents,
       updatedAt: "",
       createdAt: "",
-      companyId: int.parse(_userStore.user!.company!.id.toString()),
-      typeFlag: 1,
-      projectScopeFlag: 1,
+      companyId: _userStore.user!.company!.id!,
+      typeFlag: null,
+      projectScopeFlag: widget.formStore.projectScopeFlag,
     );
   }
 
@@ -70,178 +70,188 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
 
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              PostProjectStepper(activeStep: 3),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  PostProjectStepper(activeStep: 3),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Project details:",
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      JustTheTooltip(
+                        controller: _tooltipController,
+                        isModal: true,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.help_outline_outlined,
+                            size: 16,
+                          ),
+                          onPressed: () {
+                            _tooltipController.showTooltip();
+                          },
+                        ),
+                        content: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: UnorderedList([
+                            "Review the project information carefully, you can return to the previous steps to edit",
+                          ], "Note:"),
+                        ),
+                      )
+                    ],
+                  ),
                   Text(
-                    "Project details:",
+                    "Project title: ",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
-                  JustTheTooltip(
-                    controller: _tooltipController,
-                    isModal: true,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.help_outline_outlined,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Text(
+                      '${widget.formStore.title}',
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, bottom: 20),
+                    child: CustomPaint(
+                      painter: PointedLinePainter(
+                          MediaQuery.of(context).size.width - 40, context),
+                    ),
+                  ),
+                  Text(
+                    "Description: ",
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  QuillProvider(
+                    configurations: QuillConfigurations(
+                      controller: _controller,
+                      sharedConfigurations: const QuillSharedConfigurations(
+                        locale: Locale('en'),
+                      ),
+                    ),
+                    child: QuillEditor.basic(
+                      configurations: const QuillEditorConfigurations(
+                        readOnly: false,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, bottom: 20),
+                    child: CustomPaint(
+                      painter: PointedLinePainter(
+                          MediaQuery.of(context).size.width - 40, context),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(
+                        BootstrapIcons.alarm,
                         size: 16,
                       ),
-                      onPressed: () {
-                        _tooltipController.showTooltip();
-                      },
-                    ),
-                    content: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: UnorderedList([
-                        "Review the project information carefully, you can return to the previous steps to edit",
-                      ], "Note:"),
-                    ),
-                  )
-                ],
-              ),
-              Text(
-                "Project title: ",
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  '${widget.formStore.title}',
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20, bottom: 20),
-                child: CustomPaint(
-                  painter: PointedLinePainter(
-                      MediaQuery.of(context).size.width - 40, context),
-                ),
-              ),
-              Text(
-                "Description: ",
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              QuillProvider(
-                configurations: QuillConfigurations(
-                  controller: _controller,
-                  sharedConfigurations: const QuillSharedConfigurations(
-                    locale: Locale('en'),
-                  ),
-                ),
-                child: QuillEditor.basic(
-                  configurations: const QuillEditorConfigurations(
-                    readOnly: false,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20, bottom: 20),
-                child: CustomPaint(
-                  painter: PointedLinePainter(
-                      MediaQuery.of(context).size.width - 40, context),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Icon(
-                    BootstrapIcons.alarm,
-                    size: 16,
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Project scope: ",
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      Text(
+                        '${widget.formStore.duration}',
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ],
                   ),
                   SizedBox(
-                    width: 10,
+                    height: 15,
                   ),
-                  Text(
-                    "Project scope: ",
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  Text(
-                    '${widget.formStore.duration}',
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Icon(
-                    BootstrapIcons.people_fill,
-                    size: 16,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(
+                        BootstrapIcons.people_fill,
+                        size: 16,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Students required: ",
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      Text(
+                        '${widget.formStore.numberOfStudents} student(s)',
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ],
                   ),
                   SizedBox(
-                    width: 10,
+                    height: 40,
                   ),
-                  Text(
-                    "Students required: ",
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  Text(
-                    '${widget.formStore.numberOfStudents} student(s)',
-                    style: Theme.of(context).textTheme.labelLarge,
+                  RoundedButtonWidget(
+                    buttonText: "Post project",
+                    buttonColor: Theme.of(context).colorScheme.primary,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      if (_userStore.user?.company != null) {
+                        Project project = _constructProjectFromFormData();
+                        _projectStore.insert(project);
+                      } else {
+                        ToastHelper.error(
+                            "You have to create your profile compnay first");
+                      }
+                    },
                   ),
                 ],
               ),
-              SizedBox(
-                height: 40,
-              ),
-              RoundedButtonWidget(
-                buttonText: "Post project",
-                buttonColor: Theme.of(context).colorScheme.primary,
-                textColor: Colors.white,
-                onPressed: () {
-                  if (_userStore.user?.company != null) {
-                    Project project = _constructProjectFromFormData();
-                    _projectStore.insert(project);
-                    // print("++++++++++++++++++++++++++++++++");
-                    // print("description: " + project.description);
-                    _completeAndBackToHomeScreen();
-                  } else {
-                    ToastHelper.error(
-                        "You have to create your profile compnay first");
-                  }
-                },
-              ),
-              Observer(
-                builder: (context) {
-                  // Check if the isLoading is false && success = true, to show the success dialog
-                  if (!_projectStore.isLoading &&
-                      _projectStore.success == true) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      ToastHelper.success("Create project successfully!");
-                    });
-                  }
-
-                  // Return the Visibility widget for the loading indicator
-                  return Visibility(
-                    visible: _projectStore.isLoading,
-                    child: CustomProgressIndicatorWidget(),
-                  );
-                },
-              ),
-            ],
+            ),
           ),
-        ),
+          Observer(
+            builder: (context) {
+              return Visibility(
+                visible: _projectStore.isLoading,
+                child: CustomProgressIndicatorWidget(),
+              );
+            },
+          ),
+          Observer(
+            builder: (context) {
+              return !_projectStore.isLoading && _projectStore.success == true
+                  ? navigate(context)
+                  : _showError(_projectStore.errorStore.errorMessage);
+            },
+          ),
+        ],
       ),
     );
   }
 
-  void _completeAndBackToHomeScreen() {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => AuthWidget()),
-      (Route<dynamic> route) =>
-          false, // This removes all routes below the new route
-    );
+  Widget navigate(BuildContext context) {
+    _projectStore.resetProjectList();
+    Future.delayed(Duration(milliseconds: 0), () {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => AuthWidget()),
+        (Route<dynamic> route) =>
+            false, // This removes all routes below the new route
+      );
+    });
+    return SizedBox.shrink();
+  }
+
+  Widget _showError(String message) {
+    if (!message.isEmpty) {
+      ToastHelper.error(message);
+    }
+    return SizedBox.shrink();
   }
 }

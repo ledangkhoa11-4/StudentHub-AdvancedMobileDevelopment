@@ -25,11 +25,6 @@ class PostProjectStep2 extends StatefulWidget {
   State<PostProjectStep2> createState() => _PostProjectStep2State();
 }
 
-// List<String> options = [
-//   "1 to 3 months",
-//   "3 to 6 months",
-// ];
-
 class _PostProjectStep2State extends State<PostProjectStep2> {
   final ThemeStore _themeStore = getIt<ThemeStore>();
   final TextEditingController _numberStudents = TextEditingController();
@@ -99,6 +94,7 @@ class _PostProjectStep2State extends State<PostProjectStep2> {
                         onTap: () {
                           setState(() {
                             currentOption = option;
+                            widget.formStore.setProjectScopeFlag(option.value);
                           });
                         },
                         child: ListTile(

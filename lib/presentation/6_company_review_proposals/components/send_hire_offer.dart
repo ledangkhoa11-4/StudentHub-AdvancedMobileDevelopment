@@ -1,4 +1,5 @@
 import 'package:boilerplate/domain/entity/project/project.dart';
+import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'candidate_list.dart';
@@ -36,26 +37,26 @@ class _SendHireOffer extends State<SendHireOffer>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: [
-            Tab(
-              text: "Proposals",
-            ),
-            Tab(
-              text: "Detail",
-            ),
-            Tab(
-              text: "Message",
-            ),
-            Tab(
-              text: "Hired",
-            ),
-          ],
-          labelStyle: TextStyle(fontSize: 12),
-        ),
-      ),
+      appBar: UserAppBar.buildAppBar(context,
+          titleWidget: Text(widget.project.title),
+          tabBar: TabBar(
+            controller: _tabController,
+            tabs: [
+              Tab(
+                text: "Proposals",
+              ),
+              Tab(
+                text: "Detail",
+              ),
+              Tab(
+                text: "Message",
+              ),
+              Tab(
+                text: "Hired",
+              ),
+            ],
+            labelStyle: TextStyle(fontSize: 12),
+          )),
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[

@@ -40,7 +40,7 @@ extension ProjectScopeType on ProjectScope {
 class Project {
   int companyId;
   int projectScopeFlag;
-  int typeFlag;
+  int? typeFlag;
   int? id;
   String? createdAt;
   String? updatedAt;
@@ -89,7 +89,7 @@ class Project {
             int.parse(json["companyId"].toString()), // Safely parse to int
         projectScopeFlag: int.parse(
             json["projectScopeFlag"].toString()), // Safely parse to int
-        typeFlag: int.parse(json["typeFlag"].toString()), // Safely parse to int
+        typeFlag: int.tryParse(json["typeFlag"].toString()), // Safely parse to int
         id: json["id"] != null
             ? int.parse(json["id"].toString())
             : null, // Nullable int parsed from string

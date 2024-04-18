@@ -1,6 +1,7 @@
 import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/project/project_list.dart';
+import 'package:boilerplate/presentation/6_company_review_proposals/components/no-project.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/post_project/store/post_project_store.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +24,7 @@ class _ProjectListState extends State<CompanyProjectList> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    if (_projectStore.projectList == null) {
+    if (_projectStore.projectList == null && _userStore.user!.company != null) {
       _projectStore.getProjects();
     }
   }
@@ -53,33 +53,43 @@ class _ProjectListState extends State<CompanyProjectList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          // Text(_userStore.user!.company!.id.toString()),
-          // Observer(builder: (context) {
-          //   return Visibility(
-          //     visible: _projectStore.isLoading,
-          //     child: CustomProgressIndicatorWidget(),
-          //   );
-          // }),
-          Expanded(
-            child: Observer(builder: (context) {
-              return ListView.builder(
-                itemCount: _projectStore.projectList?.projects?.length ?? 0,
-                itemBuilder: (context, index) {
-                  final project = _projectStore.projectList![index];
-                  // print(project.toMap());
-                  // print("+++++++++++");
-                  return ProjectItem(
-                    project: project,
-                    onLikeChanged: (bool) {},
-                  );
-                },
-              );
-            }),
-          ),
-        ],
-      ),
+      body: Observer(
+          builder: (context) => _projectStore.projectList != null &&
+                  _projectStore.projectList!.projects!.length > 0
+              ? Stack(
+                  children: [
+                    Column(
+                      children: [
+                        Expanded(
+                          child: Observer(builder: (context) {
+                            return ListView.builder(
+                              itemCount:
+                                  _projectStore.projectList?.projects?.length ??
+                                      0,
+                              itemBuilder: (context, index) {
+                                final project =
+                                    _projectStore.projectList![index];
+                                // print(project.toMap());
+                                // print("+++++++++++");
+                                return ProjectItem(
+                                  project: project,
+                                  onLikeChanged: (bool) {},
+                                );
+                              },
+                            );
+                          }),
+                        ),
+                      ],
+                    ),
+                    Observer(builder: (context) {
+                      return Visibility(
+                        visible: _projectStore.isLoading,
+                        child: CustomProgressIndicatorWidget(),
+                      );
+                    }),
+                  ],
+                )
+              : NoProject()),
     );
   }
 }

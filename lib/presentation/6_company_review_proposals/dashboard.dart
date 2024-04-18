@@ -8,6 +8,7 @@ import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class DashBoardCompany extends StatefulWidget {
   @override
@@ -46,8 +47,8 @@ class _DashBoardState extends State<DashBoardCompany>
             controller: _tabController,
             tabs: [
               Tab(icon: Icon(Icons.dashboard), text: "All Projects"),
-              Tab(icon: Icon(Icons.settings), text: "Working"),
-              Tab(icon: Icon(Icons.sticky_note_2), text: "Archieved"),
+              Tab(icon: Icon(BootstrapIcons.gear_wide_connected), text: "Working"),
+              Tab(icon: Icon(BootstrapIcons.archive), text: "Archieved"),
             ],
           )),
       bottomNavigationBar:
@@ -69,13 +70,17 @@ class _DashBoardState extends State<DashBoardCompany>
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: TabBarView(
-        controller: _tabController,
-        children: <Widget>[
-          Center(child: CompanyProjectList()),
-          Center(child: Text('Content of Tab 2')),
-          Center(child: Text('Content of Tab 3')),
-        ],
+      body: Observer(
+        builder: (context) {
+          return TabBarView(
+            controller: _tabController,
+            children: <Widget>[
+              Center(child: CompanyProjectList()),
+              Center(child: Text('Content of Tab 2')),
+              Center(child: Text('Content of Tab 3')),
+            ],
+          );
+        }
       ),
     );
   }

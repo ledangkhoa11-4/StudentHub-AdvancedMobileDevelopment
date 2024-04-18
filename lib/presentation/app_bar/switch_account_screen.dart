@@ -239,15 +239,15 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Observer(
-                builder: (context) => Container(
-                  height: 70,
-                  child: DropdownButton<Account>(
-                    isExpanded: true,
-                    value: _selectedAccount,
-                    onChanged: (Account? newValue) {
-                      setState(() {
-                        if (newValue?.nickname != "") {
+              Container(
+                height: 70,
+                child: DropdownButton<Account>(
+                  isExpanded: true,
+                  value: _selectedAccount,
+                  onChanged: (Account? newValue) {
+                    setState(() {
+                      if (newValue?.nickname != "") {
+                        if (_selectedAccount != newValue) {
                           _selectedAccount = newValue!;
                           getIt<SharedPreferenceHelper>()
                               .saveCurrentProfile(newValue.value);
@@ -257,52 +257,50 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
                                   builder: (context) => AuthWidget()),
                               (Route<dynamic> route) => false);
                           UserNavigationBar.bottomNavIndex = 0;
-                        } else {
-                          if (newValue!.name!.contains("student")) {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => StudentNewProfile()));
-                          } else {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => CompanyNewProfile()));
-                          }
                         }
-                      });
-                    },
-                    items: accounts.map((Account account) {
-                      return DropdownMenuItem<Account>(
-                        value: account,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Row(
-                            children: [
-                              account.avatar,
-                              SizedBox(width: 10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    account.name,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  !account.nickname.isEmpty
-                                      ? Text(
-                                          account.nickname,
-                                          style: TextStyle(fontSize: 10),
-                                        )
-                                      : SizedBox(),
-                                ],
-                              ),
-                              SizedBox(width: 15),
-                              if (account == _selectedAccount)
-                                Icon(Icons.check),
-                            ],
-                          ),
+                      } else {
+                        if (newValue!.name!.contains("student")) {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => StudentNewProfile()));
+                        } else {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => CompanyNewProfile()));
+                        }
+                      }
+                    });
+                  },
+                  items: accounts.map((Account account) {
+                    return DropdownMenuItem<Account>(
+                      value: account,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          children: [
+                            account.avatar,
+                            SizedBox(width: 10),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  account.name,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                !account.nickname.isEmpty
+                                    ? Text(
+                                        account.nickname,
+                                        style: TextStyle(fontSize: 10),
+                                      )
+                                    : SizedBox(),
+                              ],
+                            ),
+                            SizedBox(width: 15),
+                            if (account == _selectedAccount) Icon(Icons.check),
+                          ],
                         ),
-                      );
-                    }).toList(),
-                  ),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
               _buildProfileButton(),

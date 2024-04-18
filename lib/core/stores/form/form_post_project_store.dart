@@ -34,7 +34,7 @@ abstract class _FormPostProjectStore with Store {
   int companyId = 1;
 
   @observable
-  int projectScopeFlag = 1;
+  int projectScopeFlag = 0;
 
   @observable
   int typeFlag = 1;
@@ -52,6 +52,12 @@ abstract class _FormPostProjectStore with Store {
   String description = '';
 
   // actions:-------------------------------------------------------------------
+
+  @action
+  void setProjectScopeFlag(int value) {
+    projectScopeFlag = value;
+  }
+
   @action
   void setTitle(String value) {
     title = value;

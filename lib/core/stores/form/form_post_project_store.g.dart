@@ -125,6 +125,17 @@ mixin _$FormPostProjectStore on _FormPostProjectStore, Store {
       ActionController(name: '_FormPostProjectStore', context: context);
 
   @override
+  void setProjectScopeFlag(int value) {
+    final _$actionInfo = _$_FormPostProjectStoreActionController.startAction(
+        name: '_FormPostProjectStore.setProjectScopeFlag');
+    try {
+      return super.setProjectScopeFlag(value);
+    } finally {
+      _$_FormPostProjectStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setTitle(String value) {
     final _$actionInfo = _$_FormPostProjectStoreActionController.startAction(
         name: '_FormPostProjectStore.setTitle');

@@ -83,6 +83,11 @@ abstract class _ProjectStore with Store {
     });
   }
 
+  @action
+   void resetProjectList()  {
+    this.projectList = projectList;
+  }
+
   // insert a project
   @action
   Future insert(Project project) async {

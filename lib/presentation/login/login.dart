@@ -81,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
           Observer(
             builder: (context) {
-              return _userStore.success == true
+              return !_userStore.isLoading && _userStore.success == true
                   ? navigate(context)
                   : _showErrorMessage(_userStore.siginMessage);
             },

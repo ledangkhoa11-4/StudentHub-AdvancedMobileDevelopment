@@ -9,7 +9,7 @@ part 'insert_project_usecase.g.dart';
 class InsertProjectParams {
   final int companyId;
   final int projectScopeFlag;
-  final int typeFlag;
+  final int? typeFlag;
   final String title;
   final String description;
   final int numberOfStudents;

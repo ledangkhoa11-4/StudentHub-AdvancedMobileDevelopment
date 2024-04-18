@@ -145,6 +145,20 @@ mixin _$ProjectStore on _ProjectStore, Store {
     return _$insertAsyncAction.run(() => super.insert(project));
   }
 
+  late final _$_ProjectStoreActionController =
+      ActionController(name: '_ProjectStore', context: context);
+
+  @override
+  void resetProjectList() {
+    final _$actionInfo = _$_ProjectStoreActionController.startAction(
+        name: '_ProjectStore.resetProjectList');
+    try {
+      return super.resetProjectList();
+    } finally {
+      _$_ProjectStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

@@ -10,7 +10,7 @@ InsertProjectParams _$InsertProjectParamsFromJson(Map<String, dynamic> json) =>
     InsertProjectParams(
       companyId: json['companyId'] as int,
       projectScopeFlag: json['projectScopeFlag'] as int,
-      typeFlag: json['typeFlag'] as int,
+      typeFlag: json['typeFlag'] as int?,
       title: json['title'] as String,
       description: json['description'] as String,
       numberOfStudents: json['numberOfStudents'] as int,
