@@ -1,7 +1,10 @@
 import 'package:boilerplate/core/stores/form/form_post_project_store.dart';
+import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/presentation/6_company_review_proposals/components/project_view_list.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
+import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
+import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +18,7 @@ class _DashBoardState extends State<DashBoardCompany>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
   late final FormPostProjectStore formStore;
+  final UserStore _userStore = getIt<UserStore>();
 
   @override
   void initState() {
@@ -57,7 +61,11 @@ class _DashBoardState extends State<DashBoardCompany>
           color: Theme.of(context).colorScheme.secondary,
         ),
         onPressed: () {
-          Navigator.pushNamed(context, Routes.postProject);
+          if (_userStore.user?.company != null) {
+            Navigator.pushNamed(context, Routes.postProject);
+          } else {
+            ToastHelper.error("You have to create your profile compnay first");
+          }
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

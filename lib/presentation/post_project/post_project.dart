@@ -25,7 +25,9 @@ class _PostProjectState extends State<PostProject> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              PostProjectStep1(formStore: _formStore,),
+              PostProjectStep1(
+                formStore: _formStore,
+              ),
             ],
           ),
         ),
