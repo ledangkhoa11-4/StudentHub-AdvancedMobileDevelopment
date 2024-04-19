@@ -1,22 +1,13 @@
-<<<<<<< HEAD
 import 'package:boilerplate/presentation/6_company_review_proposals/components/send_hire_offer.dart';
 import 'package:boilerplate/presentation/post_project/components/gradient_divider.dart';
-=======
 import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/presentation/post_project/components/gradient_divider.dart';
 import 'package:boilerplate/presentation/post_project/post_project.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
->>>>>>> 35e90cf90f11b7f722398c965a5ca18faa111cf2
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import '../../../domain/entity/project/project.dart';
 
-<<<<<<< HEAD
-class CustomBottomSheetContent extends StatelessWidget {
-  final Project project;
-  const CustomBottomSheetContent({super.key, required this.project});
-
-=======
 class CustomBottomSheetContent extends StatefulWidget {
   final Project project;
 
@@ -28,7 +19,6 @@ class CustomBottomSheetContent extends StatefulWidget {
 }
 
 class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
->>>>>>> 35e90cf90f11b7f722398c965a5ca18faa111cf2
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -206,7 +196,7 @@ class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
   void navigateToSendHireOffer(BuildContext context, int index) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => SendHireOffer(
-        project: project,
+        project: widget.project,
         initialTabIndex: index, // Pass initialTabIndex indicating the index tab
       ),
     ));
