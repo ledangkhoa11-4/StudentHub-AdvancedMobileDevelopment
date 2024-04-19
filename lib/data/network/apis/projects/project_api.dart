@@ -9,6 +9,7 @@ import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/domain/entity/project/project_list.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 
 class ProjectApi {
@@ -44,6 +45,20 @@ class ProjectApi {
           await _dioClient.dio.post(Endpoints.postProject, data: params);
       final result = jsonDecode(res.toString());
       return Project.fromMap(result["result"]);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<dynamic> update(UpdateProjectParams params) async {
+    try {
+      final res = await _dioClient.dio.patch(
+          Endpoints.patchProject
+              .replaceFirst(":projectId", params.id.toString()),
+          data: params);
+
+      return res;
     } catch (e) {
       print(e.toString());
       throw e;

@@ -5,6 +5,7 @@ import 'package:boilerplate/domain/entity/project/project.dart'; // Import Proje
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
 import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
 
@@ -24,11 +25,13 @@ abstract class _ProjectStore with Store {
       this._insertProjectUseCase,
       this.errorStore,
       this._projectRepository,
-      this._getAllProjectUseCase); // Add _projectRepository
+      this._getAllProjectUseCase,
+      this._updateProjectUseCase); // Add _projectRepository
 
   // use cases:-----------------------------------------------------------------
   final GetProjectUseCase _getProjectUseCase;
   final InsertProjectUseCase _insertProjectUseCase;
+  final UpdateProjectUseCase _updateProjectUseCase;
 
   // stores:--------------------------------------------------------------------
   // store for handling errors
@@ -44,6 +47,9 @@ abstract class _ProjectStore with Store {
   static ObservableFuture<Project?> _emptyProjectResponse =
       ObservableFuture.value(null);
 
+  static ObservableFuture<dynamic> _emptyDynamicResponse =
+      ObservableFuture.value(null);
+
   @observable
   ObservableFuture<ProjectList?> fetchProjectsFuture =
       ObservableFuture<ProjectList?>(emptyProjectResponse);
@@ -54,6 +60,9 @@ abstract class _ProjectStore with Store {
 
   @observable
   ObservableFuture<Project?> getProjectFuture = _emptyProjectResponse;
+
+  @observable
+  ObservableFuture<dynamic> updateProjectFuture = _emptyDynamicResponse;
 
   @observable
   ProjectList? projectList;
@@ -81,7 +90,8 @@ abstract class _ProjectStore with Store {
   bool get isLoading =>
       fetchProjectsFuture.status == FutureStatus.pending ||
       fetchProjectFuture.status == FutureStatus.pending ||
-      getProjectFuture.status == FutureStatus.pending;
+      getProjectFuture.status == FutureStatus.pending ||
+      updateProjectFuture.status == FutureStatus.pending;
 
   // actions:-------------------------------------------------------------------
   @action
@@ -132,6 +142,40 @@ abstract class _ProjectStore with Store {
         }
       }).catchError((e) {
         print(e);
+      });
+    } catch (error) {
+      this.success = false;
+      if (error is DioException) {
+        // Handle DioException
+        errorStore.errorMessage = DioErrorUtil.handleError(error);
+      } else {
+        // Handle other types of errors
+        errorStore.errorMessage = 'An error occurred: $error';
+      }
+    }
+  }
+
+@action
+  Future update(int id, Project project) async {
+    final UpdateProjectParams params = UpdateProjectParams(
+        id: id,
+        companyId: project.companyId,
+        projectScopeFlag: project.projectScopeFlag,
+        typeFlag: project.typeFlag,
+        title: project.title,
+        description: project.description,
+        numberOfStudents: project.numberOfStudents);
+    try {
+      final future = _updateProjectUseCase.call(params: params);
+      updateProjectFuture = ObservableFuture(future);
+      await future.then((value) async {
+        if (value != null) {
+          print(value);
+          this.success = true;
+        }
+      }).catchError((e) {
+        print(e);
+        print(e.response);
       });
     } catch (error) {
       this.success = false;

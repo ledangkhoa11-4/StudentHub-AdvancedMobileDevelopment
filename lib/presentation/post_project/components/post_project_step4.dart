@@ -23,8 +23,10 @@ import '../store/post_project_store.dart';
 
 class PostProjectStep4 extends StatefulWidget {
   final FormPostProjectStore formStore;
+  final Project? projectEdit;
 
-  PostProjectStep4({Key? key, required this.formStore}) : super(key: key);
+  PostProjectStep4({Key? key, required this.formStore, this.projectEdit})
+      : super(key: key);
   @override
   State<PostProjectStep4> createState() => _PostProjectStep4State();
 }
@@ -52,7 +54,8 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
       updatedAt: "",
       createdAt: "",
       companyId: _userStore.user!.company!.id!,
-      typeFlag: null,
+      typeFlag:
+          widget.projectEdit != null ? widget.projectEdit!.typeFlag : null,
       projectScopeFlag: widget.formStore.projectScopeFlag,
     );
   }
@@ -65,7 +68,10 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
         selection: const TextSelection.collapsed(offset: 0));
 
     return Scaffold(
-      appBar: UserAppBar.buildAppBar(context),
+      appBar: UserAppBar.buildAppBar(context,
+          titleWidget: widget.projectEdit != null
+              ? Text("Edit \"${widget.projectEdit!.title}\" project ")
+              : Text("Post new project")),
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -79,11 +85,12 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                 children: [
                   PostProjectStepper(activeStep: 3),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Project details:",
+                        "PROJECT DETAILS",
                         style: Theme.of(context).textTheme.labelLarge,
+                        textAlign: TextAlign.center,
                       ),
                       JustTheTooltip(
                         controller: _tooltipController,
@@ -163,7 +170,7 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                       Text(
-                        '${widget.formStore.duration}',
+                        '${ProjectScopeType.fromValue(widget.formStore.projectScopeFlag)}',
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                     ],
@@ -195,14 +202,21 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                     height: 40,
                   ),
                   RoundedButtonWidget(
-                    buttonText: "Post project",
+                    buttonText: widget.projectEdit != null
+                        ? "Update project"
+                        : "Post project",
                     buttonColor: Theme.of(context).colorScheme.primary,
                     textColor: Colors.white,
                     onPressed: () {
                       DeviceUtils.hideKeyboard(context);
                       if (_userStore.user?.company != null) {
                         Project project = _constructProjectFromFormData();
-                        _projectStore.insert(project);
+                        if (widget.projectEdit != null) {
+                          _projectStore.update(
+                              widget.projectEdit!.id!, project);
+                        } else {
+                          _projectStore.insert(project);
+                        }
                       } else {
                         ToastHelper.error(
                             "You have to create your profile compnay first");
@@ -243,7 +257,11 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
             false, // This removes all routes below the new route
       );
     });
-    ToastHelper.success("Create project successfully");
+    if (widget.projectEdit != null) {
+      ToastHelper.success("Update project successfully");
+    } else {
+      ToastHelper.success("Create project successfully");
+    }
     return SizedBox.shrink();
   }
 
@@ -251,6 +269,7 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
     if (!message.isEmpty) {
       ToastHelper.error(message);
     }
+    _projectStore.resetSuccess();
     return SizedBox.shrink();
   }
 }

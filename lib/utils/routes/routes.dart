@@ -1,4 +1,5 @@
 import 'package:boilerplate/core/stores/form/form_post_project_store.dart';
+import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/presentation/app_bar/switch_account_screen.dart';
 import 'package:boilerplate/presentation/post_project/components/post_project_step2.dart';
 import 'package:boilerplate/presentation/post_project/components/post_project_step3.dart';
@@ -42,19 +43,22 @@ class Routes {
       final args =
           ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
       final FormPostProjectStore formStore = args['formStore'];
-      return PostProjectStep2(formStore: formStore);
+      final Project? projectEdit = args['project'];
+      return PostProjectStep2(formStore: formStore, projectEdit: projectEdit);
     },
     postProjectStep3: (BuildContext context) {
       final args =
           ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
       final FormPostProjectStore formStore = args['formStore'];
-      return PostProjectStep3(formStore: formStore);
+      final Project? projectEdit = args['project'];
+      return PostProjectStep3(formStore: formStore, projectEdit: projectEdit,);
     },
     postProjectStep4: (BuildContext context) {
       final args =
           ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
       final FormPostProjectStore formStore = args['formStore'];
-      return PostProjectStep4(formStore: formStore);
+      final Project? projectEdit = args['project'];
+      return PostProjectStep4(formStore: formStore, projectEdit: projectEdit,);
     },
   };
 }
