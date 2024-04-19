@@ -88,7 +88,9 @@ class _ProjectListState extends State<CompanyArchievedProjectList> {
                     }),
                   ],
                 )
-              : NoProject()),
+              : NoProject(
+                  title:
+                      "No project found. \nLet's close your first project. Closed projects will be here.")),
     );
   }
 }

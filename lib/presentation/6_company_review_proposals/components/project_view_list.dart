@@ -89,7 +89,9 @@ class _ProjectListState extends State<CompanyProjectList> {
                     }),
                   ],
                 )
-              : NoProject()),
+              : NoProject(
+                  title:
+                      "No project found. \nLet's start posting your first project")),
     );
   }
 }
