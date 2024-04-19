@@ -9,14 +9,14 @@ import 'package:boilerplate/presentation/6_company_review_proposals/components/p
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 
-class CompanyProjectList extends StatefulWidget {
-  CompanyProjectList({Key? key}) : super(key: key);
+class CompanyWorkingProjectList extends StatefulWidget {
+  CompanyWorkingProjectList({Key? key}) : super(key: key);
 
   @override
   _ProjectListState createState() => _ProjectListState();
 }
 
-class _ProjectListState extends State<CompanyProjectList> {
+class _ProjectListState extends State<CompanyWorkingProjectList> {
   // late ProjectList _allProjects = ProjectList(projects: []);
   final ProjectStore _projectStore = getIt<ProjectStore>();
   final UserStore _userStore = getIt<UserStore>();
@@ -52,10 +52,12 @@ class _ProjectListState extends State<CompanyProjectList> {
 
   @override
   Widget build(BuildContext context) {
+    final workingProjects = _projectStore.projectList!.projects!
+        .where((e) => e.typeFlag == 0)
+        .toList();
     return Scaffold(
       body: Observer(
-          builder: (context) => _projectStore.projectList != null &&
-                  _projectStore.projectList!.projects!.length > 0
+          builder: (context) => workingProjects.length > 0
               ? Stack(
                   children: [
                     Column(
@@ -63,12 +65,9 @@ class _ProjectListState extends State<CompanyProjectList> {
                         Expanded(
                           child: Observer(builder: (context) {
                             return ListView.builder(
-                              itemCount:
-                                  _projectStore.projectList?.projects?.length ??
-                                      0,
+                              itemCount: workingProjects.length ?? 0,
                               itemBuilder: (context, index) {
-                                final project =
-                                    _projectStore.projectList![index];
+                                final project = workingProjects![index];
                                 // print(project.toMap());
                                 // print("+++++++++++");
                                 return ProjectItem(
@@ -91,7 +90,7 @@ class _ProjectListState extends State<CompanyProjectList> {
                 )
               : NoProject(
                   title:
-                      "No project found. \nLet's start posting your first project")),
+                      "No project found. \nLet's kick off your first project")),
     );
   }
 }

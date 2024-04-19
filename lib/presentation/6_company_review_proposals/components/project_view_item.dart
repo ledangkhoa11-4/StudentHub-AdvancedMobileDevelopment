@@ -27,7 +27,7 @@ class ProjectItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color greenColor = Color.fromARGB(255, 48, 121, 51);
+    // final Color greenColor = Color.fromARGB(255, 48, 121, 51);
     final Color grayColor = const Color.fromARGB(255, 134, 132, 132);
 
     // print("///////////////////");
@@ -49,7 +49,10 @@ class ProjectItem extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => SendHireOffer(project: project),
+            builder: (context) => SendHireOffer(
+              project: project,
+              initialTabIndex: 0,
+            ),
           ),
         );
       },
@@ -78,7 +81,9 @@ class ProjectItem extends StatelessWidget {
                       showModalBottomSheet(
                         context: context,
                         builder: (BuildContext context) {
-                          return CustomBottomSheetContent(project: project,);
+                          return CustomBottomSheetContent(
+                            project: project,
+                          );
                         },
                       );
                     },
