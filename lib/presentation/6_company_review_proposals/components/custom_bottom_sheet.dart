@@ -1,9 +1,14 @@
+import 'package:boilerplate/presentation/6_company_review_proposals/components/send_hire_offer.dart';
 import 'package:boilerplate/presentation/post_project/components/gradient_divider.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import '../../../domain/entity/project/project.dart';
 
 class CustomBottomSheetContent extends StatelessWidget {
+  final Project project;
+  const CustomBottomSheetContent({super.key, required this.project});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,7 +30,10 @@ class CustomBottomSheetContent extends StatelessWidget {
             shape: Border(
               bottom: BorderSide(color: Colors.grey, width: 1),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pop(context); // Close the bottom sheet
+              navigateToSendHireOffer(context, 0);
+            },
           ),
           ListTile(
             leading: Icon(BootstrapIcons.chat_left_text, size: 20),
@@ -36,7 +44,10 @@ class CustomBottomSheetContent extends StatelessWidget {
             shape: Border(
               bottom: BorderSide(color: Colors.grey, width: 1),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pop(context); // Close the bottom sheet
+              navigateToSendHireOffer(context, 2);
+            },
           ),
           ListTile(
             leading: Icon(BootstrapIcons.person_workspace, size: 20),
@@ -44,7 +55,10 @@ class CustomBottomSheetContent extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                 )),
-            onTap: () {},
+            onTap: () {
+              Navigator.pop(context); // Close the bottom sheet
+              navigateToSendHireOffer(context, 3);
+            },
           ),
           Padding(
             padding: const EdgeInsets.only(top: 0, bottom: 0),
@@ -59,7 +73,10 @@ class CustomBottomSheetContent extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                 )),
-            onTap: () {},
+            onTap: () {
+              Navigator.pop(context); // Close the bottom sheet
+              navigateToSendHireOffer(context, 1);
+            },
             shape: Border(
               bottom: BorderSide(color: Colors.grey, width: 1),
             ),
@@ -159,5 +176,14 @@ class CustomBottomSheetContent extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void navigateToSendHireOffer(BuildContext context, int index) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => SendHireOffer(
+        project: project,
+        initialTabIndex: index, // Pass initialTabIndex indicating the index tab
+      ),
+    ));
   }
 }
