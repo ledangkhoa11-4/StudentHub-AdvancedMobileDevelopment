@@ -31,7 +31,7 @@ import 'package:boilerplate/domain/usecase/user/upload_transcript_usecase.dart';
 import '../../../di/service_locator.dart';
 import '../../usecase/project/find_project_by_id_usecase.dart';
 import '../../usecase/project/insert_project_usecase.dart';
-import '../../usecase/project/udpate_project_usecase.dart';
+import '../../usecase/project/update_project_usecase.dart';
 
 mixin UseCaseModule {
   static Future<void> configureUseCaseModuleInjection() async {
@@ -130,9 +130,9 @@ mixin UseCaseModule {
     getIt.registerSingleton<InsertProjectUseCase>(
       InsertProjectUseCase(getIt<ProjectRepository>()),
     );
-    // getIt.registerSingleton<UpdateProjectUseCase>(
-    //   UpdateProjectUseCase(getIt<ProjectRepository>()),
-    // );
+    getIt.registerSingleton<UpdateProjectUseCase>(
+      UpdateProjectUseCase(getIt<ProjectRepository>()),
+    );
     // getIt.registerSingleton<DeleteProjectUseCase>(
     //   DeleteProjectUseCase(getIt<ProjectRepository>()),
     // );

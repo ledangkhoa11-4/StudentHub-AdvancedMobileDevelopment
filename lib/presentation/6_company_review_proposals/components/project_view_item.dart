@@ -78,7 +78,7 @@ class ProjectItem extends StatelessWidget {
                       showModalBottomSheet(
                         context: context,
                         builder: (BuildContext context) {
-                          return CustomBottomSheetContent();
+                          return CustomBottomSheetContent(project: project,);
                         },
                       );
                     },

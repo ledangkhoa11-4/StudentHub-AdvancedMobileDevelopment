@@ -65,6 +65,22 @@ mixin _$ProjectStore on _ProjectStore, Store {
     });
   }
 
+  late final _$updateProjectFutureAtom =
+      Atom(name: '_ProjectStore.updateProjectFuture', context: context);
+
+  @override
+  ObservableFuture<dynamic> get updateProjectFuture {
+    _$updateProjectFutureAtom.reportRead();
+    return super.updateProjectFuture;
+  }
+
+  @override
+  set updateProjectFuture(ObservableFuture<dynamic> value) {
+    _$updateProjectFutureAtom.reportWrite(value, super.updateProjectFuture, () {
+      super.updateProjectFuture = value;
+    });
+  }
+
   late final _$projectListAtom =
       Atom(name: '_ProjectStore.projectList', context: context);
 
@@ -145,6 +161,22 @@ mixin _$ProjectStore on _ProjectStore, Store {
     });
   }
 
+  late final _$manualLoadingAtom =
+      Atom(name: '_ProjectStore.manualLoading', context: context);
+
+  @override
+  bool get manualLoading {
+    _$manualLoadingAtom.reportRead();
+    return super.manualLoading;
+  }
+
+  @override
+  set manualLoading(bool value) {
+    _$manualLoadingAtom.reportWrite(value, super.manualLoading, () {
+      super.manualLoading = value;
+    });
+  }
+
   late final _$getProjectsAsyncAction =
       AsyncAction('_ProjectStore.getProjects', context: context);
 
@@ -159,6 +191,22 @@ mixin _$ProjectStore on _ProjectStore, Store {
   @override
   Future<dynamic> insert(Project project) {
     return _$insertAsyncAction.run(() => super.insert(project));
+  }
+
+  late final _$updateAsyncAction =
+      AsyncAction('_ProjectStore.update', context: context);
+
+  @override
+  Future<dynamic> update(int id, Project project) {
+    return _$updateAsyncAction.run(() => super.update(id, project));
+  }
+
+  late final _$getAllProjectsAsyncAction =
+      AsyncAction('_ProjectStore.getAllProjects', context: context);
+
+  @override
+  Future<dynamic> getAllProjects(GetAllProjectParams params) {
+    return _$getAllProjectsAsyncAction.run(() => super.getAllProjects(params));
   }
 
   late final _$_ProjectStoreActionController =
@@ -192,11 +240,13 @@ mixin _$ProjectStore on _ProjectStore, Store {
 fetchProjectsFuture: ${fetchProjectsFuture},
 fetchProjectFuture: ${fetchProjectFuture},
 getProjectFuture: ${getProjectFuture},
+updateProjectFuture: ${updateProjectFuture},
 projectList: ${projectList},
 apiResponseMessage: ${apiResponseMessage},
 apiResponseSuccess: ${apiResponseSuccess},
 success: ${success},
 allProjectList: ${allProjectList},
+manualLoading: ${manualLoading},
 isLoading: ${isLoading}
     ''';
   }

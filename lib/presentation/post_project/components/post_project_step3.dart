@@ -5,9 +5,11 @@ import 'package:boilerplate/core/stores/form/form_post_project_store.dart';
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/core/widgets/textfield_widget.dart';
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/post_project/components/post_project_stepper.dart';
 import 'package:boilerplate/presentation/post_project/components/unordered_list.dart';
+import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +20,10 @@ import 'package:just_the_tooltip/just_the_tooltip.dart';
 
 class PostProjectStep3 extends StatefulWidget {
   final FormPostProjectStore formStore;
+  final Project? projectEdit;
 
-  PostProjectStep3({Key? key, required this.formStore}) : super(key: key);
+  PostProjectStep3({Key? key, required this.formStore, this.projectEdit})
+      : super(key: key);
 
   @override
   State<PostProjectStep3> createState() => _PostProjectStep3State();
@@ -30,11 +34,29 @@ class _PostProjectStep3State extends State<PostProjectStep3> {
   QuillController _quillController = QuillController.basic();
 
   @override
+  void initState() {
+    if (widget.projectEdit != null) {
+      try {
+        QuillController editedValue = QuillController(
+            document:
+                Document.fromJson(jsonDecode(widget.projectEdit!.description)),
+            selection: const TextSelection.collapsed(offset: 0));
+        _quillController = editedValue;
+        widget.formStore.setDescription(widget.projectEdit!.description);
+      } catch (e) {}
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final _tooltipController = JustTheController();
 
     return Scaffold(
-      appBar: UserAppBar.buildAppBar(context),
+      appBar: UserAppBar.buildAppBar(context,
+          titleWidget: widget.projectEdit != null
+              ? Text("Edit \"${widget.projectEdit!.title}\" project ")
+              : Text("Post new project")),
       body: QuillProvider(
         configurations: QuillConfigurations(
           controller: _quillController,
@@ -83,9 +105,15 @@ class _PostProjectStep3State extends State<PostProjectStep3> {
               SizedBox(
                 height: 10,
               ),
-              const QuillToolbar(configurations:  const QuillToolbarConfigurations(
-                fontSizesValues: const {'Small': '8', 'Medium': '24.5', 'Large': '46', 'Clear': '14'}
-              ),),
+              const QuillToolbar(
+                configurations: const QuillToolbarConfigurations(
+                    fontSizesValues: const {
+                      'Small': '8',
+                      'Medium': '24.5',
+                      'Large': '46',
+                      'Clear': '14'
+                    }),
+              ),
               Expanded(
                 child: QuillEditor.basic(
                   configurations: const QuillEditorConfigurations(
@@ -100,9 +128,11 @@ class _PostProjectStep3State extends State<PostProjectStep3> {
                 onPressed: () {
                   widget.formStore.setDescription(
                       jsonEncode(_quillController.document.toDelta().toJson()));
+                  DeviceUtils.hideKeyboard(context);
                   Navigator.of(context)
                       .pushNamed(Routes.postProjectStep4, arguments: {
                     'formStore': widget.formStore,
+                    'project': widget.projectEdit,
                   });
                 },
               ),
