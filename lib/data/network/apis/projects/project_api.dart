@@ -66,9 +66,14 @@ class ProjectApi {
   }
 
   Future<ProjectList> getAllProject(GetAllProjectParams params) async {
+    var query = "?";
+    if (params.title != null) query += "&title=${params.title}";
+    if (params.projectScopeFlag != null) query += "&projectScopeFlag=${params.projectScopeFlag}";
+    if (params.numberOfStudents != null) query += "&numberOfStudents=${params.numberOfStudents}";
+    if (params.proposalsLessThan != null) query += "&proposalsLessThan=${params.proposalsLessThan}";
     try {
       final res =
-          await _dioClient.dio.get(Endpoints.getAllProject, data: params);
+          await _dioClient.dio.get(Endpoints.getAllProject + query);
       final result = jsonDecode(res.toString());
 
       return ProjectList.fromJson(result["result"]);
