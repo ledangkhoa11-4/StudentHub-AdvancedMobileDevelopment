@@ -1,5 +1,4 @@
 import 'package:boilerplate/domain/entity/project/project.dart';
-import 'package:boilerplate/presentation/6_company_review_proposals/components/custom_bottom_sheet.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:flutter/material.dart';
 

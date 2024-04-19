@@ -1,6 +1,8 @@
 import 'package:boilerplate/core/stores/form/form_post_project_store.dart';
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/presentation/6_company_review_proposals/components/archieved_projects_list.dart';
 import 'package:boilerplate/presentation/6_company_review_proposals/components/project_view_list.dart';
+import 'package:boilerplate/presentation/6_company_review_proposals/components/working_projects_list.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
@@ -47,7 +49,9 @@ class _DashBoardState extends State<DashBoardCompany>
             controller: _tabController,
             tabs: [
               Tab(icon: Icon(Icons.dashboard), text: "All Projects"),
-              Tab(icon: Icon(BootstrapIcons.gear_wide_connected), text: "Working"),
+              Tab(
+                  icon: Icon(BootstrapIcons.gear_wide_connected),
+                  text: "Working"),
               Tab(icon: Icon(BootstrapIcons.archive), text: "Archieved"),
             ],
           )),
@@ -70,18 +74,16 @@ class _DashBoardState extends State<DashBoardCompany>
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: Observer(
-        builder: (context) {
-          return TabBarView(
-            controller: _tabController,
-            children: <Widget>[
-              Center(child: CompanyProjectList()),
-              Center(child: Text('Content of Tab 2')),
-              Center(child: Text('Content of Tab 3')),
-            ],
-          );
-        }
-      ),
+      body: Observer(builder: (context) {
+        return TabBarView(
+          controller: _tabController,
+          children: <Widget>[
+            Center(child: CompanyProjectList()),
+            Center(child: CompanyWorkingProjectList()),
+            Center(child: CompanyArchievedProjectList()),
+          ],
+        );
+      }),
     );
   }
 }
