@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
 
 import '../../entity/project/project.dart';
 import '../../entity/project/project_list.dart';
@@ -13,7 +14,7 @@ abstract class ProjectRepository {
 
   Future<Project> insert(InsertProjectParams post);
 
-  Future<int> update(Project post);
+  Future<dynamic> update(UpdateProjectParams params);
 
   Future<int> delete(Project post);
 

@@ -50,6 +50,21 @@ extension ProjectScopeType on ProjectScope {
         return "";
     }
   }
+
+  static ProjectScope getScropeFromValue(int value) {
+    switch (value) {
+      case 0:
+        return ProjectScope.LessThanOneMonth;
+      case 1:
+        return ProjectScope.OneToThreeMonth;
+      case 2:
+        return ProjectScope.ThreeToSixMonth;
+      case 3:
+        return ProjectScope.MoreThanSixMonth;
+      default:
+        return ProjectScope.LessThanOneMonth;
+    }
+  }
 }
 
 class Project {

@@ -1,9 +1,21 @@
+import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/presentation/post_project/components/gradient_divider.dart';
+import 'package:boilerplate/presentation/post_project/post_project.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
-class CustomBottomSheetContent extends StatelessWidget {
+class CustomBottomSheetContent extends StatefulWidget {
+  final Project project;
+
+  const CustomBottomSheetContent({super.key, required this.project});
+
+  @override
+  State<CustomBottomSheetContent> createState() =>
+      _CustomBottomSheetContentState();
+}
+
+class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -70,7 +82,12 @@ class CustomBottomSheetContent extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                 )),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => PostProject(
+                        projectEdit: widget.project,
+                      )));
+            },
             shape: Border(
               bottom: BorderSide(color: Colors.grey, width: 1),
             ),

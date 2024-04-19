@@ -18,8 +18,10 @@ import 'package:just_the_tooltip/just_the_tooltip.dart';
 
 class PostProjectStep2 extends StatefulWidget {
   final FormPostProjectStore formStore;
+  final Project? projectEdit;
 
-  PostProjectStep2({Key? key, required this.formStore}) : super(key: key);
+  PostProjectStep2({Key? key, required this.formStore, this.projectEdit})
+      : super(key: key);
 
   @override
   State<PostProjectStep2> createState() => _PostProjectStep2State();
@@ -33,11 +35,28 @@ class _PostProjectStep2State extends State<PostProjectStep2> {
   ProjectScope currentOption = ProjectScope.LessThanOneMonth;
 
   @override
+  void initState() {
+    print(widget.projectEdit);
+    if (widget.projectEdit != null) {
+      _numberStudents.text = widget.projectEdit!.numberOfStudents.toString();
+      widget.formStore.setNumberStudents(widget.projectEdit!.numberOfStudents);
+      widget.formStore
+          .setProjectScopeFlag(widget.projectEdit!.projectScopeFlag);
+      currentOption = ProjectScopeType.getScropeFromValue(
+          widget.projectEdit!.projectScopeFlag);
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final _tooltipController = JustTheController();
 
     return Scaffold(
-      appBar: UserAppBar.buildAppBar(context),
+      appBar: UserAppBar.buildAppBar(context,
+          titleWidget: widget.projectEdit != null
+              ? Text("Edit \"${widget.projectEdit!.title}\" project ")
+              : Text("Post new project")),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
@@ -154,6 +173,7 @@ class _PostProjectStep2State extends State<PostProjectStep2> {
                           Navigator.of(context)
                               .pushNamed(Routes.postProjectStep3, arguments: {
                             'formStore': widget.formStore,
+                            'project': widget.projectEdit,
                           });
                         } else {
                           ToastHelper.error("Please enter required fields");
