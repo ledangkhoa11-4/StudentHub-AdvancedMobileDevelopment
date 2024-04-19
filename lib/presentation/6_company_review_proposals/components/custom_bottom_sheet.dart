@@ -1,6 +1,5 @@
 import 'package:boilerplate/presentation/6_company_review_proposals/components/send_hire_offer.dart';
 import 'package:boilerplate/presentation/post_project/components/gradient_divider.dart';
-import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import '../../../domain/entity/project/project.dart';

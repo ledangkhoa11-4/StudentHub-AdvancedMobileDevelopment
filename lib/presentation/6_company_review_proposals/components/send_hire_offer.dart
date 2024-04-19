@@ -69,7 +69,9 @@ class _SendHireOffer extends State<SendHireOffer>
         controller: _tabController,
         children: <Widget>[
           CandidateList(),
-          Detail(),
+          Detail(
+            project: widget.project,
+          ),
           Center(child: Text('Content of Tab 3')),
           Center(child: Text('Content of Tab 4')),
         ],
