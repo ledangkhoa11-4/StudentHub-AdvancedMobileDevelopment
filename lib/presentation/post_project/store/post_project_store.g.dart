@@ -177,6 +177,23 @@ mixin _$ProjectStore on _ProjectStore, Store {
     });
   }
 
+  late final _$globalGetAllProjectParamsAtom =
+      Atom(name: '_ProjectStore.globalGetAllProjectParams', context: context);
+
+  @override
+  GetAllProjectParams get globalGetAllProjectParams {
+    _$globalGetAllProjectParamsAtom.reportRead();
+    return super.globalGetAllProjectParams;
+  }
+
+  @override
+  set globalGetAllProjectParams(GetAllProjectParams value) {
+    _$globalGetAllProjectParamsAtom
+        .reportWrite(value, super.globalGetAllProjectParams, () {
+      super.globalGetAllProjectParams = value;
+    });
+  }
+
   late final _$getProjectsAsyncAction =
       AsyncAction('_ProjectStore.getProjects', context: context);
 
@@ -205,8 +222,8 @@ mixin _$ProjectStore on _ProjectStore, Store {
       AsyncAction('_ProjectStore.getAllProjects', context: context);
 
   @override
-  Future<dynamic> getAllProjects(GetAllProjectParams params) {
-    return _$getAllProjectsAsyncAction.run(() => super.getAllProjects(params));
+  Future<dynamic> getAllProjects(GetAllProjectParams param) {
+    return _$getAllProjectsAsyncAction.run(() => super.getAllProjects(param));
   }
 
   late final _$_ProjectStoreActionController =
@@ -235,6 +252,30 @@ mixin _$ProjectStore on _ProjectStore, Store {
   }
 
   @override
+  void setSearch(String value) {
+    final _$actionInfo = _$_ProjectStoreActionController.startAction(
+        name: '_ProjectStore.setSearch');
+    try {
+      return super.setSearch(value);
+    } finally {
+      _$_ProjectStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setFilter(
+      int? numberOfStudents, int? projectScopeFlag, int? proposalsLessThan) {
+    final _$actionInfo = _$_ProjectStoreActionController.startAction(
+        name: '_ProjectStore.setFilter');
+    try {
+      return super
+          .setFilter(numberOfStudents, projectScopeFlag, proposalsLessThan);
+    } finally {
+      _$_ProjectStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 fetchProjectsFuture: ${fetchProjectsFuture},
@@ -247,6 +288,7 @@ apiResponseSuccess: ${apiResponseSuccess},
 success: ${success},
 allProjectList: ${allProjectList},
 manualLoading: ${manualLoading},
+globalGetAllProjectParams: ${globalGetAllProjectParams},
 isLoading: ${isLoading}
     ''';
   }

@@ -81,6 +81,7 @@ class Project {
   int countProposals;
   int countMessages;
   int countHired;
+  bool? isFavorite;
 
   Project({
     required this.companyId,
@@ -96,6 +97,7 @@ class Project {
     this.countProposals = 0,
     this.countMessages = 0,
     this.countHired = 0,
+    this.isFavorite = false
   });
 
   // factory Project.fromMap(Map<String, dynamic> json) => Project(
@@ -141,6 +143,9 @@ class Project {
         countHired: json.containsKey("countHired")
             ? int.parse(json["countHired"].toString())
             : 0,
+          isFavorite: json.containsKey("isFavorite")
+            ? json["isFavorite"]
+            : false,
       );
 
   Map<String, dynamic> toMap() => {
