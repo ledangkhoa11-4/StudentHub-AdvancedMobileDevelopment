@@ -82,9 +82,9 @@ class _ChangeScreenState extends State<ChangeScreen> {
                 ),
           Observer(
             builder: (context) {
-              return _userStore.success == true
-                  ? navigate(context)
-                  : _showErrorMessage(_userStore.siginMessage);
+              return _userStore.changeSuccess == true
+                  ? navigate(context, _userStore.changeMessage)
+                  : _showErrorMessage(_userStore.changeMessage);
             },
           ),
           Observer(
@@ -144,8 +144,7 @@ class _ChangeScreenState extends State<ChangeScreen> {
     return Observer(
       builder: (context) {
         return TextFieldWidget(
-          hint:
-              AppLocalizations.of(context).translate('login_et_user_password'),
+          hint:"Enter Old Password",
           padding: EdgeInsets.only(top: 16.0),
           icon: Icons.lock,
           iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
@@ -164,8 +163,7 @@ class _ChangeScreenState extends State<ChangeScreen> {
     return Observer(
       builder: (context) {
         return TextFieldWidget(
-          hint:
-              AppLocalizations.of(context).translate('login_et_user_password'),
+          hint:"Enter New Password",
           padding: EdgeInsets.only(top: 16.0),
           icon: Icons.lock,
           iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
@@ -183,33 +181,64 @@ class _ChangeScreenState extends State<ChangeScreen> {
 
 
   Widget _buildChangeInButton() {
-    return RoundedButtonWidget(
-      buttonText: "Change Password",
-      buttonColor: Theme.of(context).colorScheme.primary,
-      textColor: Colors.white,
-      onPressed: () async {
-        _formStore.validateAll();
-        if (_formStore.formErrorStore.password == null && _formStore.formErrorStore.NewPassword == null) {
-          DeviceUtils.hideKeyboard(context);
-          _userStore.change(_passwordController.text, _newpasswordController.text);
-          if(_userStore.changeSuccess == true) {
-            _showSuccressMessage("Password changed successfully");
-          }else{
-            _showErrorMessage("Password change error");
-          }
-        } else {
-          _showErrorMessage('Please fill in all fields');
-        }
-      },
-    );
-  }
+  return RoundedButtonWidget(
+    buttonText: "Change Password",
+    buttonColor: Theme.of(context).colorScheme.primary,
+    textColor: Colors.white,
+    onPressed: () async {
+      _formStore.validateAll();
+      if (_formStore.formErrorStore.password == null &&
+          _formStore.formErrorStore.NewPassword == null && _passwordController.text != _newpasswordController.text) {
+        DeviceUtils.hideKeyboard(context);
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Confirm'),
+              content: Text('Are you sure you want to change your password?'),
+              actionsPadding: EdgeInsets.symmetric(horizontal: 16),
+              contentPadding: EdgeInsets.fromLTRB(24, 20, 24, 20), 
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(0.0), 
+              ),
+              backgroundColor: Color(0xFFE8ECEC),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    Navigator.of(context).pop();
+                    await _userStore.change(_passwordController.text, _newpasswordController.text);
+                  },
+                  child: Text('Confirm'),
+                ),
+              ],
+            );
+          },
+        );
+      } else if(_passwordController.text == _newpasswordController.text){
+        _showErrorMessage('The new password must not be the same as the old password');
+      }else{
+        _showErrorMessage("Please fill in all fields ");
+      }
+    },
+  );
+}
 
-  Widget navigate(BuildContext context) {
+
+  Widget navigate(BuildContext context, String message) {
+    if (message.isNotEmpty) {
+      ToastHelper.success(message);
+    }
     Future.delayed(Duration(milliseconds: 0), () {
       Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => AuthWidget()),
       );
-      _userStore.resetLoginState();
+      _userStore.resetchangeState();
     });
 
     return Container();
@@ -220,23 +249,18 @@ class _ChangeScreenState extends State<ChangeScreen> {
     if (message.isNotEmpty) {
       ToastHelper.error(message);
     }
-    _userStore.resetLoginState();
+    _userStore.resetchangeState();
     return SizedBox.shrink();
   }
 
-  _showSuccressMessage(String message) {
-    if (message.isNotEmpty) {
-      ToastHelper.success(message);
-    }
-    _userStore.resetLoginState();
-    return SizedBox.shrink();
-  }
+
   // dispose:-------------------------------------------------------------------
   @override
   void dispose() {
     // Clean up the controller when the Widget is removed from the Widget tree
     _userEmailController.dispose();
     _passwordController.dispose();
+    _newpasswordController.dispose();
     _passwordFocusNode.dispose();
     super.dispose();
   }

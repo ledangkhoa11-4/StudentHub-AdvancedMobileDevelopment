@@ -75,9 +75,9 @@ class _ForgotScreenState extends State<ForgotScreen> {
                 ),
           Observer(
             builder: (context) {
-              return _userStore.success == true
-                  ? navigate(context)
-                  : _showErrorMessage(_userStore.siginMessage);
+              return _userStore.forgotSuccess == true
+                  ? _showSuccessMessage(_userStore.forgotMessage)
+                  : _showErrorMessage(_userStore.forgotMessage);
             },
           ),
           Observer(
@@ -171,23 +171,18 @@ class _ForgotScreenState extends State<ForgotScreen> {
     );
   }
 
-  Widget navigate(BuildContext context) {
-    Future.delayed(Duration(milliseconds: 0), () {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => AuthWidget()),
-      );
-      _userStore.resetLoginState();
-    });
-
-    return Container();
-  }
 
   // General Methods:-----------------------------------------------------------
   _showErrorMessage(String message) {
     if (message.isNotEmpty) {
       ToastHelper.error(message);
     }
-    _userStore.resetLoginState();
+    return SizedBox.shrink();
+  }
+  _showSuccessMessage(String message) {
+    if (message.isNotEmpty) {
+      ToastHelper.success(message);
+    }
     return SizedBox.shrink();
   }
 

@@ -72,6 +72,7 @@ abstract class _UserStore with Store {
   void _setupDisposers() {
     _disposers = [
       reaction((_) => success, (_) => success = false, delay: 200),
+      reaction((_) => changeSuccess, (_) => changeSuccess = false, delay: 200),
     ];
   }
 
@@ -218,7 +219,7 @@ abstract class _UserStore with Store {
       String message = e.response.toString();
       final response = jsonDecode(message);
       this.forgotSuccess = false;
-      this.forgotMessage = response["errorDetails"].first.toString();
+      this.forgotMessage = response["errorDetails"].toString();
     });
   }
 
@@ -229,13 +230,14 @@ abstract class _UserStore with Store {
     changeFuture = ObservableFuture(future);
     await future.then((value) async {
       if (value != null) {
-        String message = value.toString();
-        final response = jsonDecode(message);
+        this.changeMessage = "Changed Password successfully";
         this.changeSuccess = true;
-        this.changeMessage = response["result"]["message"].toString();
       }
     }).catchError((e) {
+      String message = e.response.toString();
+      final response = jsonDecode(message);
       this.changeSuccess = false;
+      this.changeMessage = response["errorDetails"].toString();
     });
   }
 
@@ -293,6 +295,11 @@ abstract class _UserStore with Store {
   resetSigninState() {
     this.signupSuccess = null;
     this.signupMessage = "";
+  }
+
+  resetchangeState() {
+    this.changeMessage = "";
+    this.changeSuccess = null;
   }
 
   resetLoginState() {
