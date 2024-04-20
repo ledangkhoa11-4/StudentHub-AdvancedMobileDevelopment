@@ -53,51 +53,57 @@ class _ProjectListState extends State<CompanyProjectList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Observer(
-          builder: (context) => _projectStore.projectList != null &&
-                  _projectStore.projectList!.projects!.length > 0
-              ? Stack(
-                  children: [
-                    Column(
-                      children: [
-                        Expanded(
-                          child: Observer(builder: (context) {
-                            return ListView.builder(
-                              itemCount:
-                                  _projectStore.projectList?.projects?.length ??
-                                      0,
-                              itemBuilder: (context, index) {
-                                final project =
-                                    _projectStore.projectList![index];
-                                // print(project.toMap());
-                                // print("+++++++++++");
-                                return ProjectItem(
-                                  project: project,
-                                  onLikeChanged: (bool) {},
-                                );
-                              },
-                            );
-                          }),
-                        ),
-                      ],
-                    ),
-                    Observer(builder: (context) {
-                      return Visibility(
-                        visible: _projectStore.isLoading,
-                        child: CustomProgressIndicatorWidget(),
-                      );
-                    }),
-                    Observer(builder: (context) {
-                      return !_projectStore.isLoading &&
-                              _projectStore.deleted == true
-                          ? reloadProject(context)
-                          : SizedBox.shrink();
-                    }),
-                  ],
-                )
-              : NoProject(
-                  title:
-                      "No project found. \nLet's start posting your first project")),
+      body: RefreshIndicator(
+        onRefresh: () {
+          _projectStore.manualLoading = true;
+          return _projectStore.getProjects();
+        },
+        child: Observer(
+            builder: (context) => _projectStore.projectList != null &&
+                    _projectStore.projectList!.projects!.length > 0
+                ? Stack(
+                    children: [
+                      Column(
+                        children: [
+                          Expanded(
+                            child: Observer(builder: (context) {
+                              return ListView.builder(
+                                itemCount: _projectStore
+                                        .projectList?.projects?.length ??
+                                    0,
+                                itemBuilder: (context, index) {
+                                  final project =
+                                      _projectStore.projectList![index];
+                                  // print(project.toMap());
+                                  // print("+++++++++++");
+                                  return ProjectItem(
+                                    project: project,
+                                    onLikeChanged: (bool) {},
+                                  );
+                                },
+                              );
+                            }),
+                          ),
+                        ],
+                      ),
+                      Observer(builder: (context) {
+                        return Visibility(
+                          visible: _projectStore.isLoading && !_projectStore.manualLoading,
+                          child: CustomProgressIndicatorWidget(),
+                        );
+                      }),
+                      Observer(builder: (context) {
+                        return !_projectStore.isLoading &&
+                                _projectStore.deleted == true
+                            ? reloadProject(context)
+                            : SizedBox.shrink();
+                      }),
+                    ],
+                  )
+                : NoProject(
+                    title:
+                        "No project found. \nLet's start posting your first project")),
+      ),
     );
   }
 

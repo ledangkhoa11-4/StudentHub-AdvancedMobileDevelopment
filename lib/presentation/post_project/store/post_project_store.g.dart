@@ -161,6 +161,22 @@ mixin _$ProjectStore on _ProjectStore, Store {
     });
   }
 
+  late final _$slideToIndexAtom =
+      Atom(name: '_ProjectStore.slideToIndex', context: context);
+
+  @override
+  int? get slideToIndex {
+    _$slideToIndexAtom.reportRead();
+    return super.slideToIndex;
+  }
+
+  @override
+  set slideToIndex(int? value) {
+    _$slideToIndexAtom.reportWrite(value, super.slideToIndex, () {
+      super.slideToIndex = value;
+    });
+  }
+
   late final _$allProjectListAtom =
       Atom(name: '_ProjectStore.allProjectList', context: context);
 
@@ -363,6 +379,7 @@ apiResponseMessage: ${apiResponseMessage},
 apiResponseSuccess: ${apiResponseSuccess},
 success: ${success},
 deleted: ${deleted},
+slideToIndex: ${slideToIndex},
 allProjectList: ${allProjectList},
 onlyLikeProject: ${onlyLikeProject},
 manualLoading: ${manualLoading},

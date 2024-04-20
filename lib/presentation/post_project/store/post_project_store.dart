@@ -95,6 +95,9 @@ abstract class _ProjectStore with Store {
   @observable
   bool? deleted = null;
 
+  @observable
+  int? slideToIndex = null;
+
 /* KHOA */
   @observable
   ProjectList? allProjectList;
@@ -136,6 +139,7 @@ abstract class _ProjectStore with Store {
       print(error);
       errorStore.errorMessage = DioErrorUtil.handleError(error);
     });
+    this.manualLoading = false;
   }
 
   @action
@@ -331,6 +335,10 @@ abstract class _ProjectStore with Store {
               .toList());
       this.allProjectList = reverted;
     }
+  }
+
+  setSlideToIndex(int? value) {
+    this.slideToIndex = value;
   }
 
   resetApiResponse() {
