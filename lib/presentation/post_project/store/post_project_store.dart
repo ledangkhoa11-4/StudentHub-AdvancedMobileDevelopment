@@ -27,8 +27,17 @@ abstract class _ProjectStore with Store {
       this.errorStore,
       this._projectRepository,
       this._getAllProjectUseCase,
-      this._updateProjectUseCase,
-      this._removeProjectUseCase); // Add _projectRepository
+      this._removeProjectUseCase, // Add _projectRepository
+      this._updateProjectUseCase) {
+    _setupValidations();
+  } // Add _projectRepository
+
+  late List<ReactionDisposer> _disposers;
+  void _setupValidations() {
+    _disposers = [
+      reaction((_) => globalGetAllProjectParams, getAllProjects),
+    ];
+  }
 
   // use cases:-----------------------------------------------------------------
   final GetProjectUseCase _getProjectUseCase;
@@ -90,6 +99,9 @@ abstract class _ProjectStore with Store {
   bool manualLoading = false;
 
   final GetAllProjectUseCase _getAllProjectUseCase;
+
+  @observable
+  GetAllProjectParams globalGetAllProjectParams = GetAllProjectParams();
 
 /* KHOA */
   @computed
@@ -196,8 +208,8 @@ abstract class _ProjectStore with Store {
   }
 
   @action
-  Future getAllProjects(GetAllProjectParams params) async {
-    final future = _getAllProjectUseCase.call(params: params);
+  Future getAllProjects(GetAllProjectParams param) async {
+    final future = _getAllProjectUseCase.call(params: param);
     fetchProjectsFuture = ObservableFuture(future);
 
     await future.then((projectList) {
@@ -232,6 +244,28 @@ abstract class _ProjectStore with Store {
     }
   }
 
+  void setSearch(String value) {
+    this.globalGetAllProjectParams = GetAllProjectParams(
+        title: !value.isEmpty ? value : null,
+        numberOfStudents:
+            !value.isEmpty ? globalGetAllProjectParams.numberOfStudents : null,
+        projectScopeFlag:
+            !value.isEmpty ? globalGetAllProjectParams.projectScopeFlag : null,
+        proposalsLessThan: !value.isEmpty
+            ? globalGetAllProjectParams.proposalsLessThan
+            : null);
+  }
+
+  @action
+  void setFilter(
+      int? numberOfStudents, int? projectScopeFlag, int? proposalsLessThan) {
+    this.globalGetAllProjectParams = GetAllProjectParams(
+        title: globalGetAllProjectParams.title,
+        numberOfStudents: numberOfStudents,
+        projectScopeFlag: projectScopeFlag,
+        proposalsLessThan: proposalsLessThan);
+  }
+
   resetApiResponse() {
     this.apiResponseMessage = "";
     this.apiResponseSuccess = null;
@@ -239,5 +273,11 @@ abstract class _ProjectStore with Store {
 
   resetDeleted() {
     this.deleted = null;
+  }
+
+  void dispose() {
+    for (final d in _disposers) {
+      d();
+    }
   }
 }
