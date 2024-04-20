@@ -86,6 +86,19 @@ class ProjectApi {
     }
   }
 
+  Future<dynamic> remove(int id) async {
+    try {
+      final res = await _dioClient.dio.delete(
+        Endpoints.patchProject.replaceFirst(":projectId", id.toString()),
+      );
+
+      return res;
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
   Future<dynamic> updateFavorite(UpdateFavoriteProjectParams params) async {
     try {
       final UserStore _userStore = getIt<UserStore>();

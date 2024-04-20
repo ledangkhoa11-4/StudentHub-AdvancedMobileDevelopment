@@ -145,6 +145,22 @@ mixin _$ProjectStore on _ProjectStore, Store {
     });
   }
 
+  late final _$deletedAtom =
+      Atom(name: '_ProjectStore.deleted', context: context);
+
+  @override
+  bool? get deleted {
+    _$deletedAtom.reportRead();
+    return super.deleted;
+  }
+
+  @override
+  set deleted(bool? value) {
+    _$deletedAtom.reportWrite(value, super.deleted, () {
+      super.deleted = value;
+    });
+  }
+
   late final _$allProjectListAtom =
       Atom(name: '_ProjectStore.allProjectList', context: context);
 
@@ -258,6 +274,14 @@ mixin _$ProjectStore on _ProjectStore, Store {
     return _$getAllProjectsAsyncAction.run(() => super.getAllProjects(param));
   }
 
+  late final _$removeAsyncAction =
+      AsyncAction('_ProjectStore.remove', context: context);
+
+  @override
+  Future<dynamic> remove(int id) {
+    return _$removeAsyncAction.run(() => super.remove(id));
+  }
+
   late final _$updateLikeProkectAsyncAction =
       AsyncAction('_ProjectStore.updateLikeProkect', context: context);
 
@@ -287,17 +311,6 @@ mixin _$ProjectStore on _ProjectStore, Store {
         name: '_ProjectStore.resetSuccess');
     try {
       return super.resetSuccess();
-    } finally {
-      _$_ProjectStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setSearch(String value) {
-    final _$actionInfo = _$_ProjectStoreActionController.startAction(
-        name: '_ProjectStore.setSearch');
-    try {
-      return super.setSearch(value);
     } finally {
       _$_ProjectStoreActionController.endAction(_$actionInfo);
     }
@@ -349,6 +362,7 @@ projectList: ${projectList},
 apiResponseMessage: ${apiResponseMessage},
 apiResponseSuccess: ${apiResponseSuccess},
 success: ${success},
+deleted: ${deleted},
 allProjectList: ${allProjectList},
 onlyLikeProject: ${onlyLikeProject},
 manualLoading: ${manualLoading},

@@ -17,7 +17,7 @@ abstract class ProjectRepository {
 
   Future<dynamic> update(UpdateProjectParams params);
 
-  Future<int> delete(Project post);
+  Future<dynamic> remove(int id);
 
   Future<ProjectList> getAllProject(GetAllProjectParams params);
 

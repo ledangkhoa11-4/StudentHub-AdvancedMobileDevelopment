@@ -71,11 +71,16 @@ class ProjectRepositoryImpl extends ProjectRepository {
     });
   }
 
+  // @override
+  // Future<int> delete(Project project) => _projectDataSource
+  //     .update(project)
+  //     .then((id) => id)
+  //     .catchError((error) => throw error);
+
   @override
-  Future<int> delete(Project project) => _projectDataSource
-      .update(project)
-      .then((id) => id)
-      .catchError((error) => throw error);
+  Future<dynamic> remove(int id) async {
+    return await _projectApi.remove(id);
+  }
 
   @override
   Future<ProjectList> getAllProject(GetAllProjectParams params) async {
