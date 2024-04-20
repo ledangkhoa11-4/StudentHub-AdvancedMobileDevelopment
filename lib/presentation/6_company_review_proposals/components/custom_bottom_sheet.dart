@@ -10,6 +10,9 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import '../../../domain/entity/project/project.dart';
 
+int WORKING_MODE = 1;
+int ACHIEVED_MODE = 2;
+
 class CustomBottomSheetContent extends StatefulWidget {
   final Project project;
 
@@ -163,7 +166,40 @@ class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
                 style: TextStyle(
                   fontSize: 16,
                 )),
-            onTap: () {},
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(
+                      "Start Working Project",
+                    ),
+                    content: Text("Are you sure you want to start " +
+                        widget.project.title.toString() +
+                        " project?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("Cancel"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Project newStatusProject = _constructProjectStatus(
+                              widget.project, WORKING_MODE);
+                          _projectStore.update(
+                              widget.project!.id!, newStatusProject);
+                          Navigator.pop(context); // Close the dialog
+                          Navigator.pop(context); // Close the bottom sheet
+                        },
+                        child: Text("Yes"),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
             shape: Border(
               bottom: BorderSide(color: Colors.grey, width: 1),
             ),
@@ -174,7 +210,40 @@ class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
                 style: TextStyle(
                   fontSize: 16,
                 )),
-            onTap: () {},
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(
+                      "Close Project",
+                    ),
+                    content: Text("Are you sure you want to close " +
+                        widget.project.title.toString() +
+                        " project?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("Cancel"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Project newStatusProject = _constructProjectStatus(
+                              widget.project, ACHIEVED_MODE);
+                          _projectStore.update(
+                              widget.project!.id!, newStatusProject);
+                          Navigator.pop(context); // Close the dialog
+                          Navigator.pop(context); // Close the bottom sheet
+                        },
+                        child: Text("Yes"),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
             shape: Border(
               bottom: BorderSide(color: Colors.grey, width: 1),
             ),
@@ -235,5 +304,18 @@ class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
         initialTabIndex: index, // Pass initialTabIndex indicating the index tab
       ),
     ));
+  }
+
+  Project _constructProjectStatus(Project project, int newTypeFlag) {
+    return Project(
+      title: project.title,
+      description: project.description,
+      numberOfStudents: project.numberOfStudents,
+      updatedAt: "",
+      createdAt: "",
+      companyId: project.companyId,
+      typeFlag: newTypeFlag,
+      projectScopeFlag: project.projectScopeFlag,
+    );
   }
 }

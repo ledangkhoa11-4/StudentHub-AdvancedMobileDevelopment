@@ -53,7 +53,7 @@ class _ProjectListState extends State<CompanyArchievedProjectList> {
   @override
   Widget build(BuildContext context) {
     final archievedProjects = _projectStore.projectList!.projects!
-        .where((e) => e.typeFlag == 1)
+        .where((e) => e.typeFlag == 2)
         .toList();
     return Scaffold(
       body: Observer(
@@ -86,11 +86,23 @@ class _ProjectListState extends State<CompanyArchievedProjectList> {
                         child: CustomProgressIndicatorWidget(),
                       );
                     }),
+                    Observer(builder: (context) {
+                      return !_projectStore.isLoading &&
+                              _projectStore.success == true
+                          ? reloadProject(context)
+                          : SizedBox.shrink();
+                    }),
                   ],
                 )
               : NoProject(
                   title:
-                      "No project found. \nLet's close your first project. Closed projects will be here.")),
+                      "No project found. \nLet's close your first project. \nClosed projects will be here.")),
     );
+  }
+
+  Widget reloadProject(BuildContext context) {
+    _projectStore.getProjects();
+    _projectStore.resetSuccess();
+    return SizedBox.shrink();
   }
 }

@@ -53,7 +53,7 @@ class _ProjectListState extends State<CompanyWorkingProjectList> {
   @override
   Widget build(BuildContext context) {
     final workingProjects = _projectStore.projectList!.projects!
-        .where((e) => e.typeFlag == 0)
+        .where((e) => e.typeFlag == 1)
         .toList();
     return Scaffold(
       body: Observer(
@@ -86,11 +86,23 @@ class _ProjectListState extends State<CompanyWorkingProjectList> {
                         child: CustomProgressIndicatorWidget(),
                       );
                     }),
+                    Observer(builder: (context) {
+                      return !_projectStore.isLoading &&
+                              _projectStore.success == true
+                          ? reloadProject(context)
+                          : SizedBox.shrink();
+                    }),
                   ],
                 )
               : NoProject(
                   title:
                       "No project found. \nLet's kick off your first project")),
     );
+  }
+
+  Widget reloadProject(BuildContext context) {
+    _projectStore.getProjects();
+    _projectStore.resetSuccess();
+    return SizedBox.shrink();
   }
 }

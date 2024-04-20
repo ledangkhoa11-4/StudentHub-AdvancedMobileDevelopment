@@ -9,7 +9,6 @@ import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/domain/entity/project/project_list.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
-import 'package:boilerplate/domain/usecase/project/start_working_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 
@@ -91,20 +90,6 @@ class ProjectApi {
       final res = await _dioClient.dio.delete(
         Endpoints.patchProject.replaceFirst(":projectId", id.toString()),
       );
-
-      return res;
-    } catch (e) {
-      print(e.toString());
-      throw e;
-    }
-  }
-
-  Future<dynamic> startWorkingProject(StartWorkingProjectParams params) async {
-    try {
-      final res = await _dioClient.dio.patch(
-          Endpoints.patchProject
-              .replaceFirst(":projectId", params.id.toString()),
-          data: params);
 
       return res;
     } catch (e) {

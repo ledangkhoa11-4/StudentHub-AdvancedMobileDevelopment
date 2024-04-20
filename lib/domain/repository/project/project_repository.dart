@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
-import 'package:boilerplate/domain/usecase/project/start_working_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
 
 import '../../entity/project/project.dart';
@@ -18,8 +17,6 @@ abstract class ProjectRepository {
   Future<dynamic> update(UpdateProjectParams params);
 
   Future<dynamic> remove(int id);
-
-  Future<dynamic> startWorkingProject(StartWorkingProjectParams params);
 
   Future<ProjectList> getAllProject(GetAllProjectParams params);
 }
