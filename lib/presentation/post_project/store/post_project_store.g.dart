@@ -145,6 +145,22 @@ mixin _$ProjectStore on _ProjectStore, Store {
     });
   }
 
+  late final _$deletedAtom =
+      Atom(name: '_ProjectStore.deleted', context: context);
+
+  @override
+  bool? get deleted {
+    _$deletedAtom.reportRead();
+    return super.deleted;
+  }
+
+  @override
+  set deleted(bool? value) {
+    _$deletedAtom.reportWrite(value, super.deleted, () {
+      super.deleted = value;
+    });
+  }
+
   late final _$allProjectListAtom =
       Atom(name: '_ProjectStore.allProjectList', context: context);
 
@@ -209,6 +225,14 @@ mixin _$ProjectStore on _ProjectStore, Store {
     return _$getAllProjectsAsyncAction.run(() => super.getAllProjects(params));
   }
 
+  late final _$removeAsyncAction =
+      AsyncAction('_ProjectStore.remove', context: context);
+
+  @override
+  Future<dynamic> remove(int id) {
+    return _$removeAsyncAction.run(() => super.remove(id));
+  }
+
   late final _$_ProjectStoreActionController =
       ActionController(name: '_ProjectStore', context: context);
 
@@ -245,6 +269,7 @@ projectList: ${projectList},
 apiResponseMessage: ${apiResponseMessage},
 apiResponseSuccess: ${apiResponseSuccess},
 success: ${success},
+deleted: ${deleted},
 allProjectList: ${allProjectList},
 manualLoading: ${manualLoading},
 isLoading: ${isLoading}

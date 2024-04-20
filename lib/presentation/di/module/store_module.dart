@@ -17,6 +17,7 @@ import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart'
 import 'package:boilerplate/domain/usecase/project/get_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/remove_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
@@ -122,12 +123,14 @@ mixin StoreModule {
 
     getIt.registerSingleton<ProjectStore>(
       ProjectStore(
-          getIt<GetProjectUseCase>(),
-          getIt<InsertProjectUseCase>(),
-          getIt<ErrorStore>(),
-          getIt<ProjectRepository>(),
-          getIt<GetAllProjectUseCase>(),
-          getIt<UpdateProjectUseCase>()),
+        getIt<GetProjectUseCase>(),
+        getIt<InsertProjectUseCase>(),
+        getIt<ErrorStore>(),
+        getIt<ProjectRepository>(),
+        getIt<GetAllProjectUseCase>(),
+        getIt<UpdateProjectUseCase>(),
+        getIt<RemoveProjectUseCase>(),
+      ),
     );
   }
 }

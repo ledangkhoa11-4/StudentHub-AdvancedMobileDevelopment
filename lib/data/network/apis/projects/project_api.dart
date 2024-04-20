@@ -78,6 +78,19 @@ class ProjectApi {
     }
   }
 
+  Future<dynamic> remove(int id) async {
+    try {
+      final res = await _dioClient.dio.delete(
+        Endpoints.patchProject.replaceFirst(":projectId", id.toString()),
+      );
+
+      return res;
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
   /// sample api call with default rest client
 //  Future<ProjectsList> getProjects() {
 //

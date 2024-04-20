@@ -87,11 +87,24 @@ class _ProjectListState extends State<CompanyProjectList> {
                         child: CustomProgressIndicatorWidget(),
                       );
                     }),
+                    Observer(builder: (context) {
+                      return !_projectStore.isLoading &&
+                              _projectStore.deleted == true
+                          ? reloadProject(context)
+                          : SizedBox.shrink();
+                    }),
                   ],
                 )
               : NoProject(
                   title:
                       "No project found. \nLet's start posting your first project")),
     );
+  }
+
+  Widget reloadProject(BuildContext context) {
+    _projectStore.getProjects();
+    // reset deleted = null
+    _projectStore.resetDeleted();
+    return SizedBox.shrink();
   }
 }

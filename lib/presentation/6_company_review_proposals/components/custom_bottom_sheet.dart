@@ -1,8 +1,10 @@
+import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/presentation/6_company_review_proposals/components/send_hire_offer.dart';
 import 'package:boilerplate/presentation/post_project/components/gradient_divider.dart';
 import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/presentation/post_project/components/gradient_divider.dart';
 import 'package:boilerplate/presentation/post_project/post_project.dart';
+import 'package:boilerplate/presentation/post_project/store/post_project_store.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +21,8 @@ class CustomBottomSheetContent extends StatefulWidget {
 }
 
 class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
+  final ProjectStore _projectStore = getIt<ProjectStore>();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -113,7 +117,38 @@ class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
                 style: TextStyle(
                   fontSize: 16,
                 )),
-            onTap: () {},
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(
+                      "Warning!",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    content:
+                        Text("Are you sure you want to remove this project?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("Cancel"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          _projectStore
+                              .remove(int.parse(widget.project.id.toString()));
+                          Navigator.pop(context); // Close the dialog
+                          Navigator.pop(context); // Close the bottom sheet
+                        },
+                        child: Text("Remove"),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
           ),
           Padding(
             padding: const EdgeInsets.only(top: 0, bottom: 0),
