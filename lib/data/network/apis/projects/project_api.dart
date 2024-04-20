@@ -9,6 +9,7 @@ import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/domain/entity/project/project_list.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 
@@ -91,6 +92,20 @@ class ProjectApi {
         Endpoints.patchProject.replaceFirst(":projectId", id.toString()),
       );
 
+      return res;
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<dynamic> updateFavorite(UpdateFavoriteProjectParams params) async {
+    try {
+      final UserStore _userStore = getIt<UserStore>();
+      final res = await _dioClient.dio.patch(
+          Endpoints.patchFavorite.replaceFirst(
+              ":studentId", _userStore.user!.student!.id.toString()),
+          data: params);
       return res;
     } catch (e) {
       print(e.toString());

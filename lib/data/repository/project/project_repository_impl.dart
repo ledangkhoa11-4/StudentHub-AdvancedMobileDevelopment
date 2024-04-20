@@ -8,6 +8,7 @@ import 'package:boilerplate/domain/entity/project/project_list.dart';
 import 'package:boilerplate/domain/repository/project/project_repository.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
 import 'package:sembast/sembast.dart';
 
@@ -86,5 +87,14 @@ class ProjectRepositoryImpl extends ProjectRepository {
     return await _projectApi.getAllProject(params).then((projectsList) {
       return projectsList;
     }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<dynamic> updateFavorite(UpdateFavoriteProjectParams params) async {
+    return await _projectApi.updateFavorite(params).then((res) {
+      return res;
+    }).catchError((error) {
+      throw error;
+    });
   }
 }
