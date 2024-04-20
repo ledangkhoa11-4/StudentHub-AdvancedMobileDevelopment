@@ -7,6 +7,7 @@ import 'package:boilerplate/domain/entity/user/skillset.dart';
 import 'package:boilerplate/domain/entity/user/tech_stack.dart';
 import 'package:boilerplate/domain/repository/user/user_repository.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
+import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
@@ -17,6 +18,7 @@ import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
 import 'package:dio/dio.dart';
 
 import '../../../domain/entity/user/user.dart';
@@ -48,6 +50,20 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<dynamic> signup(SignupParam params) async {
     return await _userApi.signup(params).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<dynamic> forgot(ForgotParams params) async {
+    return await _userApi.forgot(params).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<dynamic> change(ChangeParams params) async {
+    return await _userApi.change(params).then((res) {
       return res;
     }).catchError((error) => throw error);
   }

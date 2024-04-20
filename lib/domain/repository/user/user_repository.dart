@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:boilerplate/domain/entity/user/profile_company.dart';
+import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
 import 'package:boilerplate/domain/entity/user/profile_student.dart';
 import 'package:boilerplate/domain/entity/user/skillset.dart';
 import 'package:boilerplate/domain/entity/user/tech_stack.dart';
@@ -15,6 +16,7 @@ import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/login_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
 import 'package:dio/dio.dart';
 
 import '../../entity/user/user.dart';
@@ -23,6 +25,10 @@ abstract class UserRepository {
   Future<dynamic> login(LoginParams params);
 
   Future<dynamic> signup(SignupParam params);
+
+  Future<dynamic> forgot(ForgotParams params);
+
+  Future<dynamic> change(ChangeParams params);
 
   Future<User?> getMe(GetMeParam params);
 
