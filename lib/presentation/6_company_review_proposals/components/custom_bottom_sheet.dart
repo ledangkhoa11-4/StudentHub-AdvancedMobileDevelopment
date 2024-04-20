@@ -195,6 +195,8 @@ class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
                               widget.project, WORKING_MODE);
                           _projectStore.update(
                               widget.project!.id!, newStatusProject);
+                          _projectStore.setSlideToIndex(1);
+
                           Navigator.pop(context); // Close the dialog
                           Navigator.pop(context); // Close the bottom sheet
                         },
@@ -239,6 +241,7 @@ class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
                               widget.project, ACHIEVED_MODE);
                           _projectStore.update(
                               widget.project!.id!, newStatusProject);
+                          _projectStore.setSlideToIndex(2);
                           Navigator.pop(context); // Close the dialog
                           Navigator.pop(context); // Close the bottom sheet
                         },
