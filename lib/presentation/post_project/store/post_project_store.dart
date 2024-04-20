@@ -12,6 +12,7 @@ import 'package:mobx/mobx.dart';
 import '../../../domain/entity/project/project_list.dart';
 import '../../../domain/repository/project/project_repository.dart'; // Import ProjectRepository
 // import '../../../domain/usecase/project/get_project_usecase.dart';
+import '../../../domain/usecase/project/remove_project_usecase.dart';
 import '../../../utils/dio/dio_error_util.dart'; // Import GetProjectUseCase
 
 part 'post_project_store.g.dart';
@@ -26,6 +27,7 @@ abstract class _ProjectStore with Store {
       this.errorStore,
       this._projectRepository,
       this._getAllProjectUseCase,
+      this._removeProjectUseCase, // Add _projectRepository
       this._updateProjectUseCase) {
     _setupValidations();
   } // Add _projectRepository
@@ -41,6 +43,7 @@ abstract class _ProjectStore with Store {
   final GetProjectUseCase _getProjectUseCase;
   final InsertProjectUseCase _insertProjectUseCase;
   final UpdateProjectUseCase _updateProjectUseCase;
+  final RemoveProjectUseCase _removeProjectUseCase;
 
   // stores:--------------------------------------------------------------------
   // store for handling errors
@@ -84,6 +87,9 @@ abstract class _ProjectStore with Store {
 
   @observable
   bool? success = null;
+
+  @observable
+  bool? deleted = null;
 
 /* KHOA */
   @observable
@@ -220,6 +226,24 @@ abstract class _ProjectStore with Store {
   }
 
   @action
+  Future remove(int id) async {
+    try {
+      final future = _removeProjectUseCase.remove(id: id);
+      updateProjectFuture = ObservableFuture(future);
+      // print('=========================');
+      // print(updateProjectFuture);
+      await future.then((_) {
+        this.deleted = true;
+      }).catchError((e) {
+        print(e.toString());
+        this.deleted = false;
+      });
+    } catch (error) {
+      print(error);
+      this.deleted = false;
+    }
+  }
+
   void setSearch(String value) {
     this.globalGetAllProjectParams = GetAllProjectParams(
         title: !value.isEmpty ? value : null,
@@ -245,6 +269,10 @@ abstract class _ProjectStore with Store {
   resetApiResponse() {
     this.apiResponseMessage = "";
     this.apiResponseSuccess = null;
+  }
+
+  resetDeleted() {
+    this.deleted = null;
   }
 
   void dispose() {
