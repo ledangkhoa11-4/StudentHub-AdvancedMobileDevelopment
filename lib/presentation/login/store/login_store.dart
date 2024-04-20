@@ -290,7 +290,7 @@ abstract class _UserStore with Store {
   Future forgot(String email) async {
     final ForgotParams signupParam = ForgotParams(email: email);
     final future = _forgotUseCase.call(params: signupParam);
-    signinFuture = ObservableFuture(future);
+    forgotFuture = ObservableFuture(future);
     await future.then((value) async {
       if (value != null) {
         String message = value.toString();
@@ -299,6 +299,7 @@ abstract class _UserStore with Store {
         this.forgotSuccess = true;
       }
     }).catchError((e) {
+      print(e.response);
       String message = e.response.toString();
       final response = jsonDecode(message);
       this.forgotSuccess = false;
@@ -706,6 +707,11 @@ abstract class _UserStore with Store {
   resetSigninState() {
     this.signupSuccess = null;
     this.signupMessage = "";
+  }
+
+  resetForgotPasswordState() {
+    this.forgotSuccess = null;
+    this.forgotMessage = "";
   }
 
   resetchangeState() {

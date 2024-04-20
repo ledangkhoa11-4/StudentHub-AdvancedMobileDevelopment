@@ -39,9 +39,6 @@ class _ForgotScreenState extends State<ForgotScreen> {
   final FormForgotStore _formStore = getIt<FormForgotStore>();
   final UserStore _userStore = getIt<UserStore>();
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,31 +100,34 @@ class _ForgotScreenState extends State<ForgotScreen> {
   }
 
   Widget _buildRightSide() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(height: 24.0),
-            Text(
-              'Forgot Password with StudentHub',
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-              ),
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(height: 24.0),
+                Text(
+                  'Forgot Password with StudentHub',
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                // AppIconWidget(image: 'assets/icons/ic_appicon.png'),
+                SizedBox(height: 24.0),
+                _buildUserIdField(),
+                SizedBox(height: 24.0),
+                _buildForgotButton(),
+              ],
             ),
-            // AppIconWidget(image: 'assets/icons/ic_appicon.png'),
-            SizedBox(height: 24.0),
-            _buildUserIdField(),
-            SizedBox(height: 24.0),
-            _buildForgotButton(),
-           
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 
@@ -151,9 +151,6 @@ class _ForgotScreenState extends State<ForgotScreen> {
     );
   }
 
-
-
-
   Widget _buildForgotButton() {
     return RoundedButtonWidget(
       buttonText: "Get a new password",
@@ -171,18 +168,21 @@ class _ForgotScreenState extends State<ForgotScreen> {
     );
   }
 
-
   // General Methods:-----------------------------------------------------------
   _showErrorMessage(String message) {
     if (message.isNotEmpty) {
       ToastHelper.error(message);
     }
+    _userStore.resetForgotPasswordState();
     return SizedBox.shrink();
   }
+
   _showSuccessMessage(String message) {
     if (message.isNotEmpty) {
       ToastHelper.success(message);
     }
+    _userStore.resetForgotPasswordState();
+
     return SizedBox.shrink();
   }
 
