@@ -5,6 +5,7 @@ import 'package:boilerplate/domain/entity/project/project.dart'; // Import Proje
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
 import 'package:dio/dio.dart';
 import 'package:mobx/mobx.dart';
@@ -27,8 +28,9 @@ abstract class _ProjectStore with Store {
       this.errorStore,
       this._projectRepository,
       this._getAllProjectUseCase,
-      this._removeProjectUseCase, // Add _projectRepository
-      this._updateProjectUseCase) {
+      this._updateProjectUseCase,
+      this._removeProjectUseCase,
+      this._updateFavoriteProjectUseCase) {
     _setupValidations();
   } // Add _projectRepository
 
@@ -36,6 +38,7 @@ abstract class _ProjectStore with Store {
   void _setupValidations() {
     _disposers = [
       reaction((_) => globalGetAllProjectParams, getAllProjects),
+      reaction((_) => allProjectList, getLikedProjectList),
     ];
   }
 
@@ -43,6 +46,7 @@ abstract class _ProjectStore with Store {
   final GetProjectUseCase _getProjectUseCase;
   final InsertProjectUseCase _insertProjectUseCase;
   final UpdateProjectUseCase _updateProjectUseCase;
+  final UpdateFavoriteProjectUseCase _updateFavoriteProjectUseCase;
   final RemoveProjectUseCase _removeProjectUseCase;
 
   // stores:--------------------------------------------------------------------
@@ -96,7 +100,13 @@ abstract class _ProjectStore with Store {
   ProjectList? allProjectList;
 
   @observable
+  ProjectList? onlyLikeProject;
+
+  @observable
   bool manualLoading = false;
+
+  @observable
+  bool showLikedOnly = false;
 
   final GetAllProjectUseCase _getAllProjectUseCase;
 
@@ -264,6 +274,63 @@ abstract class _ProjectStore with Store {
         numberOfStudents: numberOfStudents,
         projectScopeFlag: projectScopeFlag,
         proposalsLessThan: proposalsLessThan);
+  }
+
+  @action
+  void setShowLike(bool isLike) {
+    print(isLike);
+    this.showLikedOnly = isLike;
+  }
+
+  @action
+  void getLikedProjectList(ProjectList? value) {
+    if (value != null && value.projects!.length > 0) {
+      this.onlyLikeProject = ProjectList(
+          projects: value.projects!
+              .where((element) => element.isFavorite == true)
+              .toList());
+    }
+  }
+
+  @action
+  Future updateLikeProkect(Project project, bool status) async {
+    final UpdateFavoriteProjectParams params = UpdateFavoriteProjectParams(
+        projectId: project.id!, disableFlag: status == true ? 0 : 1);
+
+    final updatedProject = project..isFavorite = status;
+    final updated = ProjectList(
+        projects: this
+            .allProjectList!
+            .projects!
+            .map((e) => e.id == project.id ? updatedProject : e)
+            .toList());
+    this.allProjectList = updated;
+    try {
+      final future = _updateFavoriteProjectUseCase.call(params: params);
+      await future.then((value) async {
+        if (value != null) {
+          //do nothing
+        }
+      }).catchError((e) {
+        final reverseProject = project..isFavorite = !status;
+        final reverted = ProjectList(
+            projects: this
+                .allProjectList!
+                .projects!
+                .map((e) => e.id == project.id ? reverseProject : e)
+                .toList());
+        this.allProjectList = reverted;
+      });
+    } catch (error) {
+      final reverseProject = project..isFavorite = !status;
+      final reverted = ProjectList(
+          projects: this
+              .allProjectList!
+              .projects!
+              .map((e) => e.id == project.id ? reverseProject : e)
+              .toList());
+      this.allProjectList = reverted;
+    }
   }
 
   resetApiResponse() {

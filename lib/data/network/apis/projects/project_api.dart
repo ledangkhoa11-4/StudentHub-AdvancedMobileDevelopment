@@ -9,6 +9,7 @@ import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/domain/entity/project/project_list.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 
@@ -68,12 +69,14 @@ class ProjectApi {
   Future<ProjectList> getAllProject(GetAllProjectParams params) async {
     var query = "?";
     if (params.title != null) query += "&title=${params.title}";
-    if (params.projectScopeFlag != null) query += "&projectScopeFlag=${params.projectScopeFlag}";
-    if (params.numberOfStudents != null) query += "&numberOfStudents=${params.numberOfStudents}";
-    if (params.proposalsLessThan != null) query += "&proposalsLessThan=${params.proposalsLessThan}";
+    if (params.projectScopeFlag != null)
+      query += "&projectScopeFlag=${params.projectScopeFlag}";
+    if (params.numberOfStudents != null)
+      query += "&numberOfStudents=${params.numberOfStudents}";
+    if (params.proposalsLessThan != null)
+      query += "&proposalsLessThan=${params.proposalsLessThan}";
     try {
-      final res =
-          await _dioClient.dio.get(Endpoints.getAllProject + query);
+      final res = await _dioClient.dio.get(Endpoints.getAllProject + query);
       final result = jsonDecode(res.toString());
 
       return ProjectList.fromJson(result["result"]);
@@ -89,6 +92,20 @@ class ProjectApi {
         Endpoints.patchProject.replaceFirst(":projectId", id.toString()),
       );
 
+      return res;
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<dynamic> updateFavorite(UpdateFavoriteProjectParams params) async {
+    try {
+      final UserStore _userStore = getIt<UserStore>();
+      final res = await _dioClient.dio.patch(
+          Endpoints.patchFavorite.replaceFirst(
+              ":studentId", _userStore.user!.student!.id.toString()),
+          data: params);
       return res;
     } catch (e) {
       print(e.toString());
