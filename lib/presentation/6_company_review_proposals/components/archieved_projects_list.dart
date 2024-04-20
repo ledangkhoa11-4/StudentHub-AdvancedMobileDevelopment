@@ -17,7 +17,6 @@ class CompanyArchievedProjectList extends StatefulWidget {
 }
 
 class _ProjectListState extends State<CompanyArchievedProjectList> {
-  // late ProjectList _allProjects = ProjectList(projects: []);
   final ProjectStore _projectStore = getIt<ProjectStore>();
   final UserStore _userStore = getIt<UserStore>();
 
@@ -29,74 +28,63 @@ class _ProjectListState extends State<CompanyArchievedProjectList> {
     }
   }
 
-  // final List<Project> _allProjects2 = [
-  //   Project(
-  //     companyId: 1,
-  //     projectScopeFlag: 0,
-  //     typeFlag: 1,
-  //     id: null,
-  //     createdAt: '2024-01-01',
-  //     updatedAt: null,
-  //     deletedAt: null,
-  //     title: 'UI/UX Dev',
-  //     description:
-  //         'Looking for experienced mobile developers. Experience with Flutter is a plus.',
-  //     numberOfStudents: 4,
-  //   ),
-  // ];
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final archievedProjects = _projectStore.projectList!.projects!
-        .where((e) => e.typeFlag == 2)
-        .toList();
     return Scaffold(
       body: Observer(
-          builder: (context) => archievedProjects.length > 0
+        builder: (context) {
+          final archievedProjects = _projectStore.projectList?.projects
+                  ?.where((e) => e.typeFlag == 2)
+                  .toList() ??
+              [];
+
+          return archievedProjects.isNotEmpty
               ? Stack(
                   children: [
                     Column(
                       children: [
                         Expanded(
-                          child: Observer(builder: (context) {
-                            return ListView.builder(
-                              itemCount: archievedProjects.length ?? 0,
-                              itemBuilder: (context, index) {
-                                final project = archievedProjects![index];
-                                // print(project.toMap());
-                                // print("+++++++++++");
-                                return ProjectItem(
-                                  project: project,
-                                  onLikeChanged: (bool) {},
-                                );
-                              },
-                            );
-                          }),
+                          child: Observer(
+                            builder: (context) {
+                              return ListView.builder(
+                                itemCount: archievedProjects.length,
+                                itemBuilder: (context, index) {
+                                  final project = archievedProjects[index];
+                                  return ProjectItem(
+                                    project: project,
+                                    onLikeChanged: (bool) {},
+                                  );
+                                },
+                              );
+                            },
+                          ),
                         ),
                       ],
                     ),
-                    Observer(builder: (context) {
-                      return Visibility(
-                        visible: _projectStore.isLoading,
-                        child: CustomProgressIndicatorWidget(),
-                      );
-                    }),
-                    Observer(builder: (context) {
-                      return !_projectStore.isLoading &&
-                              _projectStore.success == true
-                          ? reloadProject(context)
-                          : SizedBox.shrink();
-                    }),
+                    Observer(
+                      builder: (context) {
+                        return Visibility(
+                          visible: _projectStore.isLoading,
+                          child: CustomProgressIndicatorWidget(),
+                        );
+                      },
+                    ),
+                    Observer(
+                      builder: (context) {
+                        return !_projectStore.isLoading &&
+                                _projectStore.success == true
+                            ? reloadProject(context)
+                            : SizedBox.shrink();
+                      },
+                    ),
                   ],
                 )
               : NoProject(
                   title:
-                      "No project found. \nLet's close your first project. \nClosed projects will be here.")),
+                      "No project found. \nLet's close your first project.\nClosed projects will be here.",
+                );
+        },
+      ),
     );
   }
 
