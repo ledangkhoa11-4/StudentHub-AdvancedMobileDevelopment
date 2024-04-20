@@ -1,24 +1,15 @@
 import 'package:flutter/material.dart';
-import 'project_detail.dart'; // Import the ProjectDetail page
+// import 'project_detail.dart'; // Import the ProjectDetail page
+import '../../domain/entity/project/project.dart';
 
 class ProjectItemType2 extends StatelessWidget {
-  final String createdDate;
-  final String title;
-  final String timeDuration;
-  final int numberOfStudents;
-  final List<String> descriptions;
-  final String proposal;
+  final Project project;
   final bool isLiked;
   final Function(bool) onLikeChanged;
 
   const ProjectItemType2({
     Key? key,
-    required this.createdDate,
-    required this.title,
-    required this.timeDuration,
-    required this.numberOfStudents,
-    required this.descriptions,
-    required this.proposal,
+    required this.project,
     required this.isLiked,
     required this.onLikeChanged,
   }) : super(key: key);
@@ -41,7 +32,7 @@ class ProjectItemType2 extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      title,
+                      project.title,
                       style: Theme.of(context)
                           .textTheme
                           .headline6!
@@ -52,22 +43,22 @@ class ProjectItemType2 extends StatelessWidget {
                 ],
               ),
               Text(
-                'Sumited 3 days ago',
+                'Submitted on ${project.createdAt ?? "a date"}', // Placeholder for created date
                 style: TextStyle(color: grayColor),
               ),
               SizedBox(height: 8.0),
               Text(
-                'Students are looking for:',
+                'Project details:',
                 style: Theme.of(context).textTheme.subtitle1,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: descriptions
-                    .map((description) => Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: Text('• $description'),
-                        ))
-                    .toList(),
+              Text(
+                project.description,
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              SizedBox(height: 8.0),
+              Text(
+                'Number of students: ${project.numberOfStudents}',
+                style: Theme.of(context).textTheme.bodyText1,
               ),
             ],
           ),

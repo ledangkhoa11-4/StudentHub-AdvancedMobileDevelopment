@@ -1,47 +1,66 @@
+import 'dart:convert';
+
 import 'package:boilerplate/presentation/6_company_review_proposals/components/custom_bottom_sheet.dart';
 import 'package:boilerplate/presentation/6_company_review_proposals/components/send_hire_offer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:intl/intl.dart';
+import '../../../domain/entity/project/project.dart';
 
 class ProjectItem extends StatelessWidget {
-  final String createdDate;
-  final String title;
-  final String timeDuration;
-  final int numberOfStudents;
-  final List<String> descriptions;
-  final String proposal;
-  final bool isLiked;
+  final Project project;
   final Function(bool) onLikeChanged;
 
   const ProjectItem({
     Key? key,
-    required this.createdDate,
-    required this.title,
-    required this.timeDuration,
-    required this.numberOfStudents,
-    required this.descriptions,
-    required this.proposal,
-    required this.isLiked,
+    required this.project,
     required this.onLikeChanged,
   }) : super(key: key);
 
+  String formatDate(String? isoDate) {
+    if (isoDate == null) {
+      return 'No date';
+    }
+    DateTime dateTime = DateTime.parse(isoDate);
+    return DateFormat('yyyy/MM/dd - HH:mm').format(dateTime);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Color greenColor = Color.fromARGB(255, 48, 121, 51);
+    // final Color greenColor = Color.fromARGB(255, 48, 121, 51);
     final Color grayColor = const Color.fromARGB(255, 134, 132, 132);
+
+    // print("///////////////////");
+    // print(isJsonString(project.description));
+    QuillController? _controller;
+
+    try {
+      final controller = QuillController(
+          document: Document.fromJson(jsonDecode(project.description)),
+          selection: const TextSelection.collapsed(offset: 0));
+
+      _controller = controller;
+    } catch (e) {
+      _controller = null;
+    }
 
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => SendHireOffer(projectItem: this),
+            builder: (context) => SendHireOffer(
+              project: project,
+              initialTabIndex: 0,
+            ),
           ),
         );
       },
       child: Card(
         margin: const EdgeInsets.all(8.0),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding:
+              const EdgeInsets.only(top: 4, bottom: 16.0, left: 16, right: 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -50,11 +69,9 @@ class ProjectItem extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      title,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6!
-                          .copyWith(color: greenColor),
+                      project.title,
+                      style: Theme.of(context).textTheme.headline6!.copyWith(
+                          color: Theme.of(context).colorScheme.primary),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -64,7 +81,9 @@ class ProjectItem extends StatelessWidget {
                       showModalBottomSheet(
                         context: context,
                         builder: (BuildContext context) {
-                          return CustomBottomSheetContent();
+                          return CustomBottomSheetContent(
+                            project: project,
+                          );
                         },
                       );
                     },
@@ -72,37 +91,79 @@ class ProjectItem extends StatelessWidget {
                 ],
               ),
               Text(
-                'Created: $createdDate',
-                style: TextStyle(color: grayColor),
+                'Created: ' + formatDate('${project!.createdAt}'),
+                style: TextStyle(
+                    color: grayColor,
+                    fontSize: 12,
+                    fontStyle: FontStyle.italic),
               ),
               SizedBox(height: 8.0),
               Text(
-                'Students are looking for:',
-                style: Theme.of(context).textTheme.subtitle1,
+                'Find ${project.numberOfStudents} students with criteria:',
+                style: Theme.of(context).textTheme.titleSmall,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: descriptions
-                    .map((description) => Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: Text('• $description'),
-                        ))
-                    .toList(),
-              ),
+              if (_controller != null)
+                IgnorePointer(
+                  ignoring: true,
+                  child: QuillProvider(
+                    configurations: QuillConfigurations(
+                      controller: _controller,
+                      sharedConfigurations: const QuillSharedConfigurations(
+                        locale: Locale('en'),
+                      ),
+                    ),
+                    child: QuillEditor.basic(
+                      configurations: const QuillEditorConfigurations(
+                        readOnly: true,
+                      ),
+                    ),
+                  ),
+                ),
+              if (_controller == null)
+                Text(
+                  project.description,
+                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                        fontStyle: FontStyle.italic,
+                      ),
+                ),
               SizedBox(height: 8.0),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: [Text('2'), Text('Proposals')],
+                    children: [
+                      Text(
+                        '${project.countProposals}',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        'Proposals',
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    ],
                   ),
                   SizedBox(width: 32.0),
                   Column(
-                    children: [Text('8'), Text('Messages')],
+                    children: [
+                      Text('${project.countMessages}',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(
+                        'Messages',
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    ],
                   ),
                   SizedBox(width: 32.0),
                   Column(
-                    children: [Text('2'), Text('Hired')],
+                    children: [
+                      Text('${project.countHired}',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(
+                        'Hired',
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    ],
                   ),
                 ],
               )

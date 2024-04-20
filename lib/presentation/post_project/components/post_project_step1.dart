@@ -2,6 +2,7 @@ import 'package:boilerplate/core/stores/form/form_post_project_store.dart';
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/core/widgets/textfield_widget.dart';
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/post_project/components/post_project_stepper.dart';
 import 'package:boilerplate/presentation/post_project/components/unordered_list.dart';
@@ -14,8 +15,9 @@ import 'package:just_the_tooltip/just_the_tooltip.dart';
 
 class PostProjectStep1 extends StatefulWidget {
   final FormPostProjectStore formStore;
+  final Project? projectEdit;
 
-  PostProjectStep1({Key? key, required this.formStore}) : super(key: key);
+  PostProjectStep1({Key? key, required this.formStore, this.projectEdit}) : super(key: key);
 
   @override
   State<PostProjectStep1> createState() => _PostProjectStep1State();
@@ -24,6 +26,15 @@ class PostProjectStep1 extends StatefulWidget {
 class _PostProjectStep1State extends State<PostProjectStep1> {
   final ThemeStore _themeStore = getIt<ThemeStore>();
   final TextEditingController _titleController = TextEditingController();
+
+  @override
+  void initState() {
+    if (widget.projectEdit != null) {
+      _titleController.text = widget.projectEdit!.title;
+      widget.formStore.setTitle(widget.projectEdit!.title);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +105,7 @@ class _PostProjectStep1State extends State<PostProjectStep1> {
                 Navigator.of(context)
                     .pushNamed(Routes.postProjectStep2, arguments: {
                   'formStore': widget.formStore,
+                  'project': widget.projectEdit,
                 });
               } else {
                 ToastHelper.error("Please enter required fields");

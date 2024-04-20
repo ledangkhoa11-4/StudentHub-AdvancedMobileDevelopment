@@ -1,10 +1,16 @@
-import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
+import 'package:boilerplate/core/stores/form/form_post_project_store.dart';
+import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/presentation/6_company_review_proposals/components/archieved_projects_list.dart';
 import 'package:boilerplate/presentation/6_company_review_proposals/components/project_view_list.dart';
+import 'package:boilerplate/presentation/6_company_review_proposals/components/working_projects_list.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
+import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
+import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class DashBoardCompany extends StatefulWidget {
   @override
@@ -14,6 +20,8 @@ class DashBoardCompany extends StatefulWidget {
 class _DashBoardState extends State<DashBoardCompany>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
+  late final FormPostProjectStore formStore;
+  final UserStore _userStore = getIt<UserStore>();
 
   @override
   void initState() {
@@ -41,8 +49,10 @@ class _DashBoardState extends State<DashBoardCompany>
             controller: _tabController,
             tabs: [
               Tab(icon: Icon(Icons.dashboard), text: "All Projects"),
-              Tab(icon: Icon(Icons.settings), text: "Working"),
-              Tab(icon: Icon(Icons.sticky_note_2), text: "Archieved"),
+              Tab(
+                  icon: Icon(BootstrapIcons.gear_wide_connected),
+                  text: "Working"),
+              Tab(icon: Icon(BootstrapIcons.archive), text: "Archieved"),
             ],
           )),
       bottomNavigationBar:
@@ -56,18 +66,24 @@ class _DashBoardState extends State<DashBoardCompany>
           color: Theme.of(context).colorScheme.secondary,
         ),
         onPressed: () {
-          Navigator.pushNamed(context, Routes.postProject);
+          if (_userStore.user?.company != null) {
+            Navigator.pushNamed(context, Routes.postProject);
+          } else {
+            ToastHelper.error("You have to create your profile compnay first");
+          }
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: TabBarView(
-        controller: _tabController,
-        children: <Widget>[
-          Center(child: ProjectList()),
-          Center(child: Text('Content of Tab 2')),
-          Center(child: Text('Content of Tab 3')),
-        ],
-      ),
+      body: Observer(builder: (context) {
+        return TabBarView(
+          controller: _tabController,
+          children: <Widget>[
+            Center(child: CompanyProjectList()),
+            Center(child: CompanyWorkingProjectList()),
+            Center(child: CompanyArchievedProjectList()),
+          ],
+        );
+      }),
     );
   }
 }

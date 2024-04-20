@@ -26,7 +26,18 @@ class PostApi {
     }
   }
 
-/// sample api call with default rest client
+  /// Company posts a project
+  Future<PostList> insert() async {
+    try {
+      final res = await _dioClient.dio.post(Endpoints.postProject);
+      return PostList.fromJson(res.data);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  /// sample api call with default rest client
 //  Future<PostsList> getPosts() {
 //
 //    return _restClient
@@ -34,5 +45,4 @@ class PostApi {
 //        .then((dynamic res) => PostsList.fromJson(res))
 //        .catchError((error) => throw NetworkException(message: error));
 //  }
-
 }

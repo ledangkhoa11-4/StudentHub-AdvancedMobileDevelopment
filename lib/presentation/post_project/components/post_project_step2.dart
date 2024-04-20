@@ -4,6 +4,7 @@ import 'package:boilerplate/core/stores/form/form_post_project_store.dart';
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/core/widgets/textfield_widget.dart';
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/post_project/components/post_project_stepper.dart';
 import 'package:boilerplate/presentation/post_project/components/unordered_list.dart';
@@ -17,30 +18,45 @@ import 'package:just_the_tooltip/just_the_tooltip.dart';
 
 class PostProjectStep2 extends StatefulWidget {
   final FormPostProjectStore formStore;
+  final Project? projectEdit;
 
-  PostProjectStep2({Key? key, required this.formStore}) : super(key: key);
+  PostProjectStep2({Key? key, required this.formStore, this.projectEdit})
+      : super(key: key);
 
   @override
   State<PostProjectStep2> createState() => _PostProjectStep2State();
 }
 
-List<String> options = [
-  "1 to 3 months",
-  "3 to 6 months",
-];
-
 class _PostProjectStep2State extends State<PostProjectStep2> {
   final ThemeStore _themeStore = getIt<ThemeStore>();
   final TextEditingController _numberStudents = TextEditingController();
 
-  String currentOption = options[0];
+  // String currentOption = options[0];
+  ProjectScope currentOption = ProjectScope.LessThanOneMonth;
+
+  @override
+  void initState() {
+    print(widget.projectEdit);
+    if (widget.projectEdit != null) {
+      _numberStudents.text = widget.projectEdit!.numberOfStudents.toString();
+      widget.formStore.setNumberStudents(widget.projectEdit!.numberOfStudents);
+      widget.formStore
+          .setProjectScopeFlag(widget.projectEdit!.projectScopeFlag);
+      currentOption = ProjectScopeType.getScropeFromValue(
+          widget.projectEdit!.projectScopeFlag);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final _tooltipController = JustTheController();
 
     return Scaffold(
-      appBar: UserAppBar.buildAppBar(context),
+      appBar: UserAppBar.buildAppBar(context,
+          titleWidget: widget.projectEdit != null
+              ? Text("Edit \"${widget.projectEdit!.title}\" project ")
+              : Text("Post new project")),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
@@ -92,11 +108,12 @@ class _PostProjectStep2State extends State<PostProjectStep2> {
                     SizedBox(
                       height: 10,
                     ),
-                    for (var option in options)
+                    for (var option in ProjectScope.values)
                       InkWell(
                         onTap: () {
                           setState(() {
                             currentOption = option;
+                            widget.formStore.setProjectScopeFlag(option.value);
                           });
                         },
                         child: ListTile(
@@ -104,13 +121,16 @@ class _PostProjectStep2State extends State<PostProjectStep2> {
                           dense: true,
                           visualDensity:
                               VisualDensity(horizontal: -4, vertical: -4),
-                          title: Text(option),
+                          title: Text(option.nameFormatted),
                           leading: Radio(
                             value: option,
                             groupValue: currentOption,
                             onChanged: ((value) {
                               setState(() {
-                                currentOption = value.toString();
+                                // currentOption = value.toString();
+                                if (value != null) {
+                                  currentOption = value;
+                                }
                               });
                             }),
                           ),
@@ -143,14 +163,17 @@ class _PostProjectStep2State extends State<PostProjectStep2> {
                       buttonColor: Theme.of(context).colorScheme.primary,
                       textColor: Colors.white,
                       onPressed: () {
-                        widget.formStore.setDuration(currentOption);
+                        widget.formStore
+                            .setDuration(currentOption.value.toString());
                         widget.formStore.validateNumberStudents(
                             int.tryParse(_numberStudents.text) ?? 0);
 
-                        if (widget.formStore.formErrorStore.numberStudents == null) {
+                        if (widget.formStore.formErrorStore.numberStudents ==
+                            null) {
                           Navigator.of(context)
                               .pushNamed(Routes.postProjectStep3, arguments: {
                             'formStore': widget.formStore,
+                            'project': widget.projectEdit,
                           });
                         } else {
                           ToastHelper.error("Please enter required fields");

@@ -1,11 +1,26 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:boilerplate/core/stores/error/error_store.dart';
 import 'package:boilerplate/core/stores/form/form_store.dart';
+import 'package:boilerplate/core/stores/form/form_student_profile_store.dart'
+    as FormStudent;
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/entity/user/education.dart';
+import 'package:boilerplate/domain/entity/user/experience.dart';
+import 'package:boilerplate/domain/entity/user/language.dart';
+import 'package:boilerplate/domain/entity/user/skillset.dart';
+import 'package:boilerplate/domain/entity/user/tech_stack.dart';
+import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
+import 'package:boilerplate/domain/usecase/user/create_update_student_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/is_logged_in_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/save_auth_token_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/save_current_profile_usecase.dart';
@@ -13,6 +28,12 @@ import 'package:boilerplate/domain/usecase/user/save_login_in_status_usecase.dar
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/upload_resume_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/upload_transcript_usecase.dart';
+import 'package:boilerplate/presentation/post_project/store/post_project_store.dart';
+import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,7 +58,16 @@ abstract class _UserStore with Store {
       this.formErrorStore,
       this.errorStore,
       this._getMeUseCase,
-      this._createCompanyProfileUseCase) {
+      this._createCompanyProfileUseCase,
+      this._getAllTechStackUseCase,
+      this._getAllSkillSetUseCase,
+      this._uploadResumeUseCase,
+      this._uploadTranscriptUseCase,
+      this._createLanguageUseCase,
+      this._createEducationUseCase,
+      this._createExperiencesUseCase,
+      this._createStudentProfileUseCase,
+      this._getProfileFileUseCase) {
     // setting up disposers
     _setupDisposers();
 
@@ -58,6 +88,15 @@ abstract class _UserStore with Store {
   final SignupUseCase _signupUseCase;
   final GetMeUseCase _getMeUseCase;
   final CreateUpdateCompanyProfileUseCase _createCompanyProfileUseCase;
+  final GetTechStackUseCase _getAllTechStackUseCase;
+  final GetSkillSetUseCase _getAllSkillSetUseCase;
+  final UploadResumeUseCase _uploadResumeUseCase;
+  final UploadTranscriptUseCase _uploadTranscriptUseCase;
+  final CreateLanguageUseCase _createLanguageUseCase;
+  final CreateEducationUseCase _createEducationUseCase;
+  final CreateExperiencesUseCase _createExperiencesUseCase;
+  final CreateUpdateStudentProfileUseCase _createStudentProfileUseCase;
+  final GetProfileFileUseCase _getProfileFileUseCase;
 
   // stores:--------------------------------------------------------------------
   // for handling form errors
@@ -85,6 +124,18 @@ abstract class _UserStore with Store {
 
   @observable
   User? user = null;
+
+  @observable
+  String transcriptFile = "";
+
+  @observable
+  String resumeFile = "";
+
+  @observable
+  List<TechStack>? techstacks = null;
+
+  @observable
+  List<Skillset>? skillSets = null;
 
   @observable
   int? currentRole = null;
@@ -123,6 +174,9 @@ abstract class _UserStore with Store {
   bool? apiResponseSuccess = null;
 
   @observable
+  bool? onFinishStudentProfile = null;
+
+  @observable
   bool? isCreateProfile = null;
 
   @observable
@@ -135,6 +189,24 @@ abstract class _UserStore with Store {
   ObservableFuture<dynamic> getMeFuture = emptyLoginResponse;
 
   @observable
+  ObservableFuture<dynamic> uploadResumeFuture = emptyLoginResponse;
+
+  @observable
+  ObservableFuture<dynamic> uploadTranscriptFuture = emptyLoginResponse;
+
+  @observable
+  ObservableFuture<dynamic> createLanguageFuture = emptyLoginResponse;
+
+  @observable
+  ObservableFuture<dynamic> createEducationFuture = emptyLoginResponse;
+
+  @observable
+  ObservableFuture<dynamic> createExperienceFuture = emptyLoginResponse;
+
+  @observable
+  ObservableFuture<dynamic> getAllTechStackFuture = emptyLoginResponse;
+
+  @observable
   ObservableFuture<dynamic> createCompanyProfileFuture = emptyLoginResponse;
 
   @observable
@@ -142,6 +214,10 @@ abstract class _UserStore with Store {
   
   @observable
   ObservableFuture<dynamic> changeFuture = emptyLoginResponse;
+  ObservableFuture<dynamic> createStudentProfileFuture = emptyLoginResponse;
+
+  @observable
+  ObservableFuture<dynamic> apiCallingFeature = emptyLoginResponse;
 
   @computed
   bool get isLoading =>
@@ -149,7 +225,14 @@ abstract class _UserStore with Store {
       getMeFuture.status == FutureStatus.pending ||
       createCompanyProfileFuture.status == FutureStatus.pending ||
       forgotFuture.status == FutureStatus.pending ||
-      changeFuture.status == FutureStatus.pending;
+      changeFuture.status == FutureStatus.pending||
+      getAllTechStackFuture.status == FutureStatus.pending ||
+      uploadResumeFuture.status == FutureStatus.pending ||
+      uploadTranscriptFuture.status == FutureStatus.pending ||
+      createEducationFuture.status == FutureStatus.pending ||
+      createExperienceFuture.status == FutureStatus.pending ||
+      createLanguageFuture.status == FutureStatus.pending ||
+      apiCallingFeature.status == FutureStatus.pending;
 
   @computed
   bool get isSignin => signinFuture.status == FutureStatus.pending;
@@ -259,6 +342,7 @@ abstract class _UserStore with Store {
         this.getMeSuccess = true;
       }
     }).catchError((e) {
+      this.getMeSuccess = false;
       print(e);
     });
   }
@@ -285,8 +369,335 @@ abstract class _UserStore with Store {
     });
   }
 
+  @action
+  Future getAllTechStack() async {
+    if (this.techstacks == null) {
+      final prms = GetTechStackParams();
+      final future = _getAllTechStackUseCase.call(params: prms);
+      getAllTechStackFuture = ObservableFuture(future);
+      await future.then((value) async {
+        if (value != null) {
+          print(value);
+          this.techstacks = value;
+          this.apiResponseSuccess = true;
+        }
+      }).catchError((e) {
+        String message = e.response.toString();
+        final response = jsonDecode(message);
+        this.apiResponseSuccess = false;
+        this.apiResponseMessage = response["errorDetails"].toString();
+      });
+    }
+  }
+
+  @action
+  Future getAllSkillset() async {
+    if (this.skillSets == null) {
+      final prms = GetSkillSetParams();
+      final future = _getAllSkillSetUseCase.call(params: prms);
+      getAllTechStackFuture = ObservableFuture(future);
+      await future.then((value) async {
+        if (value != null) {
+          print(value);
+          this.skillSets = value;
+          this.apiResponseSuccess = true;
+        }
+      }).catchError((e) {
+        String message = e.response.toString();
+        final response = jsonDecode(message);
+        this.apiResponseSuccess = false;
+        this.apiResponseMessage = response["errorDetails"].toString();
+      });
+    }
+  }
+
+  @action
+  Future uploadResume(PlatformFile file) async {
+    FormData? formData = null;
+    if (file.path != null) {
+      formData =
+          FormData.fromMap({"file": await MultipartFile.fromFile(file.path!)});
+    } else {
+      if (file.bytes != null) {
+        formData = FormData.fromMap({
+          "file": await MultipartFile.fromBytes(file.bytes!,
+              filename: file.name,
+              contentType: MediaType('application', 'pdf')),
+        });
+      }
+    }
+    if (formData == null) {
+      return;
+    }
+    final future = _uploadResumeUseCase.call(params: formData);
+    uploadResumeFuture = ObservableFuture(future);
+    await future.then((value) async {
+      if (value != null) {
+        print(value);
+        print("++++++++++++++++++++++++++");
+      }
+    }).catchError((e) {
+      print(e.response);
+      print("2---------------");
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.apiResponseSuccess = false;
+      this.apiResponseMessage = response["errorDetails"].toString();
+    });
+  }
+
+  @action
+  Future uploadTranscript(PlatformFile file) async {
+    FormData? formData = null;
+    if (file.path != null) {
+      formData =
+          FormData.fromMap({"file": await MultipartFile.fromFile(file.path!)});
+    } else {
+      if (file.bytes != null) {
+        formData = FormData.fromMap({
+          "file": await MultipartFile.fromBytes(file.bytes!,
+              filename: file.name,
+              contentType: MediaType('application', 'pdf')),
+        });
+      }
+    }
+    if (formData == null) {
+      return;
+    }
+    final future = _uploadTranscriptUseCase.call(params: formData);
+    uploadResumeFuture = ObservableFuture(future);
+    await future.then((value) async {
+      if (value != null) {
+        print(value);
+        print("++++++++++++++++++++++++++");
+      }
+    }).catchError((e) {
+      print(e.response);
+      print("3---------------");
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.apiResponseSuccess = false;
+      this.apiResponseMessage = response["errorDetails"].toString();
+    });
+  }
+
+  @action
+  Future createLanguages(List<ProfileLanguage?> languages) async {
+    List<LanguageParams> param = languages
+        .where((element) => element != null)
+        .map((e) =>
+            LanguageParams(languageName: e!.languageName, level: e.level))
+        .toList();
+
+    final CreateLanguageParams params = CreateLanguageParams(languages: param);
+    final future = _createLanguageUseCase.call(params: params);
+    createLanguageFuture = ObservableFuture(future);
+    await future.then((value) async {
+      if (value != null) {
+        print(value);
+        print("++++++++++++++++++++++++++");
+      }
+    }).catchError((e) {
+      print(e.response);
+      print("4---------------");
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.apiResponseSuccess = false;
+      this.apiResponseMessage = response["errorDetails"].toString();
+    });
+  }
+
+  @action
+  Future createEducations(List<Education?> educations) async {
+    List<EducationParam> param = educations
+        .where((element) => element != null)
+        .map((e) => EducationParam(
+            schoolName: e!.schoolName,
+            startYear: e.startYear,
+            endYear: e.endYear))
+        .toList();
+
+    final CreateEducationsParams params =
+        CreateEducationsParams(education: param);
+
+    final future = _createEducationUseCase.call(params: params);
+    createEducationFuture = ObservableFuture(future);
+    await future.then((value) async {
+      if (value != null) {
+        print(value);
+        print("++++++++++++++++++++++++++");
+      }
+    }).catchError((e) {
+      print(e.response);
+      print("5---------------");
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.apiResponseSuccess = false;
+      this.apiResponseMessage = response["errorDetails"].toString();
+    });
+  }
+
+  @action
+  Future createExperiences(List<Experience?> experiences) async {
+    List<ExperienceParam> param = experiences
+        .where((element) => element != null)
+        .map((e) => ExperienceParam(
+            title: e!.title,
+            startMonth: e.startMonth,
+            endMonth: e.endMonth,
+            description: e.description,
+            skillSets: e.skillSets.map((e) => e.id).toList()))
+        .toList();
+
+    final CreateExperiencesParams params =
+        CreateExperiencesParams(experience: param);
+
+    final future = _createExperiencesUseCase.call(params: params);
+    createExperienceFuture = ObservableFuture(future);
+
+    await future.then((value) async {
+      if (value != null) {
+        print(value);
+        print("++++++++++++++++++++++++++");
+      }
+    }).catchError((e) {
+      print(e.response);
+      print("6---------------");
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.apiResponseSuccess = false;
+      this.apiResponseMessage = response["errorDetails"].toString();
+    });
+  }
+
+  @action
+  Future createUpdateStudentProfile(
+      CreateUpdateStudentProfileParams param) async {
+    final future = _createStudentProfileUseCase.call(params: param);
+    createStudentProfileFuture = ObservableFuture(future);
+    await future.then((value) async {
+      if (value != null) {
+        if (param.uid == null) {
+          this.user!.setStudentProfile(value);
+        } else {}
+        this.apiResponseSuccess = true;
+      }
+    }).catchError((e) {
+      print("1---------------");
+      print(e);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.apiResponseSuccess = false;
+      this.apiResponseMessage = response["errorDetails"].toString();
+    });
+  }
+
+  @action
+  Future bulkCreateUpdateStudentProfile(
+      FormStudent.FormStudentProfileStore formStore) async {
+    int? studentId = null;
+    if (this.user!.student != null) {
+      studentId = this.user!.student!.id;
+    }
+    final CreateUpdateStudentProfileParams prms =
+        CreateUpdateStudentProfileParams(
+            uid: studentId,
+            techStackId: formStore.techStackId,
+            skillSets: formStore.skillSets);
+
+    if (studentId != null) {
+      await Future.wait([
+        this.createUpdateStudentProfile(prms),
+        this.createLanguages(formStore.languages),
+        this.createEducations(formStore.educations),
+        this.createExperiences(formStore.experiences),
+        this.uploadResume(formStore.resume!),
+        this.uploadTranscript(formStore.transcript!),
+      ]).then((value) {
+        print(value);
+        print("++++++++++++++++++++++++");
+      }).catchError((e) {
+        print(e);
+      });
+    } else {
+      this.isCreateProfile = true;
+
+      await Future.wait([
+        this.createUpdateStudentProfile(prms),
+      ]).then((value) async {
+        await Future.wait([
+          this.createLanguages(formStore.languages),
+          this.createEducations(formStore.educations),
+          this.createExperiences(formStore.experiences),
+          this.uploadResume(formStore.resume!),
+          this.uploadTranscript(formStore.transcript!),
+        ]);
+
+        this.onFinishStudentProfile = true;
+      }).catchError((e) {
+        print(e);
+      });
+    }
+  }
+
+  @action
+  Future getTranscriptFile() async {
+    if (this.transcriptFile.isEmpty) {
+      GetProfileFileParams param = GetProfileFileParams(
+          studentId: this.user!.student!.id!, type: "transcript");
+      final future = _getProfileFileUseCase.call(params: param);
+      apiCallingFeature = ObservableFuture(future);
+      await future.then((value) async {
+        if (value != null) {
+          this.transcriptFile = value;
+          this.apiResponseSuccess = true;
+        }
+      }).catchError((e) {
+        print("---------------");
+        print(e);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
+        this.apiResponseSuccess = false;
+        this.apiResponseMessage = response["errorDetails"].toString();
+      });
+    }
+  }
+
+  @action
+  Future getResumeFile() async {
+    if (this.resumeFile.isEmpty) {
+      GetProfileFileParams param = GetProfileFileParams(
+          studentId: this.user!.student!.id!, type: "resume");
+      final future = _getProfileFileUseCase.call(params: param);
+      apiCallingFeature = ObservableFuture(future);
+      await future.then((value) async {
+        if (value != null) {
+          print(123);
+
+          this.resumeFile = value;
+          this.apiResponseSuccess = true;
+        }
+      }).catchError((e) {
+        print("---------------");
+        print(e);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
+        this.apiResponseSuccess = false;
+        this.apiResponseMessage = response["errorDetails"].toString();
+      });
+    }
+  }
+
   logout() async {
+    final projectStore = getIt<ProjectStore>();
+
+    this.user = null;
+    this.transcriptFile = "";
+    this.resumeFile = "";
     this.isLoggedIn = false;
+    projectStore.projectList = null;
+    projectStore.allProjectList = null;
+
     await _saveLoginStatusUseCase.call(params: false);
     getIt<SharedPreferenceHelper>().removeAuthToken();
     getIt<SharedPreferenceHelper>().removeCurrentProfile();
@@ -314,6 +725,10 @@ abstract class _UserStore with Store {
   resetApiResponse() {
     this.apiResponseMessage = "";
     this.apiResponseSuccess = null;
+  }
+
+  resetFinishProfile() {
+    this.onFinishStudentProfile = null;
   }
 
   resetCreateProfileState() {

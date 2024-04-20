@@ -1,41 +1,54 @@
+import 'dart:convert';
+
+import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:flutter/material.dart';
-import 'project_detail.dart'; // Import the ProjectDetail page
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:intl/intl.dart';
+import 'project_detail.dart';
 
 class ProjectItem extends StatelessWidget {
-  final String createdDate;
-  final String title;
-  final String timeDuration;
-  final int numberOfStudents;
-  final List<String> descriptions;
-  final String proposal;
+  final Project project;
   final bool isLiked;
   final Function(bool) onLikeChanged;
 
   const ProjectItem({
     Key? key,
-    required this.createdDate,
-    required this.title,
-    required this.timeDuration,
-    required this.numberOfStudents,
-    required this.descriptions,
-    required this.proposal,
+    required this.project,
     required this.isLiked,
     required this.onLikeChanged,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final Color greenColor = Color.fromARGB(255, 48, 121, 51);
-    final Color grayColor = const Color.fromARGB(255, 134, 132, 132);
+    String formatDate(String? isoDate) {
+      if (isoDate == null) {
+        return 'No date';
+      }
+      DateTime dateTime =
+          DateFormat(("yyyy-MM-ddTHH:mm:ssZ")).parseUTC(isoDate).toLocal();
+      return DateFormat('yyyy/MM/dd - HH:mm').format(dateTime);
+    }
+
+    QuillController? _controller;
+
+    try {
+      final controller = QuillController(
+          document: Document.fromJson(jsonDecode(project.description)),
+          selection: const TextSelection.collapsed(offset: 0));
+
+      _controller = controller;
+    } catch (e) {
+      _controller = null;
+    }
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProjectDetail(projectItem: this),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => ProjectDetail(projectItem: this),
+        //   ),
+        // );
       },
       child: Card(
         margin: const EdgeInsets.all(8.0),
@@ -45,11 +58,12 @@ class ProjectItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Created: $createdDate',
+                'Created: ${formatDate(project.createdAt)}',
                 style: TextStyle(
-                    color: grayColor,
-                    fontSize: 14,
-                    fontStyle: FontStyle.italic),
+                  color: Colors.grey,
+                  fontSize: 14,
+                  fontStyle: FontStyle.italic,
+                ),
                 textAlign: TextAlign.right,
               ),
               Row(
@@ -57,9 +71,10 @@ class ProjectItem extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      title,
+                      project.title,
                       style: Theme.of(context).textTheme.headline6!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -77,53 +92,77 @@ class ProjectItem extends StatelessWidget {
               ),
               RichText(
                 text: TextSpan(
-                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                      color: grayColor,
-                      fontWeight: FontWeight.w100,
-                      fontSize: 14),
+                  style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w100,
+                        fontSize: 14,
+                      ),
                   text: 'Time: ',
                   children: <TextSpan>[
                     TextSpan(
-                        text: '$timeDuration',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                      text:
+                          '${ProjectScopeType.fromValue(project.projectScopeFlag)}',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     TextSpan(text: ', '),
                     TextSpan(
-                        text: '$numberOfStudents students',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                      text: '${project.numberOfStudents} students',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     TextSpan(text: ' needed '),
                   ],
                 ),
               ),
               SizedBox(height: 8.0),
               Text(
-                'Students are looking for:',
-                style: Theme.of(context).textTheme.subtitle1!.copyWith(fontSize: 14),
+                'The project requires candidates:',
+                style: Theme.of(context)
+                    .textTheme
+                    .subtitle1!
+                    .copyWith(fontSize: 14),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: descriptions
-                    .map((description) => Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: Text('• $description'),
-                        ))
-                    .toList(),
-              ),
-              SizedBox(height: 8.0),
-             RichText(
-                text: TextSpan(
-                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                      color: grayColor,
-                      fontWeight: FontWeight.w100,
-                      fontSize: 14),
-                  text: 'Proposal: ',
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: '$proposal',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    
-                  ],
+              if (_controller != null)
+                IgnorePointer(
+                  ignoring: true,
+                  child: QuillProvider(
+                    configurations: QuillConfigurations(
+                      controller: _controller,
+                      sharedConfigurations: const QuillSharedConfigurations(
+                        locale: Locale('en'),
+                      ),
+                    ),
+                    child: QuillEditor.basic(
+                      configurations: const QuillEditorConfigurations(
+                        readOnly: true,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              if (_controller == null)
+                Text(
+                  project.description,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 4,
+                  style: Theme.of(context).textTheme.bodyText1?.copyWith(),
+                ),
+
+              SizedBox(height: 8.0),
+              // RichText(
+              //   text: TextSpan(
+              //     style: Theme.of(context).textTheme.bodyText2!.copyWith(
+              //           color: grayColor,
+              //           fontWeight: FontWeight.w100,
+              //           fontSize: 14,
+              //         ),
+              //     text: 'Proposal: ',
+              //     children: <TextSpan>[
+              //       TextSpan(
+              //         text: '${project.proposal}',
+              //         style: TextStyle(fontWeight: FontWeight.bold),
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),

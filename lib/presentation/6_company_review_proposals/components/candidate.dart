@@ -1,3 +1,4 @@
+import 'package:boilerplate/constants/assets.dart';
 import 'package:flutter/material.dart';
 
 class Candidate extends StatefulWidget {
@@ -21,37 +22,41 @@ class _CandidateState extends State<Candidate> {
           children: [
             Row(
               children: [
-                IconButton(
-                  icon: Icon(Icons.account_circle),
-                  iconSize: 94.0,
-                  onPressed: () {},
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.asset(
+                    width: 60,
+                    Assets.studentAvatar,
+                    fit: BoxFit.cover,
+                  ),
                 ),
+                SizedBox(width: 12,),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Hung Le',
-                      style: TextStyle(fontSize: 22.0),
+                      style: Theme.of(context).textTheme.headlineMedium,
                     ),
-                    SizedBox(height: 12.0),
-                    Text('4th year student', style: TextStyle(fontSize: 18.0)),
+                    Text('4th year student', style: Theme.of(context).textTheme.labelMedium!.copyWith(fontStyle: FontStyle.italic),),
                   ],
                 )
               ],
             ),
+            SizedBox(height: 12,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Fullstack Engineer'),
-                Text('Excellent'),
+                Text('Fullstack Engineer', style: Theme.of(context).textTheme.labelLarge),
+                Text('Excellent', style: Theme.of(context).textTheme.labelLarge!.copyWith(fontStyle: FontStyle.italic)),
               ],
             ),
             SizedBox(height: 14.0),
             Text(
                 'I have gone through your project and it seem like a great project. I will commit for your project...',
                 style:
-                    TextStyle(fontStyle: FontStyle.italic, color: Colors.grey)),
+                    TextStyle(fontStyle: FontStyle.italic, color: Theme.of(context).colorScheme.onSecondary)),
             SizedBox(height: 14.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
