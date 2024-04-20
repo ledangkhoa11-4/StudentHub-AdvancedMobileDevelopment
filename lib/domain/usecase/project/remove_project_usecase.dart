@@ -18,7 +18,6 @@ class RemoveProjectUseCase extends UseCase<dynamic, int> {
 
   @override
   FutureOr call({required int params}) {
-    // TODO: implement call
-    throw UnimplementedError();
+    return _postRepository.remove(params);
   }
 }
