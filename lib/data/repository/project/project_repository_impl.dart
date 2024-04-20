@@ -8,6 +8,7 @@ import 'package:boilerplate/domain/entity/project/project_list.dart';
 import 'package:boilerplate/domain/repository/project/project_repository.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/start_working_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
 import 'package:sembast/sembast.dart';
 
@@ -79,6 +80,11 @@ class ProjectRepositoryImpl extends ProjectRepository {
   @override
   Future<dynamic> remove(int id) async {
     return await _projectApi.remove(id);
+  }
+
+  @override
+  Future<dynamic> startWorkingProject(StartWorkingProjectParams params) async {
+    return await _projectApi.startWorkingProject(params);
   }
 
   @override
