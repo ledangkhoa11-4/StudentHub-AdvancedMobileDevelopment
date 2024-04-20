@@ -18,7 +18,7 @@ class Endpoints {
   static const String signin = baseUrl + "/api/auth/sign-in";
 
   static const String getMe = baseUrl + "/api/auth/me";
-  
+
   static const String change = baseUrl + "/api/user/changePassword";
 
   static const String forgot = baseUrl + "/api/user/forgotPassword";
@@ -59,4 +59,7 @@ class Endpoints {
       baseUrl + "/api/profile/student/:studentId/transcript";
 
   static const String getAllProject = baseUrl + "/api/project";
+
+  static const String patchFavorite =
+      baseUrl + "/api/favoriteProject/:studentId";
 }

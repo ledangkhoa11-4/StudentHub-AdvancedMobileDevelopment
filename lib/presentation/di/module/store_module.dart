@@ -6,14 +6,8 @@ import 'package:boilerplate/core/stores/form/form_post_project_store.dart' as Po
 import 'package:boilerplate/core/stores/form/form_signin_store.dart' as SigninFromStore;
 import 'package:boilerplate/core/stores/form/form_forgot_store.dart' as ForgotFromStore;
 import 'package:boilerplate/core/stores/form/form_changepass_store.dart' as ChangeFromStore;
-import 'package:boilerplate/core/stores/form/form_company_profile_store.dart'
-    as CompanyProfileFormStore;
 import 'package:boilerplate/core/stores/form/form_student_profile_store.dart'
     as StudentProfileFormStore;
-import 'package:boilerplate/core/stores/form/form_post_project_store.dart'
-    as PostProjectFromStore;
-import 'package:boilerplate/core/stores/form/form_signin_store.dart'
-    as SigninFromStore;
 import 'package:boilerplate/core/stores/form/form_store.dart';
 import 'package:boilerplate/domain/repository/project/project_repository.dart';
 import 'package:boilerplate/domain/repository/setting/setting_repository.dart';
@@ -21,6 +15,7 @@ import 'package:boilerplate/domain/usecase/post/get_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
@@ -30,7 +25,6 @@ import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_student_profile_usercase.dart';
-import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
@@ -147,7 +141,8 @@ mixin StoreModule {
           getIt<ErrorStore>(),
           getIt<ProjectRepository>(),
           getIt<GetAllProjectUseCase>(),
-          getIt<UpdateProjectUseCase>()),
+          getIt<UpdateProjectUseCase>(),
+          getIt<UpdateFavoriteProjectUseCase>()),
     );
   }
 }

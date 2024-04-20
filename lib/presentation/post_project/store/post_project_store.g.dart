@@ -161,6 +161,22 @@ mixin _$ProjectStore on _ProjectStore, Store {
     });
   }
 
+  late final _$onlyLikeProjectAtom =
+      Atom(name: '_ProjectStore.onlyLikeProject', context: context);
+
+  @override
+  ProjectList? get onlyLikeProject {
+    _$onlyLikeProjectAtom.reportRead();
+    return super.onlyLikeProject;
+  }
+
+  @override
+  set onlyLikeProject(ProjectList? value) {
+    _$onlyLikeProjectAtom.reportWrite(value, super.onlyLikeProject, () {
+      super.onlyLikeProject = value;
+    });
+  }
+
   late final _$manualLoadingAtom =
       Atom(name: '_ProjectStore.manualLoading', context: context);
 
@@ -174,6 +190,22 @@ mixin _$ProjectStore on _ProjectStore, Store {
   set manualLoading(bool value) {
     _$manualLoadingAtom.reportWrite(value, super.manualLoading, () {
       super.manualLoading = value;
+    });
+  }
+
+  late final _$showLikedOnlyAtom =
+      Atom(name: '_ProjectStore.showLikedOnly', context: context);
+
+  @override
+  bool get showLikedOnly {
+    _$showLikedOnlyAtom.reportRead();
+    return super.showLikedOnly;
+  }
+
+  @override
+  set showLikedOnly(bool value) {
+    _$showLikedOnlyAtom.reportWrite(value, super.showLikedOnly, () {
+      super.showLikedOnly = value;
     });
   }
 
@@ -226,6 +258,15 @@ mixin _$ProjectStore on _ProjectStore, Store {
     return _$getAllProjectsAsyncAction.run(() => super.getAllProjects(param));
   }
 
+  late final _$updateLikeProkectAsyncAction =
+      AsyncAction('_ProjectStore.updateLikeProkect', context: context);
+
+  @override
+  Future<dynamic> updateLikeProkect(Project project, bool status) {
+    return _$updateLikeProkectAsyncAction
+        .run(() => super.updateLikeProkect(project, status));
+  }
+
   late final _$_ProjectStoreActionController =
       ActionController(name: '_ProjectStore', context: context);
 
@@ -276,6 +317,28 @@ mixin _$ProjectStore on _ProjectStore, Store {
   }
 
   @override
+  void setShowLike(bool isLike) {
+    final _$actionInfo = _$_ProjectStoreActionController.startAction(
+        name: '_ProjectStore.setShowLike');
+    try {
+      return super.setShowLike(isLike);
+    } finally {
+      _$_ProjectStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void getLikedProjectList(ProjectList? value) {
+    final _$actionInfo = _$_ProjectStoreActionController.startAction(
+        name: '_ProjectStore.getLikedProjectList');
+    try {
+      return super.getLikedProjectList(value);
+    } finally {
+      _$_ProjectStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 fetchProjectsFuture: ${fetchProjectsFuture},
@@ -287,7 +350,9 @@ apiResponseMessage: ${apiResponseMessage},
 apiResponseSuccess: ${apiResponseSuccess},
 success: ${success},
 allProjectList: ${allProjectList},
+onlyLikeProject: ${onlyLikeProject},
 manualLoading: ${manualLoading},
+showLikedOnly: ${showLikedOnly},
 globalGetAllProjectParams: ${globalGetAllProjectParams},
 isLoading: ${isLoading}
     ''';
