@@ -77,6 +77,14 @@ class _ProjectListState extends State<CompanyArchievedProjectList> {
                             : SizedBox.shrink();
                       },
                     ),
+                    Observer(
+                      builder: (context) {
+                        return !_projectStore.isLoading &&
+                                _projectStore.deleted == true
+                            ? reloadProject(context)
+                            : SizedBox.shrink();
+                      },
+                    ),
                   ],
                 )
               : NoProject(
@@ -91,6 +99,7 @@ class _ProjectListState extends State<CompanyArchievedProjectList> {
   Widget reloadProject(BuildContext context) {
     _projectStore.getProjects();
     _projectStore.resetSuccess();
+    _projectStore.resetDeleted();
     return SizedBox.shrink();
   }
 }
