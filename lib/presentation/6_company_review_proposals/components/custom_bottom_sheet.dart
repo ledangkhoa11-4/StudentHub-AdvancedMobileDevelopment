@@ -174,9 +174,14 @@ class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
                     title: Text(
                       "Start Working Project",
                     ),
-                    content: Text("Are you sure you want to start " +
-                        widget.project.title.toString() +
-                        " project?"),
+                    content: widget.project.countHired >=
+                            widget.project.numberOfStudents
+                        ? Text("Are you sure you want to start " +
+                            widget.project.title.toString() +
+                            " project?")
+                        : Text("There are not enough students! Still start " +
+                            widget.project.title.toString() +
+                            " project?"),
                     actions: [
                       TextButton(
                         onPressed: () {
