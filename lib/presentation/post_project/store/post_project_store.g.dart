@@ -33,6 +33,22 @@ mixin _$ProjectStore on _ProjectStore, Store {
     });
   }
 
+  late final _$fetchSubmitProposalAtom =
+      Atom(name: '_ProjectStore.fetchSubmitProposal', context: context);
+
+  @override
+  ObservableFuture<List<Proposal>?> get fetchSubmitProposal {
+    _$fetchSubmitProposalAtom.reportRead();
+    return super.fetchSubmitProposal;
+  }
+
+  @override
+  set fetchSubmitProposal(ObservableFuture<List<Proposal>?> value) {
+    _$fetchSubmitProposalAtom.reportWrite(value, super.fetchSubmitProposal, () {
+      super.fetchSubmitProposal = value;
+    });
+  }
+
   late final _$fetchProjectFutureAtom =
       Atom(name: '_ProjectStore.fetchProjectFuture', context: context);
 
@@ -193,6 +209,22 @@ mixin _$ProjectStore on _ProjectStore, Store {
     });
   }
 
+  late final _$submitProposalsAtom =
+      Atom(name: '_ProjectStore.submitProposals', context: context);
+
+  @override
+  ObservableList<Proposal>? get submitProposals {
+    _$submitProposalsAtom.reportRead();
+    return super.submitProposals;
+  }
+
+  @override
+  set submitProposals(ObservableList<Proposal>? value) {
+    _$submitProposalsAtom.reportWrite(value, super.submitProposals, () {
+      super.submitProposals = value;
+    });
+  }
+
   late final _$onlyLikeProjectAtom =
       Atom(name: '_ProjectStore.onlyLikeProject', context: context);
 
@@ -307,6 +339,15 @@ mixin _$ProjectStore on _ProjectStore, Store {
         .run(() => super.updateLikeProkect(project, status));
   }
 
+  late final _$getSubmitProposalAsyncAction =
+      AsyncAction('_ProjectStore.getSubmitProposal', context: context);
+
+  @override
+  Future<dynamic> getSubmitProposal(GetSubmitProposalParams param) {
+    return _$getSubmitProposalAsyncAction
+        .run(() => super.getSubmitProposal(param));
+  }
+
   late final _$_ProjectStoreActionController =
       ActionController(name: '_ProjectStore', context: context);
 
@@ -371,6 +412,7 @@ mixin _$ProjectStore on _ProjectStore, Store {
   String toString() {
     return '''
 fetchProjectsFuture: ${fetchProjectsFuture},
+fetchSubmitProposal: ${fetchSubmitProposal},
 fetchProjectFuture: ${fetchProjectFuture},
 getProjectFuture: ${getProjectFuture},
 updateProjectFuture: ${updateProjectFuture},
@@ -381,6 +423,7 @@ success: ${success},
 deleted: ${deleted},
 slideToIndex: ${slideToIndex},
 allProjectList: ${allProjectList},
+submitProposals: ${submitProposals},
 onlyLikeProject: ${onlyLikeProject},
 manualLoading: ${manualLoading},
 showLikedOnly: ${showLikedOnly},

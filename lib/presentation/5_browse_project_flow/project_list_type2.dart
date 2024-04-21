@@ -33,11 +33,7 @@ class _ProjectListState extends State<ProjectListType2> {
         itemCount: _allProjects.length,
         itemBuilder: (context, index) {
           final project = _allProjects[index];
-          return ProjectItemType2(
-            project: project,
-            isLiked: false,
-            onLikeChanged: (bool isLiked) {},
-          );
+          return SizedBox.shrink();
         },
       ),
     );

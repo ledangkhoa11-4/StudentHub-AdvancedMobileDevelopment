@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:boilerplate/domain/entity/proposal/proposal.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
@@ -22,5 +24,8 @@ abstract class ProjectRepository {
   Future<ProjectList> getAllProject(GetAllProjectParams params);
 
   Future<dynamic> updateFavorite(UpdateFavoriteProjectParams params);
+
+  Future<List<Proposal>> getSubmitProposal(GetSubmitProposalParams params);
+
 
 }

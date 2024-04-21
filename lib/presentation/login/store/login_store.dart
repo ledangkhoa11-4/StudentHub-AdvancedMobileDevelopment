@@ -12,6 +12,7 @@ import 'package:boilerplate/domain/entity/user/experience.dart';
 import 'package:boilerplate/domain/entity/user/language.dart';
 import 'package:boilerplate/domain/entity/user/skillset.dart';
 import 'package:boilerplate/domain/entity/user/tech_stack.dart';
+import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
@@ -693,11 +694,17 @@ abstract class _UserStore with Store {
   @action
   Future submitProposal(int projectId, String coverLetter) async {
     SubmitProposalParams param = SubmitProposalParams(
-        studentId: this.user!.student!.id!, projectId: projectId, coverLetter: coverLetter );
+        studentId: this.user!.student!.id!,
+        projectId: projectId,
+        coverLetter: coverLetter);
     final future = _submitProposalUseCase.call(params: param);
     apiCallingFeature = ObservableFuture(future);
     await future.then((value) async {
       if (value != null) {
+        final projectStore = getIt<ProjectStore>();
+        final GetSubmitProposalParams prms =
+            GetSubmitProposalParams(studentId: this.user!.student!.id!);
+        projectStore.getSubmitProposal(prms);
         this.apiResponseSuccess = true;
       }
     }).catchError((e) {

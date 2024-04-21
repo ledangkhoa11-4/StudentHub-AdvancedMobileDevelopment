@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:boilerplate/core/stores/error/error_store.dart';
 import 'package:boilerplate/domain/entity/project/project.dart'; // Import Project entity
+import 'package:boilerplate/domain/entity/proposal/proposal.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
@@ -30,7 +32,8 @@ abstract class _ProjectStore with Store {
       this._getAllProjectUseCase,
       this._updateProjectUseCase,
       this._removeProjectUseCase,
-      this._updateFavoriteProjectUseCase) {
+      this._updateFavoriteProjectUseCase,
+      this._getSubmitProposalUseCase) {
     _setupValidations();
   } // Add _projectRepository
 
@@ -48,6 +51,7 @@ abstract class _ProjectStore with Store {
   final UpdateProjectUseCase _updateProjectUseCase;
   final UpdateFavoriteProjectUseCase _updateFavoriteProjectUseCase;
   final RemoveProjectUseCase _removeProjectUseCase;
+  final GetSubmitProposalUseCase _getSubmitProposalUseCase;
 
   // stores:--------------------------------------------------------------------
   // store for handling errors
@@ -66,9 +70,16 @@ abstract class _ProjectStore with Store {
   static ObservableFuture<dynamic> _emptyDynamicResponse =
       ObservableFuture.value(null);
 
+  static ObservableFuture<List<Proposal>?> _emptyFetchProposalResponse =
+      ObservableFuture.value(null);
+
   @observable
   ObservableFuture<ProjectList?> fetchProjectsFuture =
       ObservableFuture<ProjectList?>(emptyProjectResponse);
+
+  @observable
+  ObservableFuture<List<Proposal>?> fetchSubmitProposal =
+      _emptyFetchProposalResponse;
 
   @observable
   ObservableFuture<Project?> fetchProjectFuture =
@@ -103,6 +114,9 @@ abstract class _ProjectStore with Store {
   ProjectList? allProjectList;
 
   @observable
+  ObservableList<Proposal>? submitProposals;
+
+  @observable
   ProjectList? onlyLikeProject;
 
   @observable
@@ -122,13 +136,14 @@ abstract class _ProjectStore with Store {
       fetchProjectsFuture.status == FutureStatus.pending ||
       fetchProjectFuture.status == FutureStatus.pending ||
       getProjectFuture.status == FutureStatus.pending ||
-      updateProjectFuture.status == FutureStatus.pending;
+      updateProjectFuture.status == FutureStatus.pending ||
+      fetchSubmitProposal.status == FutureStatus.pending;
 
   // actions:-------------------------------------------------------------------
   @action
   Future getProjects() async {
     final future = _getProjectUseCase.call(params: null);
-    fetchProjectsFuture = ObservableFuture(future); 
+    fetchProjectsFuture = ObservableFuture(future);
 
     await future.then((projectList) {
       this.projectList = projectList;
@@ -337,6 +352,25 @@ abstract class _ProjectStore with Store {
               .toList());
       this.allProjectList = reverted;
     }
+  }
+
+  @action
+  Future getSubmitProposal(
+      GetSubmitProposalParams param) async {
+    final future = _getSubmitProposalUseCase.call(params: param);
+    fetchSubmitProposal = ObservableFuture(future);
+
+    await future.then((projectList) {
+      this.submitProposals = ObservableList.of(projectList);
+      this.apiResponseSuccess = true;
+    }).catchError((e) {
+      this.submitProposals = ObservableList.of([]);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.apiResponseSuccess = false;
+      this.apiResponseMessage = response["errorDetails"].toString();
+    });
+    this.manualLoading = false;
   }
 
   setSlideToIndex(int? value) {
