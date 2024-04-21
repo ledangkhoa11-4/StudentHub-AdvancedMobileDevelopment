@@ -43,12 +43,12 @@ class ProjectItem extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => ProjectDetail(projectItem: this),
-        //   ),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProjectDetail(project: project),
+          ),
+        );
       },
       child: Card(
         margin: const EdgeInsets.all(8.0),

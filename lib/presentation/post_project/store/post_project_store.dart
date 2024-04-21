@@ -128,7 +128,7 @@ abstract class _ProjectStore with Store {
   @action
   Future getProjects() async {
     final future = _getProjectUseCase.call(params: null);
-    fetchProjectsFuture = ObservableFuture(future);
+    fetchProjectsFuture = ObservableFuture(future); 
 
     await future.then((projectList) {
       this.projectList = projectList;
@@ -293,6 +293,8 @@ abstract class _ProjectStore with Store {
           projects: value.projects!
               .where((element) => element.isFavorite == true)
               .toList());
+    } else {
+      this.onlyLikeProject = ProjectList(projects: []);
     }
   }
 

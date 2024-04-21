@@ -151,7 +151,7 @@ class _ProjectListState extends State<ProjectList> {
                                     project: project,
                                     isLiked: project.isFavorite ?? false,
                                     onLikeChanged: (bool isLiked) {
-                                      print(isLiked);
+                                       _projectStore.updateLikeProkect(project, isLiked);
                                     },
                                   );
                                 },
