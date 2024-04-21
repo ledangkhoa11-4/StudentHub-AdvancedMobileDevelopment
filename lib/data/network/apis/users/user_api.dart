@@ -23,8 +23,10 @@ import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/login_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/submit_proposal_usecase.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:dio/dio.dart';
+
 class UserApi {
   // dio instance
   final DioClient _dioClient;
@@ -55,8 +57,8 @@ class UserApi {
       throw e;
     }
   }
-  
-   Future<dynamic> forgot(ForgotParams param) async {
+
+  Future<dynamic> forgot(ForgotParams param) async {
     try {
       final res = await _dioClient.dio.post(Endpoints.forgot, data: param);
       return res;
@@ -283,6 +285,17 @@ class UserApi {
       }
 
       return null;
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<dynamic> submitProposal(SubmitProposalParams param) async {
+    try {
+      final res =
+          await _dioClient.dio.post(Endpoints.submitProposal, data: param);
+      return res;
     } catch (e) {
       print(e.toString());
       throw e;

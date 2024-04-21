@@ -19,6 +19,7 @@ import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/submit_proposal_usecase.dart';
 import 'package:dio/dio.dart';
 
 import '../../../domain/entity/user/user.dart';
@@ -163,6 +164,13 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<String?> getProfileFile(GetProfileFileParams params) async {
     return await _userApi.getResumeFile(params).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<dynamic> submitProposal(SubmitProposalParams params) async {
+    return await _userApi.submitProposal(params).then((res) {
       return res;
     }).catchError((error) => throw error);
   }

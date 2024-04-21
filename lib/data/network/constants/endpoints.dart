@@ -30,6 +30,7 @@ class Endpoints {
   static const String createCompanyProfile = baseUrl + "/api/profile/company";
 
   static const String getCompanyProject = baseUrl + "/api/project/company";
+
   static const String createStudentProfile = baseUrl + "/api/profile/student";
 
   static const String getAllTechstack =
@@ -62,4 +63,6 @@ class Endpoints {
 
   static const String patchFavorite =
       baseUrl + "/api/favoriteProject/:studentId";
+
+  static const String submitProposal = baseUrl + "/api/proposal";
 }

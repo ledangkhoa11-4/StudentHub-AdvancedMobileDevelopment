@@ -17,6 +17,7 @@ import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/login_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/submit_proposal_usecase.dart';
 import 'package:dio/dio.dart';
 
 import '../../entity/user/user.dart';
@@ -57,6 +58,8 @@ abstract class UserRepository {
   Future<dynamic> createExperiences(CreateExperiencesParams params);
 
   Future<String?> getProfileFile(GetProfileFileParams params);
+
+  Future<dynamic> submitProposal(SubmitProposalParams params);
 
   Future<bool> get isLoggedIn;
 }

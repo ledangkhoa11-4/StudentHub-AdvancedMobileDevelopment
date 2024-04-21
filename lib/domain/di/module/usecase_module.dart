@@ -29,6 +29,7 @@ import 'package:boilerplate/domain/usecase/user/save_login_in_status_usecase.dar
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_resume_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_transcript_usecase.dart';
 
@@ -110,6 +111,10 @@ mixin UseCaseModule {
 
     getIt.registerSingleton<GetProfileFileUseCase>(
       GetProfileFileUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<SubmitProposalUseCase>(
+      SubmitProposalUseCase(getIt<UserRepository>()),
     );
 
     // post:--------------------------------------------------------------------

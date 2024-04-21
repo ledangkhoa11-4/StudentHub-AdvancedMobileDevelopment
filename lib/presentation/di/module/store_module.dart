@@ -40,6 +40,7 @@ import 'package:boilerplate/domain/usecase/user/save_auth_token_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/save_current_profile_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/save_login_in_status_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_resume_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_transcript_usecase.dart';
 import 'package:boilerplate/presentation/home/store/language/language_store.dart';
@@ -117,6 +118,7 @@ mixin StoreModule {
         getIt<CreateExperiencesUseCase>(),
         getIt<CreateUpdateStudentProfileUseCase>(),
         getIt<GetProfileFileUseCase>(),
+        getIt<SubmitProposalUseCase>(),
       ),
     );
 
