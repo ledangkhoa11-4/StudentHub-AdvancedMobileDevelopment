@@ -7,7 +7,9 @@ import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/domain/entity/project/project_list.dart';
+import 'package:boilerplate/domain/entity/proposal/proposal.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
@@ -107,6 +109,25 @@ class ProjectApi {
               ":studentId", _userStore.user!.student!.id.toString()),
           data: params);
       return res;
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<List<Proposal>> getSubmitProposal(
+      GetSubmitProposalParams params) async {
+    var query = "?";
+    if (params.statusFlag != null) query += "&statusFlag=${params.statusFlag}";
+    try {
+      final res = await _dioClient.dio.get(Endpoints.getSubmitProposal
+              .replaceFirst(":studentId", params.studentId.toString()) +
+          query);
+      final result = jsonDecode(res.toString());
+
+      List<dynamic> proposalObj =
+          result["result"] != null ? result["result"] : [];
+      return proposalObj.map((e) => Proposal.fromJson(e)).toList();
     } catch (e) {
       print(e.toString());
       throw e;
