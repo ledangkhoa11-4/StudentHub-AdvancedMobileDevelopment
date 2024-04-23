@@ -69,6 +69,7 @@ class _ProjectListState extends State<ProposalListArchived> {
                   ],
                 ),
                 SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
                   child: Observer(builder: (context) {
                     final archivedProposal = _projectStore.submitProposals
                         ?.where((proposal) =>

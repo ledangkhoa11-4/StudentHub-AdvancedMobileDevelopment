@@ -66,6 +66,7 @@ class _ProjectListState extends State<ProposalListAll> {
                   ],
                 ),
                 SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
