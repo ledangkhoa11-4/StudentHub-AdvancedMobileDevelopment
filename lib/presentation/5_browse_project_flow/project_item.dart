@@ -60,7 +60,7 @@ class ProjectItem extends StatelessWidget {
               Text(
                 'Created: ${formatDate(project.createdAt)}',
                 style: TextStyle(
-                  color: Colors.grey,
+                  color: Colors.grey.shade600,
                   fontSize: 14,
                   fontStyle: FontStyle.italic,
                 ),
@@ -93,7 +93,7 @@ class ProjectItem extends StatelessWidget {
               RichText(
                 text: TextSpan(
                   style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                        color: Colors.grey,
+                        color: Colors.grey.shade700,
                         fontWeight: FontWeight.w100,
                         fontSize: 14,
                       ),

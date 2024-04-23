@@ -8,6 +8,7 @@ import 'package:boilerplate/presentation/post_project/store/post_project_store.d
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
 
 class ProposalListAll extends StatefulWidget {
   ProposalListAll({Key? key}) : super(key: key);
@@ -48,98 +49,114 @@ class _ProjectListState extends State<ProposalListAll> {
                   studentId: _userStore.user!.student!.id!);
               return _projectStore.getSubmitProposal(prms);
             },
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Observer(builder: (context) {
-                    return IgnorePointer(
-                      ignoring: _projectStore.submitProposals != null
-                          ? _projectStore.submitProposals!
-                                      .where((proposal) =>
-                                          proposal.statusFlag ==
-                                          ProposalType.ACTIVE.value)
-                                      .length >
-                                  0
-                              ? false
-                              : true
-                          : true,
-                      child: ExpansionTile(
-                        leading: Icon(BootstrapIcons.person_workspace),
-                        collapsedShape: RoundedRectangleBorder(
-                          side: BorderSide.none,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide.none,
-                        ),
-                        title: Text(
-                          "Active Proposal (${_projectStore.submitProposals != null ? _projectStore.submitProposals!.where((proposal) => proposal.statusFlag == ProposalType.ACTIVE.value).length : 0})",
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold),
-                        ),
-                        children: [
-                          if (_projectStore.submitProposals != null)
-                            ..._projectStore.submitProposals!
-                                .where((proposal) =>
-                                    proposal.statusFlag ==
-                                    ProposalType.ACTIVE.value)
-                                .map((proposal) =>
-                                    ProjectItemType2(proposal: proposal))
-                                .toList()
-                        ],
-                      ),
-                    );
-                  }),
-                  Observer(builder: (context) {
-                    return IgnorePointer(
-                      ignoring: _projectStore.submitProposals != null
-                          ? _projectStore.submitProposals!
-                                      .where((proposal) =>
-                                          proposal.statusFlag !=
-                                          ProposalType.ACTIVE.value)
-                                      .length >
-                                  0
-                              ? false
-                              : true
-                          : true,
-                      child: ExpansionTile(
-                        leading: Icon(BootstrapIcons.bookmark_star),
-                        collapsedShape: RoundedRectangleBorder(
-                          side: BorderSide.none,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide.none,
-                        ),
-                        title: Text(
-                          "Submitted Proposal (${_projectStore.submitProposals != null ? _projectStore.submitProposals!.where((proposal) => proposal.statusFlag != ProposalType.ACTIVE.value).length : 0})",
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold),
-                        ),
-                        children: [
-                          if (_projectStore.submitProposals != null)
-                            ..._projectStore.submitProposals!
-                                .where((proposal) =>
-                                    proposal.statusFlag !=
-                                    ProposalType.ACTIVE.value)
-                                .map((proposal) =>
-                                    ProjectItemType2(proposal: proposal))
-                                .toList()
-                        ],
-                      ),
-                    );
-                  }),
-                  // Expanded(
-                  //   child: ListView.builder(
-                  //     shrinkWrap: true,
-                  //     physics: const AlwaysScrollableScrollPhysics(),
-                  //     itemCount: 1,
-                  //     itemBuilder: (context, index) {
-                  //       return Container();
-                  //     },
-                  //   ),
-                  // )
-                ],
-              ),
+            child: Stack(
+              children: [
+                Column(
+                  children: [
+                    Expanded(
+                        child: ListView.builder(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemCount: 1,
+                      itemBuilder: (context, index) {
+                        return Container();
+                      },
+                    ))
+                  ],
+                ),
+                SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Observer(builder: (context) {
+                        return IgnorePointer(
+                          ignoring: _projectStore.submitProposals != null
+                              ? _projectStore.submitProposals!
+                                          .where((proposal) =>
+                                              proposal.statusFlag ==
+                                                  ProposalType.ACTIVE.value ||
+                                              proposal.statusFlag ==
+                                                  ProposalType.OFFER.value)
+                                          .length >
+                                      0
+                                  ? false
+                                  : true
+                              : true,
+                          child: ExpansionTile(
+                            leading: Icon(BootstrapIcons.person_workspace),
+                            collapsedShape: RoundedRectangleBorder(
+                              side: BorderSide.none,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide.none,
+                            ),
+                            title: Text(
+                              "Active Proposal (${_projectStore.submitProposals != null ? _projectStore.submitProposals!.where((proposal) => proposal.statusFlag == ProposalType.ACTIVE.value || proposal.statusFlag == ProposalType.OFFER.value).length : 0})",
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            children: [
+                              if (_projectStore.submitProposals != null)
+                                ..._projectStore.submitProposals!
+                                    .where((proposal) =>
+                                        proposal.statusFlag ==
+                                            ProposalType.ACTIVE.value ||
+                                        proposal.statusFlag ==
+                                            ProposalType.OFFER.value)
+                                    .map((proposal) =>
+                                        ProjectItemType2(proposal: proposal))
+                                    .toList()
+                            ],
+                          ),
+                        );
+                      }),
+                      Observer(builder: (context) {
+                        return IgnorePointer(
+                          ignoring: _projectStore.submitProposals != null
+                              ? _projectStore.submitProposals!
+                                          .where((proposal) =>
+                                              proposal.statusFlag !=
+                                                  ProposalType.ACTIVE.value &&
+                                              proposal.statusFlag !=
+                                                  ProposalType.OFFER.value)
+                                          .length >
+                                      0
+                                  ? false
+                                  : true
+                              : true,
+                          child: ExpansionTile(
+                            leading: Icon(BootstrapIcons.bookmark_star),
+                            collapsedShape: RoundedRectangleBorder(
+                              side: BorderSide.none,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide.none,
+                            ),
+                            title: Text(
+                              "Submitted Proposal (${_projectStore.submitProposals != null ? _projectStore.submitProposals!.where((proposal) => proposal.statusFlag != ProposalType.ACTIVE.value && proposal.statusFlag != ProposalType.OFFER.value).length : 0})",
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            children: [
+                              if (_projectStore.submitProposals != null)
+                                ..._projectStore.submitProposals!
+                                    .where((proposal) =>
+                                        proposal.statusFlag !=
+                                            ProposalType.ACTIVE.value &&
+                                        proposal.statusFlag !=
+                                            ProposalType.OFFER.value)
+                                    .map((proposal) =>
+                                        ProjectItemType2(proposal: proposal))
+                                    .toList()
+                            ],
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
           Observer(builder: (context) {
