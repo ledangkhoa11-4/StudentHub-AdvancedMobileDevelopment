@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/domain/entity/proposal/proposal.dart';
+import 'package:boilerplate/presentation/post_project/components/unordered_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:moment_dart/moment_dart.dart';
 // import 'project_detail.dart'; // Import the ProjectDetail page
 import '../../domain/entity/project/project.dart';
@@ -18,6 +21,8 @@ class ProjectItemType2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     QuillController? _controller;
+    final _tooltipController = JustTheController();
+
     try {
       final controller = QuillController(
           document: Document.fromJson(jsonDecode(proposal.project.description)),
@@ -88,6 +93,47 @@ class ProjectItemType2 extends StatelessWidget {
                   proposal.project.description,
                   style: Theme.of(context).textTheme.bodyText1?.copyWith(),
                 ),
+              if (proposal.statusFlag == ProposalType.OFFER.value)
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RoundedButtonWidget(
+                          buttonText: "Accept hire request",
+                          buttonColor: Theme.of(context).colorScheme.primary,
+                          textColor: Colors.white,
+                          onPressed: () {},
+                        ),
+                        JustTheTooltip(
+                          controller: _tooltipController,
+                          isModal: true,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.help_outline_outlined,
+                              size: 16,
+                            ),
+                            onPressed: () {
+                              try {
+                                _tooltipController.showTooltip();
+                              } catch (e) {}
+                            },
+                          ),
+                          content: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: UnorderedList([
+                              "Congratulations, you have been invited by the company to join the project, click this button to agree to participate",
+                            ], "Note:"),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                )
             ],
           ),
         ),

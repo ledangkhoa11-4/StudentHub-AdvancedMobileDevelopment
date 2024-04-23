@@ -179,7 +179,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                                     color:
                                         Theme.of(context).colorScheme.primary),
                           ),
-                          _userStore.user!.student!.experiences!.length >= 0
+                          _userStore.user!.student!.experiences!.length <= 0
                               ? Padding(
                                   padding:
                                       const EdgeInsets.only(left: 20, top: 10),
