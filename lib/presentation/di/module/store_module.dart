@@ -1,27 +1,29 @@
 import 'dart:async';
 
 import 'package:boilerplate/core/stores/error/error_store.dart';
-import 'package:boilerplate/core/stores/form/form_company_profile_store.dart' as CompanyProfileFormStore;
-import 'package:boilerplate/core/stores/form/form_post_project_store.dart' as PostProjectFromStore;
-import 'package:boilerplate/core/stores/form/form_signin_store.dart' as SigninFromStore;
-import 'package:boilerplate/core/stores/form/form_forgot_store.dart' as ForgotFromStore;
-import 'package:boilerplate/core/stores/form/form_changepass_store.dart' as ChangeFromStore;
 import 'package:boilerplate/core/stores/form/form_company_profile_store.dart'
     as CompanyProfileFormStore;
-import 'package:boilerplate/core/stores/form/form_student_profile_store.dart'
-    as StudentProfileFormStore;
 import 'package:boilerplate/core/stores/form/form_post_project_store.dart'
     as PostProjectFromStore;
 import 'package:boilerplate/core/stores/form/form_signin_store.dart'
     as SigninFromStore;
+import 'package:boilerplate/core/stores/form/form_forgot_store.dart'
+    as ForgotFromStore;
+import 'package:boilerplate/core/stores/form/form_changepass_store.dart'
+    as ChangeFromStore;
+import 'package:boilerplate/core/stores/form/form_student_profile_store.dart'
+    as StudentProfileFormStore;
 import 'package:boilerplate/core/stores/form/form_store.dart';
 import 'package:boilerplate/domain/repository/project/project_repository.dart';
 import 'package:boilerplate/domain/repository/setting/setting_repository.dart';
 import 'package:boilerplate/domain/usecase/post/get_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/remove_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
@@ -30,7 +32,6 @@ import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_student_profile_usercase.dart';
-import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
@@ -40,6 +41,7 @@ import 'package:boilerplate/domain/usecase/user/save_auth_token_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/save_current_profile_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/save_login_in_status_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_resume_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_transcript_usecase.dart';
 import 'package:boilerplate/presentation/home/store/language/language_store.dart';
@@ -61,7 +63,6 @@ mixin StoreModule {
     getIt.registerFactory(() => SigninFromStore.FormErrorStore());
     getIt.registerFactory(() => ForgotFromStore.FormErrorStore());
     getIt.registerFactory(() => ChangeFromStore.FormErrorStore());
-    
 
     getIt.registerFactory(
       () => FormStore(getIt<FormErrorStore>(), getIt<ErrorStore>()),
@@ -86,10 +87,12 @@ mixin StoreModule {
     );
 
     getIt.registerFactory(
-      () => ForgotFromStore.FormForgotStore(getIt<ForgotFromStore.FormErrorStore>(), getIt<ErrorStore>()),
+      () => ForgotFromStore.FormForgotStore(
+          getIt<ForgotFromStore.FormErrorStore>(), getIt<ErrorStore>()),
     );
     getIt.registerFactory(
-      () => ChangeFromStore.FormChangeStore(getIt<ChangeFromStore.FormErrorStore>(), getIt<ErrorStore>()),
+      () => ChangeFromStore.FormChangeStore(
+          getIt<ChangeFromStore.FormErrorStore>(), getIt<ErrorStore>()),
     );
 
     // stores:------------------------------------------------------------------
@@ -116,6 +119,7 @@ mixin StoreModule {
         getIt<CreateExperiencesUseCase>(),
         getIt<CreateUpdateStudentProfileUseCase>(),
         getIt<GetProfileFileUseCase>(),
+        getIt<SubmitProposalUseCase>(),
       ),
     );
 
@@ -147,7 +151,10 @@ mixin StoreModule {
           getIt<ErrorStore>(),
           getIt<ProjectRepository>(),
           getIt<GetAllProjectUseCase>(),
-          getIt<UpdateProjectUseCase>()),
+          getIt<UpdateProjectUseCase>(),
+          getIt<RemoveProjectUseCase>(),
+          getIt<UpdateFavoriteProjectUseCase>(),
+          getIt<GetSubmitProposalUseCase>()),
     );
   }
 }

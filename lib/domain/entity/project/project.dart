@@ -5,6 +5,23 @@ enum ProjectScope {
   MoreThanSixMonth
 }
 
+enum ProjectType { NEW, WORKING, ARCHIVED }
+
+extension ProjectTypeExtension on ProjectType {
+  int get value {
+    switch (this) {
+      case ProjectType.NEW:
+        return 0;
+      case ProjectType.WORKING:
+        return 1;
+      case ProjectType.ARCHIVED:
+        return 2;
+      default:
+        return -1;
+    }
+  }
+}
+
 extension ProjectScopeType on ProjectScope {
   int get value {
     switch (this) {
@@ -83,22 +100,21 @@ class Project {
   int countHired;
   bool? isFavorite;
 
-  Project({
-    required this.companyId,
-    required this.projectScopeFlag,
-    required this.typeFlag,
-    this.id,
-    this.createdAt,
-    this.updatedAt,
-    this.deletedAt,
-    required this.title,
-    required this.description,
-    required this.numberOfStudents,
-    this.countProposals = 0,
-    this.countMessages = 0,
-    this.countHired = 0,
-    this.isFavorite = false
-  });
+  Project(
+      {required this.companyId,
+      required this.projectScopeFlag,
+      required this.typeFlag,
+      this.id,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt,
+      required this.title,
+      required this.description,
+      required this.numberOfStudents,
+      this.countProposals = 0,
+      this.countMessages = 0,
+      this.countHired = 0,
+      this.isFavorite = false});
 
   // factory Project.fromMap(Map<String, dynamic> json) => Project(
   //       companyId: int.parse(json["companyId"]),
@@ -143,9 +159,7 @@ class Project {
         countHired: json.containsKey("countHired")
             ? int.parse(json["countHired"].toString())
             : 0,
-          isFavorite: json.containsKey("isFavorite")
-            ? json["isFavorite"]
-            : false,
+        isFavorite: json.containsKey("isFavorite") ? json["isFavorite"] : false,
       );
 
   Map<String, dynamic> toMap() => {

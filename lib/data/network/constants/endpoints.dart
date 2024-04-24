@@ -18,7 +18,7 @@ class Endpoints {
   static const String signin = baseUrl + "/api/auth/sign-in";
 
   static const String getMe = baseUrl + "/api/auth/me";
-  
+
   static const String change = baseUrl + "/api/user/changePassword";
 
   static const String forgot = baseUrl + "/api/user/forgotPassword";
@@ -30,6 +30,7 @@ class Endpoints {
   static const String createCompanyProfile = baseUrl + "/api/profile/company";
 
   static const String getCompanyProject = baseUrl + "/api/project/company";
+
   static const String createStudentProfile = baseUrl + "/api/profile/student";
 
   static const String getAllTechstack =
@@ -59,4 +60,12 @@ class Endpoints {
       baseUrl + "/api/profile/student/:studentId/transcript";
 
   static const String getAllProject = baseUrl + "/api/project";
+
+  static const String patchFavorite =
+      baseUrl + "/api/favoriteProject/:studentId";
+
+  static const String submitProposal = baseUrl + "/api/proposal";
+
+  static const String getSubmitProposal = baseUrl + "/api/proposal/project/:studentId";
+
 }

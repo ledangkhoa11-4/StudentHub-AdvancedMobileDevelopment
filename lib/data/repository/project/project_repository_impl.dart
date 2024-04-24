@@ -5,9 +5,12 @@ import 'package:boilerplate/data/local/datasources/project/project_datasource.da
 import 'package:boilerplate/data/network/apis/projects/project_api.dart';
 import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/domain/entity/project/project_list.dart';
+import 'package:boilerplate/domain/entity/proposal/proposal.dart';
 import 'package:boilerplate/domain/repository/project/project_repository.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
 import 'package:sembast/sembast.dart';
 
@@ -70,16 +73,39 @@ class ProjectRepositoryImpl extends ProjectRepository {
     });
   }
 
+  // @override
+  // Future<int> delete(Project project) => _projectDataSource
+  //     .update(project)
+  //     .then((id) => id)
+  //     .catchError((error) => throw error);
+
   @override
-  Future<int> delete(Project project) => _projectDataSource
-      .update(project)
-      .then((id) => id)
-      .catchError((error) => throw error);
+  Future<dynamic> remove(int id) async {
+    return await _projectApi.remove(id);
+  }
 
   @override
   Future<ProjectList> getAllProject(GetAllProjectParams params) async {
     return await _projectApi.getAllProject(params).then((projectsList) {
       return projectsList;
     }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<dynamic> updateFavorite(UpdateFavoriteProjectParams params) async {
+    return await _projectApi.updateFavorite(params).then((res) {
+      return res;
+    }).catchError((error) {
+      throw error;
+    });
+  }
+
+  @override
+  Future<List<Proposal>> getSubmitProposal(GetSubmitProposalParams params) async {
+    return await _projectApi.getSubmitProposal(params).then((res) {
+      return res;
+    }).catchError((error) {
+      throw error;
+    });
   }
 }

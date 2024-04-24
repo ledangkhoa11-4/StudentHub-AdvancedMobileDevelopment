@@ -689,6 +689,15 @@ mixin _$UserStore on _UserStore, Store {
     return _$getResumeFileAsyncAction.run(() => super.getResumeFile());
   }
 
+  late final _$submitProposalAsyncAction =
+      AsyncAction('_UserStore.submitProposal', context: context);
+
+  @override
+  Future<dynamic> submitProposal(int projectId, String coverLetter) {
+    return _$submitProposalAsyncAction
+        .run(() => super.submitProposal(projectId, coverLetter));
+  }
+
   @override
   String toString() {
     return '''

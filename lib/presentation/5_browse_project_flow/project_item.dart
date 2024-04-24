@@ -43,12 +43,12 @@ class ProjectItem extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => ProjectDetail(projectItem: this),
-        //   ),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProjectDetail(project: project),
+          ),
+        );
       },
       child: Card(
         margin: const EdgeInsets.all(8.0),
@@ -60,7 +60,7 @@ class ProjectItem extends StatelessWidget {
               Text(
                 AppLocalizations.of(context).translate('Created') + " : " + '${formatDate(project.createdAt)}',
                 style: TextStyle(
-                  color: Colors.grey,
+                  color: Colors.grey.shade600,
                   fontSize: 14,
                   fontStyle: FontStyle.italic,
                 ),
@@ -93,7 +93,7 @@ class ProjectItem extends StatelessWidget {
               RichText(
                 text: TextSpan(
                   style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                        color: Colors.grey,
+                        color: Colors.grey.shade700,
                         fontWeight: FontWeight.w100,
                         fontSize: 14,
                       ),

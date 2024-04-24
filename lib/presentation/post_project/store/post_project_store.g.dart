@@ -33,6 +33,22 @@ mixin _$ProjectStore on _ProjectStore, Store {
     });
   }
 
+  late final _$fetchSubmitProposalAtom =
+      Atom(name: '_ProjectStore.fetchSubmitProposal', context: context);
+
+  @override
+  ObservableFuture<List<Proposal>?> get fetchSubmitProposal {
+    _$fetchSubmitProposalAtom.reportRead();
+    return super.fetchSubmitProposal;
+  }
+
+  @override
+  set fetchSubmitProposal(ObservableFuture<List<Proposal>?> value) {
+    _$fetchSubmitProposalAtom.reportWrite(value, super.fetchSubmitProposal, () {
+      super.fetchSubmitProposal = value;
+    });
+  }
+
   late final _$fetchProjectFutureAtom =
       Atom(name: '_ProjectStore.fetchProjectFuture', context: context);
 
@@ -145,6 +161,38 @@ mixin _$ProjectStore on _ProjectStore, Store {
     });
   }
 
+  late final _$deletedAtom =
+      Atom(name: '_ProjectStore.deleted', context: context);
+
+  @override
+  bool? get deleted {
+    _$deletedAtom.reportRead();
+    return super.deleted;
+  }
+
+  @override
+  set deleted(bool? value) {
+    _$deletedAtom.reportWrite(value, super.deleted, () {
+      super.deleted = value;
+    });
+  }
+
+  late final _$slideToIndexAtom =
+      Atom(name: '_ProjectStore.slideToIndex', context: context);
+
+  @override
+  int? get slideToIndex {
+    _$slideToIndexAtom.reportRead();
+    return super.slideToIndex;
+  }
+
+  @override
+  set slideToIndex(int? value) {
+    _$slideToIndexAtom.reportWrite(value, super.slideToIndex, () {
+      super.slideToIndex = value;
+    });
+  }
+
   late final _$allProjectListAtom =
       Atom(name: '_ProjectStore.allProjectList', context: context);
 
@@ -161,6 +209,38 @@ mixin _$ProjectStore on _ProjectStore, Store {
     });
   }
 
+  late final _$submitProposalsAtom =
+      Atom(name: '_ProjectStore.submitProposals', context: context);
+
+  @override
+  ObservableList<Proposal>? get submitProposals {
+    _$submitProposalsAtom.reportRead();
+    return super.submitProposals;
+  }
+
+  @override
+  set submitProposals(ObservableList<Proposal>? value) {
+    _$submitProposalsAtom.reportWrite(value, super.submitProposals, () {
+      super.submitProposals = value;
+    });
+  }
+
+  late final _$onlyLikeProjectAtom =
+      Atom(name: '_ProjectStore.onlyLikeProject', context: context);
+
+  @override
+  ProjectList? get onlyLikeProject {
+    _$onlyLikeProjectAtom.reportRead();
+    return super.onlyLikeProject;
+  }
+
+  @override
+  set onlyLikeProject(ProjectList? value) {
+    _$onlyLikeProjectAtom.reportWrite(value, super.onlyLikeProject, () {
+      super.onlyLikeProject = value;
+    });
+  }
+
   late final _$manualLoadingAtom =
       Atom(name: '_ProjectStore.manualLoading', context: context);
 
@@ -174,6 +254,22 @@ mixin _$ProjectStore on _ProjectStore, Store {
   set manualLoading(bool value) {
     _$manualLoadingAtom.reportWrite(value, super.manualLoading, () {
       super.manualLoading = value;
+    });
+  }
+
+  late final _$showLikedOnlyAtom =
+      Atom(name: '_ProjectStore.showLikedOnly', context: context);
+
+  @override
+  bool get showLikedOnly {
+    _$showLikedOnlyAtom.reportRead();
+    return super.showLikedOnly;
+  }
+
+  @override
+  set showLikedOnly(bool value) {
+    _$showLikedOnlyAtom.reportWrite(value, super.showLikedOnly, () {
+      super.showLikedOnly = value;
     });
   }
 
@@ -226,6 +322,32 @@ mixin _$ProjectStore on _ProjectStore, Store {
     return _$getAllProjectsAsyncAction.run(() => super.getAllProjects(param));
   }
 
+  late final _$removeAsyncAction =
+      AsyncAction('_ProjectStore.remove', context: context);
+
+  @override
+  Future<dynamic> remove(int id) {
+    return _$removeAsyncAction.run(() => super.remove(id));
+  }
+
+  late final _$updateLikeProkectAsyncAction =
+      AsyncAction('_ProjectStore.updateLikeProkect', context: context);
+
+  @override
+  Future<dynamic> updateLikeProkect(Project project, bool status) {
+    return _$updateLikeProkectAsyncAction
+        .run(() => super.updateLikeProkect(project, status));
+  }
+
+  late final _$getSubmitProposalAsyncAction =
+      AsyncAction('_ProjectStore.getSubmitProposal', context: context);
+
+  @override
+  Future<dynamic> getSubmitProposal(GetSubmitProposalParams param) {
+    return _$getSubmitProposalAsyncAction
+        .run(() => super.getSubmitProposal(param));
+  }
+
   late final _$_ProjectStoreActionController =
       ActionController(name: '_ProjectStore', context: context);
 
@@ -252,17 +374,6 @@ mixin _$ProjectStore on _ProjectStore, Store {
   }
 
   @override
-  void setSearch(String value) {
-    final _$actionInfo = _$_ProjectStoreActionController.startAction(
-        name: '_ProjectStore.setSearch');
-    try {
-      return super.setSearch(value);
-    } finally {
-      _$_ProjectStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void setFilter(
       int? numberOfStudents, int? projectScopeFlag, int? proposalsLessThan) {
     final _$actionInfo = _$_ProjectStoreActionController.startAction(
@@ -276,9 +387,32 @@ mixin _$ProjectStore on _ProjectStore, Store {
   }
 
   @override
+  void setShowLike(bool isLike) {
+    final _$actionInfo = _$_ProjectStoreActionController.startAction(
+        name: '_ProjectStore.setShowLike');
+    try {
+      return super.setShowLike(isLike);
+    } finally {
+      _$_ProjectStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void getLikedProjectList(ProjectList? value) {
+    final _$actionInfo = _$_ProjectStoreActionController.startAction(
+        name: '_ProjectStore.getLikedProjectList');
+    try {
+      return super.getLikedProjectList(value);
+    } finally {
+      _$_ProjectStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 fetchProjectsFuture: ${fetchProjectsFuture},
+fetchSubmitProposal: ${fetchSubmitProposal},
 fetchProjectFuture: ${fetchProjectFuture},
 getProjectFuture: ${getProjectFuture},
 updateProjectFuture: ${updateProjectFuture},
@@ -286,8 +420,13 @@ projectList: ${projectList},
 apiResponseMessage: ${apiResponseMessage},
 apiResponseSuccess: ${apiResponseSuccess},
 success: ${success},
+deleted: ${deleted},
+slideToIndex: ${slideToIndex},
 allProjectList: ${allProjectList},
+submitProposals: ${submitProposals},
+onlyLikeProject: ${onlyLikeProject},
 manualLoading: ${manualLoading},
+showLikedOnly: ${showLikedOnly},
 globalGetAllProjectParams: ${globalGetAllProjectParams},
 isLoading: ${isLoading}
     ''';

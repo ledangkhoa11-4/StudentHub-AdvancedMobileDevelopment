@@ -6,6 +6,7 @@ import 'package:boilerplate/presentation/6_company_review_proposals/components/w
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
+import 'package:boilerplate/presentation/post_project/store/post_project_store.dart';
 import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
@@ -23,6 +24,7 @@ class _DashBoardState extends State<DashBoardCompany>
   TabController? _tabController;
   late final FormPostProjectStore formStore;
   final UserStore _userStore = getIt<UserStore>();
+  final ProjectStore _projectStore = getIt<ProjectStore>();
 
   @override
   void initState() {
@@ -75,16 +77,35 @@ class _DashBoardState extends State<DashBoardCompany>
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: Observer(builder: (context) {
-        return TabBarView(
-          controller: _tabController,
-          children: <Widget>[
-            Center(child: CompanyProjectList()),
-            Center(child: CompanyWorkingProjectList()),
-            Center(child: CompanyArchievedProjectList()),
-          ],
-        );
-      }),
+      body: Stack(
+        children: [
+          Observer(builder: (context) {
+            return TabBarView(
+              controller: _tabController,
+              children: <Widget>[
+                Center(child: CompanyProjectList()),
+                Center(child: CompanyWorkingProjectList()),
+                Center(child: CompanyArchievedProjectList()),
+              ],
+            );
+          }),
+          Observer(builder: (context) {
+            return !_projectStore.isLoading && _projectStore.success == true
+                ? slideToIndex(_projectStore.slideToIndex)
+                : SizedBox.shrink();
+          }),
+        ],
+      ),
     );
+  }
+
+  Widget slideToIndex(int? value) {
+    if (value != null && _tabController != null) {
+      Future.delayed(Duration(milliseconds: 0), () {
+        _tabController!.animateTo(value!);
+      });
+    }
+    _projectStore.setSlideToIndex(null);
+    return SizedBox.shrink();
   }
 }

@@ -18,7 +18,6 @@ class CompanyWorkingProjectList extends StatefulWidget {
 }
 
 class _ProjectListState extends State<CompanyWorkingProjectList> {
-  // late ProjectList _allProjects = ProjectList(projects: []);
   final ProjectStore _projectStore = getIt<ProjectStore>();
   final UserStore _userStore = getIt<UserStore>();
 
@@ -30,68 +29,85 @@ class _ProjectListState extends State<CompanyWorkingProjectList> {
     }
   }
 
-  // final List<Project> _allProjects2 = [
-  //   Project(
-  //     companyId: 1,
-  //     projectScopeFlag: 0,
-  //     typeFlag: 1,
-  //     id: null,
-  //     createdAt: '2024-01-01',
-  //     updatedAt: null,
-  //     deletedAt: null,
-  //     title: 'UI/UX Dev',
-  //     description:
-  //         'Looking for experienced mobile developers. Experience with Flutter is a plus.',
-  //     numberOfStudents: 4,
-  //   ),
-  // ];
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final workingProjects = _projectStore.projectList!.projects!
-        .where((e) => e.typeFlag == 0)
-        .toList();
     return Scaffold(
-      body: Observer(
-          builder: (context) => workingProjects.length > 0
-              ? Stack(
-                  children: [
-                    Column(
-                      children: [
-                        Expanded(
-                          child: Observer(builder: (context) {
-                            return ListView.builder(
-                              itemCount: workingProjects.length ?? 0,
-                              itemBuilder: (context, index) {
-                                final project = workingProjects![index];
-                                // print(project.toMap());
-                                // print("+++++++++++");
-                                return ProjectItem(
-                                  project: project,
-                                  onLikeChanged: (bool) {},
+      body: RefreshIndicator(
+        onRefresh: () {
+          _projectStore.manualLoading = true;
+          return _projectStore.getProjects();
+        },
+        child: Observer(
+          builder: (context) {
+            final workingProjects = _projectStore.projectList?.projects
+                    ?.where((e) => e.typeFlag == 1)
+                    .toList() ??
+                [];
+
+            return workingProjects.isNotEmpty
+                ? Stack(
+                    children: [
+                      Column(
+                        children: [
+                          Expanded(
+                            child: Observer(
+                              builder: (context) {
+                                return ListView.builder(
+                                  itemCount: workingProjects.length,
+                                  itemBuilder: (context, index) {
+                                    final project = workingProjects[index];
+                                    return ProjectItem(
+                                      project: project,
+                                      onLikeChanged: (bool) {},
+                                    );
+                                  },
                                 );
                               },
-                            );
-                          }),
-                        ),
-                      ],
-                    ),
-                    Observer(builder: (context) {
-                      return Visibility(
-                        visible: _projectStore.isLoading,
-                        child: CustomProgressIndicatorWidget(),
-                      );
-                    }),
-                  ],
-                )
-              : NoProject(
-                  title:
-                      AppLocalizations.of(context).translate('working_projects_list_text'))),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Observer(
+                        builder: (context) {
+                          return Visibility(
+                            visible: _projectStore.isLoading && !_projectStore.manualLoading,
+                            child: CustomProgressIndicatorWidget(),
+                          );
+                        },
+                      ),
+                      Observer(
+                        builder: (context) {
+                          return !_projectStore.isLoading &&
+                                  _projectStore.success == true
+                              ? reloadProject(context)
+                              : SizedBox.shrink();
+                        },
+                      ),
+                      Observer(
+                        builder: (context) {
+                          return !_projectStore.isLoading &&
+                                  _projectStore.deleted == true
+                              ? reloadProject(context)
+                              : SizedBox.shrink();
+                        },
+                      ),
+                    ],
+                  )
+                : NoProject(
+                    title:
+                        AppLocalizations.of(context).translate('working_projects_list_text'),
+                  );
+          },
+        ),
+      ),
     );
+  }
+
+  Widget reloadProject(BuildContext context) {
+    print("KKKKKKKKKKKKKK");
+    _projectStore.getProjects();
+    _projectStore.resetSuccess();
+    _projectStore.resetDeleted();
+    return SizedBox.shrink();
   }
 }

@@ -12,6 +12,7 @@ import 'package:boilerplate/domain/entity/user/experience.dart';
 import 'package:boilerplate/domain/entity/user/language.dart';
 import 'package:boilerplate/domain/entity/user/skillset.dart';
 import 'package:boilerplate/domain/entity/user/tech_stack.dart';
+import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
@@ -28,6 +29,7 @@ import 'package:boilerplate/domain/usecase/user/save_login_in_status_usecase.dar
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_resume_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_transcript_usecase.dart';
 import 'package:boilerplate/presentation/post_project/store/post_project_store.dart';
@@ -67,7 +69,8 @@ abstract class _UserStore with Store {
       this._createEducationUseCase,
       this._createExperiencesUseCase,
       this._createStudentProfileUseCase,
-      this._getProfileFileUseCase) {
+      this._getProfileFileUseCase,
+      this._submitProposalUseCase) {
     // setting up disposers
     _setupDisposers();
 
@@ -97,6 +100,7 @@ abstract class _UserStore with Store {
   final CreateExperiencesUseCase _createExperiencesUseCase;
   final CreateUpdateStudentProfileUseCase _createStudentProfileUseCase;
   final GetProfileFileUseCase _getProfileFileUseCase;
+  final SubmitProposalUseCase _submitProposalUseCase;
 
   // stores:--------------------------------------------------------------------
   // for handling form errors
@@ -148,7 +152,7 @@ abstract class _UserStore with Store {
 
   @observable
   bool? forgotSuccess = null;
-  
+
   @observable
   bool? changeSuccess = null;
 
@@ -211,7 +215,7 @@ abstract class _UserStore with Store {
 
   @observable
   ObservableFuture<dynamic> forgotFuture = emptyLoginResponse;
-  
+
   @observable
   ObservableFuture<dynamic> changeFuture = emptyLoginResponse;
   ObservableFuture<dynamic> createStudentProfileFuture = emptyLoginResponse;
@@ -225,7 +229,7 @@ abstract class _UserStore with Store {
       getMeFuture.status == FutureStatus.pending ||
       createCompanyProfileFuture.status == FutureStatus.pending ||
       forgotFuture.status == FutureStatus.pending ||
-      changeFuture.status == FutureStatus.pending||
+      changeFuture.status == FutureStatus.pending ||
       getAllTechStackFuture.status == FutureStatus.pending ||
       uploadResumeFuture.status == FutureStatus.pending ||
       uploadTranscriptFuture.status == FutureStatus.pending ||
@@ -266,7 +270,8 @@ abstract class _UserStore with Store {
   }
 
   @action
-  Future signup(String fullname, String email, String password, int role) async {
+  Future signup(
+      String fullname, String email, String password, int role) async {
     final SignupParam signupParam = SignupParam(
         fullname: fullname, email: email, password: password, role: role);
     final future = _signupUseCase.call(params: signupParam);
@@ -290,7 +295,7 @@ abstract class _UserStore with Store {
   Future forgot(String email) async {
     final ForgotParams signupParam = ForgotParams(email: email);
     final future = _forgotUseCase.call(params: signupParam);
-    signinFuture = ObservableFuture(future);
+    forgotFuture = ObservableFuture(future);
     await future.then((value) async {
       if (value != null) {
         String message = value.toString();
@@ -299,6 +304,7 @@ abstract class _UserStore with Store {
         this.forgotSuccess = true;
       }
     }).catchError((e) {
+      print(e.response);
       String message = e.response.toString();
       final response = jsonDecode(message);
       this.forgotSuccess = false;
@@ -308,7 +314,8 @@ abstract class _UserStore with Store {
 
   @action
   Future change(String oldPassword, String newPassword) async {
-    final ChangeParams changeParam = ChangeParams(oldPassword: oldPassword, newPassword: newPassword);
+    final ChangeParams changeParam =
+        ChangeParams(oldPassword: oldPassword, newPassword: newPassword);
     final future = _changeUseCase.call(params: changeParam);
     changeFuture = ObservableFuture(future);
     await future.then((value) async {
@@ -323,8 +330,6 @@ abstract class _UserStore with Store {
       this.changeMessage = response["errorDetails"].toString();
     });
   }
-
-
 
   @action
   Future getMe() async {
@@ -672,8 +677,6 @@ abstract class _UserStore with Store {
       apiCallingFeature = ObservableFuture(future);
       await future.then((value) async {
         if (value != null) {
-          print(123);
-
           this.resumeFile = value;
           this.apiResponseSuccess = true;
         }
@@ -686,6 +689,32 @@ abstract class _UserStore with Store {
         this.apiResponseMessage = response["errorDetails"].toString();
       });
     }
+  }
+
+  @action
+  Future submitProposal(int projectId, String coverLetter) async {
+    SubmitProposalParams param = SubmitProposalParams(
+        studentId: this.user!.student!.id!,
+        projectId: projectId,
+        coverLetter: coverLetter);
+    final future = _submitProposalUseCase.call(params: param);
+    apiCallingFeature = ObservableFuture(future);
+    await future.then((value) async {
+      if (value != null) {
+        final projectStore = getIt<ProjectStore>();
+        final GetSubmitProposalParams prms =
+            GetSubmitProposalParams(studentId: this.user!.student!.id!);
+        projectStore.getSubmitProposal(prms);
+        this.apiResponseSuccess = true;
+      }
+    }).catchError((e) {
+      print("---------------");
+      print(e);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.apiResponseSuccess = false;
+      this.apiResponseMessage = response["errorDetails"].toString();
+    });
   }
 
   logout() async {
@@ -706,6 +735,11 @@ abstract class _UserStore with Store {
   resetSigninState() {
     this.signupSuccess = null;
     this.signupMessage = "";
+  }
+
+  resetForgotPasswordState() {
+    this.forgotSuccess = null;
+    this.forgotMessage = "";
   }
 
   resetchangeState() {

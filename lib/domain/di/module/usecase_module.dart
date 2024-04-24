@@ -8,8 +8,11 @@ import 'package:boilerplate/domain/usecase/post/find_post_by_id_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/get_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/insert_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/udpate_post_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/remove_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
@@ -27,6 +30,7 @@ import 'package:boilerplate/domain/usecase/user/save_login_in_status_usecase.dar
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_resume_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_transcript_usecase.dart';
 
@@ -73,7 +77,7 @@ mixin UseCaseModule {
       ForgotUseCase(getIt<UserRepository>()),
     );
     getIt.registerSingleton<ChangeUseCase>(
-      ChangeUseCase(getIt<UserRepository>()));
+        ChangeUseCase(getIt<UserRepository>()));
     getIt.registerSingleton<GetTechStackUseCase>(
       GetTechStackUseCase(getIt<UserRepository>()),
     );
@@ -110,6 +114,10 @@ mixin UseCaseModule {
       GetProfileFileUseCase(getIt<UserRepository>()),
     );
 
+    getIt.registerSingleton<SubmitProposalUseCase>(
+      SubmitProposalUseCase(getIt<UserRepository>()),
+    );
+
     // post:--------------------------------------------------------------------
     getIt.registerSingleton<GetPostUseCase>(
       GetPostUseCase(getIt<PostRepository>()),
@@ -140,12 +148,20 @@ mixin UseCaseModule {
     getIt.registerSingleton<UpdateProjectUseCase>(
       UpdateProjectUseCase(getIt<ProjectRepository>()),
     );
-    // getIt.registerSingleton<DeleteProjectUseCase>(
-    //   DeleteProjectUseCase(getIt<ProjectRepository>()),
-    // );
+    getIt.registerSingleton<RemoveProjectUseCase>(
+      RemoveProjectUseCase(getIt<ProjectRepository>()),
+    );
 
     getIt.registerSingleton<GetAllProjectUseCase>(
       GetAllProjectUseCase(getIt<ProjectRepository>()),
+    );
+
+    getIt.registerSingleton<UpdateFavoriteProjectUseCase>(
+      UpdateFavoriteProjectUseCase(getIt<ProjectRepository>()),
+    );
+
+    getIt.registerSingleton<GetSubmitProposalUseCase>(
+      GetSubmitProposalUseCase(getIt<ProjectRepository>()),
     );
   }
 }

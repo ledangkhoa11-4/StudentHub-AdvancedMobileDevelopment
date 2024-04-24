@@ -18,8 +18,6 @@ class ProjectList extends StatefulWidget {
 
 class _ProjectListState extends State<ProjectList> {
   final ProjectStore _projectStore = getIt<ProjectStore>();
-
-  bool _showLikedOnly = false;
   TextEditingController _controller = new TextEditingController();
 
   @override
@@ -112,7 +110,7 @@ class _ProjectListState extends State<ProjectList> {
                             _projectStore.globalGetAllProjectParams.title !=
                                     null
                                 ? Icons.filter_alt_outlined
-                                : _showLikedOnly
+                                : _projectStore.showLikedOnly
                                     ? Icons.favorite
                                     : Icons.favorite_border,
                           ),
@@ -120,6 +118,9 @@ class _ProjectListState extends State<ProjectList> {
                             if (_projectStore.globalGetAllProjectParams.title !=
                                 null) {
                               _showFilterDialog(context);
+                            } else {
+                              _projectStore
+                                  .setShowLike(!_projectStore.showLikedOnly);
                             }
                           },
                           color:
@@ -134,28 +135,56 @@ class _ProjectListState extends State<ProjectList> {
                 ),
                 Expanded(
                   child: Observer(
-                    builder: (context) => _projectStore.allProjectList !=
-                                null &&
-                            _projectStore.allProjectList!.projects!.length > 0
-                        ? ListView.builder(
-                            itemCount: _projectStore
-                                    .allProjectList?.projects?.length ??
-                                0,
-                            itemBuilder: (context, index) {
-                              final project =
-                                  _projectStore.allProjectList![index];
-                              return ProjectItem(
-                                project: project,
-                                isLiked: false,
-                                onLikeChanged: (bool isLiked) {},
-                              );
-                            },
-                          )
-                        : Center(
-                            child: Text(_projectStore.isLoading
-                                ? ""
-                                : "No project found"),
-                          ),
+                    builder: (context) => _projectStore.showLikedOnly
+                        ? _projectStore.onlyLikeProject != null &&
+                                _projectStore
+                                        .onlyLikeProject!.projects!.length >
+                                    0
+                            ? ListView.builder(
+                                itemCount: _projectStore
+                                        .onlyLikeProject?.projects?.length ??
+                                    0,
+                                itemBuilder: (context, index) {
+                                  final project =
+                                      _projectStore.onlyLikeProject![index];
+                                  return ProjectItem(
+                                    project: project,
+                                    isLiked: project.isFavorite ?? false,
+                                    onLikeChanged: (bool isLiked) {
+                                       _projectStore.updateLikeProkect(project, isLiked);
+                                    },
+                                  );
+                                },
+                              )
+                            : Center(
+                                child: Text(_projectStore.isLoading
+                                    ? ""
+                                    : "No project found"),
+                              )
+                        : _projectStore.allProjectList != null &&
+                                _projectStore.allProjectList!.projects!.length >
+                                    0
+                            ? ListView.builder(
+                                itemCount: _projectStore
+                                        .allProjectList?.projects?.length ??
+                                    0,
+                                itemBuilder: (context, index) {
+                                  final project =
+                                      _projectStore.allProjectList![index];
+                                  return ProjectItem(
+                                    project: project,
+                                    isLiked: project.isFavorite ?? false,
+                                    onLikeChanged: (bool isLiked) {
+                                      _projectStore.updateLikeProkect(project, isLiked);
+                                    },
+                                  );
+                                },
+                              )
+                            : Center(
+                                child: Text(_projectStore.isLoading
+                                    ? ""
+                                    : "No project found"),
+                              ),
                   ),
                 ),
               ],
