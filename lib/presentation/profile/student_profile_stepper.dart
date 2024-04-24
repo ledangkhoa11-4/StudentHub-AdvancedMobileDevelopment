@@ -1,5 +1,6 @@
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
+import '../../utils/locale/app_localization.dart';
 
 class StudentFormStepper extends StatefulWidget{
   StudentFormStepper({required this.activeStep});
@@ -38,7 +39,7 @@ class _StudentFormStepperState extends State<StudentFormStepper> {
                     widget.activeStep >= 0 ? Theme.of(context).colorScheme.primary : Colors.white,
               ),
             ),
-            title: 'Information',
+            title: AppLocalizations.of(context).translate('info'),
           
           ),
           EasyStep(
@@ -51,7 +52,7 @@ class _StudentFormStepperState extends State<StudentFormStepper> {
                      widget.activeStep >= 1 ? Theme.of(context).colorScheme.primary : Colors.white,
               ),
             ),
-            title: 'Experience',
+            title: AppLocalizations.of(context).translate('exp'),
             topTitle: true,
           ),
           EasyStep(
@@ -64,7 +65,7 @@ class _StudentFormStepperState extends State<StudentFormStepper> {
                   widget.activeStep >= 2 ? Theme.of(context).colorScheme.primary : Colors.white,
               ),
             ),
-            title: 'Resume',
+            title: AppLocalizations.of(context).translate('Resume'),
           ),
         ],
     );

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import '../../utils/locale/app_localization.dart';
 
 class ReviewStudentProfile extends StatefulWidget {
   @override
@@ -24,7 +25,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: UserAppBar.buildAppBar(context,
-            titleWidget: Text("Your profile"), disableSettingAccount: true),
+            titleWidget: Text(AppLocalizations.of(context).translate('y_prof')), disableSettingAccount: true),
         body: Stack(
           children: [
             Column(
@@ -48,7 +49,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                                 width: 80,
                                 height: 40,
                                 child: RoundedButtonWidget(
-                                  buttonText: "Edit",
+                                  buttonText: AppLocalizations.of(context).translate('edit'),
                                   buttonColor:
                                       Theme.of(context).colorScheme.primary,
                                   textColor: Colors.white,
@@ -63,7 +64,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                             ],
                           ),
                           Text(
-                            "Main techstack: ",
+                            AppLocalizations.of(context).translate('Main_techstack') +": ",
                             style: Theme.of(context)
                                 .textTheme
                                 .labelLarge!
@@ -87,7 +88,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                             ),
                           ),
                           Text(
-                            "Main skillsets: ",
+                            AppLocalizations.of(context).translate('Main_skill') +": ",
                             style: Theme.of(context)
                                 .textTheme
                                 .labelLarge!
@@ -111,7 +112,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                             ),
                           ),
                           Text(
-                            "Languages: ",
+                            AppLocalizations.of(context).translate('Languages') + ": ",
                             style: Theme.of(context)
                                 .textTheme
                                 .labelLarge!
@@ -141,7 +142,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                             ),
                           ),
                           Text(
-                            "Education: ",
+                            AppLocalizations.of(context).translate('Education') +": ",
                             style: Theme.of(context)
                                 .textTheme
                                 .labelLarge!
@@ -171,7 +172,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                             ),
                           ),
                           Text(
-                            "Experiences: ",
+                            AppLocalizations.of(context).translate('Experiences') + ": ",
                             style: Theme.of(context)
                                 .textTheme
                                 .labelLarge!
@@ -184,7 +185,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                                   padding:
                                       const EdgeInsets.only(left: 20, top: 10),
                                   child: Text(
-                                    'Empty',
+                                    AppLocalizations.of(context).translate('empt'),
                                     style:
                                         Theme.of(context).textTheme.labelLarge,
                                   ),
@@ -208,13 +209,13 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                                             .labelLarge,
                                       ),
                                       Text(
-                                        'Description: ${e.description}',
+                                        AppLocalizations.of(context).translate('Description') + ': ${e.description}',
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelMedium,
                                       ),
                                       Text(
-                                        'Skillsets: ${e.skillSets!.map((e) => e.name).toList().join(", ")}.',
+                                        AppLocalizations.of(context).translate('Skillsets') + ': ${e.skillSets!.map((e) => e.name).toList().join(", ")}.',
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelMedium,
@@ -242,7 +243,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                                     Navigator.of(context)
                                         .push(MaterialPageRoute(
                                             builder: (context) => ViewPdfScreen(
-                                                  title: "Your transcript",
+                                                  title: AppLocalizations.of(context).translate('Your_trans'),
                                                   url:
                                                       _userStore.transcriptFile,
                                                 )));
@@ -253,7 +254,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                                     });
                                   }
                                 },
-                                child: Text('View transcript'),
+                                child: Text(AppLocalizations.of(context).translate('view_trans')),
                               ),
                               ElevatedButton(
                                 onPressed: () {
@@ -261,7 +262,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                                     Navigator.of(context)
                                         .push(MaterialPageRoute(
                                             builder: (context) => ViewPdfScreen(
-                                                  title: "Your resume",
+                                                  title: AppLocalizations.of(context).translate('Your_re'),
                                                   url: _userStore.resumeFile,
                                                 )));
                                   } else {
@@ -271,7 +272,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                                     });
                                   }
                                 },
-                                child: Text('View resume'),
+                                child: Text(AppLocalizations.of(context).translate('view_re')),
                               ),
                             ],
                           ),
@@ -307,7 +308,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
       if (_nextNavigate == 1) {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ViewPdfScreen(
-                  title: "Your transcript",
+                  title: AppLocalizations.of(context).translate('Your_trans'),
                   url: _userStore.transcriptFile,
                 )));
       }
@@ -315,7 +316,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
       if (_nextNavigate == 2) {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ViewPdfScreen(
-                  title: "Your resume",
+                  title: AppLocalizations.of(context).translate('Your_re'),
                   url: _userStore.resumeFile,
                 )));
       }

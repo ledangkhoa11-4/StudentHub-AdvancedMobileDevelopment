@@ -10,6 +10,7 @@ import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/message/message.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class TabData {
   const TabData({required this.icon, required this.text, required this.screen});
@@ -29,17 +30,17 @@ class UserNavigationBar {
     final iconList = <TabData>[
       TabData(
           icon: BootstrapIcons.kanban,
-          text: "Project",
+          text: AppLocalizations.of(context).translate('project'),
           screen: isStudent ? ProjectList() : DashBoardCompany()),
       TabData(
           icon: BootstrapIcons.clipboard_data,
-          text: "Dashboard",
+          text:  AppLocalizations.of(context).translate('dashboard'),
           screen: isStudent ? DashBoardStudent() : DashBoardCompany()),
       TabData(
           icon: BootstrapIcons.chat_dots,
-          text: "Message",
+          text: AppLocalizations.of(context).translate('message'),
           screen: MessageScreen()),
-      TabData(icon: BootstrapIcons.bell, text: "Alert", screen: AlertScreen()),
+      TabData(icon: BootstrapIcons.bell, text: AppLocalizations.of(context).translate('alert'), screen: AlertScreen()),
     ];
     return AnimatedBottomNavigationBar.builder(
       height: 80,

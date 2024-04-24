@@ -1,6 +1,6 @@
 import 'package:boilerplate/constants/assets.dart';
 import 'package:flutter/material.dart';
-
+import 'package:boilerplate/utils/locale/app_localization.dart';
 class Candidate extends StatefulWidget {
   @override
   _CandidateState createState() => _CandidateState();
@@ -48,33 +48,33 @@ class _CandidateState extends State<Candidate> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Fullstack Engineer', style: Theme.of(context).textTheme.labelLarge),
-                Text('Excellent', style: Theme.of(context).textTheme.labelLarge!.copyWith(fontStyle: FontStyle.italic)),
+                Text(AppLocalizations.of(context).translate('fullstack_Engineer'), style: Theme.of(context).textTheme.labelLarge),
+                Text(AppLocalizations.of(context).translate('excellent'), style: Theme.of(context).textTheme.labelLarge!.copyWith(fontStyle: FontStyle.italic)),
               ],
             ),
             SizedBox(height: 14.0),
             Text(
-                'I have gone through your project and it seem like a great project. I will commit for your project...',
+                AppLocalizations.of(context).translate('cand_text'),
                 style:
                     TextStyle(fontStyle: FontStyle.italic, color: Theme.of(context).colorScheme.onSecondary)),
             SizedBox(height: 14.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ElevatedButton(onPressed: () {}, child: Text('Message')),
+                ElevatedButton(onPressed: () {}, child: Text(AppLocalizations.of(context).translate('message'))),
                 ElevatedButton(
                   onPressed: () {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Center(child: Text("Hired offer")),
+                          title: Center(child: Text(AppLocalizations.of(context).translate('hired_offer'))),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Center(
                                 child: Text(
-                                  "Do you really want to send hired offer for student to do this project?",
+        AppLocalizations.of(context).translate('candi_q'),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -88,7 +88,7 @@ class _CandidateState extends State<Candidate> {
                                       Navigator.of(context)
                                           .pop(); // Close the dialog
                                     },
-                                    child: Text("Cancel"),
+                                    child: Text(AppLocalizations.of(context).translate('cancel')),
                                   ),
                                   ElevatedButton(
                                     onPressed: () {
@@ -98,7 +98,7 @@ class _CandidateState extends State<Candidate> {
                                       Navigator.of(context)
                                           .pop(); // Close the dialog
                                     },
-                                    child: Text("Send"),
+                                    child: Text(AppLocalizations.of(context).translate('send')),
                                   ),
                                 ],
                               ),
@@ -108,7 +108,7 @@ class _CandidateState extends State<Candidate> {
                       },
                     );
                   },
-                  child: Text(isOfferSent ? 'Sent hired offer' : 'Hire'),
+                  child: Text(isOfferSent ? AppLocalizations.of(context).translate('sent_hired_offer') : ''),
                 )
               ],
             )

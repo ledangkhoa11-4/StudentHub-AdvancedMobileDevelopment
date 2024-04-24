@@ -4,7 +4,7 @@ import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'project_list.dart';
 
 class DashBoardStudent extends StatefulWidget {
@@ -32,13 +32,13 @@ class _DashBoardState extends State<DashBoardStudent>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context,
-          titleWidget: Text("Your Projects"),
+          titleWidget: Text(AppLocalizations.of(context).translate('your_pr')),
           tabBar: TabBar(
             controller: _tabController,
             tabs: [
-              Tab(icon: Icon(Icons.dashboard), text: "All Projects"),
-              Tab(icon: Icon(Icons.settings), text: "Working"),
-              Tab(icon: Icon(Icons.sticky_note_2), text: "Archieved"),
+              Tab(icon: Icon(Icons.dashboard), text: AppLocalizations.of(context).translate('all_pr')),
+              Tab(icon: Icon(Icons.settings), text: AppLocalizations.of(context).translate('working')),
+              Tab(icon: Icon(Icons.sticky_note_2), text: AppLocalizations.of(context).translate('archieved')),
             ],
           )),
       bottomNavigationBar:
@@ -58,7 +58,7 @@ class _DashBoardState extends State<DashBoardStudent>
                       BorderRadius.circular(10.0), // Example border radius
                 ),
                 child: Text(
-                  'Active proposal (0)',
+                  AppLocalizations.of(context).translate('ac_proposal'),
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 18.0,

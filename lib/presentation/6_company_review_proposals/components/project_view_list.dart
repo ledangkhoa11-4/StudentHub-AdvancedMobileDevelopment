@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:boilerplate/presentation/6_company_review_proposals/components/project_view_item.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class CompanyProjectList extends StatefulWidget {
   CompanyProjectList({Key? key}) : super(key: key);
@@ -91,7 +92,7 @@ class _ProjectListState extends State<CompanyProjectList> {
                 )
               : NoProject(
                   title:
-                      "No project found. \nLet's start posting your first project")),
+                      AppLocalizations.of(context).translate('project_view_list_text'))),
     );
   }
 }

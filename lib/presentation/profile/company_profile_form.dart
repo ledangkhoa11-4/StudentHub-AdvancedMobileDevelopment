@@ -67,7 +67,7 @@ class _CompanyProfileFormState extends State<CompanyProfileForm> {
             height: 40,
           ),
           Text(
-            "How many people are in your company?",
+            AppLocalizations.of(context).translate('many_people_question'),
             style: Theme.of(context).textTheme.labelLarge,
           ),
           SizedBox(
@@ -100,11 +100,11 @@ class _CompanyProfileFormState extends State<CompanyProfileForm> {
             height: 15,
           ),
           Text(
-            "Company Name",
+            AppLocalizations.of(context).translate('Company_name'),
             style: Theme.of(context).textTheme.labelLarge,
           ),
           TextFieldWidget(
-            hint: "Your company name",
+            hint: AppLocalizations.of(context).translate('Your_com_name'),
             padding: EdgeInsets.only(top: 15, bottom: 15),
             icon: Icons.work,
             iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
@@ -115,11 +115,11 @@ class _CompanyProfileFormState extends State<CompanyProfileForm> {
             },
           ),
           Text(
-            "Website",
+            AppLocalizations.of(context).translate('Website'),
             style: Theme.of(context).textTheme.labelLarge,
           ),
           TextFieldWidget(
-            hint: "Your website url",
+            hint: AppLocalizations.of(context).translate('your_web_url'),
             padding: EdgeInsets.only(top: 15, bottom: 15),
             icon: BootstrapIcons.globe,
             iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
@@ -130,11 +130,11 @@ class _CompanyProfileFormState extends State<CompanyProfileForm> {
             },
           ),
           Text(
-            "Description",
+           AppLocalizations.of(context).translate('Description'),
             style: Theme.of(context).textTheme.labelLarge,
           ),
           TextFieldWidget(
-            hint: "Some things about your work",
+            hint: AppLocalizations.of(context).translate('some_thing_ques'),
             inputType: TextInputType.multiline,
             padding: EdgeInsets.only(top: 15, bottom: 15),
             icon: BootstrapIcons.info_circle,
@@ -146,7 +146,7 @@ class _CompanyProfileFormState extends State<CompanyProfileForm> {
             },
           ),
           RoundedButtonWidget(
-            buttonText: isEdit ? "Update" : "Continue",
+            buttonText: isEdit ? AppLocalizations.of(context).translate('Update') : AppLocalizations.of(context).translate('Continue'),
             buttonColor: Theme.of(context).colorScheme.primary,
             textColor: Colors.white,
             onPressed: () {

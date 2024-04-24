@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:intl/intl.dart';
 import '../../../domain/entity/project/project.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class ProjectItem extends StatelessWidget {
   final Project project;
@@ -91,7 +92,7 @@ class ProjectItem extends StatelessWidget {
                 ],
               ),
               Text(
-                'Created: ' + formatDate('${project!.createdAt}'),
+                AppLocalizations.of(context).translate('Created') + ' : ' + formatDate('${project!.createdAt}'),
                 style: TextStyle(
                     color: grayColor,
                     fontSize: 12,
@@ -99,7 +100,7 @@ class ProjectItem extends StatelessWidget {
               ),
               SizedBox(height: 8.0),
               Text(
-                'Find ${project.numberOfStudents} students with criteria:',
+                AppLocalizations.of(context).translate('find') + ' ${project.numberOfStudents} '+ AppLocalizations.of(context).translate('students_cre'),
                 style: Theme.of(context).textTheme.titleSmall,
               ),
               if (_controller != null)
@@ -138,7 +139,7 @@ class ProjectItem extends StatelessWidget {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        'Proposals',
+                        AppLocalizations.of(context).translate('Proposals'),
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ],
@@ -149,7 +150,7 @@ class ProjectItem extends StatelessWidget {
                       Text('${project.countMessages}',
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       Text(
-                        'Messages',
+                        AppLocalizations.of(context).translate('messages'),
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ],
@@ -160,7 +161,7 @@ class ProjectItem extends StatelessWidget {
                       Text('${project.countHired}',
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       Text(
-                        'Hired',
+                        AppLocalizations.of(context).translate('hired'),
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ],

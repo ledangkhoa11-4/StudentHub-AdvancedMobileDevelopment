@@ -11,6 +11,7 @@ import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class AuthWidget extends StatefulWidget {
   @override
@@ -88,7 +89,7 @@ class _AuthWidgetState extends State<AuthWidget> {
           MaterialPageRoute(builder: (context) => LoginScreen()),
           (Route<dynamic> route) => false);
 
-          ToastHelper.error("Unknow Error");
+          ToastHelper.error(AppLocalizations.of(context).translate('unk_err'));
     });
 
     return Container();

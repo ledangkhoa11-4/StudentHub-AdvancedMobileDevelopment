@@ -3,6 +3,7 @@ import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/message/components/conversation_list.dart';
 import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class MessageScreen extends StatefulWidget {
   @override
@@ -70,7 +71,7 @@ class _MessageScreenState extends State<MessageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: UserAppBar.buildAppBar(context, titleWidget: Text("Message")),
+      appBar: UserAppBar.buildAppBar(context, titleWidget: Text(AppLocalizations.of(context).translate('message'))),
       bottomNavigationBar:
           UserNavigationBar.buildNavigationBar(context, setState: setState),
       body: SingleChildScrollView(
@@ -82,7 +83,7 @@ class _MessageScreenState extends State<MessageScreen> {
               padding: EdgeInsets.only(top: 16, left: 16, right: 16),
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: "Search...",
+                  hintText: AppLocalizations.of(context).translate('search'),
                   hintStyle: TextStyle(color: Colors.grey.shade600),
                   prefixIcon: Icon(
                     Icons.search,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'project_detail.dart'; // Import the ProjectDetail page
 import '../../domain/entity/project/project.dart';
-
+import 'package:boilerplate/utils/locale/app_localization.dart';
 class ProjectItemType2 extends StatelessWidget {
   final Project project;
   final bool isLiked;
@@ -43,12 +43,12 @@ class ProjectItemType2 extends StatelessWidget {
                 ],
               ),
               Text(
-                'Submitted on ${project.createdAt ?? "a date"}', // Placeholder for created date
+                AppLocalizations.of(context).translate('sub_on') + ' ${project.createdAt ?? "date"}',// Placeholder for created date
                 style: TextStyle(color: grayColor),
               ),
               SizedBox(height: 8.0),
               Text(
-                'Project details:',
+                AppLocalizations.of(context).translate('pr_de'),
                 style: Theme.of(context).textTheme.subtitle1,
               ),
               Text(
@@ -57,7 +57,7 @@ class ProjectItemType2 extends StatelessWidget {
               ),
               SizedBox(height: 8.0),
               Text(
-                'Number of students: ${project.numberOfStudents}',
+                AppLocalizations.of(context).translate('num_s')+ '${project.numberOfStudents}',
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             ],

@@ -7,7 +7,6 @@ import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import '../../../domain/entity/project/project.dart';
-
 class CustomBottomSheetContent extends StatefulWidget {
   final Project project;
 
@@ -33,7 +32,7 @@ class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
               BootstrapIcons.people,
               size: 20,
             ),
-            title: Text("View proposals",
+            title: Text(AppLocalizations.of(context).translate('view_proposals'),
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -47,7 +46,7 @@ class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
           ),
           ListTile(
             leading: Icon(BootstrapIcons.chat_left_text, size: 20),
-            title: Text("View messages",
+            title: Text(AppLocalizations.of(context).translate('view_messages'),
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -61,7 +60,7 @@ class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
           ),
           ListTile(
             leading: Icon(BootstrapIcons.person_workspace, size: 20),
-            title: Text("View hired",
+            title: Text(AppLocalizations.of(context).translate('view_hired'),
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -79,7 +78,7 @@ class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
           ),
           ListTile(
             leading: Icon(BootstrapIcons.eye, size: 20),
-            title: Text("View project",
+            title: Text(AppLocalizations.of(context).translate('view_project'),
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -93,7 +92,7 @@ class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
           ),
           ListTile(
             leading: Icon(BootstrapIcons.pencil_square, size: 20),
-            title: Text("Edit project",
+            title: Text(AppLocalizations.of(context).translate('edit_project'),
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -109,7 +108,7 @@ class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
           ),
           ListTile(
             leading: Icon(BootstrapIcons.x_square, size: 20),
-            title: Text("Remove project",
+            title: Text(AppLocalizations.of(context).translate('remove_project'),
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -124,7 +123,7 @@ class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
           ),
           ListTile(
             leading: Icon(BootstrapIcons.align_start, size: 20),
-            title: Text("Start working this project",
+            title: Text(AppLocalizations.of(context).translate('start_pr'),
                 style: TextStyle(
                   fontSize: 16,
                 )),
@@ -135,7 +134,7 @@ class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
           ),
           ListTile(
             leading: Icon(BootstrapIcons.archive, size: 20),
-            title: Text("Archive this project",
+            title: Text(AppLocalizations.of(context).translate('archive_pr'),
                 style: TextStyle(
                   fontSize: 16,
                 )),

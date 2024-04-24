@@ -3,13 +3,12 @@ import 'package:boilerplate/presentation/post_project/components/unordered_list.
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
-
+import 'package:boilerplate/utils/locale/app_localization.dart';
 class SubmitScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     QuillController _quillController = QuillController.basic();
     final _tooltipController = JustTheController();
-
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context),
       body: QuillProvider(
@@ -30,7 +29,7 @@ class SubmitScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Project description:",
+                      AppLocalizations.of(context).translate('pr_des'),
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     JustTheTooltip(
@@ -48,10 +47,10 @@ class SubmitScreen extends StatelessWidget {
                       content: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: UnorderedList([
-                          "Describe why do you fit to this project",
-                          "State your strengths",
-                          "Experience that you have had",
-                        ], "Hint:"),
+                          AppLocalizations.of(context).translate('des_1'),
+                          AppLocalizations.of(context).translate('des_2'),
+                          AppLocalizations.of(context).translate('des_3'),
+                        ], AppLocalizations.of(context).translate('pr_des')),
                       ),
                     )
                   ],
@@ -81,11 +80,11 @@ class SubmitScreen extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () {},
-                      child: Text('Cancel'),
+                      child: Text(AppLocalizations.of(context).translate('cancel')),
                     ),
                     ElevatedButton(
                       onPressed: () {},
-                      child: Text('Submit proposal'),
+                      child: Text(AppLocalizations.of(context).translate('sub_propasal')),
                     ),
                   ],
                 ),

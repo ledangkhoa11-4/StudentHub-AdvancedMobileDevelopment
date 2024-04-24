@@ -11,6 +11,7 @@ import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class DashBoardCompany extends StatefulWidget {
   @override
@@ -42,17 +43,17 @@ class _DashBoardState extends State<DashBoardCompany>
           titleWidget: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Dashboard'),
+              Text(AppLocalizations.of(context).translate('dashboard')),
             ],
           ),
           tabBar: TabBar(
             controller: _tabController,
             tabs: [
-              Tab(icon: Icon(Icons.dashboard), text: "All Projects"),
+              Tab(icon: Icon(Icons.dashboard), text:AppLocalizations.of(context).translate('all_pr')),
               Tab(
                   icon: Icon(BootstrapIcons.gear_wide_connected),
-                  text: "Working"),
-              Tab(icon: Icon(BootstrapIcons.archive), text: "Archieved"),
+                  text: AppLocalizations.of(context).translate('working')),
+              Tab(icon: Icon(BootstrapIcons.archive), text: AppLocalizations.of(context).translate('archieved')),
             ],
           )),
       bottomNavigationBar:
@@ -69,7 +70,7 @@ class _DashBoardState extends State<DashBoardCompany>
           if (_userStore.user?.company != null) {
             Navigator.pushNamed(context, Routes.postProject);
           } else {
-            ToastHelper.error("You have to create your profile compnay first");
+            ToastHelper.error(AppLocalizations.of(context).translate('com_pro_dash_text'));
           }
         },
       ),
