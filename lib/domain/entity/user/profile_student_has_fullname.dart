@@ -15,7 +15,7 @@ class ProfileStudentHasFullName {
   List<ProfileLanguage>? languages;
   List<Education>? educations;
   List<Experience>? experiences;
-  String? fullname; // Added fullname field
+  String? fullname;
 
   ProfileStudentHasFullName({
     this.id,
@@ -31,8 +31,8 @@ class ProfileStudentHasFullName {
   });
 
   factory ProfileStudentHasFullName.fromMap(Map<String, dynamic> json) {
-    final student = json["student"] as Map<String, dynamic>;
-    final user = student["user"] as Map<String, dynamic>;
+    // print("========================================");
+    // print(json["user"]["fullname"]);
     List<dynamic> languagesObj =
         json["languages"] != null ? json["languages"] : [];
     final languages =
@@ -57,7 +57,8 @@ class ProfileStudentHasFullName {
       languages: languages,
       educations: educations,
       experiences: experiences,
-      fullname: user["fullname"], // Extracted fullname from nested user object
+      fullname: json["user"]["fullname"]
+          .toString(), // Extracted fullname from nested user object: user{fullname: "Funny Company"}
     );
   }
 
@@ -78,7 +79,7 @@ class ProfileStudentHasFullName {
       'experiences': experiences != null
           ? experiences!.map((experience) => experience.toJson()).toList()
           : null,
-      'fullname': fullname, // Added fullname field to JSON
+      'fullname': fullname,
     };
   }
 }

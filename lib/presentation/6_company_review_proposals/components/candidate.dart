@@ -57,11 +57,12 @@ class _CandidateState extends State<Candidate> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hung Le',
+                      widget.proposal.student.fullname.toString(),
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                     Text(
-                      '4th year student',
+                      widget.proposal.student.educations![0]
+                          .schoolName, // 4th year student
                       style: Theme.of(context)
                           .textTheme
                           .labelMedium!
@@ -77,7 +78,7 @@ class _CandidateState extends State<Candidate> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Fullstack Engineer',
+                Text(widget.proposal.student.techStack!.name.toString(),
                     style: Theme.of(context).textTheme.labelLarge),
                 Text('Excellent',
                     style: Theme.of(context)
