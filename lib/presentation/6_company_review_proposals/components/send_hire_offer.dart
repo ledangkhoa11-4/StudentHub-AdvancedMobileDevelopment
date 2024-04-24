@@ -67,7 +67,7 @@ class _SendHireOffer extends State<SendHireOffer>
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          CandidateList(),
+          CandidateList(project: widget.project),
           Detail(
             project: widget.project,
           ),
