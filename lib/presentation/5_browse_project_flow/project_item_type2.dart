@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
+import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/proposal/proposal.dart';
+import 'package:boilerplate/domain/usecase/user/update_proposal_usecase.dart';
+import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/post_project/components/unordered_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -18,8 +21,22 @@ class ProjectItemType2 extends StatelessWidget {
     required this.proposal,
   }) : super(key: key);
 
+  UpdateProposalParam constructUpdateProposalParam(
+      int statusFlag, int disableFlag) {
+    return UpdateProposalParam(
+      // proposalId: widget.proposal.id,
+      projectId: this.proposal.projectId,
+      studentId: this.proposal.studentId,
+      coverLetter: this.proposal.coverLetter,
+      statusFlag: statusFlag,
+      disableFlag: disableFlag,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final UserStore _userStore = getIt<UserStore>();
+
     QuillController? _controller;
     final _tooltipController = JustTheController();
 
@@ -107,7 +124,56 @@ class ProjectItemType2 extends StatelessWidget {
                           buttonText: "Accept hire request",
                           buttonColor: Theme.of(context).colorScheme.primary,
                           textColor: Colors.white,
-                          onPressed: () {},
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Center(
+                                      child: Text("Accept hire request")),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Center(
+                                        child: Text(
+                                          "Do you really want to accept this hire request?",
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(); // Close the dialog
+                                            },
+                                            child: Text("Cancel"),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              UpdateProposalParam
+                                                  updatedProposal =
+                                                  constructUpdateProposalParam(
+                                                      ProposalType.OFFER.value,
+                                                      0);
+                                              _userStore.updateProposalById(
+                                                  this.proposal.id,
+                                                  updatedProposal);
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text("Yes"),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
                         ),
                         JustTheTooltip(
                           controller: _tooltipController,
