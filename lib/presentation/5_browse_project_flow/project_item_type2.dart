@@ -1,23 +1,37 @@
+import 'dart:convert';
+
+import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
+import 'package:boilerplate/domain/entity/proposal/proposal.dart';
+import 'package:boilerplate/presentation/post_project/components/unordered_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
+import 'package:moment_dart/moment_dart.dart';
 // import 'project_detail.dart'; // Import the ProjectDetail page
 import '../../domain/entity/project/project.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+
 class ProjectItemType2 extends StatelessWidget {
-  final Project project;
-  final bool isLiked;
-  final Function(bool) onLikeChanged;
+  final Proposal proposal;
 
   const ProjectItemType2({
     Key? key,
-    required this.project,
-    required this.isLiked,
-    required this.onLikeChanged,
+    required this.proposal,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final Color greenColor = Color.fromARGB(255, 48, 121, 51);
-    final Color grayColor = const Color.fromARGB(255, 134, 132, 132);
+    QuillController? _controller;
+    final _tooltipController = JustTheController();
+
+    try {
+      final controller = QuillController(
+          document: Document.fromJson(jsonDecode(proposal.project.description)),
+          selection: const TextSelection.collapsed(offset: 0));
+      _controller = controller;
+    } catch (e) {
+      _controller = null;
+    }
 
     return GestureDetector(
       child: Card(
@@ -28,38 +42,99 @@ class ProjectItemType2 extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    AppLocalizations.of(context).translate('sub') + ' ${Moment(DateTime.parse(proposal.createdAt)).fromNow()}', // Placeholder for created date
+                    style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                    textAlign: TextAlign.right,
+                  ),
+                ],
+              ),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
                     child: Text(
-                      project.title,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6!
-                          .copyWith(color: greenColor),
+                      proposal.project.title,
+                      style: Theme.of(context).textTheme.headline6!.copyWith(
+                          color: Theme.of(context).colorScheme.primary),
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
               ),
-              Text(
-                AppLocalizations.of(context).translate('sub_on') + ' ${project.createdAt ?? "date"}',// Placeholder for created date
-                style: TextStyle(color: grayColor),
-              ),
               SizedBox(height: 8.0),
               Text(
-                AppLocalizations.of(context).translate('pr_de'),
-                style: Theme.of(context).textTheme.subtitle1,
+                AppLocalizations.of(context).translate('stu_look'),
+                style: Theme.of(context)
+                    .textTheme
+                    .labelSmall!
+                    .copyWith(fontSize: 14),
               ),
-              Text(
-                project.description,
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              SizedBox(height: 8.0),
-              Text(
-                AppLocalizations.of(context).translate('num_s')+ '${project.numberOfStudents}',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
+              if (_controller != null)
+                IgnorePointer(
+                  ignoring: true,
+                  child: QuillProvider(
+                    configurations: QuillConfigurations(
+                      controller: _controller,
+                      sharedConfigurations: const QuillSharedConfigurations(
+                        locale: Locale('en'),
+                      ),
+                    ),
+                    child: QuillEditor.basic(
+                      configurations: const QuillEditorConfigurations(
+                        readOnly: true,
+                      ),
+                    ),
+                  ),
+                ),
+              if (_controller == null)
+                Text(
+                  proposal.project.description,
+                  style: Theme.of(context).textTheme.bodyText1?.copyWith(),
+                ),
+              if (proposal.statusFlag == ProposalType.OFFER.value)
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RoundedButtonWidget(
+                          buttonText: AppLocalizations.of(context).translate('acp_hi_req'),
+                          buttonColor: Theme.of(context).colorScheme.primary,
+                          textColor: Colors.white,
+                          onPressed: () {},
+                        ),
+                        JustTheTooltip(
+                          controller: _tooltipController,
+                          isModal: true,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.help_outline_outlined,
+                              size: 16,
+                            ),
+                            onPressed: () {
+                              try {
+                                _tooltipController.showTooltip();
+                              } catch (e) {}
+                            },
+                          ),
+                          content: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: UnorderedList([
+                              AppLocalizations.of(context).translate('Congr_inv'),
+                            ], AppLocalizations.of(context).translate('note')),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                )
             ],
           ),
         ),

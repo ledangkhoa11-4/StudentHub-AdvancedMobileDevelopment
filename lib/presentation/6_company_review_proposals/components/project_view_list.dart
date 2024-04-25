@@ -103,7 +103,7 @@ class _ProjectListState extends State<CompanyProjectList> {
                   )
                 : NoProject(
                     title:
-                        "No project found. \nLet's start posting your first project")),
+                        AppLocalizations.of(context).translate('project_view_list_text'))),
       ),
     );
   }

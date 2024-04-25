@@ -105,7 +105,7 @@ class SubmitScreen extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () {
                             if (_quillController.document.isEmpty()) {
-                              ToastHelper.error("Please enter cover letter");
+                              ToastHelper.error( AppLocalizations.of(context).translate('pls_en_cov_let'));
                             } else {
                               _userStore.submitProposal(
                                   project.id!,
@@ -156,7 +156,7 @@ class SubmitScreen extends StatelessWidget {
     Future.delayed(Duration(milliseconds: 0), () {
       Navigator.pop(context);
     });
-    ToastHelper.success("Your proposal has been submitted");
+    ToastHelper.success( AppLocalizations.of(context).translate('y_pro_subed'));
     _userStore.resetApiResponse();
     return SizedBox.shrink();
   }

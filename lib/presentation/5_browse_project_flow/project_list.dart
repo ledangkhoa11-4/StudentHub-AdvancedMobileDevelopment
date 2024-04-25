@@ -159,7 +159,7 @@ class _ProjectListState extends State<ProjectList> {
                             : Center(
                                 child: Text(_projectStore.isLoading
                                     ? ""
-                                    : "No project found"),
+                                    : AppLocalizations.of(context).translate('no_pr_f')),
                               )
                         : _projectStore.allProjectList != null &&
                                 _projectStore.allProjectList!.projects!.length >
@@ -183,7 +183,7 @@ class _ProjectListState extends State<ProjectList> {
                             : Center(
                                 child: Text(_projectStore.isLoading
                                     ? ""
-                                    : "No project found"),
+                                    : AppLocalizations.of(context).translate('no_pr_f')),
                               ),
                   ),
                 ),

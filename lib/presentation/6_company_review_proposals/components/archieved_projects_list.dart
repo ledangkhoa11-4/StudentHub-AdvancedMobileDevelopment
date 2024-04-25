@@ -90,7 +90,7 @@ class _ProjectListState extends State<CompanyArchievedProjectList> {
                 )
               : NoProject(
                   title:
-                      "No project found. \nLet's close your first project.\nClosed projects will be here.",
+                      AppLocalizations.of(context).translate('archieved_projects_list_text'),
                 );
         },
       ),

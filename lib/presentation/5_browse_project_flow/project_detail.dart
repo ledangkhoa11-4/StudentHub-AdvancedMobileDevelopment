@@ -17,6 +17,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:mobx/mobx.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class ProjectDetail extends StatefulWidget {
   final Project project;
@@ -66,7 +67,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
 
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context,
-          titleWidget: Text("Project ${widget.project.title}")),
+          titleWidget: Text( AppLocalizations.of(context).translate('project') + " ${widget.project.title}")),
       body: Stack(
         children: [
           Padding(
@@ -78,7 +79,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      'Project name: ',
+                      AppLocalizations.of(context).translate('Proj_name') + ": ",
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -109,7 +110,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                 ),
                 SizedBox(height: 16),
                 Text(
-                  'Students are looking for:',
+                  AppLocalizations.of(context).translate('stu_look_for') + ": ",
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -163,7 +164,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Project scope:',
+                          AppLocalizations.of(context).translate('pr_scope') + ": ",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -199,7 +200,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Number of students:',
+                          AppLocalizations.of(context).translate('num_s') +": ",
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -208,7 +209,7 @@ class _ProjectDetailState extends State<ProjectDetail> {
                         Padding(
                           padding: const EdgeInsets.only(left: 16.0),
                           child: Text(
-                              '• ${widget.project.numberOfStudents} students',
+                              '• ${widget.project.numberOfStudents} '+ AppLocalizations.of(context).translate('students'),
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -230,8 +231,8 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                         (proposal) =>
                                             proposal.project.id ==
                                             widget.project.id)
-                                ? "Already submitted"
-                                : "Apply proposal",
+                                ?  AppLocalizations.of(context).translate('alr_sub')
+                                :  AppLocalizations.of(context).translate('apl_pro'),
                         buttonColor: widget._projectStore.submitProposals !=
                                     null &&
                                 widget._projectStore.submitProposals!.any(
@@ -268,8 +269,8 @@ class _ProjectDetailState extends State<ProjectDetail> {
                           });
                         },
                         child: Text(widget.project.isFavorite == true
-                            ? 'Unlike it'
-                            : 'Like it'),
+                            ? AppLocalizations.of(context).translate('unk_like')
+                            : AppLocalizations.of(context).translate('Like')),
                       ),
                     ],
                   );

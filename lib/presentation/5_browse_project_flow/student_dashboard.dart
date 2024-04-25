@@ -42,10 +42,7 @@ class _DashBoardState extends State<DashBoardStudent>
             tabs: [
               Tab(icon: Icon(Icons.dashboard), text: AppLocalizations.of(context).translate('all_pr')),
               Tab(icon: Icon(Icons.settings), text: AppLocalizations.of(context).translate('working')),
-              Tab(icon: Icon(Icons.sticky_note_2), text: AppLocalizations.of(context).translate('archieved')),
-              Tab(icon: Icon(Icons.dashboard), text: "All Projects"),
-              Tab(icon: Icon(Icons.settings), text: "Working"),
-              Tab(icon: Icon(BootstrapIcons.archive_fill, size: 20,), text: "Archieved"),
+              Tab(icon: Icon(BootstrapIcons.archive_fill, size: 20,), text: AppLocalizations.of(context).translate('archieved')),
             ],
           )),
       bottomNavigationBar:
