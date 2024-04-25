@@ -31,6 +31,7 @@ import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/submit_proposal_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/update_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_resume_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_transcript_usecase.dart';
 import 'package:boilerplate/presentation/post_project/store/post_project_store.dart';
@@ -74,6 +75,7 @@ abstract class _UserStore with Store {
     this._getProfileFileUseCase,
     this._submitProposalUseCase,
     this._getStudentProfileUseCase,
+    this._updateProposalUseCase,
   ) {
     // setting up disposers
     _setupDisposers();
@@ -106,6 +108,7 @@ abstract class _UserStore with Store {
   final GetProfileFileUseCase _getProfileFileUseCase;
   final SubmitProposalUseCase _submitProposalUseCase;
   final GetStudentProfileUseCase _getStudentProfileUseCase;
+  final UpdateProposalUseCase _updateProposalUseCase;
 
   // stores:--------------------------------------------------------------------
   // for handling form errors
@@ -194,7 +197,7 @@ abstract class _UserStore with Store {
   @observable
   bool? isCreateProfile = null;
 
-  // [PHONG]
+  // [PHONG] --------------------------------------------------
   @observable
   ProfileStudent? profileStudent = null;
   bool? apiStudentResponseSuccess = null;
@@ -241,6 +244,9 @@ abstract class _UserStore with Store {
 
   @observable
   ObservableFuture<dynamic> apiStudentProfileResponse = emptyLoginResponse;
+
+  @observable
+  ObservableFuture<dynamic> apiUpdateProfile = emptyLoginResponse;
 
   @computed
   bool get isLoading =>
@@ -711,7 +717,7 @@ abstract class _UserStore with Store {
     }
   }
 
-  // [PHONG]
+  // [PHONG] -----------------------------------------------------------
   @action
   Future getStudentTranscriptFile() async {
     this.resetStudentFile();
@@ -765,6 +771,8 @@ abstract class _UserStore with Store {
     }
   }
 
+  // ----------------------------------------------------------------------------
+
   @action
   Future submitProposal(int projectId, String coverLetter) async {
     SubmitProposalParams param = SubmitProposalParams(
@@ -791,7 +799,7 @@ abstract class _UserStore with Store {
     });
   }
 
-  // [PHONG]
+  // [PHONG] ---------------------------------------------------------------
   @action
   Future getStudentProfile(int student_id) async {
     final GetStudentProfileParams getStudentProfileParams =
@@ -817,6 +825,20 @@ abstract class _UserStore with Store {
 
     return null;
   }
+
+  Future<dynamic> updateProposal(UpdateProposalParam params) async {
+    final future = _updateProposalUseCase.call(params: params);
+    apiUpdateProfile = ObservableFuture(future);
+  }
+
+  Future<dynamic> updateProposalById(
+      int proposalId, UpdateProposalParam params) async {
+    final future = _updateProposalUseCase.updateProposalById(
+        proposalId: proposalId, params: params);
+    apiUpdateProfile = ObservableFuture(future);
+  }
+
+  // ----------------------------------------------------------------------------
 
   logout() async {
     final projectStore = getIt<ProjectStore>();

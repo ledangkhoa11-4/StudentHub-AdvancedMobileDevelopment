@@ -605,6 +605,22 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$apiUpdateProfileAtom =
+      Atom(name: '_UserStore.apiUpdateProfile', context: context);
+
+  @override
+  ObservableFuture<dynamic> get apiUpdateProfile {
+    _$apiUpdateProfileAtom.reportRead();
+    return super.apiUpdateProfile;
+  }
+
+  @override
+  set apiUpdateProfile(ObservableFuture<dynamic> value) {
+    _$apiUpdateProfileAtom.reportWrite(value, super.apiUpdateProfile, () {
+      super.apiUpdateProfile = value;
+    });
+  }
+
   late final _$loginAsyncAction =
       AsyncAction('_UserStore.login', context: context);
 
@@ -830,6 +846,7 @@ forgotFuture: ${forgotFuture},
 changeFuture: ${changeFuture},
 apiCallingFeature: ${apiCallingFeature},
 apiStudentProfileResponse: ${apiStudentProfileResponse},
+apiUpdateProfile: ${apiUpdateProfile},
 isLoading: ${isLoading},
 isSignin: ${isSignin}
     ''';

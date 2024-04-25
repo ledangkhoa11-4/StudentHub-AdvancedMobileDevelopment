@@ -18,6 +18,7 @@ import 'package:boilerplate/domain/usecase/user/login_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/submit_proposal_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/update_proposal_usecase.dart';
 import 'package:dio/dio.dart';
 
 import '../../entity/user/user.dart';
@@ -67,4 +68,9 @@ abstract class UserRepository {
   Future<bool> get isLoggedIn;
 
   Future<ProfileStudent> getStudentProfile(GetStudentProfileParams params);
+
+  Future<dynamic> updateProposal(UpdateProposalParam params);
+
+  Future<dynamic> updateProposalById(
+      int proposalId, UpdateProposalParam params);
 }

@@ -71,4 +71,6 @@ class Endpoints {
 
   static const String getSubmitProposal =
       baseUrl + "/api/proposal/project/:studentId";
+
+  static const String updateProposal = baseUrl + "/api/proposal/:proposalId";
 }

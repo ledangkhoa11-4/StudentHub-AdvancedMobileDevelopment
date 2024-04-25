@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/proposal/proposal-type-no-project.dart';
+// import 'package:boilerplate/domain/entity/proposal/proposal.dart';
+import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/update_proposal_usecase.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/profile/company_review_profile_student.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +32,18 @@ class _CandidateState extends State<Candidate> {
     if (_userStore.profileStudent == null) {
       _userStore.getStudentProfile(widget.studentId);
     }
+  }
+
+  UpdateProposalParam constructUpdateProposalParam(
+      int statusFlag, int disableFlag) {
+    return UpdateProposalParam(
+      // proposalId: widget.proposal.id,
+      projectId: widget.proposal.projectId,
+      studentId: widget.studentId,
+      coverLetter: widget.proposal.coverLetter,
+      statusFlag: statusFlag,
+      disableFlag: disableFlag,
+    );
   }
 
   @override
@@ -112,6 +127,8 @@ class _CandidateState extends State<Candidate> {
                           .copyWith(fontStyle: FontStyle.italic)),
                 ],
               ),
+              // SizedBox(height: 14.0),
+              // Text("statusFlag: " + widget.proposal.statusFlag.toString()),
               SizedBox(height: 14.0),
               if (_controller != null)
                 IgnorePointer(
@@ -141,7 +158,18 @@ class _CandidateState extends State<Candidate> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  ElevatedButton(onPressed: () {}, child: Text('Message')),
+                  ElevatedButton(
+                      onPressed: () {
+                        UpdateProposalParam updatedProposal =
+                            constructUpdateProposalParam(
+                                ProposalType.ACTIVE.value, 0);
+                        if (widget.proposal.statusFlag ==
+                            ProposalType.WAITING.value) {
+                          _userStore.updateProposalById(
+                              widget.proposal.id, updatedProposal);
+                        }
+                      },
+                      child: Text('Message')),
                   ElevatedButton(
                     onPressed: () {
                       showDialog(
@@ -172,6 +200,12 @@ class _CandidateState extends State<Candidate> {
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
+                                        UpdateProposalParam updatedProposal =
+                                            constructUpdateProposalParam(
+                                                ProposalType.OFFER.value, 0);
+                                        _userStore.updateProposalById(
+                                            widget.proposal.id,
+                                            updatedProposal);
                                         setState(() {
                                           isOfferSent = true;
                                         });
@@ -188,7 +222,10 @@ class _CandidateState extends State<Candidate> {
                         },
                       );
                     },
-                    child: Text(isOfferSent ? 'Sent hired offer' : 'Hire'),
+                    child: Text(
+                        widget.proposal.statusFlag == ProposalType.OFFER.value
+                            ? 'Sent hired offer'
+                            : 'Offer'),
                   )
                 ],
               )
