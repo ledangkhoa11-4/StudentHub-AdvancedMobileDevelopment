@@ -141,6 +141,12 @@ abstract class _UserStore with Store {
   String resumeFile = "";
 
   @observable
+  String studentTranscriptFile = "";
+
+  @observable
+  String studentResumeFile = "";
+
+  @observable
   List<TechStack>? techstacks = null;
 
   @observable
@@ -705,6 +711,60 @@ abstract class _UserStore with Store {
     }
   }
 
+  // [PHONG]
+  @action
+  Future getStudentTranscriptFile() async {
+    this.resetStudentFile();
+    if (this.studentTranscriptFile.isEmpty) {
+      GetProfileFileParams param = GetProfileFileParams(
+          studentId: int.parse(this.profileStudent!.id.toString()),
+          type: "transcript");
+      final future = _getProfileFileUseCase.call(params: param);
+      apiCallingFeature = ObservableFuture(future);
+      await future.then((value) async {
+        if (value != null) {
+          // print("88888888888888888888888888888888");
+          // print(value.toString());
+          this.studentTranscriptFile = value;
+          this.apiResponseSuccess = true;
+        }
+      }).catchError((e) {
+        print("---------------");
+        print(e);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
+        this.apiResponseSuccess = false;
+        this.apiResponseMessage = response["errorDetails"].toString();
+      });
+    }
+  }
+
+  @action
+  Future getStudentResumeFile() async {
+    this.resetStudentFile();
+    if (this.studentResumeFile.isEmpty) {
+      GetProfileFileParams param = GetProfileFileParams(
+          studentId: int.parse(this.profileStudent!.id.toString()),
+          type: "resume");
+      final future = _getProfileFileUseCase.call(params: param);
+      apiCallingFeature = ObservableFuture(future);
+
+      await future.then((value) async {
+        if (value != null) {
+          this.studentResumeFile = value;
+          this.apiResponseSuccess = true;
+        }
+      }).catchError((e) {
+        print("---------------");
+        print(e);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
+        this.apiResponseSuccess = false;
+        this.apiResponseMessage = response["errorDetails"].toString();
+      });
+    }
+  }
+
   @action
   Future submitProposal(int projectId, String coverLetter) async {
     SubmitProposalParams param = SubmitProposalParams(
@@ -813,6 +873,11 @@ abstract class _UserStore with Store {
   resetProfileStudent() {
     this.profileStudent = null;
     this.apiStudentResponseSuccess = null;
+  }
+
+  resetStudentFile() {
+    this.studentResumeFile = '';
+    this.studentTranscriptFile = '';
   }
 
   // general methods:-----------------------------------------------------------

@@ -33,8 +33,14 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
     if (_userStore.profileStudent == null) {
       _userStore.getStudentProfile(widget.student_id);
     }
+
+    if (_userStore.studentResumeFile.isEmpty &&
+        _userStore.studentTranscriptFile.isEmpty) {
+      _userStore.getStudentResumeFile();
+      _userStore.getStudentTranscriptFile();
+    }
     // print("44444444444444444444444444444444444");
-    // print(_userStore.profileStudent);
+    // print(_userStore.studentResumeFile);
     // print(_userStore.apiStudentResponseSuccess);
   }
 
@@ -49,7 +55,8 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
         builder: (context) => _userStore.profileStudent != null
             ? Scaffold(
                 appBar: UserAppBar.buildAppBar(context,
-                    // titleWidget: Text(_userStore.profileStudent!.fullname.toString()),
+                    titleWidget:
+                        Text(_userStore.profileStudent!.fullname.toString()),
                     disableSettingAccount: true),
                 body: Stack(
                   children: [
@@ -271,19 +278,20 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
                                       ElevatedButton(
                                         onPressed: () {
                                           if (!_userStore
-                                              .transcriptFile.isEmpty) {
+                                              .studentTranscriptFile.isEmpty) {
                                             Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         ViewPdfScreen(
                                                           title: "Transcript",
                                                           url: _userStore
-                                                              .transcriptFile,
+                                                              .studentTranscriptFile,
                                                         )));
                                           } else {
                                             setState(() {
                                               _nextNavigate = 1;
-                                              _userStore.getTranscriptFile();
+                                              _userStore
+                                                  .getStudentTranscriptFile();
                                             });
                                           }
                                         },
@@ -291,19 +299,20 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
                                       ),
                                       ElevatedButton(
                                         onPressed: () {
-                                          if (!_userStore.resumeFile.isEmpty) {
+                                          if (!_userStore
+                                              .studentResumeFile.isEmpty) {
                                             Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         ViewPdfScreen(
                                                           title: "Resume",
                                                           url: _userStore
-                                                              .resumeFile,
+                                                              .studentResumeFile,
                                                         )));
                                           } else {
                                             setState(() {
                                               _nextNavigate = 2;
-                                              _userStore.getResumeFile();
+                                              _userStore.getStudentResumeFile();
                                             });
                                           }
                                         },
@@ -329,7 +338,7 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
                     Observer(
                       builder: (context) {
                         return !_userStore.isLoading &&
-                                _userStore.apiStudentResponseSuccess == true
+                                _userStore.apiResponseSuccess == true
                             ? navigate(context)
                             : SizedBox.shrink();
                       },
@@ -344,16 +353,18 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
       if (_nextNavigate == 1) {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ViewPdfScreen(
-                  title: "Your transcript",
-                  url: _userStore.transcriptFile,
+                  title: _userStore.profileStudent!.fullname.toString() +
+                      " Transcript",
+                  url: _userStore.studentTranscriptFile,
                 )));
       }
 
       if (_nextNavigate == 2) {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ViewPdfScreen(
-                  title: "Your resume",
-                  url: _userStore.resumeFile,
+                  title: _userStore.profileStudent!.fullname.toString() +
+                      " Resume",
+                  url: _userStore.studentResumeFile,
                 )));
       }
 

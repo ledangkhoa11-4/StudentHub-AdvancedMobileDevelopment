@@ -69,6 +69,39 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$studentTranscriptFileAtom =
+      Atom(name: '_UserStore.studentTranscriptFile', context: context);
+
+  @override
+  String get studentTranscriptFile {
+    _$studentTranscriptFileAtom.reportRead();
+    return super.studentTranscriptFile;
+  }
+
+  @override
+  set studentTranscriptFile(String value) {
+    _$studentTranscriptFileAtom.reportWrite(value, super.studentTranscriptFile,
+        () {
+      super.studentTranscriptFile = value;
+    });
+  }
+
+  late final _$studentResumeFileAtom =
+      Atom(name: '_UserStore.studentResumeFile', context: context);
+
+  @override
+  String get studentResumeFile {
+    _$studentResumeFileAtom.reportRead();
+    return super.studentResumeFile;
+  }
+
+  @override
+  set studentResumeFile(String value) {
+    _$studentResumeFileAtom.reportWrite(value, super.studentResumeFile, () {
+      super.studentResumeFile = value;
+    });
+  }
+
   late final _$techstacksAtom =
       Atom(name: '_UserStore.techstacks', context: context);
 
@@ -722,6 +755,24 @@ mixin _$UserStore on _UserStore, Store {
     return _$getResumeFileAsyncAction.run(() => super.getResumeFile());
   }
 
+  late final _$getStudentTranscriptFileAsyncAction =
+      AsyncAction('_UserStore.getStudentTranscriptFile', context: context);
+
+  @override
+  Future<dynamic> getStudentTranscriptFile() {
+    return _$getStudentTranscriptFileAsyncAction
+        .run(() => super.getStudentTranscriptFile());
+  }
+
+  late final _$getStudentResumeFileAsyncAction =
+      AsyncAction('_UserStore.getStudentResumeFile', context: context);
+
+  @override
+  Future<dynamic> getStudentResumeFile() {
+    return _$getStudentResumeFileAsyncAction
+        .run(() => super.getStudentResumeFile());
+  }
+
   late final _$submitProposalAsyncAction =
       AsyncAction('_UserStore.submitProposal', context: context);
 
@@ -746,6 +797,8 @@ mixin _$UserStore on _UserStore, Store {
 user: ${user},
 transcriptFile: ${transcriptFile},
 resumeFile: ${resumeFile},
+studentTranscriptFile: ${studentTranscriptFile},
+studentResumeFile: ${studentResumeFile},
 techstacks: ${techstacks},
 skillSets: ${skillSets},
 currentRole: ${currentRole},

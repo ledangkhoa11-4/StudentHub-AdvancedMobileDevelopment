@@ -71,8 +71,7 @@ class _CandidateState extends State<Candidate> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.proposal.student.fullname.toString() +
-                            widget.studentId.toString(),
+                        widget.proposal.student.fullname.toString(),
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       Text(
