@@ -30,9 +30,9 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_userStore.profileStudent == null) {
-      _userStore.getStudentProfile(widget.student_id);
-    }
+    // if (_userStore.profileStudent == null) {
+    //   _userStore.getStudentProfile(widget.student_id);
+    // }
 
     if (_userStore.studentResumeFile.isEmpty &&
         _userStore.studentTranscriptFile.isEmpty) {
@@ -345,7 +345,12 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
                     ),
                   ],
                 ))
-            : NoProject(title: 'Data is loading...'));
+            : NoProject(title: "Data is loading...."));
+  }
+
+  Widget reloadStudentProfile(BuildContext context) {
+    _userStore.getStudentProfile(widget.student_id);
+    return SizedBox.shrink();
   }
 
   Widget navigate(BuildContext context) {

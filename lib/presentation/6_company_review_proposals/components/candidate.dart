@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:boilerplate/constants/assets.dart';
+import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/proposal/proposal-type-no-project.dart';
+import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/profile/company_review_profile_student.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -18,7 +20,16 @@ class Candidate extends StatefulWidget {
 }
 
 class _CandidateState extends State<Candidate> {
+  final UserStore _userStore = getIt<UserStore>();
   bool isOfferSent = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_userStore.profileStudent == null) {
+      _userStore.getStudentProfile(widget.studentId);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
