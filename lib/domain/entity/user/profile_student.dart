@@ -16,6 +16,7 @@ class ProfileStudent {
   List<ProfileLanguage>? languages;
   List<Education>? educations;
   List<Experience>? experiences;
+  String? fullname;
 
   ProfileStudent(
       {this.id,
@@ -27,7 +28,8 @@ class ProfileStudent {
       this.techStack,
       this.languages,
       this.educations,
-      this.experiences});
+      this.experiences,
+      this.fullname});
 
   factory ProfileStudent.fromMap(Map<String, dynamic> json) {
     List<dynamic> skillSetsObj =
@@ -58,7 +60,8 @@ class ProfileStudent {
         transcript: json["transcript"],
         languages: languages,
         educations: educations,
-        experiences: experiences);
+        experiences: experiences,
+        fullname: json["fullname"]);
   }
 
   Map<String, dynamic> toMap() {
@@ -80,6 +83,7 @@ class ProfileStudent {
       'experiences': experiences != null
           ? experiences!.map((experience) => experience.toJson()).toList()
           : null,
+      'fullname': fullname,
     };
   }
 }

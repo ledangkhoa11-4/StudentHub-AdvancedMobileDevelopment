@@ -325,6 +325,22 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$profileStudentAtom =
+      Atom(name: '_UserStore.profileStudent', context: context);
+
+  @override
+  ProfileStudent? get profileStudent {
+    _$profileStudentAtom.reportRead();
+    return super.profileStudent;
+  }
+
+  @override
+  set profileStudent(ProfileStudent? value) {
+    _$profileStudentAtom.reportWrite(value, super.profileStudent, () {
+      super.profileStudent = value;
+    });
+  }
+
   late final _$loginFutureAtom =
       Atom(name: '_UserStore.loginFuture', context: context);
 
@@ -539,6 +555,23 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$apiStudentProfileResponseAtom =
+      Atom(name: '_UserStore.apiStudentProfileResponse', context: context);
+
+  @override
+  ObservableFuture<dynamic> get apiStudentProfileResponse {
+    _$apiStudentProfileResponseAtom.reportRead();
+    return super.apiStudentProfileResponse;
+  }
+
+  @override
+  set apiStudentProfileResponse(ObservableFuture<dynamic> value) {
+    _$apiStudentProfileResponseAtom
+        .reportWrite(value, super.apiStudentProfileResponse, () {
+      super.apiStudentProfileResponse = value;
+    });
+  }
+
   late final _$loginAsyncAction =
       AsyncAction('_UserStore.login', context: context);
 
@@ -698,6 +731,15 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.submitProposal(projectId, coverLetter));
   }
 
+  late final _$getStudentProfileAsyncAction =
+      AsyncAction('_UserStore.getStudentProfile', context: context);
+
+  @override
+  Future<dynamic> getStudentProfile(int student_id) {
+    return _$getStudentProfileAsyncAction
+        .run(() => super.getStudentProfile(student_id));
+  }
+
   @override
   String toString() {
     return '''
@@ -720,6 +762,7 @@ apiResponseMessage: ${apiResponseMessage},
 apiResponseSuccess: ${apiResponseSuccess},
 onFinishStudentProfile: ${onFinishStudentProfile},
 isCreateProfile: ${isCreateProfile},
+profileStudent: ${profileStudent},
 loginFuture: ${loginFuture},
 signinFuture: ${signinFuture},
 getMeFuture: ${getMeFuture},
@@ -733,6 +776,7 @@ createCompanyProfileFuture: ${createCompanyProfileFuture},
 forgotFuture: ${forgotFuture},
 changeFuture: ${changeFuture},
 apiCallingFeature: ${apiCallingFeature},
+apiStudentProfileResponse: ${apiStudentProfileResponse},
 isLoading: ${isLoading},
 isSignin: ${isSignin}
     ''';

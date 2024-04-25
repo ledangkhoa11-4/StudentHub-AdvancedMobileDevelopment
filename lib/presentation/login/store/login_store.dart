@@ -10,6 +10,7 @@ import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/user/education.dart';
 import 'package:boilerplate/domain/entity/user/experience.dart';
 import 'package:boilerplate/domain/entity/user/language.dart';
+import 'package:boilerplate/domain/entity/user/profile_student.dart';
 import 'package:boilerplate/domain/entity/user/skillset.dart';
 import 'package:boilerplate/domain/entity/user/tech_stack.dart';
 import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
@@ -40,6 +41,7 @@ import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../domain/entity/user/user.dart';
+import '../../../domain/usecase/user/get_student_profile_usecase.dart';
 import '../../../domain/usecase/user/login_usecase.dart';
 
 part 'login_store.g.dart';
@@ -49,28 +51,30 @@ class UserStore = _UserStore with _$UserStore;
 abstract class _UserStore with Store {
   // constructor:---------------------------------------------------------------
   _UserStore(
-      this._isLoggedInUseCase,
-      this._saveLoginStatusUseCase,
-      this._saveAuthTokenUseCase,
-      this._saveCurrentProfileUseCase,
-      this._loginUseCase,
-      this._changeUseCase,
-      this._forgotUseCase,
-      this._signupUseCase,
-      this.formErrorStore,
-      this.errorStore,
-      this._getMeUseCase,
-      this._createCompanyProfileUseCase,
-      this._getAllTechStackUseCase,
-      this._getAllSkillSetUseCase,
-      this._uploadResumeUseCase,
-      this._uploadTranscriptUseCase,
-      this._createLanguageUseCase,
-      this._createEducationUseCase,
-      this._createExperiencesUseCase,
-      this._createStudentProfileUseCase,
-      this._getProfileFileUseCase,
-      this._submitProposalUseCase) {
+    this._isLoggedInUseCase,
+    this._saveLoginStatusUseCase,
+    this._saveAuthTokenUseCase,
+    this._saveCurrentProfileUseCase,
+    this._loginUseCase,
+    this._changeUseCase,
+    this._forgotUseCase,
+    this._signupUseCase,
+    this.formErrorStore,
+    this.errorStore,
+    this._getMeUseCase,
+    this._createCompanyProfileUseCase,
+    this._getAllTechStackUseCase,
+    this._getAllSkillSetUseCase,
+    this._uploadResumeUseCase,
+    this._uploadTranscriptUseCase,
+    this._createLanguageUseCase,
+    this._createEducationUseCase,
+    this._createExperiencesUseCase,
+    this._createStudentProfileUseCase,
+    this._getProfileFileUseCase,
+    this._submitProposalUseCase,
+    this._getStudentProfileUseCase,
+  ) {
     // setting up disposers
     _setupDisposers();
 
@@ -101,6 +105,7 @@ abstract class _UserStore with Store {
   final CreateUpdateStudentProfileUseCase _createStudentProfileUseCase;
   final GetProfileFileUseCase _getProfileFileUseCase;
   final SubmitProposalUseCase _submitProposalUseCase;
+  final GetStudentProfileUseCase _getStudentProfileUseCase;
 
   // stores:--------------------------------------------------------------------
   // for handling form errors
@@ -183,6 +188,11 @@ abstract class _UserStore with Store {
   @observable
   bool? isCreateProfile = null;
 
+  // [PHONG]
+  @observable
+  ProfileStudent? profileStudent = null;
+  bool? apiStudentResponseSuccess = null;
+
   @observable
   ObservableFuture<dynamic> loginFuture = emptyLoginResponse;
 
@@ -223,6 +233,9 @@ abstract class _UserStore with Store {
   @observable
   ObservableFuture<dynamic> apiCallingFeature = emptyLoginResponse;
 
+  @observable
+  ObservableFuture<dynamic> apiStudentProfileResponse = emptyLoginResponse;
+
   @computed
   bool get isLoading =>
       loginFuture.status == FutureStatus.pending ||
@@ -236,7 +249,8 @@ abstract class _UserStore with Store {
       createEducationFuture.status == FutureStatus.pending ||
       createExperienceFuture.status == FutureStatus.pending ||
       createLanguageFuture.status == FutureStatus.pending ||
-      apiCallingFeature.status == FutureStatus.pending;
+      apiCallingFeature.status == FutureStatus.pending ||
+      apiStudentProfileResponse.status == FutureStatus.pending;
 
   @computed
   bool get isSignin => signinFuture.status == FutureStatus.pending;
@@ -717,6 +731,33 @@ abstract class _UserStore with Store {
     });
   }
 
+  // [PHONG]
+  @action
+  Future getStudentProfile(int student_id) async {
+    final GetStudentProfileParams getStudentProfileParams =
+        GetStudentProfileParams(studentId: student_id);
+    final future =
+        _getStudentProfileUseCase.call(params: getStudentProfileParams);
+    apiStudentProfileResponse = ObservableFuture(future);
+
+    await future.then((value) async {
+      if (value != null) {
+        // print("============================");
+        // print(value);
+        // resetProfileStudent();
+        this.profileStudent = value;
+        apiStudentResponseSuccess = true;
+        // print(value.toMap());
+      }
+    }).catchError((e) {
+      this.profileStudent = null;
+      this.apiStudentResponseSuccess = false;
+      print(e);
+    });
+
+    return null;
+  }
+
   logout() async {
     final projectStore = getIt<ProjectStore>();
 
@@ -767,6 +808,11 @@ abstract class _UserStore with Store {
 
   resetCreateProfileState() {
     this.isCreateProfile = null;
+  }
+
+  resetProfileStudent() {
+    this.profileStudent = null;
+    this.apiStudentResponseSuccess = null;
   }
 
   // general methods:-----------------------------------------------------------

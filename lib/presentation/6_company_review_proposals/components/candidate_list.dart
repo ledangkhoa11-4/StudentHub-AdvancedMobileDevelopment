@@ -22,7 +22,8 @@ class _CandidateListState extends State<CandidateList> {
                 itemCount: widget.project!.countProposals,
                 itemBuilder: (context, index) {
                   final proposal = widget.project.proposals[index];
-                  return Candidate(proposal: proposal);
+                  return Candidate(
+                      studentId: proposal.studentId, proposal: proposal);
                 },
               )
             : NoCandidate());

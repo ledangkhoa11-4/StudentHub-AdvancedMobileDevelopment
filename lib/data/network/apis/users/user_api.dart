@@ -20,6 +20,7 @@ import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_student_profile_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/login_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
@@ -296,6 +297,22 @@ class UserApi {
       final res =
           await _dioClient.dio.post(Endpoints.submitProposal, data: param);
       return res;
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<ProfileStudent> getProfileStudent(
+      GetStudentProfileParams param) async {
+    try {
+      final res = await _dioClient.dio.get(
+          Endpoints.getStudentProfile
+              .replaceFirst(":studentId", param.studentId.toString()),
+          data: param);
+
+      final result = jsonDecode(res.toString());
+      return ProfileStudent.fromMap(result["result"]);
     } catch (e) {
       print(e.toString());
       throw e;
