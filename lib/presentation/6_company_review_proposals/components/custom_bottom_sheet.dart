@@ -29,6 +29,7 @@ class _CustomBottomSheetContentState extends State<CustomBottomSheetContent> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 460.0,
       width: double.infinity,
       padding: EdgeInsets.only(left: 16.0, right: 16),
       child: Column(

@@ -80,9 +80,14 @@ class ProjectItem extends StatelessWidget {
                     onPressed: () {
                       showModalBottomSheet(
                         context: context,
-                        builder: (BuildContext context) {
-                          return CustomBottomSheetContent(
-                            project: project,
+                        isScrollControlled: true,
+                        builder: (context) {
+                          return Wrap(
+                            children: [
+                              CustomBottomSheetContent(
+                                project: project,
+                              ),
+                            ],
                           );
                         },
                       );
