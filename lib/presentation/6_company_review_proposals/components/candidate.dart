@@ -170,63 +170,64 @@ class _CandidateState extends State<Candidate> {
                         }
                       },
                       child: Text('Message')),
-                  ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Center(child: Text("Hired offer")),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Center(
-                                  child: Text(
-                                    "Do you really want to send hired offer for student to do this project?",
-                                    textAlign: TextAlign.center,
+                  if (widget.proposal.statusFlag != ProposalType.HIRED.value)
+                    ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Center(child: Text("Hired offer")),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Center(
+                                    child: Text(
+                                      "Do you really want to send hired offer for student to do this project?",
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: 20),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .pop(); // Close the dialog
-                                      },
-                                      child: Text("Cancel"),
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        UpdateProposalParam updatedProposal =
-                                            constructUpdateProposalParam(
-                                                ProposalType.OFFER.value, 0);
-                                        _userStore.updateProposalById(
-                                            widget.proposal.id,
-                                            updatedProposal);
-                                        setState(() {
-                                          isOfferSent = true;
-                                        });
-                                        Navigator.of(context)
-                                            .pop(); // Close the dialog
-                                      },
-                                      child: Text("Send"),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Text(
-                        widget.proposal.statusFlag == ProposalType.OFFER.value
-                            ? 'Sent hired offer'
-                            : 'Offer'),
-                  )
+                                  SizedBox(height: 20),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .pop(); // Close the dialog
+                                        },
+                                        child: Text("Cancel"),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          UpdateProposalParam updatedProposal =
+                                              constructUpdateProposalParam(
+                                                  ProposalType.OFFER.value, 0);
+                                          _userStore.updateProposalById(
+                                              widget.proposal.id,
+                                              updatedProposal);
+                                          setState(() {
+                                            isOfferSent = true;
+                                          });
+                                          Navigator.of(context)
+                                              .pop(); // Close the dialog
+                                        },
+                                        child: Text("Send"),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                          widget.proposal.statusFlag == ProposalType.OFFER.value
+                              ? 'Sent hired offer'
+                              : 'Offer'),
+                    )
                 ],
               )
             ],

@@ -23,6 +23,8 @@ class ProjectItemType2 extends StatelessWidget {
 
   UpdateProposalParam constructUpdateProposalParam(
       int statusFlag, int disableFlag) {
+    // print("Aaaaaaaaaaaaaaaaaaa");
+    // print(statusFlag);
     return UpdateProposalParam(
       // proposalId: widget.proposal.id,
       projectId: this.proposal.projectId,
@@ -157,7 +159,7 @@ class ProjectItemType2 extends StatelessWidget {
                                               UpdateProposalParam
                                                   updatedProposal =
                                                   constructUpdateProposalParam(
-                                                      ProposalType.OFFER.value,
+                                                      ProposalType.HIRED.value,
                                                       0);
                                               _userStore.updateProposalById(
                                                   this.proposal.id,

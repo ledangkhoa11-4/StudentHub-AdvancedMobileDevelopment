@@ -5,20 +5,20 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'candidate.dart';
 import 'package:boilerplate/domain/entity/project/project.dart';
 
-class CandidateList extends StatefulWidget {
+class HiredCandidateList extends StatefulWidget {
   final Project project;
 
-  CandidateList({Key? key, required this.project}) : super(key: key);
+  HiredCandidateList({Key? key, required this.project}) : super(key: key);
 
   @override
-  _CandidateListState createState() => _CandidateListState();
+  _HiredCandidateListState createState() => _HiredCandidateListState();
 }
 
-class _CandidateListState extends State<CandidateList> {
+class _HiredCandidateListState extends State<HiredCandidateList> {
   @override
   Widget build(BuildContext context) {
     final hiredCandidateList = widget.project.proposals
-        .where((e) => e.statusFlag != ProposalType.HIRED.value)
+        .where((e) => e.statusFlag == ProposalType.HIRED.value)
         .toList();
     return Observer(
         builder: (context) => hiredCandidateList.length > 0
@@ -30,6 +30,6 @@ class _CandidateListState extends State<CandidateList> {
                       studentId: proposal.studentId, proposal: proposal);
                 },
               )
-            : NoCandidate(title: "There are no proposals in this project"));
+            : NoCandidate(title: "There are no hired student in this project"));
   }
 }

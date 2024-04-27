@@ -7,7 +7,8 @@ import 'package:boilerplate/presentation/post_project/store/post_project_store.d
 import 'package:boilerplate/constants/assets.dart';
 
 class NoCandidate extends StatefulWidget {
-  const NoCandidate({Key? key}) : super(key: key);
+  final String title;
+  const NoCandidate({Key? key, required this.title}) : super(key: key);
 
   @override
   _NoCandidateState createState() => _NoCandidateState();
@@ -38,7 +39,7 @@ class _NoCandidateState extends State<NoCandidate> {
                       ),
                       Center(
                         child: Text(
-                          "There are no candidates in this project",
+                          widget.title.toString(),
                           style: Theme.of(context).textTheme.labelLarge,
                           textAlign: TextAlign.center,
                         ),
