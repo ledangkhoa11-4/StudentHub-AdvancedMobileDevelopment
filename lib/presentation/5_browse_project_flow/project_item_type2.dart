@@ -60,8 +60,14 @@ class ProjectItemType2 extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Text(
+                    proposal.statusFlag == ProposalType.HIRED.value
+                        ? "Joined"
+                        : "",
+                    style: Theme.of(context).textTheme.labelSmall!.copyWith(color: Colors.grey.shade600),
+                  ),
                   Text(
                     'Submitted ${Moment(DateTime.parse(proposal.createdAt)).fromNow()}', // Placeholder for created date
                     style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
@@ -69,6 +75,7 @@ class ProjectItemType2 extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(height: 10,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -201,7 +208,7 @@ class ProjectItemType2 extends StatelessWidget {
                       ],
                     )
                   ],
-                )
+                ),
             ],
           ),
         ),

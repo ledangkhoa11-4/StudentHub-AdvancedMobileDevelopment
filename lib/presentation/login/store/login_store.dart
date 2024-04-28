@@ -8,6 +8,7 @@ import 'package:boilerplate/core/stores/form/form_student_profile_store.dart'
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/project/project_list.dart';
+import 'package:boilerplate/domain/entity/proposal/proposal-type-no-project.dart';
 import 'package:boilerplate/domain/entity/user/education.dart';
 import 'package:boilerplate/domain/entity/user/experience.dart';
 import 'package:boilerplate/domain/entity/user/language.dart';
@@ -857,7 +858,11 @@ abstract class _UserStore with Store {
         projectStore.setProjectList(ProjectList(projects: assignProjects));
       }
       this.apiResponseSuccess = true;
-      this.apiResponseMessage = "Offer message has been sent to student";
+      this.apiResponseMessage = params.statusFlag == ProposalType.OFFER.value
+          ? "Offer message has been sent to student"
+          : params.statusFlag == ProposalType.HIRED.value
+              ? "Congratulations, you have joined to the project"
+              : "Update successfully";
     }).catchError((e) {
       this.apiStudentResponseSuccess = false;
       this.apiResponseMessage = "Error";
