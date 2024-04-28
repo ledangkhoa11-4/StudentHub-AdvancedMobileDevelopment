@@ -186,14 +186,14 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<ProfileStudent> updateProposal(UpdateProposalParam params) async {
+  Future<dynamic> updateProposal(UpdateProposalParam params) async {
     return await _userApi.updateProposal(params).then((res) {
       return res;
     }).catchError((error) => throw error);
   }
 
   @override
-  Future<ProfileStudent> updateProposalById(
+  Future<dynamic> updateProposalById(
       int proposalId, UpdateProposalParam params) async {
     return await _userApi.updateProposalById(proposalId, params).then((res) {
       return res;

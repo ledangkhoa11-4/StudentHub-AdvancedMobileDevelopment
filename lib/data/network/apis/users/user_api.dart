@@ -345,8 +345,8 @@ class UserApi {
           Endpoints.updateProposal
               .replaceFirst(":proposalId", proposalId.toString()),
           data: param);
-
-      final result = jsonDecode(res.toString());
+      return res;
+      //final result = jsonDecode(res.toString());
       // print("222222222222222222222222222222222");
       // print(result);
       // return ProfileStudent.fromMap(result["result"]);

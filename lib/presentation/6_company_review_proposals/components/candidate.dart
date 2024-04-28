@@ -49,7 +49,6 @@ class _CandidateState extends State<Candidate> {
   @override
   Widget build(BuildContext context) {
     QuillController? _controller;
-
     try {
       final controller = QuillController(
           document: Document.fromJson(jsonDecode(widget.proposal.coverLetter)),
@@ -159,6 +158,7 @@ class _CandidateState extends State<Candidate> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
+                    style:  ElevatedButton.styleFrom(),
                       onPressed: () {
                         UpdateProposalParam updatedProposal =
                             constructUpdateProposalParam(
@@ -172,7 +172,14 @@ class _CandidateState extends State<Candidate> {
                       child: Text('Message')),
                   if (widget.proposal.statusFlag != ProposalType.HIRED.value)
                     ElevatedButton(
+                      style: widget.proposal.statusFlag == ProposalType.OFFER.value ? ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey,
+                        foregroundColor: Colors.white
+                      ) :  ElevatedButton.styleFrom(),
                       onPressed: () {
+                        if (widget.proposal.statusFlag == ProposalType.OFFER.value ) {
+                          return;
+                        }
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {

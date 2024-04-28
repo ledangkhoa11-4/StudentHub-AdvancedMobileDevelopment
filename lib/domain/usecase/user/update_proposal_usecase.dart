@@ -36,7 +36,6 @@ class UpdateProposalUseCase implements UseCase<dynamic, UpdateProposalParam> {
     return _userRepository.updateProposal(params);
   }
 
-  @override
   Future<dynamic> updateProposalById(
       {required int proposalId, required UpdateProposalParam params}) async {
     return _userRepository.updateProposalById(proposalId, params);

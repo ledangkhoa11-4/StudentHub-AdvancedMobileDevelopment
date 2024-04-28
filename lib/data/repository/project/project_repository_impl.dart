@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:boilerplate/data/local/constants/db_constants.dart';
-import 'package:boilerplate/data/local/datasources/project/project_datasource.dart';
 import 'package:boilerplate/data/network/apis/projects/project_api.dart';
 import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/domain/entity/project/project_list.dart';
@@ -12,17 +10,14 @@ import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.d
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
-import 'package:sembast/sembast.dart';
 
 class ProjectRepositoryImpl extends ProjectRepository {
-  // data source object
-  final ProjectDataSource _projectDataSource;
 
   // api objects
   final ProjectApi _projectApi;
 
   // constructor
-  ProjectRepositoryImpl(this._projectApi, this._projectDataSource);
+  ProjectRepositoryImpl(this._projectApi);
 
   // Project: -----------------------------------------------------------------
   @override
@@ -31,28 +26,13 @@ class ProjectRepositoryImpl extends ProjectRepository {
     // else make a network call to get all projects, store them into database for
     // later use
     return await _projectApi.getProjects().then((projectsList) {
-      projectsList.projects?.forEach((project) {
-        _projectDataSource.insert(project);
-      });
-
       return projectsList;
     }).catchError((error) => throw error);
   }
 
   @override
-  Future<List<Project>> findProjectById(int id) {
-    //creating filter
-    List<Filter> filters = [];
-
-    //check to see if dataLogsType is not null
-    Filter dataLogTypeFilter = Filter.equals(DBConstants.FIELD_ID, id);
-    filters.add(dataLogTypeFilter);
-
-    //making db call
-    return _projectDataSource
-        .getAllSortedByFilter(filters: filters)
-        .then((projects) => projects)
-        .catchError((error) => throw error);
+  Future<List<Project>> findProjectById(int id) async {
+    return [];
   }
 
   @override

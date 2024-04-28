@@ -7,6 +7,7 @@ import 'package:boilerplate/core/stores/form/form_student_profile_store.dart'
     as FormStudent;
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/entity/project/project_list.dart';
 import 'package:boilerplate/domain/entity/user/education.dart';
 import 'package:boilerplate/domain/entity/user/experience.dart';
 import 'package:boilerplate/domain/entity/user/language.dart';
@@ -826,16 +827,42 @@ abstract class _UserStore with Store {
     return null;
   }
 
-  Future<dynamic> updateProposal(UpdateProposalParam params) async {
-    final future = _updateProposalUseCase.call(params: params);
-    apiUpdateProfile = ObservableFuture(future);
-  }
+  // Future<dynamic> updateProposal(UpdateProposalParam params) async {
+  //   final future = _updateProposalUseCase.call(params: params);
+  //   apiUpdateProfile = ObservableFuture(future);
+  // }
 
   Future<dynamic> updateProposalById(
       int proposalId, UpdateProposalParam params) async {
+    final projectStore = getIt<ProjectStore>();
+
     final future = _updateProposalUseCase.updateProposalById(
         proposalId: proposalId, params: params);
-    apiUpdateProfile = ObservableFuture(future);
+    apiCallingFeature = ObservableFuture(future);
+    await future.then((value) {
+      if (projectStore.projectList != null) {
+        final assignProjects = projectStore.projectList!.projects!.map((pj) {
+          if (pj.id == params.projectId) {
+            final newProposal = pj.proposals.map((proposal) {
+              if (proposal.id == proposalId) {
+                proposal.statusFlag = params.statusFlag;
+              }
+              return proposal;
+            }).toList();
+
+            pj.proposals = newProposal;
+          }
+          return pj;
+        }).toList();
+        projectStore.setProjectList(ProjectList(projects: assignProjects));
+      }
+      this.apiResponseSuccess = true;
+      this.apiResponseMessage = "Offer message has been sent to student";
+    }).catchError((e) {
+      this.apiStudentResponseSuccess = false;
+      this.apiResponseMessage = "Error";
+      print(e);
+    });
   }
 
   // ----------------------------------------------------------------------------
