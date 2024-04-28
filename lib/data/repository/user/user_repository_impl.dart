@@ -20,9 +20,11 @@ import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/submit_proposal_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/update_proposal_usecase.dart';
 import 'package:dio/dio.dart';
 
 import '../../../domain/entity/user/user.dart';
+import '../../../domain/usecase/user/get_student_profile_usecase.dart';
 import '../../../domain/usecase/user/login_usecase.dart';
 
 class UserRepositoryImpl extends UserRepository {
@@ -171,6 +173,29 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<dynamic> submitProposal(SubmitProposalParams params) async {
     return await _userApi.submitProposal(params).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<ProfileStudent> getStudentProfile(
+      GetStudentProfileParams params) async {
+    return await _userApi.getProfileStudent(params).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<ProfileStudent> updateProposal(UpdateProposalParam params) async {
+    return await _userApi.updateProposal(params).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<ProfileStudent> updateProposalById(
+      int proposalId, UpdateProposalParam params) async {
+    return await _userApi.updateProposalById(proposalId, params).then((res) {
       return res;
     }).catchError((error) => throw error);
   }

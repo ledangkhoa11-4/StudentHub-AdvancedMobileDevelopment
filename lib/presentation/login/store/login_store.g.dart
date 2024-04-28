@@ -69,6 +69,39 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$studentTranscriptFileAtom =
+      Atom(name: '_UserStore.studentTranscriptFile', context: context);
+
+  @override
+  String get studentTranscriptFile {
+    _$studentTranscriptFileAtom.reportRead();
+    return super.studentTranscriptFile;
+  }
+
+  @override
+  set studentTranscriptFile(String value) {
+    _$studentTranscriptFileAtom.reportWrite(value, super.studentTranscriptFile,
+        () {
+      super.studentTranscriptFile = value;
+    });
+  }
+
+  late final _$studentResumeFileAtom =
+      Atom(name: '_UserStore.studentResumeFile', context: context);
+
+  @override
+  String get studentResumeFile {
+    _$studentResumeFileAtom.reportRead();
+    return super.studentResumeFile;
+  }
+
+  @override
+  set studentResumeFile(String value) {
+    _$studentResumeFileAtom.reportWrite(value, super.studentResumeFile, () {
+      super.studentResumeFile = value;
+    });
+  }
+
   late final _$techstacksAtom =
       Atom(name: '_UserStore.techstacks', context: context);
 
@@ -325,6 +358,22 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$profileStudentAtom =
+      Atom(name: '_UserStore.profileStudent', context: context);
+
+  @override
+  ProfileStudent? get profileStudent {
+    _$profileStudentAtom.reportRead();
+    return super.profileStudent;
+  }
+
+  @override
+  set profileStudent(ProfileStudent? value) {
+    _$profileStudentAtom.reportWrite(value, super.profileStudent, () {
+      super.profileStudent = value;
+    });
+  }
+
   late final _$loginFutureAtom =
       Atom(name: '_UserStore.loginFuture', context: context);
 
@@ -539,6 +588,39 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$apiStudentProfileResponseAtom =
+      Atom(name: '_UserStore.apiStudentProfileResponse', context: context);
+
+  @override
+  ObservableFuture<dynamic> get apiStudentProfileResponse {
+    _$apiStudentProfileResponseAtom.reportRead();
+    return super.apiStudentProfileResponse;
+  }
+
+  @override
+  set apiStudentProfileResponse(ObservableFuture<dynamic> value) {
+    _$apiStudentProfileResponseAtom
+        .reportWrite(value, super.apiStudentProfileResponse, () {
+      super.apiStudentProfileResponse = value;
+    });
+  }
+
+  late final _$apiUpdateProfileAtom =
+      Atom(name: '_UserStore.apiUpdateProfile', context: context);
+
+  @override
+  ObservableFuture<dynamic> get apiUpdateProfile {
+    _$apiUpdateProfileAtom.reportRead();
+    return super.apiUpdateProfile;
+  }
+
+  @override
+  set apiUpdateProfile(ObservableFuture<dynamic> value) {
+    _$apiUpdateProfileAtom.reportWrite(value, super.apiUpdateProfile, () {
+      super.apiUpdateProfile = value;
+    });
+  }
+
   late final _$loginAsyncAction =
       AsyncAction('_UserStore.login', context: context);
 
@@ -689,6 +771,24 @@ mixin _$UserStore on _UserStore, Store {
     return _$getResumeFileAsyncAction.run(() => super.getResumeFile());
   }
 
+  late final _$getStudentTranscriptFileAsyncAction =
+      AsyncAction('_UserStore.getStudentTranscriptFile', context: context);
+
+  @override
+  Future<dynamic> getStudentTranscriptFile() {
+    return _$getStudentTranscriptFileAsyncAction
+        .run(() => super.getStudentTranscriptFile());
+  }
+
+  late final _$getStudentResumeFileAsyncAction =
+      AsyncAction('_UserStore.getStudentResumeFile', context: context);
+
+  @override
+  Future<dynamic> getStudentResumeFile() {
+    return _$getStudentResumeFileAsyncAction
+        .run(() => super.getStudentResumeFile());
+  }
+
   late final _$submitProposalAsyncAction =
       AsyncAction('_UserStore.submitProposal', context: context);
 
@@ -698,12 +798,23 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.submitProposal(projectId, coverLetter));
   }
 
+  late final _$getStudentProfileAsyncAction =
+      AsyncAction('_UserStore.getStudentProfile', context: context);
+
+  @override
+  Future<dynamic> getStudentProfile(int student_id) {
+    return _$getStudentProfileAsyncAction
+        .run(() => super.getStudentProfile(student_id));
+  }
+
   @override
   String toString() {
     return '''
 user: ${user},
 transcriptFile: ${transcriptFile},
 resumeFile: ${resumeFile},
+studentTranscriptFile: ${studentTranscriptFile},
+studentResumeFile: ${studentResumeFile},
 techstacks: ${techstacks},
 skillSets: ${skillSets},
 currentRole: ${currentRole},
@@ -720,6 +831,7 @@ apiResponseMessage: ${apiResponseMessage},
 apiResponseSuccess: ${apiResponseSuccess},
 onFinishStudentProfile: ${onFinishStudentProfile},
 isCreateProfile: ${isCreateProfile},
+profileStudent: ${profileStudent},
 loginFuture: ${loginFuture},
 signinFuture: ${signinFuture},
 getMeFuture: ${getMeFuture},
@@ -733,6 +845,8 @@ createCompanyProfileFuture: ${createCompanyProfileFuture},
 forgotFuture: ${forgotFuture},
 changeFuture: ${changeFuture},
 apiCallingFeature: ${apiCallingFeature},
+apiStudentProfileResponse: ${apiStudentProfileResponse},
+apiUpdateProfile: ${apiUpdateProfile},
 isLoading: ${isLoading},
 isSignin: ${isSignin}
     ''';

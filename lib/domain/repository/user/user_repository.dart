@@ -18,9 +18,11 @@ import 'package:boilerplate/domain/usecase/user/login_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/submit_proposal_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/update_proposal_usecase.dart';
 import 'package:dio/dio.dart';
 
 import '../../entity/user/user.dart';
+import '../../usecase/user/get_student_profile_usecase.dart';
 
 abstract class UserRepository {
   Future<dynamic> login(LoginParams params);
@@ -43,9 +45,11 @@ abstract class UserRepository {
 
   Future<List<Skillset>?> getSkillSet(GetSkillSetParams params);
 
-  Future<ProfileCompany?> createUpdateCompanyProfile(CreateUpdateCompanyProfileParams params);
+  Future<ProfileCompany?> createUpdateCompanyProfile(
+      CreateUpdateCompanyProfileParams params);
 
-  Future<ProfileStudent?> createUpdateStudentProfile(CreateUpdateStudentProfileParams params);
+  Future<ProfileStudent?> createUpdateStudentProfile(
+      CreateUpdateStudentProfileParams params);
 
   Future<dynamic> uploadResume(FormData params);
 
@@ -62,4 +66,11 @@ abstract class UserRepository {
   Future<dynamic> submitProposal(SubmitProposalParams params);
 
   Future<bool> get isLoggedIn;
+
+  Future<ProfileStudent> getStudentProfile(GetStudentProfileParams params);
+
+  Future<dynamic> updateProposal(UpdateProposalParam params);
+
+  Future<dynamic> updateProposalById(
+      int proposalId, UpdateProposalParam params);
 }

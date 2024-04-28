@@ -79,32 +79,32 @@ class _PostProjectStep3State extends State<PostProjectStep3> {
                     "Project description:",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
-                  JustTheTooltip(
-                    controller: _tooltipController,
-                    isModal: true,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.help_outline_outlined,
-                        size: 16,
-                      ),
-                      onPressed: () {
-                        _tooltipController.showTooltip();
-                      },
-                    ),
-                    content: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: UnorderedList([
-                        "Clear expectation about your project or dellverables",
-                        "The skills required for your project",
-                        "Detall about your project",
-                      ], "Example: Students are looking for:"),
-                    ),
-                  )
+                  // JustTheTooltip(
+                  //   controller: _tooltipController,
+                  //   isModal: true,
+                  //   child: IconButton(
+                  //     icon: Icon(
+                  //       Icons.help_outline_outlined,
+                  //       size: 16,
+                  //     ),
+                  //     onPressed: () {
+                  //       _tooltipController.showTooltip();
+                  //     },
+                  //   ),
+                  //   content: Padding(
+                  //     padding: EdgeInsets.all(8.0),
+                  //     child: UnorderedList([
+                  //       "Clear expectation about your project or dellverables",
+                  //       "The skills required for your project",
+                  //       "Detall about your project",
+                  //     ], "Example: Students are looking for:"),
+                  //   ),
+                  // )
                 ],
               ),
-              SizedBox(
-                height: 10,
-              ),
+              // SizedBox(
+              //   height: 10,
+              // ),
               const QuillToolbar(
                 configurations: const QuillToolbarConfigurations(
                     fontSizesValues: const {

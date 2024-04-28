@@ -1,4 +1,5 @@
 import 'package:boilerplate/domain/entity/project/project.dart';
+import 'package:boilerplate/presentation/6_company_review_proposals/components/hired_candidate_list.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -67,12 +68,12 @@ class _SendHireOffer extends State<SendHireOffer>
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          CandidateList(),
+          CandidateList(project: widget.project),
           Detail(
             project: widget.project,
           ),
           Center(child: Text('Content of Tab 3')),
-          Center(child: Text('Content of Tab 4')),
+          HiredCandidateList(project: widget.project),
         ],
       ),
       // bottomSheet: CustomBottomSheetContent(
