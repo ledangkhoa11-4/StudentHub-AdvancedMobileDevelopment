@@ -111,10 +111,12 @@ class _SendHireOffer extends State<SendHireOffer>
   }
 
   Widget popupMessage(bool? isSuccess, String msg) {
-    if (isSuccess == true) {
-      ToastHelper.success(msg);
-    } else {
-      ToastHelper.error(msg);
+    if (!msg.isEmpty) {
+      if (isSuccess == true) {
+        ToastHelper.success(msg);
+      } else {
+        ToastHelper.error(msg);
+      }
     }
     _userStore.resetApiResponse();
     return SizedBox.shrink();
