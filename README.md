@@ -3,6 +3,9 @@
 **Phasing 1:**
 Mocking UI - [Youtube Link](https://www.youtube.com/watch?v=cpLQGUNOjnk)
 
+**Phasing 2:**
+Auth flow, profile flow, post project flow - [Youtube Link](https://www.youtube.com/watch?v=cuWcSlmp9Rw)
+
 **Step 1:**
 
 Go to project root and execute the following command in console to get the required dependencies: 
