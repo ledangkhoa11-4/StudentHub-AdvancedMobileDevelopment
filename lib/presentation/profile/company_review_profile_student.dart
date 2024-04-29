@@ -30,12 +30,6 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
     super.initState();
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   _userStore.getTranscriptFileByStudentId(widget.proposal.studentId);
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -244,9 +238,6 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
                                 onPressed: () {
                                   if (!_userStore
                                       .studentTranscriptFile.isEmpty) {
-                                    // print("22222222222222222222222222222");
-                                    // print("studentTranscriptFile: " +
-                                    //     _userStore.studentTranscriptFile);
                                     Navigator.of(context)
                                         .push(MaterialPageRoute(
                                             builder: (context) => ViewPdfScreen(
@@ -269,24 +260,24 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
                               ),
                               ElevatedButton(
                                 onPressed: () {
-                                  if (!_userStore.studentResumeFile.isEmpty) {
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                            builder: (context) => ViewPdfScreen(
-                                                  title: widget.proposal.student
-                                                          .fullname
-                                                          .toString() +
-                                                      " resume",
-                                                  url: _userStore
-                                                      .studentResumeFile,
-                                                )));
-                                  } else {
-                                    setState(() {
-                                      _nextNavigate = 2;
-                                      _userStore.getResumeFileByStudentId(
-                                          widget.proposal.studentId);
-                                    });
-                                  }
+                                  // if (!_userStore.studentResumeFile.isEmpty) {
+                                  //   Navigator.of(context)
+                                  //       .push(MaterialPageRoute(
+                                  //           builder: (context) => ViewPdfScreen(
+                                  //                 title: widget.proposal.student
+                                  //                         .fullname
+                                  //                         .toString() +
+                                  //                     " resume",
+                                  //                 url: _userStore
+                                  //                     .studentResumeFile,
+                                  //               )));
+                                  // } else {
+                                  setState(() {
+                                    _nextNavigate = 2;
+                                    _userStore.getResumeFileByStudentId(
+                                        widget.proposal.studentId);
+                                  });
+                                  // }
                                 },
                                 child: Text('View resume'),
                               ),
@@ -309,8 +300,7 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
             ),
             Observer(
               builder: (context) {
-                return !_userStore.isLoading &&
-                        _userStore.apiResponseSuccess == true
+                return (!_userStore.isLoading)
                     ? navigate(context)
                     : SizedBox.shrink();
               },
@@ -338,8 +328,7 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
       if (_nextNavigate == 2) {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ViewPdfScreen(
-                  title:
-                      widget.proposal.student.fullname.toString() + " resume",
+                  title: widget.proposal.student.fullname.toString(),
                   url: _userStore.studentResumeFile,
                 )));
       }
