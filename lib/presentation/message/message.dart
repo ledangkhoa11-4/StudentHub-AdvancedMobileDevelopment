@@ -84,7 +84,7 @@ class _MessageScreenState extends State<MessageScreen> {
                             side: BorderSide.none,
                           ),
                           title: Text(
-                            "Project  ${project != null ? project.title : "N/A"}",
+                            "Project ${project != null ? project.title : "N/A"}",
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.bold),
                           ),
