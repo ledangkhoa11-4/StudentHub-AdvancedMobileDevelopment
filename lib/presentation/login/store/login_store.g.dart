@@ -771,22 +771,22 @@ mixin _$UserStore on _UserStore, Store {
     return _$getResumeFileAsyncAction.run(() => super.getResumeFile());
   }
 
-  late final _$getStudentTranscriptFileAsyncAction =
-      AsyncAction('_UserStore.getStudentTranscriptFile', context: context);
+  late final _$getTranscriptFileByStudentIdAsyncAction =
+      AsyncAction('_UserStore.getTranscriptFileByStudentId', context: context);
 
   @override
-  Future<dynamic> getStudentTranscriptFile() {
-    return _$getStudentTranscriptFileAsyncAction
-        .run(() => super.getStudentTranscriptFile());
+  Future<dynamic> getTranscriptFileByStudentId(int studentId) {
+    return _$getTranscriptFileByStudentIdAsyncAction
+        .run(() => super.getTranscriptFileByStudentId(studentId));
   }
 
-  late final _$getStudentResumeFileAsyncAction =
-      AsyncAction('_UserStore.getStudentResumeFile', context: context);
+  late final _$getResumeFileByStudentIdAsyncAction =
+      AsyncAction('_UserStore.getResumeFileByStudentId', context: context);
 
   @override
-  Future<dynamic> getStudentResumeFile() {
-    return _$getStudentResumeFileAsyncAction
-        .run(() => super.getStudentResumeFile());
+  Future<dynamic> getResumeFileByStudentId(int studentId) {
+    return _$getResumeFileByStudentIdAsyncAction
+        .run(() => super.getResumeFileByStudentId(studentId));
   }
 
   late final _$submitProposalAsyncAction =

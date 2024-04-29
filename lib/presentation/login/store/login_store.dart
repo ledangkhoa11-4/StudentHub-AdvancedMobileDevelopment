@@ -721,19 +721,15 @@ abstract class _UserStore with Store {
 
   // [PHONG] -----------------------------------------------------------
   @action
-  Future getStudentTranscriptFile() async {
-    this.resetStudentFile();
-    if (this.studentTranscriptFile.isEmpty) {
-      GetProfileFileParams param = GetProfileFileParams(
-          studentId: int.parse(this.profileStudent!.id.toString()),
-          type: "transcript");
+  Future getTranscriptFileByStudentId(int studentId) async {
+    if (this.transcriptFile.isEmpty) {
+      GetProfileFileParams param =
+          GetProfileFileParams(studentId: studentId, type: "transcript");
       final future = _getProfileFileUseCase.call(params: param);
       apiCallingFeature = ObservableFuture(future);
       await future.then((value) async {
         if (value != null) {
-          // print("88888888888888888888888888888888");
-          // print(value.toString());
-          this.studentTranscriptFile = value;
+          this.transcriptFile = value;
           this.apiResponseSuccess = true;
         }
       }).catchError((e) {
@@ -748,18 +744,15 @@ abstract class _UserStore with Store {
   }
 
   @action
-  Future getStudentResumeFile() async {
-    this.resetStudentFile();
-    if (this.studentResumeFile.isEmpty) {
-      GetProfileFileParams param = GetProfileFileParams(
-          studentId: int.parse(this.profileStudent!.id.toString()),
-          type: "resume");
+  Future getResumeFileByStudentId(int studentId) async {
+    if (this.resumeFile.isEmpty) {
+      GetProfileFileParams param =
+          GetProfileFileParams(studentId: studentId, type: "resume");
       final future = _getProfileFileUseCase.call(params: param);
       apiCallingFeature = ObservableFuture(future);
-
       await future.then((value) async {
         if (value != null) {
-          this.studentResumeFile = value;
+          this.resumeFile = value;
           this.apiResponseSuccess = true;
         }
       }).catchError((e) {
