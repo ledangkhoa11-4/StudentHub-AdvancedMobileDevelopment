@@ -31,6 +31,13 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _userStore.getResumeFileByStudentId(widget.proposal.studentId);
+    _userStore.getTranscriptFileByStudentId(widget.proposal.studentId);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: UserAppBar.buildAppBar(context,
