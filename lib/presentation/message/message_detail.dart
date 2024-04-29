@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
@@ -16,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:uuid/uuid.dart';
 
 class MessageDetail extends StatefulWidget {
   final int projectId;
@@ -46,7 +44,7 @@ class _MessageDetailState extends State<MessageDetail> {
 
 @override
   void dispose() {
-    _userStore.setCurrentChat(null, null);
+    _userStore.setCurrentChat(_userStore.currentChatProjectId, null);
     super.dispose();
   }
   @override

@@ -670,6 +670,38 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$chatListAtom =
+      Atom(name: '_UserStore.chatList', context: context);
+
+  @override
+  List<ChatEntity> get chatList {
+    _$chatListAtom.reportRead();
+    return super.chatList;
+  }
+
+  @override
+  set chatList(List<ChatEntity> value) {
+    _$chatListAtom.reportWrite(value, super.chatList, () {
+      super.chatList = value;
+    });
+  }
+
+  late final _$allChatListAtom =
+      Atom(name: '_UserStore.allChatList', context: context);
+
+  @override
+  List<ChatEntity>? get allChatList {
+    _$allChatListAtom.reportRead();
+    return super.allChatList;
+  }
+
+  @override
+  set allChatList(List<ChatEntity>? value) {
+    _$allChatListAtom.reportWrite(value, super.allChatList, () {
+      super.allChatList = value;
+    });
+  }
+
   late final _$loginAsyncAction =
       AsyncAction('_UserStore.login', context: context);
 
@@ -855,6 +887,24 @@ mixin _$UserStore on _UserStore, Store {
     return _$getCurrentChatAsyncAction.run(() => super.getCurrentChat());
   }
 
+  late final _$getChatListByProjectIdAsyncAction =
+      AsyncAction('_UserStore.getChatListByProjectId', context: context);
+
+  @override
+  Future<dynamic> getChatListByProjectId({bool loading = true}) {
+    return _$getChatListByProjectIdAsyncAction
+        .run(() => super.getChatListByProjectId(loading: loading));
+  }
+
+  late final _$getAllChatListAsyncAction =
+      AsyncAction('_UserStore.getAllChatList', context: context);
+
+  @override
+  Future<dynamic> getAllChatList({bool loading = true}) {
+    return _$getAllChatListAsyncAction
+        .run(() => super.getAllChatList(loading: loading));
+  }
+
   late final _$_UserStoreActionController =
       ActionController(name: '_UserStore', context: context);
 
@@ -923,6 +973,8 @@ apiUpdateProfile: ${apiUpdateProfile},
 currentChatProjectId: ${currentChatProjectId},
 currentChatUserId: ${currentChatUserId},
 currentChat: ${currentChat},
+chatList: ${chatList},
+allChatList: ${allChatList},
 isLoading: ${isLoading},
 isSignin: ${isSignin}
     ''';

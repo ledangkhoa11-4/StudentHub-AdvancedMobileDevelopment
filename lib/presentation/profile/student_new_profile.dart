@@ -43,7 +43,7 @@ class _StudentNewProfileState extends State<StudentNewProfile> {
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context,
           titleWidget: isEdit
-              ? Text("Edit company profile")
+              ? Text("Edit student profile")
               : Text("Create new profile"),
           disableSettingAccount: true),
       body: Stack(

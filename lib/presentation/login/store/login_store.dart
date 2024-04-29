@@ -137,8 +137,17 @@ abstract class _UserStore with Store {
     _disposers = [
       reaction((_) => success, (_) => success = false, delay: 200),
       reaction((_) => changeSuccess, (_) => changeSuccess = false, delay: 200),
+      reaction((_) => [apiResponseMessage, apiResponseSuccess], (_) {
+        apiResponseSuccess = null;
+        apiResponseMessage = "";
+      }, delay: 200),
       reaction((_) => [currentChatProjectId, currentChatUserId],
           (_) => getCurrentChat()),
+      reaction((_) => currentChatProjectId, (_) => getChatListByProjectId()),
+      reaction((_) => currentChat, (_) => getAllChatList(loading: false)),
+
+
+      
     ];
   }
 
@@ -271,6 +280,12 @@ abstract class _UserStore with Store {
 
   @observable
   List<ChatEntity> currentChat = [];
+
+  @observable
+  List<ChatEntity> chatList = [];
+
+  @observable
+  List<ChatEntity>? allChatList;
 
   @computed
   bool get isLoading =>
@@ -893,24 +908,31 @@ abstract class _UserStore with Store {
     this.currentChatUserId = userId;
   }
 
+  dynamic messageHandler(data) {
+    final senderId = data["senderId"];
+    if (senderId != this.user!.id) {
+      final newChat = ChatEntity(
+          id: data["messageId"],
+          createdAt: DateTime.now(),
+          content: data["content"],
+          sender: ChatUser(id: data["senderId"], fullname: ""),
+          receiver:
+              ChatUser(id: this.user!.id!, fullname: this.user!.fullname!));
+      this.addCurrentChat(newChat);
+    }
+  }
+
   @action
   Future getCurrentChat() async {
     if (this.currentChatProjectId != null && this.currentChatUserId != null) {
       getIt<SharedPreferenceHelper>().authToken.then((value) {
         if (value != null) {
-          SocketService.connectWithQuery(this.currentChatProjectId!, value);
           final socket = SocketService.socket;
-
+          if (socket?.io.options?['query'] == null) {
+            SocketService.connectWithQuery(this.currentChatProjectId!, value);
+          }
           if (socket != null) {
-            socket.on('RECEIVE_MESSAGE', (data) {
-              final senderId = data["senderId"];
-              if (senderId != this.user!.id) {
-                final newChat = ChatEntity(id: data["messageId"], createdAt: DateTime.now(), content: data["content"], 
-                sender: ChatUser(id: data["senderId"], fullname: ""), 
-                receiver: ChatUser(id: this.user!.id!, fullname: this.user!.fullname!));
-                this.addCurrentChat(newChat);
-              }
-            });
+            socket.on('RECEIVE_MESSAGE', messageHandler);
           }
         }
       });
@@ -934,10 +956,71 @@ abstract class _UserStore with Store {
     } else {
       this.currentChat = [];
       final socket = SocketService.socket;
-      if(socket != null) {
-        socket.off("RECEIVE_MESSAGE");
+      if (socket != null) {
+        socket.off("RECEIVE_MESSAGE", messageHandler);
       }
     }
+  }
+
+  dynamic messageProjectHandler(data) {
+    this.getChatListByProjectId(loading: false);
+  }
+
+  @action
+  Future getChatListByProjectId({bool loading = true}) async {
+    if (this.currentChatProjectId != null) {
+      if (loading) {
+        getIt<SharedPreferenceHelper>().authToken.then((value) {
+          if (value != null) {
+            SocketService.connectWithQuery(this.currentChatProjectId!, value);
+            final socket = SocketService.socket;
+            if (socket != null) {
+              socket.on('RECEIVE_MESSAGE', messageProjectHandler);
+            }
+          }
+        });
+      }
+
+      final future = _getAllChatByProjectUseCase.call(
+          params: ProjectIdParam(projectId: this.currentChatProjectId!));
+      if (loading) {
+        apiCallingFeature = ObservableFuture(future);
+      }
+      await future.then((value) async {
+        this.chatList = value;
+      }).catchError((e) {
+        print("---------------");
+        print(e);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
+        this.apiResponseSuccess = false;
+        this.apiResponseMessage = response["errorDetails"].toString();
+      });
+    } else {
+      this.chatList = [];
+      final socket = SocketService.socket;
+      if (socket != null) {
+        socket.off("RECEIVE_MESSAGE", messageProjectHandler);
+      }
+    }
+  }
+
+  @action
+  Future getAllChatList({bool loading = true}) async {
+    final future = _getAllChatUseCase.call(params: null);
+    if (loading) {
+      apiCallingFeature = ObservableFuture(future);
+    }
+    await future.then((value) async {
+      this.allChatList = value;
+    }).catchError((e) {
+      print("---------------");
+      print(e);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.apiResponseSuccess = false;
+      this.apiResponseMessage = response["errorDetails"].toString();
+    });
   }
 
   @action
@@ -951,6 +1034,7 @@ abstract class _UserStore with Store {
     final projectStore = getIt<ProjectStore>();
 
     this.user = null;
+    this.allChatList = null;
     this.transcriptFile = "";
     this.resumeFile = "";
     this.isLoggedIn = false;
