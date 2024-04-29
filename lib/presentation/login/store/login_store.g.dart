@@ -820,22 +820,22 @@ mixin _$UserStore on _UserStore, Store {
     return _$getResumeFileAsyncAction.run(() => super.getResumeFile());
   }
 
-  late final _$getStudentTranscriptFileAsyncAction =
-      AsyncAction('_UserStore.getStudentTranscriptFile', context: context);
+  late final _$getTranscriptFileByStudentIdAsyncAction =
+      AsyncAction('_UserStore.getTranscriptFileByStudentId', context: context);
 
   @override
-  Future<dynamic> getStudentTranscriptFile() {
-    return _$getStudentTranscriptFileAsyncAction
-        .run(() => super.getStudentTranscriptFile());
+  Future<dynamic> getTranscriptFileByStudentId(int studentId) {
+    return _$getTranscriptFileByStudentIdAsyncAction
+        .run(() => super.getTranscriptFileByStudentId(studentId));
   }
 
-  late final _$getStudentResumeFileAsyncAction =
-      AsyncAction('_UserStore.getStudentResumeFile', context: context);
+  late final _$getResumeFileByStudentIdAsyncAction =
+      AsyncAction('_UserStore.getResumeFileByStudentId', context: context);
 
   @override
-  Future<dynamic> getStudentResumeFile() {
-    return _$getStudentResumeFileAsyncAction
-        .run(() => super.getStudentResumeFile());
+  Future<dynamic> getResumeFileByStudentId(int studentId) {
+    return _$getResumeFileByStudentIdAsyncAction
+        .run(() => super.getResumeFileByStudentId(studentId));
   }
 
   late final _$submitProposalAsyncAction =
@@ -845,15 +845,6 @@ mixin _$UserStore on _UserStore, Store {
   Future<dynamic> submitProposal(int projectId, String coverLetter) {
     return _$submitProposalAsyncAction
         .run(() => super.submitProposal(projectId, coverLetter));
-  }
-
-  late final _$getStudentProfileAsyncAction =
-      AsyncAction('_UserStore.getStudentProfile', context: context);
-
-  @override
-  Future<dynamic> getStudentProfile(int student_id) {
-    return _$getStudentProfileAsyncAction
-        .run(() => super.getStudentProfile(student_id));
   }
 
   late final _$getCurrentChatAsyncAction =

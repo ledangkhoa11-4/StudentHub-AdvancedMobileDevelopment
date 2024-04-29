@@ -30,9 +30,9 @@ class _CandidateState extends State<Candidate> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (_userStore.profileStudent == null) {
-      _userStore.getStudentProfile(widget.studentId);
-    }
+    // if (_userStore.profileStudent == null) {
+    //   _userStore.getTranscriptFileByStudentId(widget.studentId);
+    // }
   }
 
   UpdateProposalParam constructUpdateProposalParam(
@@ -66,7 +66,7 @@ class _CandidateState extends State<Candidate> {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                CompanyReviewStudentProfile(student_id: widget.studentId),
+                CompanyReviewStudentProfile(proposal: widget.proposal),
           ),
         );
       },
