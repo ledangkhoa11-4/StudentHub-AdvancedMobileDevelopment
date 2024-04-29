@@ -267,24 +267,24 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
                               ),
                               ElevatedButton(
                                 onPressed: () {
-                                  // if (!_userStore.studentResumeFile.isEmpty) {
-                                  //   Navigator.of(context)
-                                  //       .push(MaterialPageRoute(
-                                  //           builder: (context) => ViewPdfScreen(
-                                  //                 title: widget.proposal.student
-                                  //                         .fullname
-                                  //                         .toString() +
-                                  //                     " resume",
-                                  //                 url: _userStore
-                                  //                     .studentResumeFile,
-                                  //               )));
-                                  // } else {
-                                  setState(() {
-                                    _nextNavigate = 2;
-                                    _userStore.getResumeFileByStudentId(
-                                        widget.proposal.studentId);
-                                  });
-                                  // }
+                                  if (!_userStore.studentResumeFile.isEmpty) {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                            builder: (context) => ViewPdfScreen(
+                                                  title: widget.proposal.student
+                                                          .fullname
+                                                          .toString() +
+                                                      " resume",
+                                                  url: _userStore
+                                                      .studentResumeFile,
+                                                )));
+                                  } else {
+                                    setState(() {
+                                      _nextNavigate = 2;
+                                      _userStore.getResumeFileByStudentId(
+                                          widget.proposal.studentId);
+                                    });
+                                  }
                                 },
                                 child: Text('View resume'),
                               ),
@@ -307,8 +307,8 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
             ),
             Observer(
               builder: (context) {
-                return !_userStore.isLoading
-                    // && _userStore.apiResponseMessage == true
+                return !_userStore.isLoading &&
+                        _userStore.apiResponseMessage == true
                     ? navigate(context)
                     : SizedBox.shrink();
               },
