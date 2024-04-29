@@ -139,7 +139,7 @@ class ProjectItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        '${project.countProposals}',
+                        '${project.countProposals - project.countHired}',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Text(

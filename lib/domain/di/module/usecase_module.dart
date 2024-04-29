@@ -18,6 +18,9 @@ import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_student_profile_usercase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_by_projectid_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_with_userId_in_projectid_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
@@ -126,6 +129,18 @@ mixin UseCaseModule {
 
     getIt.registerSingleton<UpdateProposalUseCase>(
       UpdateProposalUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<GetAllChatUseCase>(
+      GetAllChatUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<GetAllChatByProjectUseCase>(
+      GetAllChatByProjectUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<GetAllChatWithUserInProjectUseCase>(
+      GetAllChatWithUserInProjectUseCase(getIt<UserRepository>()),
     );
 
     // post:--------------------------------------------------------------------

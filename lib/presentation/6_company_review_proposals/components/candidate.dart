@@ -7,6 +7,7 @@ import 'package:boilerplate/domain/entity/proposal/proposal-type-no-project.dart
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/update_proposal_usecase.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
+import 'package:boilerplate/presentation/message/message_detail.dart';
 import 'package:boilerplate/presentation/profile/company_review_profile_student.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -158,26 +159,27 @@ class _CandidateState extends State<Candidate> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
-                    style:  ElevatedButton.styleFrom(),
+                      style: ElevatedButton.styleFrom(),
                       onPressed: () {
-                        UpdateProposalParam updatedProposal =
-                            constructUpdateProposalParam(
-                                ProposalType.ACTIVE.value, 0);
-                        if (widget.proposal.statusFlag ==
-                            ProposalType.WAITING.value) {
-                          _userStore.updateProposalById(
-                              widget.proposal.id, updatedProposal);
-                        }
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MessageDetail(projectId: widget.proposal.projectId, userId: widget.proposal.student.userId, userName: widget.proposal.student.fullname!,),
+                          ),
+                        );
                       },
                       child: Text('Message')),
                   if (widget.proposal.statusFlag != ProposalType.HIRED.value)
                     ElevatedButton(
-                      style: widget.proposal.statusFlag == ProposalType.OFFER.value ? ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey,
-                        foregroundColor: Colors.white
-                      ) :  ElevatedButton.styleFrom(),
+                      style:
+                          widget.proposal.statusFlag == ProposalType.OFFER.value
+                              ? ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.grey,
+                                  foregroundColor: Colors.white)
+                              : ElevatedButton.styleFrom(),
                       onPressed: () {
-                        if (widget.proposal.statusFlag == ProposalType.OFFER.value ) {
+                        if (widget.proposal.statusFlag ==
+                            ProposalType.OFFER.value) {
                           return;
                         }
                         showDialog(
