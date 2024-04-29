@@ -722,48 +722,48 @@ abstract class _UserStore with Store {
   // [PHONG] -----------------------------------------------------------
   @action
   Future getTranscriptFileByStudentId(int studentId) async {
-    if (this.transcriptFile.isEmpty) {
-      GetProfileFileParams param =
-          GetProfileFileParams(studentId: studentId, type: "transcript");
-      final future = _getProfileFileUseCase.call(params: param);
-      apiCallingFeature = ObservableFuture(future);
-      await future.then((value) async {
-        if (value != null) {
-          this.transcriptFile = value;
-          this.apiResponseSuccess = true;
-        }
-      }).catchError((e) {
-        print("---------------");
-        print(e);
-        String message = e.response.toString();
-        final response = jsonDecode(message);
-        this.apiResponseSuccess = false;
-        this.apiResponseMessage = response["errorDetails"].toString();
-      });
-    }
+    // if (this.transcriptFile.isEmpty) {
+    GetProfileFileParams param =
+        GetProfileFileParams(studentId: studentId, type: "transcript");
+    final future = _getProfileFileUseCase.call(params: param);
+    apiCallingFeature = ObservableFuture(future);
+    await future.then((value) async {
+      if (value != null) {
+        this.studentTranscriptFile = value;
+        this.apiResponseSuccess = true;
+      }
+    }).catchError((e) {
+      print("---------------");
+      print(e);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.apiResponseSuccess = false;
+      this.apiResponseMessage = response["errorDetails"].toString();
+    });
+    // }
   }
 
   @action
   Future getResumeFileByStudentId(int studentId) async {
-    if (this.resumeFile.isEmpty) {
-      GetProfileFileParams param =
-          GetProfileFileParams(studentId: studentId, type: "resume");
-      final future = _getProfileFileUseCase.call(params: param);
-      apiCallingFeature = ObservableFuture(future);
-      await future.then((value) async {
-        if (value != null) {
-          this.resumeFile = value;
-          this.apiResponseSuccess = true;
-        }
-      }).catchError((e) {
-        print("---------------");
-        print(e);
-        String message = e.response.toString();
-        final response = jsonDecode(message);
-        this.apiResponseSuccess = false;
-        this.apiResponseMessage = response["errorDetails"].toString();
-      });
-    }
+    // if (this.resumeFile.isEmpty) {
+    GetProfileFileParams param =
+        GetProfileFileParams(studentId: studentId, type: "resume");
+    final future = _getProfileFileUseCase.call(params: param);
+    apiCallingFeature = ObservableFuture(future);
+    await future.then((value) async {
+      if (value != null) {
+        this.studentResumeFile = value;
+        this.apiResponseSuccess = true;
+      }
+    }).catchError((e) {
+      print("---------------");
+      print(e);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.apiResponseSuccess = false;
+      this.apiResponseMessage = response["errorDetails"].toString();
+    });
+    // }
   }
 
   // ----------------------------------------------------------------------------
@@ -795,31 +795,31 @@ abstract class _UserStore with Store {
   }
 
   // [PHONG] ---------------------------------------------------------------
-  @action
-  Future getStudentProfile(int student_id) async {
-    final GetStudentProfileParams getStudentProfileParams =
-        GetStudentProfileParams(studentId: student_id);
-    final future =
-        _getStudentProfileUseCase.call(params: getStudentProfileParams);
-    apiStudentProfileResponse = ObservableFuture(future);
+  // @action
+  // Future getStudentProfile(int student_id) async {
+  //   final GetStudentProfileParams getStudentProfileParams =
+  //       GetStudentProfileParams(studentId: student_id);
+  //   final future =
+  //       _getStudentProfileUseCase.call(params: getStudentProfileParams);
+  //   apiStudentProfileResponse = ObservableFuture(future);
 
-    await future.then((value) async {
-      if (value != null) {
-        // print("============================");
-        // print(value);
-        // resetProfileStudent();
-        this.profileStudent = value;
-        apiStudentResponseSuccess = true;
-        // print(value.toMap());
-      }
-    }).catchError((e) {
-      this.profileStudent = null;
-      this.apiStudentResponseSuccess = false;
-      print(e);
-    });
+  //   await future.then((value) async {
+  //     if (value != null) {
+  //       // print("============================");
+  //       // print(value);
+  //       // resetProfileStudent();
+  //       this.profileStudent = value;
+  //       apiStudentResponseSuccess = true;
+  //       // print(value.toMap());
+  //     }
+  //   }).catchError((e) {
+  //     this.profileStudent = null;
+  //     this.apiStudentResponseSuccess = false;
+  //     print(e);
+  //   });
 
-    return null;
-  }
+  //   return null;
+  // }
 
   // Future<dynamic> updateProposal(UpdateProposalParam params) async {
   //   final future = _updateProposalUseCase.call(params: params);

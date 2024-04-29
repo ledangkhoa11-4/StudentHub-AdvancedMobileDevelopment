@@ -798,15 +798,6 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.submitProposal(projectId, coverLetter));
   }
 
-  late final _$getStudentProfileAsyncAction =
-      AsyncAction('_UserStore.getStudentProfile', context: context);
-
-  @override
-  Future<dynamic> getStudentProfile(int student_id) {
-    return _$getStudentProfileAsyncAction
-        .run(() => super.getStudentProfile(student_id));
-  }
-
   @override
   String toString() {
     return '''
