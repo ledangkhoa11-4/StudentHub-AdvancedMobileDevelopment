@@ -300,7 +300,8 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
             ),
             Observer(
               builder: (context) {
-                return (!_userStore.isLoading)
+                return !_userStore.isLoading
+                    // && _userStore.apiResponseMessage == true
                     ? navigate(context)
                     : SizedBox.shrink();
               },
