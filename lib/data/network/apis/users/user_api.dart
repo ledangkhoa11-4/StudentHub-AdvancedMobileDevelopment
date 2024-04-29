@@ -307,12 +307,16 @@ class UserApi {
   Future<ProfileStudent> getProfileStudent(
       GetStudentProfileParams param) async {
     try {
+      print("99999999999999999999");
+      print(param.studentId);
       final res = await _dioClient.dio.get(
           Endpoints.getStudentProfile
               .replaceFirst(":studentId", param.studentId.toString()),
           data: param);
 
       final result = jsonDecode(res.toString());
+      print("88888888888888888888888888");
+      print(result);
       return ProfileStudent.fromMap(result["result"]);
     } catch (e) {
       print(e.toString());
