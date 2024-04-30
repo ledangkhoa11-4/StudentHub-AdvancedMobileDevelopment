@@ -1,6 +1,8 @@
 import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
+import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/chat/chatUser.dart';
+import 'package:boilerplate/domain/entity/user/user.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/message/components/conversation_list.dart';
@@ -90,6 +92,9 @@ class _MessageScreenState extends State<MessageScreen> {
                           ),
                           children: [
                             Observer(builder: (context) {
+                              final currentProfile =
+                                  getIt<SharedPreferenceHelper>()
+                                      .currentProfile;
                               final chatsInProject = _userStore.allChatList!
                                   .where((chat) => chat.project?.id == id)
                                   .toList();
@@ -107,7 +112,10 @@ class _MessageScreenState extends State<MessageScreen> {
                                         chat.sender.id == _userStore.user!.id
                                             ? "You: ${chat.content}"
                                             : chat.content,
-                                    imageUrl: "https://i.imgur.com/ugcoGNH.png",
+                                    imageUrl:
+                                        currentProfile == UserRole.COMPANY.value
+                                            ? "https://i.imgur.com/ugcoGNH.png"
+                                            : "https://i.imgur.com/SR6SaqF.png",
                                     time: "${Moment(chat.createdAt).fromNow()}",
                                     isMessageRead: false,
                                     projectId: chat.project!.id!,

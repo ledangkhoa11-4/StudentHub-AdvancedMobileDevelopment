@@ -1,20 +1,27 @@
 import 'dart:math';
 
 import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
+import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/chat/chat.dart';
 import 'package:boilerplate/domain/entity/chat/chatUser.dart';
+import 'package:boilerplate/domain/entity/interview/interview.dart';
 import 'package:boilerplate/domain/entity/user/user.dart';
+import 'package:boilerplate/presentation/9_schedule_for_interview/components/shedule_bottom_sheet.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:boilerplate/utils/socket/socket.dart';
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:moment_dart/moment_dart.dart';
+import 'package:uuid/uuid.dart';
 
 class MessageDetail extends StatefulWidget {
   final int projectId;
@@ -22,7 +29,10 @@ class MessageDetail extends StatefulWidget {
   final String userName;
 
   const MessageDetail(
-      {super.key, required this.projectId, required this.userId, required this.userName});
+      {super.key,
+      required this.projectId,
+      required this.userId,
+      required this.userName});
 
   @override
   State<MessageDetail> createState() => _MessageDetailState();
@@ -30,7 +40,6 @@ class MessageDetail extends StatefulWidget {
 
 class _MessageDetailState extends State<MessageDetail> {
   final UserStore _userStore = getIt<UserStore>();
-  List<types.Message> _messages = [];
   late types.User _user;
 
   @override
@@ -42,48 +51,209 @@ class _MessageDetailState extends State<MessageDetail> {
     super.initState();
   }
 
-@override
+  @override
   void dispose() {
     _userStore.setCurrentChat(_userStore.currentChatProjectId, null);
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final ThemeStore _themeStore = getIt<ThemeStore>();
+    final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
 
     return Scaffold(
-      appBar: UserAppBar.buildAppBar(context, titleWidget: Text("${widget.userName}")),
+      appBar: UserAppBar.buildAppBar(context,
+          titleWidget: Text("${widget.userName}")),
       body: Stack(
         children: [
-          Observer(
-            builder: (context) {
-              return Chat(
-                l10n: ChatL10nEn(emptyChatPlaceholder: _userStore.isLoading ? 'Loading...' : _userStore.currentChat.length > 0 ? "" : "No message"
-                  
-                ),
-                messages: _messages,
-                user: _user,
-                onSendPressed: _handleSendPressed,
-                showUserAvatars: true,
-                showUserNames: true,
-                theme: _themeStore.darkMode ? const DarkChatTheme() : const DefaultChatTheme(
-                  seenIcon: Text(
-                    'read',
-                    style: TextStyle(
-                      fontSize: 10.0,
+          Observer(builder: (context) {
+            List<types.Message> _messages = [];
+            _userStore.currentChat.forEach((chat) {
+              final String type = chat.interview != null ? "custom" : "text";
+              _messages.add(types.Message.fromJson(
+                {
+                  "author": {
+                    "firstName": !chat.sender.fullname.isEmpty
+                        ? chat.sender.fullname
+                        : widget.userName,
+                    "id": "${chat.sender.id}",
+                    "lastName": "",
+                    "imageUrl": currentProfile == UserRole.COMPANY.value
+                        ? "https://i.imgur.com/ugcoGNH.png"
+                        : "https://i.imgur.com/SR6SaqF.png",
+                  },
+                  "createdAt": chat.createdAt.millisecondsSinceEpoch,
+                  "id": "${chat.id}",
+                  "text": chat.content,
+                  "type": type,
+                  "metadata":
+                      chat.interview != null ? chat.interview!.toJson() : null
+                },
+              ));
+            });
+            _messages = _messages.reversed.toList();
+            return Chat(
+              onAttachmentPressed: currentProfile == UserRole.COMPANY.value
+                  ? () => _handleCreateMeeting(context)
+                  : null,
+              l10n: ChatL10nEn(
+                  emptyChatPlaceholder: _userStore.isLoading
+                      ? 'Loading...'
+                      : _userStore.currentChat.length > 0
+                          ? ""
+                          : "No message"),
+              messages: _messages,
+              user: _user,
+              onSendPressed: _handleSendPressed,
+              showUserAvatars: true,
+              showUserNames: true,
+              theme: _themeStore.darkMode
+                  ? const DarkChatTheme(
+                      attachmentButtonIcon: Icon(
+                        BootstrapIcons.camera_video,
+                        color: Colors.white,
+                      ),
+                    )
+                  : const DefaultChatTheme(
+                      attachmentButtonIcon: Icon(
+                        BootstrapIcons.camera_video,
+                        color: Colors.white,
+                      ),
+                      seenIcon: Text(
+                        'read',
+                        style: TextStyle(
+                          fontSize: 10.0,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              );
-            }
-          ),
-          Observer(
-            builder: (context) {
-              return !_userStore.isLoading && _userStore.currentChat.length > 0
-                  ? setChatBubble(_userStore.currentChat)
-                  : SizedBox.shrink();
-            },
-          ),
+              customMessageBuilder: (p0, {required messageWidth}) {
+                if (p0.metadata != null) {
+                  final currentProfile =
+                      getIt<SharedPreferenceHelper>().currentProfile;
+
+                  final Interview interview = Interview.fromJson(p0.metadata!);
+                  final bool isDeleted = interview.deletedAt != null;
+                  final senderName =
+                      p0.author.id == _userStore.user!.id!.toString()
+                          ? "You"
+                          : _userStore.user!.fullname!;
+                  final Duration diff =
+                      interview.endTime.difference(interview.startTime);
+                  return Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          "${senderName} want to schedule a meeting for ${interview.title}",
+                          style: TextStyle(
+                              color: p0.author.id ==
+                                      _userStore.user!.id!.toString()
+                                  ? Colors.white
+                                  : Theme.of(context).colorScheme.primary),
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Card(
+                          child: Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Time",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall,
+                                    ),
+                                    Expanded(
+                                        child: Text(
+                                            "${diff.toDurationString(format: DurationFormat.auto, form: Abbreviation.semi, dropPrefixOrSuffix: true)}",
+                                            textAlign: TextAlign.right,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelSmall)),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 4,
+                                ),
+                                Text(
+                                    "Start time: ${Moment(interview.startTime).toLocal().formatDateTimeShort()}",
+                                    style:
+                                        Theme.of(context).textTheme.labelSmall),
+                                Text(
+                                    "Due time: ${Moment(interview.endTime).toLocal().formatDateTimeShort()}",
+                                    style:
+                                        Theme.of(context).textTheme.labelSmall),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: ElevatedButton(
+                                        style: isDeleted
+                                            ? ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.grey)
+                                            : ElevatedButton.styleFrom(),
+                                        onPressed: () {},
+                                        child: Text(
+                                          isDeleted ? "Cancelled" : "Join", style: isDeleted ? TextStyle(color: Colors.white) : TextStyle(),
+                                        ),
+                                      ),
+                                    ),
+                                    if (currentProfile ==
+                                        UserRole.COMPANY.value && !isDeleted)
+                                      PopupMenuButton(
+                                          icon: const Icon(BootstrapIcons
+                                              .three_dots_vertical),
+                                          itemBuilder: (context) {
+                                            return <PopupMenuEntry>[
+                                              PopupMenuItem(
+                                                child: const Text(
+                                                    'Re-schedule meeting'),
+                                                onTap: () {
+                                                  _handleEditMeeting(interview);
+                                                },
+                                              ),
+                                              PopupMenuItem(
+                                                child: const Text(
+                                                    'Cancel meeting'),
+                                                onTap: () {
+                                                  _handleDeleteMeeting(
+                                                      context, interview);
+                                                },
+                                              ),
+                                            ];
+                                          })
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                } else {
+                  return Text("ERROR");
+                }
+              },
+            );
+          }),
           Observer(
             builder: (context) {
               return Visibility(
@@ -95,36 +265,6 @@ class _MessageDetailState extends State<MessageDetail> {
         ],
       ),
     );
-  }
-
-  Widget setChatBubble(List<ChatEntity> chats) {
-    final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
-    List<types.Message> newChats = [];
-    chats.forEach((chat) {
-      newChats.add(types.Message.fromJson(
-        {
-          "author": {
-            "firstName": !chat.sender.fullname.isEmpty ? chat.sender.fullname : widget.userName,
-            "id": "${chat.sender.id}",
-            "lastName": "",
-            "imageUrl": currentProfile == UserRole.COMPANY.value
-                ? "https://i.imgur.com/ugcoGNH.png"
-                : "https://i.imgur.com/SR6SaqF.png",
-          },
-          "createdAt": chat.createdAt.millisecondsSinceEpoch,
-          "id": "${chat.id}",
-          "text": chat.content,
-          "type": "text"
-        },
-      ));
-    });
-    Future.delayed(Duration(milliseconds: 0), () {
-      setState(() {
-        _messages = newChats.reversed.toList();
-      });
-    });
-
-    return SizedBox.shrink();
   }
 
   void _handleSendPressed(types.PartialText message) {
@@ -152,5 +292,114 @@ class _MessageDetailState extends State<MessageDetail> {
         sender: ChatUser(
             id: _userStore.user!.id!, fullname: _userStore.user!.fullname!),
         receiver: ChatUser(id: widget.userId, fullname: "You")));
+  }
+
+  void _handleCreateMeeting(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return ScheduleBottomSheet(
+          onMeetingCreated: _emitMeetingCreated,
+        );
+      },
+    );
+  }
+
+  void _handleDeleteMeeting(BuildContext context, Interview interviewDelete) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Are you sure?'),
+          content: Text('This action cannot be reversed'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                final socket = SocketService.socket;
+                if (socket != null) {
+                  socket.emit(EMessageFlag.UPDATE_INTERVIEW.eventName, {
+                    "projectId": widget.projectId,
+                    "senderId": _userStore.user!.id,
+                    "receiverId": widget.userId,
+                    "interviewId": interviewDelete.id,
+                    "deleteAction": true
+                  });
+                  ToastHelper.success(
+                      "Please wait until we delete your meeting room",
+                      length: Toast.LENGTH_LONG);
+                } else {
+                  ToastHelper.error("Cannot connect to socket service");
+                }
+              },
+              child: Text('OK'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  void _emitMeetingCreated(String title, DateTime startTime, DateTime endTime) {
+    final socket = SocketService.socket;
+    if (socket != null) {
+      socket.emit(EMessageFlag.INTERVIEW.eventName, {
+        "projectId": widget.projectId,
+        "senderId": _userStore.user!.id,
+        "receiverId": widget.userId,
+        "title": title,
+        "startTime": Moment(startTime).toUtc().toIso8601String(),
+        "endTime": Moment(endTime).toUtc().toIso8601String(),
+        "meeting_room_code": Uuid().v4(),
+        "meeting_room_id": Uuid().v4()
+      });
+      ToastHelper.success("Please wait until we create your meeting room",
+          length: Toast.LENGTH_LONG);
+    } else {
+      ToastHelper.error("Cannot connect to socket service");
+    }
+  }
+
+  void _emitMeetingEdit(Interview interviewEdit, String title,
+      DateTime startTime, DateTime endTime) {
+    final socket = SocketService.socket;
+    if (socket != null) {
+      socket.emit(EMessageFlag.UPDATE_INTERVIEW.eventName, {
+        "projectId": widget.projectId,
+        "senderId": _userStore.user!.id,
+        "receiverId": widget.userId,
+        "interviewId": interviewEdit.id,
+        "title": title,
+        "startTime": Moment(startTime).toUtc().toIso8601String(),
+        "endTime": Moment(endTime).toUtc().toIso8601String(),
+        "updateAction": true
+      });
+      ToastHelper.success("Please wait until we save your meeting room",
+          length: Toast.LENGTH_LONG);
+    } else {
+      ToastHelper.error("Cannot connect to socket service");
+    }
+  }
+
+  void _handleEditMeeting(Interview interviewEdit) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return ScheduleBottomSheet(
+          interviewEdit: interviewEdit,
+          onMeetingCreated:
+              (String title, DateTime startTime, DateTime endTime) =>
+                  _emitMeetingEdit(interviewEdit, title, startTime, endTime),
+        );
+      },
+    );
   }
 }

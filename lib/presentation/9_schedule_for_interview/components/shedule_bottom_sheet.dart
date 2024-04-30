@@ -1,10 +1,16 @@
 // import 'package:boilerplate/presentation/9_schedule_for_interview/components/models.dart';
+import 'dart:math';
+
+import 'package:boilerplate/domain/entity/interview/interview.dart';
+import 'package:boilerplate/presentation/toast/toast.dart';
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:moment_dart/moment_dart.dart';
 
 class ScheduleBottomSheet extends StatefulWidget {
   final Function(String, DateTime, DateTime) onMeetingCreated;
-
-  ScheduleBottomSheet({required this.onMeetingCreated});
+  final Interview? interviewEdit;
+  ScheduleBottomSheet({required this.onMeetingCreated, this.interviewEdit});
   @override
   _ScheduleBottomSheetState createState() => _ScheduleBottomSheetState();
 }
@@ -13,19 +19,28 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   late String title;
   late DateTime startTime;
   late DateTime endTime;
+  TextEditingController _titleController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    title = '';
-    startTime = DateTime.now();
-    endTime = DateTime.now();
+    title = widget.interviewEdit != null ? widget.interviewEdit!.title : '';
+    _titleController.text =
+        widget.interviewEdit != null ? widget.interviewEdit!.title : '';
+    startTime = widget.interviewEdit != null
+        ? Moment(widget.interviewEdit!.startTime).toLocal()
+        : DateTime.now();
+    endTime = widget.interviewEdit != null
+        ? Moment(widget.interviewEdit!.endTime).toLocal()
+        : DateTime.now().add(Duration(hours: 1));
   }
 
   void _handleScheduleMeeting() {
-    if (endTime.isAfter(startTime)) {
+    if (endTime.isAfter(startTime) && !title.isEmpty) {
       widget.onMeetingCreated(title, startTime, endTime);
       Navigator.pop(context); // Close the bottom sheet
+    } else if (title.isEmpty) {
+      ToastHelper.error("Title must not be empty");
     } else {
       showDialog(
         context: context,
@@ -51,25 +66,44 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity, // Set width to full width
-      padding: EdgeInsets.all(16.0),
-      height: MediaQuery.of(context).size.height * 0.8,
+      padding: EdgeInsets.only(
+        top: 16.0,
+        left: 16,
+        right: 16,
+        bottom: max(MediaQuery.of(context).viewInsets.bottom, 16),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Text(
-            'Schedule Interview',
+            widget.interviewEdit != null
+                ? "Reschedule interview"
+                : 'Schedule Interview',
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.bold,
             ),
           ),
           SizedBox(height: 16.0),
-          Text('Title:'),
+          Text(
+            'Title:',
+            style: Theme.of(context).textTheme.labelSmall,
+          ),
           TextField(
+            controller: _titleController,
             decoration: InputDecoration(
               // labelText: 'Title',
-              border: OutlineInputBorder(),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey)),
+              focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey)),
+              focusedErrorBorder:
+                  OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+              errorBorder:
+                  OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+              border: OutlineInputBorder(borderSide: BorderSide(width: 1)),
               contentPadding:
                   EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
             ),
@@ -80,16 +114,27 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
             },
           ),
           SizedBox(height: 16.0),
-          Text('Start Time:'),
+          Text('Start Time:', style: Theme.of(context).textTheme.labelSmall),
           SizedBox(height: 8.0),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Icon(
+                BootstrapIcons.calendar2_date, // Calendar icon
+                color: Theme.of(context).primaryColor,
+              ),
+              SizedBox(
+                width: 10,
+              ),
               ElevatedButton(
                 onPressed: () async {
                   final DateTime? picked = await showDatePicker(
                     context: context,
                     initialDate: startTime,
-                    firstDate: DateTime.now(),
+                    firstDate: startTime.isBefore(DateTime.now())
+                        ? startTime
+                        : DateTime.now(),
                     lastDate: DateTime(2101),
                   );
                   if (picked != null) {
@@ -104,7 +149,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
               ),
               SizedBox(width: 8.0),
               Icon(
-                Icons.calendar_today, // Calendar icon
+                BootstrapIcons.clock_history, // Calendar icon
                 color: Theme.of(context).primaryColor,
               ),
               SizedBox(width: 8.0),
@@ -132,16 +177,27 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
             ],
           ),
           SizedBox(height: 16.0),
-          Text('End Time:'),
+          Text('End Time:', style: Theme.of(context).textTheme.labelSmall),
           SizedBox(height: 8.0),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Icon(
+                BootstrapIcons.calendar2_date, // Calendar icon
+                color: Theme.of(context).primaryColor,
+              ),
+              SizedBox(
+                width: 10,
+              ),
               ElevatedButton(
                 onPressed: () async {
                   final DateTime? picked = await showDatePicker(
                     context: context,
                     initialDate: endTime,
-                    firstDate: DateTime.now(),
+                    firstDate: endTime.isBefore(DateTime.now())
+                        ? endTime
+                        : DateTime.now(),
                     lastDate: DateTime(2101),
                   );
                   if (picked != null) {
@@ -156,7 +212,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
               ),
               SizedBox(width: 8.0),
               Icon(
-                Icons.calendar_today, // Calendar icon
+                BootstrapIcons.clock_history, // Calendar icon
                 color: Theme.of(context).primaryColor,
               ),
               SizedBox(width: 8.0),
@@ -164,7 +220,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                 onPressed: () async {
                   final TimeOfDay? timePicked = await showTimePicker(
                     context: context,
-                    initialTime: TimeOfDay.fromDateTime(startTime),
+                    initialTime: TimeOfDay.fromDateTime(endTime),
                   );
                   if (timePicked != null) {
                     setState(() {
