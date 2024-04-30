@@ -1,4 +1,5 @@
 import 'package:boilerplate/domain/entity/chat/chatUser.dart';
+import 'package:boilerplate/domain/entity/interview/interview.dart';
 import 'package:boilerplate/domain/entity/project/project.dart';
 
 class ChatEntity {
@@ -7,7 +8,7 @@ class ChatEntity {
   final String content;
   final ChatUser sender;
   final ChatUser receiver;
-  final String? interview;
+  final Interview? interview;
   final Project? project;
 
   ChatEntity({
@@ -39,7 +40,9 @@ class ChatEntity {
       content: map['content'],
       sender: ChatUser.fromMap(map['sender']),
       receiver: ChatUser.fromMap(map['receiver']),
-      interview: map['interview'],
+      interview: map['interview'] != null
+          ? Interview.fromJson(map['interview'])
+          : null,
       project: map['project'] != null ? Project.fromMap(map['project']) : null,
     );
   }

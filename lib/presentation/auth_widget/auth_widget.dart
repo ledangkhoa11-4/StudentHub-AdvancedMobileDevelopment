@@ -75,9 +75,14 @@ class _AuthWidgetState extends State<AuthWidget> {
         if (socket != null) {
           socket.on('NOTI_${_userStore.user!.id}', (data) {
           
-            if (data["messageId"] != null) {
+            if (data["notification"]["messageId"] != null) {
               _userStore.getAllChatList(loading: false);
             }
+          });
+
+          socket.on('ERROR', (data) {
+            print(data.toString());
+            ToastHelper.error(data["content"]);
           });
         }
       }
