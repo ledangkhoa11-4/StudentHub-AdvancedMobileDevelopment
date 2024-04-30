@@ -7,6 +7,8 @@ import 'package:boilerplate/core/stores/form/form_student_profile_store.dart'
     as FormStudent;
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/entity/chat/chat.dart';
+import 'package:boilerplate/domain/entity/chat/chatUser.dart';
 import 'package:boilerplate/domain/entity/project/project_list.dart';
 import 'package:boilerplate/domain/entity/proposal/proposal-type-no-project.dart';
 import 'package:boilerplate/domain/entity/user/education.dart';
@@ -21,6 +23,9 @@ import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_student_profile_usercase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_by_projectid_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_with_userId_in_projectid_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
@@ -37,6 +42,7 @@ import 'package:boilerplate/domain/usecase/user/update_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_resume_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_transcript_usecase.dart';
 import 'package:boilerplate/presentation/post_project/store/post_project_store.dart';
+import 'package:boilerplate/utils/socket/socket.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http_parser/http_parser.dart';
@@ -54,31 +60,33 @@ class UserStore = _UserStore with _$UserStore;
 abstract class _UserStore with Store {
   // constructor:---------------------------------------------------------------
   _UserStore(
-    this._isLoggedInUseCase,
-    this._saveLoginStatusUseCase,
-    this._saveAuthTokenUseCase,
-    this._saveCurrentProfileUseCase,
-    this._loginUseCase,
-    this._changeUseCase,
-    this._forgotUseCase,
-    this._signupUseCase,
-    this.formErrorStore,
-    this.errorStore,
-    this._getMeUseCase,
-    this._createCompanyProfileUseCase,
-    this._getAllTechStackUseCase,
-    this._getAllSkillSetUseCase,
-    this._uploadResumeUseCase,
-    this._uploadTranscriptUseCase,
-    this._createLanguageUseCase,
-    this._createEducationUseCase,
-    this._createExperiencesUseCase,
-    this._createStudentProfileUseCase,
-    this._getProfileFileUseCase,
-    this._submitProposalUseCase,
-    this._getStudentProfileUseCase,
-    this._updateProposalUseCase,
-  ) {
+      this._isLoggedInUseCase,
+      this._saveLoginStatusUseCase,
+      this._saveAuthTokenUseCase,
+      this._saveCurrentProfileUseCase,
+      this._loginUseCase,
+      this._changeUseCase,
+      this._forgotUseCase,
+      this._signupUseCase,
+      this.formErrorStore,
+      this.errorStore,
+      this._getMeUseCase,
+      this._createCompanyProfileUseCase,
+      this._getAllTechStackUseCase,
+      this._getAllSkillSetUseCase,
+      this._uploadResumeUseCase,
+      this._uploadTranscriptUseCase,
+      this._createLanguageUseCase,
+      this._createEducationUseCase,
+      this._createExperiencesUseCase,
+      this._createStudentProfileUseCase,
+      this._getProfileFileUseCase,
+      this._submitProposalUseCase,
+      this._getStudentProfileUseCase,
+      this._updateProposalUseCase,
+      this._getAllChatUseCase,
+      this._getAllChatByProjectUseCase,
+      this._getAllChatWithUserInProjectUseCase) {
     // setting up disposers
     _setupDisposers();
 
@@ -111,6 +119,9 @@ abstract class _UserStore with Store {
   final SubmitProposalUseCase _submitProposalUseCase;
   final GetStudentProfileUseCase _getStudentProfileUseCase;
   final UpdateProposalUseCase _updateProposalUseCase;
+  final GetAllChatByProjectUseCase _getAllChatByProjectUseCase;
+  final GetAllChatUseCase _getAllChatUseCase;
+  final GetAllChatWithUserInProjectUseCase _getAllChatWithUserInProjectUseCase;
 
   // stores:--------------------------------------------------------------------
   // for handling form errors
@@ -126,6 +137,17 @@ abstract class _UserStore with Store {
     _disposers = [
       reaction((_) => success, (_) => success = false, delay: 200),
       reaction((_) => changeSuccess, (_) => changeSuccess = false, delay: 200),
+      reaction((_) => [apiResponseMessage, apiResponseSuccess], (_) {
+        apiResponseSuccess = null;
+        apiResponseMessage = "";
+      }, delay: 200),
+      reaction((_) => [currentChatProjectId, currentChatUserId],
+          (_) => getCurrentChat()),
+      reaction((_) => currentChatProjectId, (_) => getChatListByProjectId()),
+      reaction((_) => currentChat, (_) => getAllChatList(loading: false)),
+
+
+      
     ];
   }
 
@@ -249,6 +271,21 @@ abstract class _UserStore with Store {
 
   @observable
   ObservableFuture<dynamic> apiUpdateProfile = emptyLoginResponse;
+
+  @observable
+  int? currentChatProjectId = null;
+
+  @observable
+  int? currentChatUserId = null;
+
+  @observable
+  List<ChatEntity> currentChat = [];
+
+  @observable
+  List<ChatEntity> chatList = [];
+
+  @observable
+  List<ChatEntity>? allChatList;
 
   @computed
   bool get isLoading =>
@@ -865,10 +902,139 @@ abstract class _UserStore with Store {
 
   // ----------------------------------------------------------------------------
 
+  @action
+  void setCurrentChat(int? projectId, int? userId) {
+    this.currentChatProjectId = projectId;
+    this.currentChatUserId = userId;
+  }
+
+  dynamic messageHandler(data) {
+    final senderId = data["senderId"];
+    if (senderId != this.user!.id) {
+      final newChat = ChatEntity(
+          id: data["messageId"],
+          createdAt: DateTime.now(),
+          content: data["content"],
+          sender: ChatUser(id: data["senderId"], fullname: ""),
+          receiver:
+              ChatUser(id: this.user!.id!, fullname: this.user!.fullname!));
+      this.addCurrentChat(newChat);
+    }
+  }
+
+  @action
+  Future getCurrentChat() async {
+    if (this.currentChatProjectId != null && this.currentChatUserId != null) {
+      getIt<SharedPreferenceHelper>().authToken.then((value) {
+        if (value != null) {
+          final socket = SocketService.socket;
+          if (socket?.io.options?['query'] == null) {
+            SocketService.connectWithQuery(this.currentChatProjectId!, value);
+          }
+          if (socket != null) {
+            socket.on('RECEIVE_MESSAGE', messageHandler);
+          }
+        }
+      });
+
+      final future = _getAllChatWithUserInProjectUseCase.call(
+          params: ProjectUserIdParam(
+              projectId: this.currentChatProjectId!,
+              userId: this.currentChatUserId!));
+      apiCallingFeature = ObservableFuture(future);
+      await future.then((value) async {
+        this.currentChat = value;
+        this.apiResponseSuccess = true;
+      }).catchError((e) {
+        print("---------------");
+        print(e);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
+        this.apiResponseSuccess = false;
+        this.apiResponseMessage = response["errorDetails"].toString();
+      });
+    } else {
+      this.currentChat = [];
+      final socket = SocketService.socket;
+      if (socket != null) {
+        socket.off("RECEIVE_MESSAGE", messageHandler);
+      }
+    }
+  }
+
+  dynamic messageProjectHandler(data) {
+    this.getChatListByProjectId(loading: false);
+  }
+
+  @action
+  Future getChatListByProjectId({bool loading = true}) async {
+    if (this.currentChatProjectId != null) {
+      if (loading) {
+        getIt<SharedPreferenceHelper>().authToken.then((value) {
+          if (value != null) {
+            SocketService.connectWithQuery(this.currentChatProjectId!, value);
+            final socket = SocketService.socket;
+            if (socket != null) {
+              socket.on('RECEIVE_MESSAGE', messageProjectHandler);
+            }
+          }
+        });
+      }
+
+      final future = _getAllChatByProjectUseCase.call(
+          params: ProjectIdParam(projectId: this.currentChatProjectId!));
+      if (loading) {
+        apiCallingFeature = ObservableFuture(future);
+      }
+      await future.then((value) async {
+        this.chatList = value;
+      }).catchError((e) {
+        print("---------------");
+        print(e);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
+        this.apiResponseSuccess = false;
+        this.apiResponseMessage = response["errorDetails"].toString();
+      });
+    } else {
+      this.chatList = [];
+      final socket = SocketService.socket;
+      if (socket != null) {
+        socket.off("RECEIVE_MESSAGE", messageProjectHandler);
+      }
+    }
+  }
+
+  @action
+  Future getAllChatList({bool loading = true}) async {
+    final future = _getAllChatUseCase.call(params: null);
+    if (loading) {
+      apiCallingFeature = ObservableFuture(future);
+    }
+    await future.then((value) async {
+      this.allChatList = value;
+    }).catchError((e) {
+      print("---------------");
+      print(e);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.apiResponseSuccess = false;
+      this.apiResponseMessage = response["errorDetails"].toString();
+    });
+  }
+
+  @action
+  void addCurrentChat(ChatEntity chat) {
+    final newChat = List.of(this.currentChat);
+    newChat.add(chat);
+    this.currentChat = newChat;
+  }
+
   logout() async {
     final projectStore = getIt<ProjectStore>();
 
     this.user = null;
+    this.allChatList = null;
     this.transcriptFile = "";
     this.resumeFile = "";
     this.isLoggedIn = false;
@@ -878,6 +1044,9 @@ abstract class _UserStore with Store {
     await _saveLoginStatusUseCase.call(params: false);
     getIt<SharedPreferenceHelper>().removeAuthToken();
     getIt<SharedPreferenceHelper>().removeCurrentProfile();
+    if (SocketService.socket != null) {
+      SocketService.socket!.dispose();
+    }
   }
 
   resetSigninState() {

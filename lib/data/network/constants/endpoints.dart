@@ -73,4 +73,11 @@ class Endpoints {
       baseUrl + "/api/proposal/project/:studentId";
 
   static const String updateProposal = baseUrl + "/api/proposal/:proposalId";
+
+  static const String getAllChatByProjectId = baseUrl + "/api/message/:projectId";
+
+  static const String getAllChatWithUserInProject = baseUrl + "/api/message/:projectId/user/:userId";
+
+  static const String getAllChat = baseUrl + "/api/message";
+
 }

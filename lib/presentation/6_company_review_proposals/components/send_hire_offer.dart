@@ -2,6 +2,7 @@ import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/presentation/6_company_review_proposals/components/hired_candidate_list.dart';
+import 'package:boilerplate/presentation/6_company_review_proposals/components/project_message_list.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/toast/toast.dart';
@@ -34,6 +35,8 @@ class _SendHireOffer extends State<SendHireOffer>
   void initState() {
     super.initState();
     // _tabController = TabController(length: 4, vsync: this);
+    _userStore.setCurrentChat(widget.project.id, null);
+
     _tabController = TabController(
         length: 4, vsync: this, initialIndex: widget.initialTabIndex);
   }
@@ -41,6 +44,8 @@ class _SendHireOffer extends State<SendHireOffer>
   @override
   void dispose() {
     _tabController.dispose();
+    _userStore.setCurrentChat(null, null);
+
     super.dispose();
   }
 
@@ -80,7 +85,7 @@ class _SendHireOffer extends State<SendHireOffer>
               Detail(
                 project: widget.project,
               ),
-              Center(child: Text('Content of Tab 3')),
+              ProjectMessageList(),
               HiredCandidateList(project: widget.project),
             ],
           ),
@@ -118,7 +123,6 @@ class _SendHireOffer extends State<SendHireOffer>
         ToastHelper.error(msg);
       }
     }
-    _userStore.resetApiResponse();
     return SizedBox.shrink();
   }
 }

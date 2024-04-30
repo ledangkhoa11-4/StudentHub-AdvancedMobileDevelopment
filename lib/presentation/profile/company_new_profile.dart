@@ -78,7 +78,8 @@ class _CompanyNewProfileState extends State<CompanyNewProfile> {
           ),
           Observer(
             builder: (context) {
-              return _userStore.apiResponseSuccess == true
+              return !_userStore.isLoading &&
+                      _userStore.apiResponseSuccess == true
                   ? navigate(context)
                   : _showErrorMessage(_userStore.siginMessage);
             },
@@ -97,7 +98,6 @@ class _CompanyNewProfileState extends State<CompanyNewProfile> {
         ToastHelper.success("Update profile successfully");
         Navigator.of(context).pop();
       }
-      _userStore.resetApiResponse();
     });
 
     return Container();

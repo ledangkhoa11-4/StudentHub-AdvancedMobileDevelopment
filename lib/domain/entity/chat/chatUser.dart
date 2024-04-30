@@ -1,11 +1,23 @@
-class ChatUsers {
-  String name;
-  String messageText;
-  String imageURL;
-  String time;
-  ChatUsers(
-      {required this.name,
-      required this.messageText,
-      required this.imageURL,
-      required this.time});
+class ChatUser {
+  final int id;
+  final String fullname;
+
+  ChatUser({
+    required this.id,
+    required this.fullname,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'fullname': fullname,
+    };
+  }
+
+  static ChatUser fromMap(Map<String, dynamic> map) {
+    return ChatUser(
+      id: map['id'],
+      fullname: map['fullname'],
+    );
+  }
 }
