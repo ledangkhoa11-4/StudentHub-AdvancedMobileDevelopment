@@ -81,9 +81,14 @@ class ProjectItem extends StatelessWidget {
                     onPressed: () {
                       showModalBottomSheet(
                         context: context,
-                        builder: (BuildContext context) {
-                          return CustomBottomSheetContent(
-                            project: project,
+                        isScrollControlled: true,
+                        builder: (context) {
+                          return Wrap(
+                            children: [
+                              CustomBottomSheetContent(
+                                project: project,
+                              ),
+                            ],
                           );
                         },
                       );
@@ -135,11 +140,11 @@ class ProjectItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        '${project.countProposals}',
+                        '${project.countProposals - project.countHired}',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        AppLocalizations.of(context).translate('Proposals'),
+                        AppLocalizations.of(context).translate('proposals'),
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ],

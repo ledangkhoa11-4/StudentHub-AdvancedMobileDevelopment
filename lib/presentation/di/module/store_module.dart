@@ -29,11 +29,15 @@ import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_by_projectid_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_with_userId_in_projectid_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_student_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_student_profile_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/is_logged_in_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/login_usecase.dart';
@@ -42,6 +46,7 @@ import 'package:boilerplate/domain/usecase/user/save_current_profile_usecase.dar
 import 'package:boilerplate/domain/usecase/user/save_login_in_status_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/submit_proposal_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/update_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_resume_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_transcript_usecase.dart';
 import 'package:boilerplate/presentation/home/store/language/language_store.dart';
@@ -120,6 +125,11 @@ mixin StoreModule {
         getIt<CreateUpdateStudentProfileUseCase>(),
         getIt<GetProfileFileUseCase>(),
         getIt<SubmitProposalUseCase>(),
+        getIt<GetStudentProfileUseCase>(),
+        getIt<UpdateProposalUseCase>(),
+        getIt<GetAllChatUseCase>(),
+        getIt<GetAllChatByProjectUseCase>(),
+        getIt<GetAllChatWithUserInProjectUseCase>(),
       ),
     );
 

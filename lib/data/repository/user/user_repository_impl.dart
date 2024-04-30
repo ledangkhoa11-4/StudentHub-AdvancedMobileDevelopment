@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:boilerplate/data/network/apis/users/user_api.dart';
+import 'package:boilerplate/domain/entity/chat/chat.dart';
 import 'package:boilerplate/domain/entity/user/profile_company.dart';
 import 'package:boilerplate/domain/entity/user/profile_student.dart';
 import 'package:boilerplate/domain/entity/user/skillset.dart';
@@ -13,6 +14,8 @@ import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_student_profile_usercase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_by_projectid_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_with_userId_in_projectid_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
@@ -20,9 +23,11 @@ import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/submit_proposal_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/update_proposal_usecase.dart';
 import 'package:dio/dio.dart';
 
 import '../../../domain/entity/user/user.dart';
+import '../../../domain/usecase/user/get_student_profile_usecase.dart';
 import '../../../domain/usecase/user/login_usecase.dart';
 
 class UserRepositoryImpl extends UserRepository {
@@ -171,6 +176,51 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<dynamic> submitProposal(SubmitProposalParams params) async {
     return await _userApi.submitProposal(params).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<ProfileStudent> getStudentProfile(
+      GetStudentProfileParams params) async {
+    return await _userApi.getProfileStudent(params).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<dynamic> updateProposal(UpdateProposalParam params) async {
+    return await _userApi.updateProposal(params).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<dynamic> updateProposalById(
+      int proposalId, UpdateProposalParam params) async {
+    return await _userApi.updateProposalById(proposalId, params).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<List<ChatEntity>> getAllChat() async {
+    return await _userApi.getAllChat().then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<List<ChatEntity>> getAllChatByProjectId(ProjectIdParam params) async {
+    return await _userApi.getAllChatByProjectId(params).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<List<ChatEntity>> getAllWithUserIdChatByProjectId(
+      ProjectUserIdParam params) async {
+    return await _userApi.getAllChatWithUserInProject(params).then((res) {
       return res;
     }).catchError((error) => throw error);
   }

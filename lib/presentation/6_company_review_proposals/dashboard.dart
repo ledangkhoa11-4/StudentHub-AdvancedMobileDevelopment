@@ -79,16 +79,14 @@ class _DashBoardState extends State<DashBoardCompany>
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Stack(
         children: [
-          Observer(builder: (context) {
-            return TabBarView(
-              controller: _tabController,
-              children: <Widget>[
-                Center(child: CompanyProjectList()),
-                Center(child: CompanyWorkingProjectList()),
-                Center(child: CompanyArchievedProjectList()),
-              ],
-            );
-          }),
+          TabBarView(
+            controller: _tabController,
+            children: <Widget>[
+              Center(child: CompanyProjectList()),
+              Center(child: CompanyWorkingProjectList()),
+              Center(child: CompanyArchievedProjectList()),
+            ],
+          ),
           Observer(builder: (context) {
             return !_projectStore.isLoading && _projectStore.success == true
                 ? slideToIndex(_projectStore.slideToIndex)

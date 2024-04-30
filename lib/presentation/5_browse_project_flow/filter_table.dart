@@ -60,121 +60,129 @@ class _FilterTableState extends State<FilterTable> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-          bottom: max(MediaQuery.of(context).viewInsets.bottom, 16),
-          top: 16,
-          left: 16,
-          right: 16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Project Length filter
-          ListTile(
-            title: Text(
-              AppLocalizations.of(context).translate('project_Length'),
-              style: TextStyle(fontWeight: FontWeight.bold),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.only(
+            bottom: max(MediaQuery.of(context).viewInsets.bottom, 16),
+            top: 16,
+            left: 16,
+            right: 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Project Length filter
+            ListTile(
+              title: Text(
+                AppLocalizations.of(context).translate('project_Length'),
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              contentPadding: EdgeInsets.zero,
+              subtitle: Column(
+                children: <Widget>[
+                  RadioListTile<int>(
+                    title: Text(
+                      AppLocalizations.of(context).translate('Less_one_month'),
+                    ),
+                    value: ProjectScope.LessThanOneMonth.value,
+                    toggleable: true,
+                    groupValue: _projectLength,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _projectLength = newValue;
+                      });
+                    },
+                  ),
+                  RadioListTile<int>(
+                    title: Text(
+                      AppLocalizations.of(context).translate('1_3_month'),
+                    ),
+                    toggleable: true,
+                    value: ProjectScope.OneToThreeMonth.value,
+                    groupValue: _projectLength,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _projectLength = newValue;
+                      });
+                    },
+                  ),
+                  RadioListTile<int>(
+                    title: Text(
+                      AppLocalizations.of(context).translate('3_6_month'),
+                    ),
+                    toggleable: true,
+                    value: ProjectScope.ThreeToSixMonth.value,
+                    groupValue: _projectLength,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _projectLength = newValue;
+                      });
+                    },
+                  ),
+                  RadioListTile<int>(
+                    title: Text(AppLocalizations.of(context).translate('more_6_month'),),
+                    toggleable: true,
+                    value: ProjectScope.MoreThanSixMonth.value,
+                    groupValue: _projectLength,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _projectLength = newValue;
+                      });
+                    },
+                  ),
+                ],
+              ),
             ),
-            contentPadding: EdgeInsets.zero,
-            subtitle: Column(
-              children: <Widget>[
-                RadioListTile<int>(
-                  title: Text(AppLocalizations.of(context).translate('Less_one_month')),
-                  value: ProjectScope.LessThanOneMonth.value,
-                  toggleable: true,
-                  groupValue: _projectLength,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _projectLength = newValue;
-                    });
+            // Students Needed filter
+            TextFieldWidget(
+              hint: AppLocalizations.of(context).translate('s_need_more'),
+              icon: BootstrapIcons.person_badge,
+              iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
+              textController: _studentsNeededController,
+              inputType: TextInputType.number,
+              errorText: null,
+              onChanged: (value) {},
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            TextFieldWidget(
+              hint: AppLocalizations.of(context).translate('pro_less'),
+              icon: BootstrapIcons.file_text,
+              iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
+              textController: _proposalsLessThanController,
+              inputType: TextInputType.number,
+              errorText: null,
+              onChanged: (value) {},
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    _clearFilters();
                   },
+                  child: Text(AppLocalizations.of(context).translate('clear_f')),
                 ),
-                RadioListTile<int>(
-                  title: Text(AppLocalizations.of(context).translate('1_3_month')),
-                  toggleable: true,
-                  value: ProjectScope.OneToThreeMonth.value,
-                  groupValue: _projectLength,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _projectLength = newValue;
-                    });
-                  },
-                ),
-                RadioListTile<int>(
-                  title: Text(AppLocalizations.of(context).translate('3_6_month')),
-                  toggleable: true,
-                  value: ProjectScope.ThreeToSixMonth.value,
-                  groupValue: _projectLength,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _projectLength = newValue;
-                    });
-                  },
-                ),
-                RadioListTile<int>(
-                  title: Text(AppLocalizations.of(context).translate('more_6_month')),
-                  toggleable: true,
-                  value: ProjectScope.MoreThanSixMonth.value,
-                  groupValue: _projectLength,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _projectLength = newValue;
-                    });
+                RoundedButtonWidget(
+                  buttonText: AppLocalizations.of(context).translate('apply'),
+                  buttonColor: Theme.of(context).colorScheme.primary,
+                  textColor: Colors.white,
+                  onPressed: () {
+                    DeviceUtils.hideKeyboard(context);
+                    widget.onFilter(
+                        _projectLength,
+                        int.tryParse(_studentsNeededController.text),
+                        int.tryParse(_proposalsLessThanController.text));
+                    Navigator.pop(context);
                   },
                 ),
               ],
-            ),
-          ),
-          // Students Needed filter
-          TextFieldWidget(
-            hint: AppLocalizations.of(context).translate('s_need_more'),
-            icon: BootstrapIcons.person_badge,
-            iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
-            textController: _studentsNeededController,
-            inputType: TextInputType.number,
-            errorText: null,
-            onChanged: (value) {},
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          TextFieldWidget(
-            hint: AppLocalizations.of(context).translate('pro_less'),
-            icon: BootstrapIcons.file_text,
-            iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
-            textController: _proposalsLessThanController,
-            inputType: TextInputType.number,
-            errorText: null,
-            onChanged: (value) {},
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              TextButton(
-                onPressed: () {
-                  _clearFilters();
-                },
-                child: Text(AppLocalizations.of(context).translate('clear_f')),
-              ),
-              RoundedButtonWidget(
-                buttonText: AppLocalizations.of(context).translate('apply'),
-                buttonColor: Theme.of(context).colorScheme.primary,
-                textColor: Colors.white,
-                onPressed: () {
-                  DeviceUtils.hideKeyboard(context);
-                  widget.onFilter(
-                      _projectLength,
-                      int.tryParse(_studentsNeededController.text),
-                      int.tryParse(_proposalsLessThanController.text));
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

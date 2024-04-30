@@ -152,14 +152,14 @@ class _CompanyProfileFormState extends State<CompanyProfileForm> {
             onPressed: () {
               _formStore.validateAll();
               if (_formStore.formErrorStore.companyName == null &&
-                  _formStore.formErrorStore.description == null &&
+                  _formStore.formErrorStore.website == null &&
                   _formStore.formErrorStore.description == null) {
                 _userStore.createUpdateCompanyProfile(
                     CreateUpdateCompanyProfileParams(
                         uid: _userStore.user?.company?.id ?? null,
                         companyName: _formStore.companyName,
                         website: _formStore.website,
-                        description: _formStore.website,
+                        description: _formStore.description,
                         size: currentOption));
               } else {
                 ToastHelper.error(AppLocalizations.of(context)

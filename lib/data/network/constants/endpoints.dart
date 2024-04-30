@@ -33,6 +33,9 @@ class Endpoints {
 
   static const String createStudentProfile = baseUrl + "/api/profile/student";
 
+  static const String getStudentProfile =
+      baseUrl + "/api/profile/student/:studentId";
+
   static const String getAllTechstack =
       baseUrl + "/api/techstack/getAllTechStack";
 
@@ -66,6 +69,15 @@ class Endpoints {
 
   static const String submitProposal = baseUrl + "/api/proposal";
 
-  static const String getSubmitProposal = baseUrl + "/api/proposal/project/:studentId";
+  static const String getSubmitProposal =
+      baseUrl + "/api/proposal/project/:studentId";
+
+  static const String updateProposal = baseUrl + "/api/proposal/:proposalId";
+
+  static const String getAllChatByProjectId = baseUrl + "/api/message/:projectId";
+
+  static const String getAllChatWithUserInProject = baseUrl + "/api/message/:projectId/user/:userId";
+
+  static const String getAllChat = baseUrl + "/api/message";
 
 }

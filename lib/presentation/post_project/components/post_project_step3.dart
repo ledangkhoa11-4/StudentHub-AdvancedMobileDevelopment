@@ -103,9 +103,9 @@ class _PostProjectStep3State extends State<PostProjectStep3> {
                   )
                 ],
               ),
-              SizedBox(
-                height: 10,
-              ),
+              // SizedBox(
+              //   height: 10,
+              // ),
               const QuillToolbar(
                 configurations: const QuillToolbarConfigurations(
                     fontSizesValues: const {

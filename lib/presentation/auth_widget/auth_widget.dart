@@ -1,6 +1,8 @@
 import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/entity/chat/chat.dart';
+import 'package:boilerplate/domain/entity/chat/chatUser.dart';
 import 'package:boilerplate/domain/entity/user/user.dart';
 import 'package:boilerplate/presentation/5_browse_project_flow/project_list.dart';
 import 'package:boilerplate/presentation/5_browse_project_flow/student_dashboard.dart';
@@ -9,9 +11,11 @@ import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/login/login.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/toast/toast.dart';
+import 'package:boilerplate/utils/socket/socket.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 class AuthWidget extends StatefulWidget {
   @override
@@ -64,6 +68,26 @@ class _AuthWidgetState extends State<AuthWidget> {
   }
 
   Widget navigate(BuildContext context) {
+    getIt<SharedPreferenceHelper>().authToken.then((value) {
+      if (value != null) {
+        SocketService.connect(value);
+        final socket = SocketService.socket;
+
+        if (socket != null) {
+          socket.on('NOTI_${_userStore.user!.id}', (data) {
+          
+            if (data["notification"]["messageId"] != null) {
+              _userStore.getAllChatList(loading: false);
+            }
+          });
+
+          socket.on('ERROR', (data) {
+            print(data.toString());
+            ToastHelper.error(data["content"]);
+          });
+        }
+      }
+    });
     Future.delayed(Duration(milliseconds: 0), () {
       final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
       print(currentProfile);

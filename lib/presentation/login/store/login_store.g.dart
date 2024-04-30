@@ -69,6 +69,39 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$studentTranscriptFileAtom =
+      Atom(name: '_UserStore.studentTranscriptFile', context: context);
+
+  @override
+  String get studentTranscriptFile {
+    _$studentTranscriptFileAtom.reportRead();
+    return super.studentTranscriptFile;
+  }
+
+  @override
+  set studentTranscriptFile(String value) {
+    _$studentTranscriptFileAtom.reportWrite(value, super.studentTranscriptFile,
+        () {
+      super.studentTranscriptFile = value;
+    });
+  }
+
+  late final _$studentResumeFileAtom =
+      Atom(name: '_UserStore.studentResumeFile', context: context);
+
+  @override
+  String get studentResumeFile {
+    _$studentResumeFileAtom.reportRead();
+    return super.studentResumeFile;
+  }
+
+  @override
+  set studentResumeFile(String value) {
+    _$studentResumeFileAtom.reportWrite(value, super.studentResumeFile, () {
+      super.studentResumeFile = value;
+    });
+  }
+
   late final _$techstacksAtom =
       Atom(name: '_UserStore.techstacks', context: context);
 
@@ -325,6 +358,22 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$profileStudentAtom =
+      Atom(name: '_UserStore.profileStudent', context: context);
+
+  @override
+  ProfileStudent? get profileStudent {
+    _$profileStudentAtom.reportRead();
+    return super.profileStudent;
+  }
+
+  @override
+  set profileStudent(ProfileStudent? value) {
+    _$profileStudentAtom.reportWrite(value, super.profileStudent, () {
+      super.profileStudent = value;
+    });
+  }
+
   late final _$loginFutureAtom =
       Atom(name: '_UserStore.loginFuture', context: context);
 
@@ -539,6 +588,120 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$apiStudentProfileResponseAtom =
+      Atom(name: '_UserStore.apiStudentProfileResponse', context: context);
+
+  @override
+  ObservableFuture<dynamic> get apiStudentProfileResponse {
+    _$apiStudentProfileResponseAtom.reportRead();
+    return super.apiStudentProfileResponse;
+  }
+
+  @override
+  set apiStudentProfileResponse(ObservableFuture<dynamic> value) {
+    _$apiStudentProfileResponseAtom
+        .reportWrite(value, super.apiStudentProfileResponse, () {
+      super.apiStudentProfileResponse = value;
+    });
+  }
+
+  late final _$apiUpdateProfileAtom =
+      Atom(name: '_UserStore.apiUpdateProfile', context: context);
+
+  @override
+  ObservableFuture<dynamic> get apiUpdateProfile {
+    _$apiUpdateProfileAtom.reportRead();
+    return super.apiUpdateProfile;
+  }
+
+  @override
+  set apiUpdateProfile(ObservableFuture<dynamic> value) {
+    _$apiUpdateProfileAtom.reportWrite(value, super.apiUpdateProfile, () {
+      super.apiUpdateProfile = value;
+    });
+  }
+
+  late final _$currentChatProjectIdAtom =
+      Atom(name: '_UserStore.currentChatProjectId', context: context);
+
+  @override
+  int? get currentChatProjectId {
+    _$currentChatProjectIdAtom.reportRead();
+    return super.currentChatProjectId;
+  }
+
+  @override
+  set currentChatProjectId(int? value) {
+    _$currentChatProjectIdAtom.reportWrite(value, super.currentChatProjectId,
+        () {
+      super.currentChatProjectId = value;
+    });
+  }
+
+  late final _$currentChatUserIdAtom =
+      Atom(name: '_UserStore.currentChatUserId', context: context);
+
+  @override
+  int? get currentChatUserId {
+    _$currentChatUserIdAtom.reportRead();
+    return super.currentChatUserId;
+  }
+
+  @override
+  set currentChatUserId(int? value) {
+    _$currentChatUserIdAtom.reportWrite(value, super.currentChatUserId, () {
+      super.currentChatUserId = value;
+    });
+  }
+
+  late final _$currentChatAtom =
+      Atom(name: '_UserStore.currentChat', context: context);
+
+  @override
+  List<ChatEntity> get currentChat {
+    _$currentChatAtom.reportRead();
+    return super.currentChat;
+  }
+
+  @override
+  set currentChat(List<ChatEntity> value) {
+    _$currentChatAtom.reportWrite(value, super.currentChat, () {
+      super.currentChat = value;
+    });
+  }
+
+  late final _$chatListAtom =
+      Atom(name: '_UserStore.chatList', context: context);
+
+  @override
+  List<ChatEntity> get chatList {
+    _$chatListAtom.reportRead();
+    return super.chatList;
+  }
+
+  @override
+  set chatList(List<ChatEntity> value) {
+    _$chatListAtom.reportWrite(value, super.chatList, () {
+      super.chatList = value;
+    });
+  }
+
+  late final _$allChatListAtom =
+      Atom(name: '_UserStore.allChatList', context: context);
+
+  @override
+  List<ChatEntity>? get allChatList {
+    _$allChatListAtom.reportRead();
+    return super.allChatList;
+  }
+
+  @override
+  set allChatList(List<ChatEntity>? value) {
+    _$allChatListAtom.reportWrite(value, super.allChatList, () {
+      super.allChatList = value;
+    });
+  }
+
   late final _$loginAsyncAction =
       AsyncAction('_UserStore.login', context: context);
 
@@ -689,6 +852,24 @@ mixin _$UserStore on _UserStore, Store {
     return _$getResumeFileAsyncAction.run(() => super.getResumeFile());
   }
 
+  late final _$getTranscriptFileByStudentIdAsyncAction =
+      AsyncAction('_UserStore.getTranscriptFileByStudentId', context: context);
+
+  @override
+  Future<dynamic> getTranscriptFileByStudentId(int studentId) {
+    return _$getTranscriptFileByStudentIdAsyncAction
+        .run(() => super.getTranscriptFileByStudentId(studentId));
+  }
+
+  late final _$getResumeFileByStudentIdAsyncAction =
+      AsyncAction('_UserStore.getResumeFileByStudentId', context: context);
+
+  @override
+  Future<dynamic> getResumeFileByStudentId(int studentId) {
+    return _$getResumeFileByStudentIdAsyncAction
+        .run(() => super.getResumeFileByStudentId(studentId));
+  }
+
   late final _$submitProposalAsyncAction =
       AsyncAction('_UserStore.submitProposal', context: context);
 
@@ -698,12 +879,66 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.submitProposal(projectId, coverLetter));
   }
 
+  late final _$getCurrentChatAsyncAction =
+      AsyncAction('_UserStore.getCurrentChat', context: context);
+
+  @override
+  Future<dynamic> getCurrentChat({bool loading = true}) {
+    return _$getCurrentChatAsyncAction
+        .run(() => super.getCurrentChat(loading: loading));
+  }
+
+  late final _$getChatListByProjectIdAsyncAction =
+      AsyncAction('_UserStore.getChatListByProjectId', context: context);
+
+  @override
+  Future<dynamic> getChatListByProjectId({bool loading = true}) {
+    return _$getChatListByProjectIdAsyncAction
+        .run(() => super.getChatListByProjectId(loading: loading));
+  }
+
+  late final _$getAllChatListAsyncAction =
+      AsyncAction('_UserStore.getAllChatList', context: context);
+
+  @override
+  Future<dynamic> getAllChatList({bool loading = true}) {
+    return _$getAllChatListAsyncAction
+        .run(() => super.getAllChatList(loading: loading));
+  }
+
+  late final _$_UserStoreActionController =
+      ActionController(name: '_UserStore', context: context);
+
+  @override
+  void setCurrentChat(int? projectId, int? userId) {
+    final _$actionInfo = _$_UserStoreActionController.startAction(
+        name: '_UserStore.setCurrentChat');
+    try {
+      return super.setCurrentChat(projectId, userId);
+    } finally {
+      _$_UserStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void addCurrentChat(ChatEntity chat) {
+    final _$actionInfo = _$_UserStoreActionController.startAction(
+        name: '_UserStore.addCurrentChat');
+    try {
+      return super.addCurrentChat(chat);
+    } finally {
+      _$_UserStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
 user: ${user},
 transcriptFile: ${transcriptFile},
 resumeFile: ${resumeFile},
+studentTranscriptFile: ${studentTranscriptFile},
+studentResumeFile: ${studentResumeFile},
 techstacks: ${techstacks},
 skillSets: ${skillSets},
 currentRole: ${currentRole},
@@ -720,6 +955,7 @@ apiResponseMessage: ${apiResponseMessage},
 apiResponseSuccess: ${apiResponseSuccess},
 onFinishStudentProfile: ${onFinishStudentProfile},
 isCreateProfile: ${isCreateProfile},
+profileStudent: ${profileStudent},
 loginFuture: ${loginFuture},
 signinFuture: ${signinFuture},
 getMeFuture: ${getMeFuture},
@@ -733,6 +969,13 @@ createCompanyProfileFuture: ${createCompanyProfileFuture},
 forgotFuture: ${forgotFuture},
 changeFuture: ${changeFuture},
 apiCallingFeature: ${apiCallingFeature},
+apiStudentProfileResponse: ${apiStudentProfileResponse},
+apiUpdateProfile: ${apiUpdateProfile},
+currentChatProjectId: ${currentChatProjectId},
+currentChatUserId: ${currentChatUserId},
+currentChat: ${currentChat},
+chatList: ${chatList},
+allChatList: ${allChatList},
 isLoading: ${isLoading},
 isSignin: ${isSignin}
     ''';

@@ -36,7 +36,6 @@ mixin RepositoryModule {
 
     getIt.registerSingleton<ProjectRepository>(ProjectRepositoryImpl(
       getIt<ProjectApi>(),
-      getIt<ProjectDataSource>(),
     ));
   }
 }

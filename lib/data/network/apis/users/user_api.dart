@@ -5,6 +5,7 @@ import 'package:boilerplate/core/data/network/dio/dio_client.dart';
 import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/entity/chat/chat.dart';
 import 'package:boilerplate/domain/entity/user/profile_company.dart';
 import 'package:boilerplate/domain/entity/user/profile_student.dart';
 import 'package:boilerplate/domain/entity/user/skillset.dart';
@@ -17,13 +18,17 @@ import 'package:boilerplate/domain/usecase/user/create_update_company_profile_us
 import 'package:boilerplate/domain/usecase/user/create_update_student_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_by_projectid_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_with_userId_in_projectid_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_student_profile_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_techstack_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/login_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/signup_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/submit_proposal_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/update_proposal_usecase.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:dio/dio.dart';
 
@@ -297,6 +302,106 @@ class UserApi {
           await _dioClient.dio.post(Endpoints.submitProposal, data: param);
       return res;
     } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<ProfileStudent> getProfileStudent(
+      GetStudentProfileParams param) async {
+    try {
+      final res = await _dioClient.dio.get(
+          Endpoints.getStudentProfile
+              .replaceFirst(":studentId", param.studentId.toString()),
+          data: param);
+
+      final result = jsonDecode(res.toString());
+      return ProfileStudent.fromMap(result["result"]);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<dynamic> updateProposal(UpdateProposalParam param) async {
+    // try {
+    //   final res = await _dioClient.dio.patch(
+    //       Endpoints.updateProposal
+    //           .replaceFirst(":proposalId", param.proposalId.toString()),
+    //       data: param);
+
+    //   final result = jsonDecode(res.toString());
+    //   print("222222222222222222222222222222222");
+    //   print(result);
+    //   // return ProfileStudent.fromMap(result["result"]);
+    // } catch (e) {
+    //   print("updateProposal api ---------------------------");
+    //   print(e.toString());
+    //   throw e;
+    // }
+  }
+
+  Future<dynamic> updateProposalById(
+      int proposalId, UpdateProposalParam param) async {
+    try {
+      final res = await _dioClient.dio.patch(
+          Endpoints.updateProposal
+              .replaceFirst(":proposalId", proposalId.toString()),
+          data: param);
+      return res;
+      //final result = jsonDecode(res.toString());
+      // print("222222222222222222222222222222222");
+      // print(result);
+      // return ProfileStudent.fromMap(result["result"]);
+    } catch (e) {
+      print("updateProposal api ---------------------------");
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<List<ChatEntity>> getAllChatByProjectId(ProjectIdParam param) async {
+    try {
+      final res = await _dioClient.dio.get(Endpoints.getAllChatByProjectId
+          .replaceFirst(":projectId", "${param.projectId}"));
+           final result = jsonDecode(res.toString());
+      List<dynamic> chatObj = result["result"];
+      return chatObj
+          .map((chat) => ChatEntity.fromMap(chat))
+          .toList();
+    } catch (e) {
+      print("---------------------------");
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<List<ChatEntity>> getAllChatWithUserInProject(ProjectUserIdParam param) async {
+    try {
+      final res = await _dioClient.dio.get(Endpoints.getAllChatWithUserInProject
+          .replaceFirst(":projectId", "${param.projectId}").replaceFirst(":userId", "${param.userId}"));
+           final result = jsonDecode(res.toString());
+      List<dynamic> chatObj = result["result"];
+      return chatObj
+          .map((chat) => ChatEntity.fromMap(chat))
+          .toList();
+    } catch (e) {
+      print("---------------------------");
+      print(e.toString());
+      throw e;
+    }
+  }
+
+   Future<List<ChatEntity>> getAllChat() async {
+    try {
+      final res = await _dioClient.dio.get(Endpoints.getAllChat);
+           final result = jsonDecode(res.toString());
+      List<dynamic> chatObj = result["result"];
+      return chatObj
+          .map((chat) => ChatEntity.fromMap(chat))
+          .toList();
+    } catch (e) {
+      print("---------------------------");
       print(e.toString());
       throw e;
     }

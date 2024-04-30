@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
+import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/proposal/proposal.dart';
+import 'package:boilerplate/domain/usecase/user/update_proposal_usecase.dart';
+import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/post_project/components/unordered_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -19,8 +22,24 @@ class ProjectItemType2 extends StatelessWidget {
     required this.proposal,
   }) : super(key: key);
 
+  UpdateProposalParam constructUpdateProposalParam(
+      int statusFlag, int disableFlag) {
+    // print("Aaaaaaaaaaaaaaaaaaa");
+    // print(statusFlag);
+    return UpdateProposalParam(
+      // proposalId: widget.proposal.id,
+      projectId: this.proposal.projectId,
+      studentId: this.proposal.studentId,
+      coverLetter: this.proposal.coverLetter,
+      statusFlag: statusFlag,
+      disableFlag: disableFlag,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final UserStore _userStore = getIt<UserStore>();
+
     QuillController? _controller;
     final _tooltipController = JustTheController();
 
@@ -42,15 +61,22 @@ class ProjectItemType2 extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    AppLocalizations.of(context).translate('sub') + ' ${Moment(DateTime.parse(proposal.createdAt)).fromNow()}', // Placeholder for created date
+                    proposal.statusFlag == ProposalType.HIRED.value
+                        ? AppLocalizations.of(context).translate('joined')
+                        : "",
+                    style: Theme.of(context).textTheme.labelSmall!.copyWith(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    '${AppLocalizations.of(context).translate('sub')} ${Moment(DateTime.parse(proposal.createdAt)).fromNow()}', // Placeholder for created date
                     style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
                     textAlign: TextAlign.right,
                   ),
                 ],
               ),
+              SizedBox(height: 10,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -108,7 +134,56 @@ class ProjectItemType2 extends StatelessWidget {
                           buttonText: AppLocalizations.of(context).translate('acp_hi_req'),
                           buttonColor: Theme.of(context).colorScheme.primary,
                           textColor: Colors.white,
-                          onPressed: () {},
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Center(
+                                      child: Text(AppLocalizations.of(context).translate('acp_hi_req'))),
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Center(
+                                        child: Text(
+                                          AppLocalizations.of(context).translate('candi_q2'),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.of(context)
+                                                  .pop(); // Close the dialog
+                                            },
+                                            child: Text(AppLocalizations.of(context).translate('cancel')),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              UpdateProposalParam
+                                                  updatedProposal =
+                                                  constructUpdateProposalParam(
+                                                      ProposalType.HIRED.value,
+                                                      0);
+                                              _userStore.updateProposalById(
+                                                  this.proposal.id,
+                                                  updatedProposal);
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text(AppLocalizations.of(context).translate('yes')),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
                         ),
                         JustTheTooltip(
                           controller: _tooltipController,
@@ -134,7 +209,7 @@ class ProjectItemType2 extends StatelessWidget {
                       ],
                     )
                   ],
-                )
+                ),
             ],
           ),
         ),
