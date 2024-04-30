@@ -34,7 +34,24 @@ class VideoConferencePageState extends State<VideoConferencePage> {
         conferenceID: widget.conferenceID,
         userID: localUserID,
         userName: "user_$localUserID",
-        config: ZegoUIKitPrebuiltVideoConferenceConfig(),
+        config: ZegoUIKitPrebuiltVideoConferenceConfig(
+          turnOnCameraWhenJoining: false,
+          avatarBuilder: (BuildContext context, Size size, ZegoUIKitUser? user,
+              Map extraInfo) {
+            return user != null
+                ? Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          'https://media.istockphoto.com/id/1302783988/vector/the-embarrassed-man.jpg?s=612x612&w=0&k=20&c=bIPvdEHEGAP0RnSH5n45dvHfsqvZKv8NwG5qjRWCNTg=',
+                        ),
+                      ),
+                    ),
+                  )
+                : const SizedBox();
+          },
+        ),
         // config: ZegoUIKitPrebuiltVideoConferenceConfig(
         //   turnOnCameraWhenJoining: false,
         //   audioVideoViewConfig:
