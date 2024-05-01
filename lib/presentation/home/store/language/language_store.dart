@@ -21,7 +21,7 @@ abstract class _LanguageStore with Store {
     Language(code: 'US', locale: 'en', language: 'English'),
     // Language(code: 'VN', locale: 'vn', language: 'Vietnam'),
     // Language(code: 'DK', locale: 'da', language: 'Danish'),
-    Language(code: 'VN', locale: 'es', language: 'VietNam'),
+    Language(code: 'VN', locale: 'es', language: 'Tiếng Việt'),
   ];
 
   // constructor:---------------------------------------------------------------

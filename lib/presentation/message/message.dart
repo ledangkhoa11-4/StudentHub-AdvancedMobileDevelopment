@@ -1,12 +1,15 @@
 import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
+import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/chat/chatUser.dart';
+import 'package:boilerplate/domain/entity/user/user.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/message/components/conversation_list.dart';
 import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:moment_dart/moment_dart.dart';
 
@@ -29,7 +32,7 @@ class _MessageScreenState extends State<MessageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: UserAppBar.buildAppBar(context, titleWidget: Text("Message")),
+      appBar: UserAppBar.buildAppBar(context, titleWidget: Text(AppLocalizations.of(context).translate('message'))),
       bottomNavigationBar:
           UserNavigationBar.buildNavigationBar(context, setState: setState),
       body: Stack(
@@ -43,7 +46,7 @@ class _MessageScreenState extends State<MessageScreen> {
                   padding: EdgeInsets.only(top: 16, left: 16, right: 16),
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: "Search...",
+                      hintText:  AppLocalizations.of(context).translate('search'),
                       hintStyle: TextStyle(color: Colors.grey.shade600),
                       prefixIcon: Icon(
                         Icons.search,
@@ -84,12 +87,15 @@ class _MessageScreenState extends State<MessageScreen> {
                             side: BorderSide.none,
                           ),
                           title: Text(
-                            "Project ${project != null ? project.title : "N/A"}",
+                            "${AppLocalizations.of(context).translate('project')} ${project != null ? project.title : "N/A"}",
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.bold),
                           ),
                           children: [
                             Observer(builder: (context) {
+                              final currentProfile =
+                                  getIt<SharedPreferenceHelper>()
+                                      .currentProfile;
                               final chatsInProject = _userStore.allChatList!
                                   .where((chat) => chat.project?.id == id)
                                   .toList();
@@ -105,9 +111,12 @@ class _MessageScreenState extends State<MessageScreen> {
                                         : chat.sender.fullname,
                                     messageText:
                                         chat.sender.id == _userStore.user!.id
-                                            ? "You: ${chat.content}"
+                                            ? "${AppLocalizations.of(context).translate('you')}: ${chat.content}"
                                             : chat.content,
-                                    imageUrl: "https://i.imgur.com/ugcoGNH.png",
+                                    imageUrl:
+                                        currentProfile == UserRole.COMPANY.value
+                                            ? "https://i.imgur.com/ugcoGNH.png"
+                                            : "https://i.imgur.com/SR6SaqF.png",
                                     time: "${Moment(chat.createdAt).fromNow()}",
                                     isMessageRead: false,
                                     projectId: chat.project!.id!,

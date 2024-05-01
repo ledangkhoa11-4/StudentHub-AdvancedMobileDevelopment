@@ -883,8 +883,9 @@ mixin _$UserStore on _UserStore, Store {
       AsyncAction('_UserStore.getCurrentChat', context: context);
 
   @override
-  Future<dynamic> getCurrentChat() {
-    return _$getCurrentChatAsyncAction.run(() => super.getCurrentChat());
+  Future<dynamic> getCurrentChat({bool loading = true}) {
+    return _$getCurrentChatAsyncAction
+        .run(() => super.getCurrentChat(loading: loading));
   }
 
   late final _$getChatListByProjectIdAsyncAction =

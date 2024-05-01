@@ -119,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: <Widget>[
             SizedBox(height: 24.0),
             Text(
-              'Login with StudentHub',
+              AppLocalizations.of(context).translate('login_title'),
               style: TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
@@ -139,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "Don't have a StudentHub Account?",
+                   AppLocalizations.of(context).translate('not_have_acc'),
                   style: TextStyle(fontSize: 14.0),
                 ),
                 ElevatedButton(
@@ -149,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       foregroundColor: Colors.white),
-                  child: Text('Sign up'),
+                  child: Text( AppLocalizations.of(context).translate('sign_up')),
                 ),
               ],
             ),
@@ -233,7 +233,7 @@ class _LoginScreenState extends State<LoginScreen> {
           DeviceUtils.hideKeyboard(context);
           _userStore.login(_userEmailController.text, _passwordController.text);
         } else {
-          _showErrorMessage('Please fill in all fields');
+          _showErrorMessage( AppLocalizations.of(context).translate('pls_fill_all'));
         }
       },
     );

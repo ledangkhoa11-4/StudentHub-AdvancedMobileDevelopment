@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'models.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class ChatMessageObj extends StatelessWidget {
   final ChatMessage message;

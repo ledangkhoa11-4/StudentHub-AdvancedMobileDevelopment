@@ -153,3 +153,4 @@ flutter:
 
 # dependency_overrides:
 #   file_picker: ^8.0.0+1
+  # see https://flutter.io/custom-fonts/#from-packages

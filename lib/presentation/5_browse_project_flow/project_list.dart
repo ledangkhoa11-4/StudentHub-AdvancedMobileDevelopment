@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'project_item.dart';
 import 'package:input_history_text_field/input_history_text_field.dart';
-
+import 'package:boilerplate/utils/locale/app_localization.dart';
 class ProjectList extends StatefulWidget {
   ProjectList({Key? key}) : super(key: key);
 
@@ -49,7 +49,7 @@ class _ProjectListState extends State<ProjectList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context,
-          titleWidget: Text("Discovery Projects")),
+          titleWidget: Text(AppLocalizations.of(context).translate('dis_pr'))),
       bottomNavigationBar:
           UserNavigationBar.buildNavigationBar(context, setState: setState),
       body: Stack(
@@ -90,7 +90,7 @@ class _ProjectListState extends State<ProjectList> {
                               decoration: InputDecoration(
                                 prefixIcon:
                                     Icon(Icons.search, color: Colors.black),
-                                hintText: 'Search...',
+                                hintText: AppLocalizations.of(context).translate('search'),
                                 border: InputBorder.none,
                                 hintStyle: TextStyle(color: Colors.black),
                                 contentPadding:
@@ -159,7 +159,7 @@ class _ProjectListState extends State<ProjectList> {
                             : Center(
                                 child: Text(_projectStore.isLoading
                                     ? ""
-                                    : "No project found"),
+                                    : AppLocalizations.of(context).translate('no_pr_f')),
                               )
                         : _projectStore.allProjectList != null &&
                                 _projectStore.allProjectList!.projects!.length >
@@ -183,7 +183,7 @@ class _ProjectListState extends State<ProjectList> {
                             : Center(
                                 child: Text(_projectStore.isLoading
                                     ? ""
-                                    : "No project found"),
+                                    : AppLocalizations.of(context).translate('no_pr_f')),
                               ),
                   ),
                 ),

@@ -17,6 +17,7 @@ import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class PostProjectStep3 extends StatefulWidget {
   final FormPostProjectStore formStore;
@@ -55,8 +56,8 @@ class _PostProjectStep3State extends State<PostProjectStep3> {
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context,
           titleWidget: widget.projectEdit != null
-              ? Text("Edit \"${widget.projectEdit!.title}\" project ")
-              : Text("Post new project")),
+              ? Text(AppLocalizations.of(context).translate('edit')+ "\"${widget.projectEdit!.title}\""+ AppLocalizations.of(context).translate('project'))
+              : Text(AppLocalizations.of(context).translate('post_new_pr'))),
       body: QuillProvider(
         configurations: QuillConfigurations(
           controller: _quillController,
@@ -76,30 +77,30 @@ class _PostProjectStep3State extends State<PostProjectStep3> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Project description:",
+                    AppLocalizations.of(context).translate('pr_des'),
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
-                  // JustTheTooltip(
-                  //   controller: _tooltipController,
-                  //   isModal: true,
-                  //   child: IconButton(
-                  //     icon: Icon(
-                  //       Icons.help_outline_outlined,
-                  //       size: 16,
-                  //     ),
-                  //     onPressed: () {
-                  //       _tooltipController.showTooltip();
-                  //     },
-                  //   ),
-                  //   content: Padding(
-                  //     padding: EdgeInsets.all(8.0),
-                  //     child: UnorderedList([
-                  //       "Clear expectation about your project or dellverables",
-                  //       "The skills required for your project",
-                  //       "Detall about your project",
-                  //     ], "Example: Students are looking for:"),
-                  //   ),
-                  // )
+                  JustTheTooltip(
+                    controller: _tooltipController,
+                    isModal: true,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.help_outline_outlined,
+                        size: 16,
+                      ),
+                      onPressed: () {
+                        _tooltipController.showTooltip();
+                      },
+                    ),
+                    content: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: UnorderedList([
+                        AppLocalizations.of(context).translate('post_project_step3_text_1'),
+                        AppLocalizations.of(context).translate('post_project_step3_text_2'),
+                        AppLocalizations.of(context).translate('post_project_step3_text_3'),
+                      ],AppLocalizations.of(context).translate('post_project_step3_text_4')),
+                    ),
+                  )
                 ],
               ),
               // SizedBox(
@@ -122,7 +123,7 @@ class _PostProjectStep3State extends State<PostProjectStep3> {
                 ),
               ),
               RoundedButtonWidget(
-                buttonText: "Final: Review your post",
+                buttonText: AppLocalizations.of(context).translate('final_pre_post'),
                 buttonColor: Theme.of(context).colorScheme.primary,
                 textColor: Colors.white,
                 onPressed: () {

@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class PostProjectStep2 extends StatefulWidget {
   final FormPostProjectStore formStore;
@@ -55,8 +56,8 @@ class _PostProjectStep2State extends State<PostProjectStep2> {
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context,
           titleWidget: widget.projectEdit != null
-              ? Text("Edit \"${widget.projectEdit!.title}\" project ")
-              : Text("Post new project")),
+              ? Text(AppLocalizations.of(context).translate('edit')+ "\"${widget.projectEdit!.title}\""+ AppLocalizations.of(context).translate('project'))
+              : Text(AppLocalizations.of(context).translate('post_new_pr'))),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
@@ -77,7 +78,7 @@ class _PostProjectStep2State extends State<PostProjectStep2> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Estimate the scope of your job",
+                          AppLocalizations.of(context).translate('es_scope'),
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
                         JustTheTooltip(
@@ -95,14 +96,14 @@ class _PostProjectStep2State extends State<PostProjectStep2> {
                           content: Padding(
                             padding: EdgeInsets.all(8.0),
                             child: UnorderedList([
-                              "Consider the size of your project and the timeline",
-                            ], "Guidelines"),
+                              AppLocalizations.of(context).translate('con_timeline'),
+                            ], AppLocalizations.of(context).translate('Guidelines')),
                           ),
                         )
                       ],
                     ),
                     Text(
-                      "How long will your project take?",
+                      AppLocalizations.of(context).translate('time_pr_question'),
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     SizedBox(
@@ -140,11 +141,11 @@ class _PostProjectStep2State extends State<PostProjectStep2> {
                       height: 20,
                     ),
                     Text(
-                      "How many students do you want for this project?",
+                      AppLocalizations.of(context).translate('many_stu_pr_question'),
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     TextFieldWidget(
-                      hint: "Number of students",
+                      hint: AppLocalizations.of(context).translate('num_s'),
                       inputType: TextInputType.number,
                       padding: EdgeInsets.only(top: 15, bottom: 15),
                       icon: BootstrapIcons.people,
@@ -159,7 +160,7 @@ class _PostProjectStep2State extends State<PostProjectStep2> {
                       },
                     ),
                     RoundedButtonWidget(
-                      buttonText: "Next: Description",
+                      buttonText: AppLocalizations.of(context).translate('next_des'),
                       buttonColor: Theme.of(context).colorScheme.primary,
                       textColor: Colors.white,
                       onPressed: () {
@@ -176,7 +177,7 @@ class _PostProjectStep2State extends State<PostProjectStep2> {
                             'project': widget.projectEdit,
                           });
                         } else {
-                          ToastHelper.error("Please enter required fields");
+                          ToastHelper.error(AppLocalizations.of(context).translate('pls_en_re_fi'));
                         }
                       },
                     )

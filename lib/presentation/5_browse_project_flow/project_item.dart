@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:intl/intl.dart';
 import 'project_detail.dart';
-
+import 'package:boilerplate/utils/locale/app_localization.dart';
 class ProjectItem extends StatelessWidget {
   final Project project;
   final bool isLiked;
@@ -22,7 +22,7 @@ class ProjectItem extends StatelessWidget {
   Widget build(BuildContext context) {
     String formatDate(String? isoDate) {
       if (isoDate == null) {
-        return 'No date';
+        return AppLocalizations.of(context).translate('No_day');
       }
       DateTime dateTime =
           DateFormat(("yyyy-MM-ddTHH:mm:ssZ")).parseUTC(isoDate).toLocal();
@@ -58,7 +58,7 @@ class ProjectItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Created: ${formatDate(project.createdAt)}',
+                AppLocalizations.of(context).translate('Created') + " : " + '${formatDate(project.createdAt)}',
                 style: TextStyle(
                   color: Colors.grey.shade600,
                   fontSize: 14,
@@ -97,7 +97,7 @@ class ProjectItem extends StatelessWidget {
                         fontWeight: FontWeight.w100,
                         fontSize: 14,
                       ),
-                  text: 'Time: ',
+                  text: AppLocalizations.of(context).translate('Time'),
                   children: <TextSpan>[
                     TextSpan(
                       text:
@@ -106,16 +106,16 @@ class ProjectItem extends StatelessWidget {
                     ),
                     TextSpan(text: ', '),
                     TextSpan(
-                      text: '${project.numberOfStudents} students',
+                      text: '${project.numberOfStudents}' +  AppLocalizations.of(context).translate('students'),
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    TextSpan(text: ' needed '),
+                    TextSpan(text: AppLocalizations.of(context).translate('needed')),
                   ],
                 ),
               ),
               SizedBox(height: 8.0),
               Text(
-                'The project requires candidates:',
+                AppLocalizations.of(context).translate('pr_re_can'),
                 style: Theme.of(context)
                     .textTheme
                     .subtitle1!

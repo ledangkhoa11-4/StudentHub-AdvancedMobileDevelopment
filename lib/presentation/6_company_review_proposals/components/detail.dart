@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import '../../../domain/entity/project/project.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class Detail extends StatelessWidget {
   final Project project;
@@ -35,7 +36,7 @@ class Detail extends StatelessWidget {
             // Divider(color: Colors.black),
             SizedBox(height: 16),
             Text(
-              'Students are looking for:',
+              AppLocalizations.of(context).translate('stu_look_for'),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -82,7 +83,7 @@ class Detail extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Project scope',
+                      AppLocalizations.of(context).translate('pr_scope'),
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -107,7 +108,7 @@ class Detail extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Number of Students',
+                      AppLocalizations.of(context).translate('num_s'),
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,

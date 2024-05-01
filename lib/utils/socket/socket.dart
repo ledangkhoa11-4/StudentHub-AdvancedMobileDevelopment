@@ -4,6 +4,7 @@ import 'package:socket_io_client/socket_io_client.dart';
 enum EMessageFlag {
   MESSAGE,
   INTERVIEW,
+  UPDATE_INTERVIEW,
 }
 
 extension EMessageFlagType on EMessageFlag {
@@ -13,6 +14,8 @@ extension EMessageFlagType on EMessageFlag {
         return 0;
       case EMessageFlag.INTERVIEW:
         return 1;
+      case EMessageFlag.UPDATE_INTERVIEW:
+        return 2;
       default:
         return -1;
     }
@@ -24,6 +27,8 @@ extension EMessageFlagType on EMessageFlag {
         return "SEND_MESSAGE";
       case EMessageFlag.INTERVIEW:
         return "SCHEDULE_INTERVIEW";
+      case EMessageFlag.UPDATE_INTERVIEW:
+        return "UPDATE_INTERVIEW";
       default:
         return "";
     }
