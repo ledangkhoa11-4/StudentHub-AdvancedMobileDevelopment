@@ -9,6 +9,7 @@ import 'package:boilerplate/domain/entity/user/tech_stack.dart';
 import 'package:boilerplate/domain/repository/user/user_repository.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/check_room_available_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
@@ -221,6 +222,14 @@ class UserRepositoryImpl extends UserRepository {
   Future<List<ChatEntity>> getAllWithUserIdChatByProjectId(
       ProjectUserIdParam params) async {
     return await _userApi.getAllChatWithUserInProject(params).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<bool> checkRoomAvailability(
+      CheckRoomAvailabilityParams params) async {
+    return await _userApi.checkRoomAvailability(params).then((res) {
       return res;
     }).catchError((error) => throw error);
   }

@@ -906,6 +906,15 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.getAllChatList(loading: loading));
   }
 
+  late final _$checkRoomAvailabilityAsyncAction =
+      AsyncAction('_UserStore.checkRoomAvailability', context: context);
+
+  @override
+  Future<bool> checkRoomAvailability(CheckRoomAvailabilityParams params) {
+    return _$checkRoomAvailabilityAsyncAction
+        .run(() => super.checkRoomAvailability(params));
+  }
+
   late final _$_UserStoreActionController =
       ActionController(name: '_UserStore', context: context);
 

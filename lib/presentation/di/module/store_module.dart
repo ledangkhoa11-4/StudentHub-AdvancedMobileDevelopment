@@ -24,6 +24,7 @@ import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/remove_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/check_room_available_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
@@ -130,6 +131,7 @@ mixin StoreModule {
         getIt<GetAllChatUseCase>(),
         getIt<GetAllChatByProjectUseCase>(),
         getIt<GetAllChatWithUserInProjectUseCase>(),
+        getIt<CheckRoomAvailabilityUseCase>(),
       ),
     );
 

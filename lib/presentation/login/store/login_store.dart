@@ -18,6 +18,7 @@ import 'package:boilerplate/domain/entity/user/profile_student.dart';
 import 'package:boilerplate/domain/entity/user/skillset.dart';
 import 'package:boilerplate/domain/entity/user/tech_stack.dart';
 import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/check_room_available_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
@@ -86,7 +87,8 @@ abstract class _UserStore with Store {
       this._updateProposalUseCase,
       this._getAllChatUseCase,
       this._getAllChatByProjectUseCase,
-      this._getAllChatWithUserInProjectUseCase) {
+      this._getAllChatWithUserInProjectUseCase,
+      this._checkRoomAvailabilityUseCase) {
     // setting up disposers
     _setupDisposers();
 
@@ -122,6 +124,7 @@ abstract class _UserStore with Store {
   final GetAllChatByProjectUseCase _getAllChatByProjectUseCase;
   final GetAllChatUseCase _getAllChatUseCase;
   final GetAllChatWithUserInProjectUseCase _getAllChatWithUserInProjectUseCase;
+  final CheckRoomAvailabilityUseCase _checkRoomAvailabilityUseCase;
 
   // stores:--------------------------------------------------------------------
   // for handling form errors
@@ -913,7 +916,8 @@ abstract class _UserStore with Store {
             id: data["notification"]["messageId"],
             createdAt: DateTime.now(),
             content: data["notification"]["message"]["content"],
-            sender: ChatUser(id: data["notification"]["senderId"], fullname: ""),
+            sender:
+                ChatUser(id: data["notification"]["senderId"], fullname: ""),
             receiver:
                 ChatUser(id: this.user!.id!, fullname: this.user!.fullname!));
         this.addCurrentChat(newChat);
@@ -1041,6 +1045,18 @@ abstract class _UserStore with Store {
     final newChat = List.of(this.currentChat);
     newChat.add(chat);
     this.currentChat = newChat;
+  }
+
+  @action
+  Future<bool> checkRoomAvailability(CheckRoomAvailabilityParams params) async {
+    final future = _checkRoomAvailabilityUseCase.call(params: params);
+    apiCallingFeature = ObservableFuture(future);
+    final isAvailable = await future.then((value) async {
+      return value;
+    }).catchError((e) {
+      return false;
+    });
+    return isAvailable;
   }
 
   logout() async {
