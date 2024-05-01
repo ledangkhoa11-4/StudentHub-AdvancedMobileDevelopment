@@ -6,6 +6,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
+import '../../utils/locale/app_localization.dart';
 
 class SkillsetWidget extends StatefulWidget {
   final FormStudentProfileStore formStore;
@@ -58,14 +59,14 @@ class _SkillsetWidgetState extends State<SkillsetWidget> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              "Your Skillset:",
+              AppLocalizations.of(context).translate('Your_Skillset') + ": ",
               style: Theme.of(context).textTheme.labelLarge,
             ),
             SizedBox(
               height: 10,
             ),
             MultiSelectDropDown<int>(
-                hint: "Select your skillset",
+                hint: AppLocalizations.of(context).translate('Sel_y_skillset'),
                 fieldBackgroundColor: Colors.transparent,
                 borderColor: widget.formStore.formErrorStore.skillset == null
                     ? Colors.grey

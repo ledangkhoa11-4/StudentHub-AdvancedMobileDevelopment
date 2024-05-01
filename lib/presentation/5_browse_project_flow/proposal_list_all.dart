@@ -9,6 +9,7 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class ProposalListAll extends StatefulWidget {
   ProposalListAll({Key? key}) : super(key: key);
@@ -93,7 +94,7 @@ class _ProjectListState extends State<ProposalListAll> {
                               side: BorderSide.none,
                             ),
                             title: Text(
-                              "Active Proposal (${_projectStore.submitProposals != null ? _projectStore.submitProposals!.where((proposal) => proposal.statusFlag == ProposalType.ACTIVE.value || proposal.statusFlag == ProposalType.OFFER.value).length : 0})",
+                              AppLocalizations.of(context).translate('ac_proposal') + " (${_projectStore.submitProposals != null ? _projectStore.submitProposals!.where((proposal) => proposal.statusFlag == ProposalType.ACTIVE.value || proposal.statusFlag == ProposalType.OFFER.value).length : 0})",
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.bold),
                             ),
@@ -135,7 +136,7 @@ class _ProjectListState extends State<ProposalListAll> {
                               side: BorderSide.none,
                             ),
                             title: Text(
-                              "Submitted Proposal (${_projectStore.submitProposals != null ? _projectStore.submitProposals!.where((proposal) => proposal.statusFlag != ProposalType.ACTIVE.value && proposal.statusFlag != ProposalType.OFFER.value).length : 0})",
+                              AppLocalizations.of(context).translate('sub_ed_pro')+ " (${_projectStore.submitProposals != null ? _projectStore.submitProposals!.where((proposal) => proposal.statusFlag != ProposalType.ACTIVE.value && proposal.statusFlag != ProposalType.OFFER.value).length : 0})",
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.bold),
                             ),
@@ -148,7 +149,7 @@ class _ProjectListState extends State<ProposalListAll> {
                                         proposal.statusFlag !=
                                             ProposalType.OFFER.value)
                                     .map((proposal) =>
-                                        ProjectItemType2(proposal: proposal))
+                                        ProjectItemType2( proposal: proposal))
                                     .toList()
                             ],
                           ),

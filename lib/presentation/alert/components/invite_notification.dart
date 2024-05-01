@@ -2,6 +2,7 @@ import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class InviteNotification extends StatefulWidget {
   const InviteNotification({Key? key}) : super(key: key);
@@ -41,7 +42,7 @@ class _InviteNotificationState extends State<InviteNotification> {
                   textAlign: TextAlign.right,
                 ),
                 Text(
-                    "You have Invited to Intervlew for project \"Javls - AI Copllot\" at 14:00 March 20, Thursday",
+                     AppLocalizations.of(context).translate('act_notif_text'),
                     style: Theme.of(context).textTheme.labelSmall!),
                 const SizedBox(
                   height: 5,
@@ -49,7 +50,7 @@ class _InviteNotificationState extends State<InviteNotification> {
                 SizedBox(
                   width: 150,
                   child: RoundedButtonWidget(
-                    buttonText: "View offer",
+                    buttonText: AppLocalizations.of(context).translate('view_offer'),
                     buttonColor: Theme.of(context).colorScheme.primary,
                     textColor: Colors.white,
                     onPressed: () {},

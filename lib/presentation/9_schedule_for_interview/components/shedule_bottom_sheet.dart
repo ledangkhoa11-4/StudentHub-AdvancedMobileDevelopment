@@ -5,6 +5,7 @@ import 'package:boilerplate/domain/entity/interview/interview.dart';
 import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:moment_dart/moment_dart.dart';
 
 class ScheduleBottomSheet extends StatefulWidget {
@@ -46,14 +47,14 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Error'),
-            content: Text('End time must be after start time'),
+            title: Text(AppLocalizations.of(context).translate('err')),
+            content: Text(AppLocalizations.of(context).translate('end_time_alert')),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the dialog
                 },
-                child: Text('OK'),
+                child: Text(AppLocalizations.of(context).translate('ok')),
               ),
             ],
           );
@@ -78,8 +79,8 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
         children: <Widget>[
           Text(
             widget.interviewEdit != null
-                ? "Reschedule interview"
-                : 'Schedule Interview',
+                ? AppLocalizations.of(context).translate('resche_inter')
+                : AppLocalizations.of(context).translate('sche_inter'),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 18.0,
@@ -87,10 +88,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
             ),
           ),
           SizedBox(height: 16.0),
-          Text(
-            'Title:',
-            style: Theme.of(context).textTheme.labelSmall,
-          ),
+          Text(AppLocalizations.of(context).translate('Title') + ': ',  style: Theme.of(context).textTheme.labelSmall),
           TextField(
             controller: _titleController,
             decoration: InputDecoration(
@@ -114,7 +112,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
             },
           ),
           SizedBox(height: 16.0),
-          Text('Start Time:', style: Theme.of(context).textTheme.labelSmall),
+          Text(AppLocalizations.of(context).translate('start_time'), style: Theme.of(context).textTheme.labelSmall),
           SizedBox(height: 8.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -177,7 +175,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
             ],
           ),
           SizedBox(height: 16.0),
-          Text('End Time:', style: Theme.of(context).textTheme.labelSmall),
+          Text(AppLocalizations.of(context).translate('end_time'), style: Theme.of(context).textTheme.labelSmall),
           SizedBox(height: 8.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -247,11 +245,11 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                 onPressed: () {
                   Navigator.pop(context); // Close the bottom sheet
                 },
-                child: Text('Cancel'),
+                child: Text(AppLocalizations.of(context).translate('cancel')),
               ),
               ElevatedButton(
                 onPressed: _handleScheduleMeeting,
-                child: Text('Send Invite'),
+                child: Text(AppLocalizations.of(context).translate('send_i')),
               ),
             ],
           ),

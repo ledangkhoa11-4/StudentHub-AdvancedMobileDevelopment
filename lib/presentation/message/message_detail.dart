@@ -13,6 +13,7 @@ import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/toast/toast.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/utils/socket/socket.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
@@ -99,10 +100,11 @@ class _MessageDetailState extends State<MessageDetail> {
                   : null,
               l10n: ChatL10nEn(
                   emptyChatPlaceholder: _userStore.isLoading
-                      ? 'Loading...'
+                      ? AppLocalizations.of(context).translate('loading')
                       : _userStore.currentChat.length > 0
                           ? ""
-                          : "No message"),
+                          : AppLocalizations.of(context)
+                              .translate('no_message')),
               messages: _messages,
               user: _user,
               onSendPressed: _handleSendPressed,
@@ -136,7 +138,7 @@ class _MessageDetailState extends State<MessageDetail> {
                   final bool isDeleted = interview.deletedAt != null;
                   final senderName =
                       p0.author.id == _userStore.user!.id!.toString()
-                          ? "You"
+                          ? AppLocalizations.of(context).translate('you')
                           : _userStore.user!.fullname!;
                   final Duration diff =
                       interview.endTime.difference(interview.startTime);
@@ -147,7 +149,7 @@ class _MessageDetailState extends State<MessageDetail> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          "${senderName} want to schedule a meeting for ${interview.title}",
+                          "${senderName} ${AppLocalizations.of(context).translate('create_schedule')} ${interview.title}",
                           style: TextStyle(
                               color: p0.author.id ==
                                       _userStore.user!.id!.toString()
@@ -169,7 +171,8 @@ class _MessageDetailState extends State<MessageDetail> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Time",
+                                      AppLocalizations.of(context)
+                                          .translate('time'),
                                       style: Theme.of(context)
                                           .textTheme
                                           .labelSmall,
@@ -189,11 +192,11 @@ class _MessageDetailState extends State<MessageDetail> {
                                   height: 4,
                                 ),
                                 Text(
-                                    "Start time: ${Moment(interview.startTime).toLocal().formatDateTimeShort()}",
+                                    "${AppLocalizations.of(context).translate('start_time')}${Moment(interview.startTime).toLocal().formatDateTimeShort()}",
                                     style:
                                         Theme.of(context).textTheme.labelSmall),
                                 Text(
-                                    "Due time: ${Moment(interview.endTime).toLocal().formatDateTimeShort()}",
+                                    "${AppLocalizations.of(context).translate('end_time')}${Moment(interview.endTime).toLocal().formatDateTimeShort()}",
                                     style:
                                         Theme.of(context).textTheme.labelSmall),
                                 SizedBox(
@@ -211,27 +214,39 @@ class _MessageDetailState extends State<MessageDetail> {
                                             : ElevatedButton.styleFrom(),
                                         onPressed: () {},
                                         child: Text(
-                                          isDeleted ? "Cancelled" : "Join", style: isDeleted ? TextStyle(color: Colors.white) : TextStyle(),
+                                          isDeleted
+                                              ? AppLocalizations.of(context)
+                                                  .translate('cancelled')
+                                              : AppLocalizations.of(context)
+                                                  .translate('join'),
+                                          style: isDeleted
+                                              ? TextStyle(color: Colors.white)
+                                              : TextStyle(),
                                         ),
                                       ),
                                     ),
                                     if (currentProfile ==
-                                        UserRole.COMPANY.value && !isDeleted)
+                                            UserRole.COMPANY.value &&
+                                        !isDeleted)
                                       PopupMenuButton(
                                           icon: const Icon(BootstrapIcons
                                               .three_dots_vertical),
                                           itemBuilder: (context) {
                                             return <PopupMenuEntry>[
                                               PopupMenuItem(
-                                                child: const Text(
-                                                    'Re-schedule meeting'),
+                                                child: Text(AppLocalizations.of(
+                                                        context)
+                                                    .translate(
+                                                        'resschedule_meeting')),
                                                 onTap: () {
                                                   _handleEditMeeting(interview);
                                                 },
                                               ),
                                               PopupMenuItem(
-                                                child: const Text(
-                                                    'Cancel meeting'),
+                                                child: Text(
+                                                    AppLocalizations.of(context)
+                                                        .translate(
+                                                            'cancel_meeting')),
                                                 onTap: () {
                                                   _handleDeleteMeeting(
                                                       context, interview);
@@ -327,7 +342,7 @@ class _MessageDetailState extends State<MessageDetail> {
                     "deleteAction": true
                   });
                   ToastHelper.success(
-                      "Please wait until we delete your meeting room",
+                      AppLocalizations.of(context).translate('wait_delete'),
                       length: Toast.LENGTH_LONG);
                 } else {
                   ToastHelper.error("Cannot connect to socket service");
@@ -360,7 +375,7 @@ class _MessageDetailState extends State<MessageDetail> {
         "meeting_room_code": Uuid().v4(),
         "meeting_room_id": Uuid().v4()
       });
-      ToastHelper.success("Please wait until we create your meeting room",
+      ToastHelper.success(AppLocalizations.of(context).translate('wait_create'),
           length: Toast.LENGTH_LONG);
     } else {
       ToastHelper.error("Cannot connect to socket service");
@@ -381,7 +396,7 @@ class _MessageDetailState extends State<MessageDetail> {
         "endTime": Moment(endTime).toUtc().toIso8601String(),
         "updateAction": true
       });
-      ToastHelper.success("Please wait until we save your meeting room",
+      ToastHelper.success(AppLocalizations.of(context).translate('wait_edit'),
           length: Toast.LENGTH_LONG);
     } else {
       ToastHelper.error("Cannot connect to socket service");

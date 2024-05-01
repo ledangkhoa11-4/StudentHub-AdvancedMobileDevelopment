@@ -14,6 +14,7 @@ import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import '../../utils/locale/app_localization.dart';
 
 class StudentNewProfile extends StatefulWidget {
   @override
@@ -43,8 +44,8 @@ class _StudentNewProfileState extends State<StudentNewProfile> {
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context,
           titleWidget: isEdit
-              ? Text("Edit student profile")
-              : Text("Create new profile"),
+              ? Text(AppLocalizations.of(context).translate('Edit_comp_prof'))
+              : Text(AppLocalizations.of(context).translate('cre_new_prof')),
           disableSettingAccount: true),
       body: Stack(
         children: [
@@ -60,7 +61,7 @@ class _StudentNewProfileState extends State<StudentNewProfile> {
                   StudentFormStepper(activeStep: 0),
                   Center(
                       child: Text(
-                    "Welcome to StudentHub",
+                     AppLocalizations.of(context).translate('wellcome'),
                     style: Theme.of(context)
                         .textTheme
                         .labelLarge
@@ -69,7 +70,7 @@ class _StudentNewProfileState extends State<StudentNewProfile> {
                   SizedBox(height: 10),
                   Center(
                       child: Text(
-                          "Tell us about your self and you will be on your way connect with real-world project",
+                          AppLocalizations.of(context).translate('tell_us_real_prj'),
                           textAlign: TextAlign.center,
                           style: Theme.of(context)
                               .textTheme
@@ -95,13 +96,13 @@ class _StudentNewProfileState extends State<StudentNewProfile> {
                     height: 20,
                   ),
                   RoundedButtonWidget(
-                    buttonText: "Continue",
+                    buttonText: AppLocalizations.of(context).translate('Continue'),
                     buttonColor: Theme.of(context).colorScheme.primary,
                     textColor: Colors.white,
                     onPressed: () {
                       _formStore.validateAll();
                       if (_formStore.formErrorStore.hasErrorsInStep1 == true) {
-                        ToastHelper.error("Please fill all fields");
+                        ToastHelper.error(AppLocalizations.of(context).translate('pls_fill_all'));
                       } else {
                         Navigator.push(
                           context,

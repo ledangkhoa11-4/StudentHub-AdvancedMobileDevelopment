@@ -9,6 +9,7 @@ import 'package:boilerplate/presentation/message/components/conversation_list.da
 import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:moment_dart/moment_dart.dart';
 
@@ -31,7 +32,7 @@ class _MessageScreenState extends State<MessageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: UserAppBar.buildAppBar(context, titleWidget: Text("Message")),
+      appBar: UserAppBar.buildAppBar(context, titleWidget: Text(AppLocalizations.of(context).translate('message'))),
       bottomNavigationBar:
           UserNavigationBar.buildNavigationBar(context, setState: setState),
       body: Stack(
@@ -45,7 +46,7 @@ class _MessageScreenState extends State<MessageScreen> {
                   padding: EdgeInsets.only(top: 16, left: 16, right: 16),
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: "Search...",
+                      hintText:  AppLocalizations.of(context).translate('search'),
                       hintStyle: TextStyle(color: Colors.grey.shade600),
                       prefixIcon: Icon(
                         Icons.search,
@@ -86,7 +87,7 @@ class _MessageScreenState extends State<MessageScreen> {
                             side: BorderSide.none,
                           ),
                           title: Text(
-                            "Project ${project != null ? project.title : "N/A"}",
+                            "${AppLocalizations.of(context).translate('project')} ${project != null ? project.title : "N/A"}",
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.bold),
                           ),
@@ -110,7 +111,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                         : chat.sender.fullname,
                                     messageText:
                                         chat.sender.id == _userStore.user!.id
-                                            ? "You: ${chat.content}"
+                                            ? "${AppLocalizations.of(context).translate('you')}: ${chat.content}"
                                             : chat.content,
                                     imageUrl:
                                         currentProfile == UserRole.COMPANY.value

@@ -18,6 +18,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../../utils/locale/app_localization.dart';
 
 class SignUpStep2 extends StatefulWidget {
   final String selectedOption;
@@ -41,7 +42,9 @@ class _SignUpStep2State extends State<SignUpStep2> {
   @override
   Widget build(BuildContext context) {
     var anotherOption =
-        widget.selectedOption == "company" ? "student" : "company";
+        widget.selectedOption ==   AppLocalizations.of(context).translate('company')? 
+                                 AppLocalizations.of(context).translate('student'): 
+                                AppLocalizations.of(context).translate('company');
 
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context),
@@ -57,7 +60,7 @@ class _SignUpStep2State extends State<SignUpStep2> {
                   SizedBox(height: 24),
                   Center(
                     child: Text(
-                      'Sign up as ${widget.selectedOption.toTitleCase()}',
+                      AppLocalizations.of(context).translate('sign_ip_as') + ' ${widget.selectedOption.toTitleCase()}',
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.bold,
@@ -65,7 +68,7 @@ class _SignUpStep2State extends State<SignUpStep2> {
                     ),
                   ),
                   TextFieldWidget(
-                    hint: "Fullname",
+                    hint: AppLocalizations.of(context).translate('Fullname'),
                     padding: EdgeInsets.only(top: 15, bottom: 15),
                     icon: BootstrapIcons.alphabet,
                     iconColor:
@@ -77,7 +80,7 @@ class _SignUpStep2State extends State<SignUpStep2> {
                     },
                   ),
                   TextFieldWidget(
-                    hint: "Email",
+                    hint: AppLocalizations.of(context).translate('Email'),
                     padding: EdgeInsets.only(top: 15, bottom: 15),
                     icon: BootstrapIcons.envelope_at_fill,
                     iconColor:
@@ -89,7 +92,7 @@ class _SignUpStep2State extends State<SignUpStep2> {
                     },
                   ),
                   TextFieldWidget(
-                    hint: "Password",
+                    hint: AppLocalizations.of(context).translate('Password'),
                     inputType: TextInputType.visiblePassword,
                     padding: EdgeInsets.only(top: 15, bottom: 15),
                     icon: BootstrapIcons.shield_lock_fill,
@@ -115,7 +118,7 @@ class _SignUpStep2State extends State<SignUpStep2> {
                       ),
                       Expanded(
                         child: Text(
-                          'Yes, I understand and agree to StudentHub',
+                          AppLocalizations.of(context).translate('understand_agr'),
                           style: TextStyle(
                             fontSize: 12,
                           ),
@@ -125,7 +128,7 @@ class _SignUpStep2State extends State<SignUpStep2> {
                   ),
                   SizedBox(height: 16.0),
                   RoundedButtonWidget(
-                    buttonText: "Create my account",
+                    buttonText: AppLocalizations.of(context).translate('cre_my_acc'),
                     buttonColor: Theme.of(context).colorScheme.primary,
                     textColor: Colors.white,
                     onPressed: () {
@@ -134,11 +137,11 @@ class _SignUpStep2State extends State<SignUpStep2> {
                           _formStore.formErrorStore.fullname != null ||
                           _formStore.formErrorStore.password != null) {
                         ToastHelper.error(
-                            "One or more fields are incorrect, please type again");
+                            AppLocalizations.of(context).translate('err_one_and_more_fildes'));
                         return;
                       }
                       if (_agreeToTerms == false) {
-                        ToastHelper.error("Please agree to the terms");
+                        ToastHelper.error(AppLocalizations.of(context).translate('err_pls_agr_terms'));
                         return;
                       }
                       DeviceUtils.hideKeyboard(context);
@@ -155,7 +158,7 @@ class _SignUpStep2State extends State<SignUpStep2> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Looking for a project? ',
+                        AppLocalizations.of(context).translate('look_for_proj_q'),
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 13,
@@ -163,7 +166,7 @@ class _SignUpStep2State extends State<SignUpStep2> {
                       ),
                       InkWell(
                         child: Text(
-                          'Apply as ${anotherOption}',
+                          AppLocalizations.of(context).translate('apply_as')+ '${anotherOption}',
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
                             decoration: TextDecoration.underline,

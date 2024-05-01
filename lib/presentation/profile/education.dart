@@ -10,7 +10,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:uuid/uuid.dart';
-
+import '../../utils/locale/app_localization.dart';
 class EducationWidget extends StatefulWidget {
   final FormStudentProfileStore formStore;
 
@@ -106,7 +106,7 @@ class _EducationWidgetState extends State<EducationWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Education:",
+                  AppLocalizations.of(context).translate('Education') + ": ",
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
                 IconButton.outlined(
@@ -192,7 +192,7 @@ class _EducationWidgetState extends State<EducationWidget> {
                                           .educations![0].schoolName
                                       : null,
                               contentPadding: EdgeInsets.zero,
-                              label: Text('School name'),
+                              label: Text(AppLocalizations.of(context).translate('School_name')),
                               errorStyle: Theme.of(context)
                                   .textTheme
                                   .bodySmall!
@@ -209,7 +209,7 @@ class _EducationWidgetState extends State<EducationWidget> {
                         CustomDateRangePicker(
                           key: UniqueKey(),
                           name: 'schoolYear',
-                          label: "School Year",
+                          label: AppLocalizations.of(context).translate('School_Year'),
                           initialValue: _userStore.user!.student != null && _userStore.user!.student!.educations!.length > 0 ?
                               '${_userStore.user!.student!.educations![0].startYear} - ${_userStore.user!.student!.educations![0].endYear}' : "",
                           error: widget.formStore.formErrorStore.educations !=
@@ -220,7 +220,7 @@ class _EducationWidgetState extends State<EducationWidget> {
                                       widget.formStore.formErrorStore
                                               .educations![0].endYear ==
                                           1)
-                              ? "error"
+                              ? AppLocalizations.of(context).translate('err')
                               : null,
                           onSubmit: ({required range}) {
                             if (range.startDate != null &&
@@ -325,7 +325,7 @@ class NewTextField extends StatelessWidget {
                                   .schoolName
                               : null,
                           contentPadding: EdgeInsets.zero,
-                          label: Text('School name'),
+                          label: Text(AppLocalizations.of(context).translate('School_name')),
                           errorStyle: Theme.of(context)
                               .textTheme
                               .bodySmall!
@@ -338,7 +338,7 @@ class NewTextField extends StatelessWidget {
                                   color: Colors.grey, strokeAlign: 0))),
                     ),
                     CustomDateRangePicker(
-                      label: "School year",
+                      label: AppLocalizations.of(context).translate('School_Year'),
                       initialValue: initialValue2,
                       key: key2,
                       name: name2,
@@ -351,7 +351,7 @@ class NewTextField extends StatelessWidget {
                                   formstore.formErrorStore
                                           .educations![formIndex].endYear ==
                                       1)
-                          ? "error"
+                          ? AppLocalizations.of(context).translate('err')
                           : null,
                       onSubmit: ({required range}) {
                         if (range.startDate != null && range.endDate != null) {

@@ -1,5 +1,6 @@
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class PostProjectStepper extends StatefulWidget {
   PostProjectStepper({required this.activeStep});
@@ -39,7 +40,7 @@ class _PostProjectStepperState extends State<PostProjectStepper> {
                   : Colors.white,
             ),
           ),
-          title: 'Title',
+          title: AppLocalizations.of(context).translate('Title'),
         ),
         EasyStep(
           customStep: CircleAvatar(
@@ -52,7 +53,7 @@ class _PostProjectStepperState extends State<PostProjectStepper> {
                   : Colors.white,
             ),
           ),
-          title: 'Scope',
+          title: AppLocalizations.of(context).translate('Scope'),
           topTitle: true,
         ),
         EasyStep(
@@ -66,7 +67,7 @@ class _PostProjectStepperState extends State<PostProjectStepper> {
                   : Colors.white,
             ),
           ),
-          title: 'Description',
+          title: AppLocalizations.of(context).translate('Description'),
         ),
         EasyStep(
           customStep: CircleAvatar(
@@ -79,7 +80,7 @@ class _PostProjectStepperState extends State<PostProjectStepper> {
                   : Colors.white,
             ),
           ),
-          title: 'Overall',
+          title: AppLocalizations.of(context).translate('Overall'),
           topTitle: true,
         ),
       ],

@@ -2,7 +2,7 @@ import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/login/login.dart';
 import 'package:boilerplate/presentation/sign_up/sign_up_step2.dart';
 import 'package:flutter/material.dart';
-
+import '../../utils/locale/app_localization.dart';
 class SignUpStep1 extends StatefulWidget {
   @override
   _SignUpStep1State createState() => _SignUpStep1State();
@@ -22,7 +22,7 @@ class _SignUpStep1State extends State<SignUpStep1> {
           children: [
             SizedBox(height: 24),
             Text(
-              'Join as Company or Student',
+              AppLocalizations.of(context).translate('join_com_stu'),
               style: TextStyle(
                 fontSize: 20.0, // Adjust the size as needed
                 fontWeight: FontWeight.bold,
@@ -31,7 +31,7 @@ class _SignUpStep1State extends State<SignUpStep1> {
             SizedBox(height: 24),
             customRadioListTile(
               icon: Icons.business,
-              text: 'I am a company, find engineer for project',
+              text:AppLocalizations.of(context).translate('find_engin'),
               value: 'company',
               onChanged: (value) {
                 setState(() {
@@ -42,7 +42,7 @@ class _SignUpStep1State extends State<SignUpStep1> {
             SizedBox(height: 14),
             customRadioListTile(
               icon: Icons.engineering,
-              text: 'I am an student, looking for projects',
+              text: AppLocalizations.of(context).translate('look_for_proj'),
               value: 'student',
               onChanged: (value) {
                 setState(() {
@@ -61,7 +61,7 @@ class _SignUpStep1State extends State<SignUpStep1> {
                         // Show a message indicating that the user must choose an option
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('Please choose an option.'),
+                            content: Text(AppLocalizations.of(context).translate('choose_op')),
                           ),
                         );
                       } else {
@@ -73,7 +73,7 @@ class _SignUpStep1State extends State<SignUpStep1> {
                         );
                       }
                     },
-                    child: Text('Create account'),
+                    child: Text(AppLocalizations.of(context).translate('cre_acc')),
                   ),
                 ),
               ],
@@ -90,13 +90,13 @@ class _SignUpStep1State extends State<SignUpStep1> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Already have an account? ',
+                    AppLocalizations.of(context).translate('have_acc'),
                     style: TextStyle(
                       color: Colors.black, // Set the color as needed
                     ),
                   ),
                   Text(
-                    'Login',
+                    AppLocalizations.of(context).translate('login_btn_login_in'),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                       decoration: TextDecoration.underline,

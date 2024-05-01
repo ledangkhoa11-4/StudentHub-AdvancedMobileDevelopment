@@ -112,7 +112,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
               children: <Widget>[
                 SizedBox(height: 24.0),
                 Text(
-                  'Forgot Password with StudentHub',
+                  AppLocalizations.of(context).translate('forgot_tille'),
                   style: TextStyle(
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold,
@@ -153,7 +153,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
 
   Widget _buildForgotButton() {
     return RoundedButtonWidget(
-      buttonText: "Get a new password",
+      buttonText:  AppLocalizations.of(context).translate('get_new_pass'),
       buttonColor: Theme.of(context).colorScheme.primary,
       textColor: Colors.white,
       onPressed: () async {
@@ -162,7 +162,7 @@ class _ForgotScreenState extends State<ForgotScreen> {
           DeviceUtils.hideKeyboard(context);
           _userStore.forgot(_userEmailController.text);
         } else {
-          _showErrorMessage('Please fill in all fields');
+          _showErrorMessage(AppLocalizations.of(context).translate('pls_fill_all'));
         }
       },
     );

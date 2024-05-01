@@ -7,6 +7,7 @@ import 'package:boilerplate/presentation/profile/student_profile_stepper.dart';
 import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
+import '../../utils/locale/app_localization.dart';
 
 class StudentNewProfileStep2 extends StatefulWidget {
   final FormStudentProfileStore formStore;
@@ -33,7 +34,7 @@ class _StudentNewProfileStep2State extends State<StudentNewProfileStep2> {
               StudentFormStepper(activeStep: 1),
               Center(
                   child: Text(
-                "Experiences",
+                AppLocalizations.of(context).translate('Experiences'),
                 style: Theme.of(context)
                     .textTheme
                     .labelLarge
@@ -42,7 +43,7 @@ class _StudentNewProfileStep2State extends State<StudentNewProfileStep2> {
               SizedBox(height: 10),
               Center(
                   child: Text(
-                      "Tell us about your self and you will be on your \nway connect with real-world project",
+                       AppLocalizations.of(context).translate('tel_us_about'),
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
@@ -55,7 +56,7 @@ class _StudentNewProfileStep2State extends State<StudentNewProfileStep2> {
                 height: 20,
               ),
               RoundedButtonWidget(
-                buttonText: "Continue",
+                buttonText: AppLocalizations.of(context).translate('Continue'),
                 buttonColor: Theme.of(context).colorScheme.primary,
                 textColor: Colors.white,
                 onPressed: () {
@@ -63,7 +64,7 @@ class _StudentNewProfileStep2State extends State<StudentNewProfileStep2> {
                   if (widget.formStore.formErrorStore.hasErrorsInStep2 ==
                       true) {
                         widget.formStore.formErrorStore.experiences!.forEach((e) => print(e.title));
-                    ToastHelper.error("Please fill all fields");
+                    ToastHelper.error(AppLocalizations.of(context).translate('pls_fill_all'));
                   } else {
                     Navigator.push(
                       context,

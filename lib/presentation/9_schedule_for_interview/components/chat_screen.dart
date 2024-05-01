@@ -4,7 +4,7 @@ import 'package:boilerplate/presentation/9_schedule_for_interview/components/she
 import 'package:flutter/material.dart';
 import 'chat_message_obj.dart';
 import 'models.dart';
-
+import 'package:boilerplate/utils/locale/app_localization.dart';
 class ChatScreen extends StatefulWidget {
   @override
   State createState() => ChatScreenState();
@@ -142,7 +142,7 @@ class ChatScreenState extends State<ChatScreen> {
               onSubmitted: _handleSubmitted,
               onTap: _scrollToBottom,
               decoration: InputDecoration(
-                hintText: "Send a message",
+                hintText: AppLocalizations.of(context).translate('send_mss'),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
@@ -191,7 +191,7 @@ class ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat'),
+        title: Text(AppLocalizations.of(context).translate('Chat')),
       ),
       body: CustomScrollView(
         controller: _scrollController,
