@@ -106,7 +106,7 @@ class ProjectItem extends StatelessWidget {
                     ),
                     TextSpan(text: ', '),
                     TextSpan(
-                      text: '${project.numberOfStudents}' +  AppLocalizations.of(context).translate('students'),
+                      text: '${project.numberOfStudents}' + " " + AppLocalizations.of(context).translate('students') + " ",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     TextSpan(text: AppLocalizations.of(context).translate('needed')),

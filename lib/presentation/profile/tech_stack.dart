@@ -21,6 +21,7 @@ class _TechStackWigetState extends State<TechStackWiget> {
   TechStack? selectedValue;
   final textEditingController = new TextEditingController();
   final UserStore _userStore = getIt<UserStore>();
+  bool isBind = false;
 
   @override
   void dispose() {
@@ -33,11 +34,12 @@ class _TechStackWigetState extends State<TechStackWiget> {
     final UserStore _userStore = getIt<UserStore>();
 
     return Observer(builder: (context) {
-      if (_userStore.user!.student != null &&
+      if ( !isBind && _userStore.user!.student != null &&
           _userStore.user!.student!.id != null &&
           _userStore.techstacks != null) {
         Future.delayed(Duration.zero, () async {
           setState(() {
+            isBind = true;
             selectedValue = _userStore.techstacks!.firstWhere(
                 (element) =>
                     element.id == _userStore.user!.student!.stechStackId,

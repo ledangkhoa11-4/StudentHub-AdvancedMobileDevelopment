@@ -374,6 +374,7 @@ class _MessageDetailState extends State<MessageDetail> {
         "projectId": widget.projectId,
         "senderId": _userStore.user!.id,
         "receiverId": widget.userId,
+        "content": "Schedule meeting for $title",
         "title": title,
         "startTime": Moment(startTime).toUtc().toIso8601String(),
         "endTime": Moment(endTime).toUtc().toIso8601String(),
