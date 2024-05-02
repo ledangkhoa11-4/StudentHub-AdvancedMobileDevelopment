@@ -37,6 +37,7 @@ dependencies:
   google_fonts: 6.1.0
   # H
   http: ^1.2.0
+  zego_uikit: ^2.13.1
   # I
   intl: ^0.18.0
   # J
@@ -72,7 +73,7 @@ dependencies:
   form_builder_validators: ^9.1.0
   syncfusion_flutter_datepicker: ^22.2.12
   easy_stepper: ^0.8.3
-  file_picker: ^8.0.0+1
+  file_picker: 6.2.1
   dotted_border: ^2.1.0
   fluttertoast: ^8.2.4
   just_the_tooltip: ^0.0.12
@@ -86,6 +87,8 @@ dependencies:
   moment_dart: ^2.1.0
   socket_io_client: ^2.0.3+1
   flutter_chat_ui: ^1.6.12
+  zego_uikit_prebuilt_video_conference: ^2.6.4
+  wakelock_plus: ^1.2.4
   # Y
   # Z
 
@@ -146,4 +149,8 @@ flutter:
       weight: 700
 
   # For details regarding fonts from package dependencies,
+  # see https://flutter.io/custom-fonts/#from-packages
+
+# dependency_overrides:
+#   file_picker: ^8.0.0+1
   # see https://flutter.io/custom-fonts/#from-packages

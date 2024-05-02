@@ -80,4 +80,5 @@ class Endpoints {
 
   static const String getAllChat = baseUrl + "/api/message";
 
+  static const String checkRoomAvailability = baseUrl + "/meeting-room/check-availability";
 }

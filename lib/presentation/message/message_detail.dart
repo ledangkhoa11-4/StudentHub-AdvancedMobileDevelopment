@@ -7,12 +7,15 @@ import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/chat/chat.dart';
 import 'package:boilerplate/domain/entity/chat/chatUser.dart';
 import 'package:boilerplate/domain/entity/interview/interview.dart';
+import 'package:boilerplate/domain/entity/meeting_room/meeting_room.dart';
 import 'package:boilerplate/domain/entity/user/user.dart';
+import 'package:boilerplate/domain/usecase/user/check_room_available_usercase.dart';
 import 'package:boilerplate/presentation/9_schedule_for_interview/components/shedule_bottom_sheet.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/toast/toast.dart';
+import 'package:boilerplate/presentation/video_call/video_conference.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/utils/socket/socket.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
@@ -212,7 +215,9 @@ class _MessageDetailState extends State<MessageDetail> {
                                             ? ElevatedButton.styleFrom(
                                                 backgroundColor: Colors.grey)
                                             : ElevatedButton.styleFrom(),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          _onJoinMeeting(interview);
+                                        },
                                         child: Text(
                                           isDeleted
                                               ? AppLocalizations.of(context)
@@ -416,5 +421,28 @@ class _MessageDetailState extends State<MessageDetail> {
         );
       },
     );
+  }
+
+  void _onJoinMeeting(Interview interview) {
+    _userStore
+        .checkRoomAvailability(CheckRoomAvailabilityParams(
+            meeting_room_code: interview.meetingRoom.meetingRoomCode,
+            meeting_room_id: interview.meetingRoom.meetingRoomId))
+        .then((value) {
+      if (value == true) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return VideoConferencePage(
+              conferenceID:
+                  interview.meetingRoom.meetingRoomId.replaceAll("-", "_"),
+              interview: interview,
+            );
+          }),
+        );
+      } else {
+        ToastHelper.error("Room not available");
+      }
+    });
   }
 }

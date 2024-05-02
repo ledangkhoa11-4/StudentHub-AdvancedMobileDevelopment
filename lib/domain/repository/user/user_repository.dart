@@ -6,6 +6,7 @@ import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
 import 'package:boilerplate/domain/entity/user/profile_student.dart';
 import 'package:boilerplate/domain/entity/user/skillset.dart';
 import 'package:boilerplate/domain/entity/user/tech_stack.dart';
+import 'package:boilerplate/domain/usecase/user/check_room_available_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
@@ -82,4 +83,6 @@ abstract class UserRepository {
       ProjectUserIdParam params);
 
   Future<List<ChatEntity>> getAllChat();
+
+  Future<bool> checkRoomAvailability(CheckRoomAvailabilityParams params);
 }
