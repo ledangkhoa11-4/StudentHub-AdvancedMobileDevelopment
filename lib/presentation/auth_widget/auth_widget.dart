@@ -123,11 +123,11 @@ class _AuthWidgetState extends State<AuthWidget> {
               print(e);
             }
 
-            // _userStore.getAllNotifications(loading: false);
+            _userStore.getAllNotifications(loading: false);
 
-            // if (data["notification"]["messageId"] != null) {
-            //   _userStore.getAllChatList(loading: false);
-            // }
+            if (data["notification"]["messageId"] != null) {
+              _userStore.getAllChatList(loading: false);
+            }
           });
 
           socket.on('ERROR', (data) {
