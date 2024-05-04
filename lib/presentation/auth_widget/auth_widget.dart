@@ -37,7 +37,7 @@ class _AuthWidgetState extends State<AuthWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[350],
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: Stack(
           children: [
             Observer(

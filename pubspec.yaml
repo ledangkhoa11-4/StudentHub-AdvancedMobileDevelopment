@@ -90,6 +90,9 @@ dependencies:
   zego_uikit_prebuilt_video_conference: ^2.6.4
   wakelock_plus: ^1.2.4
   flutter_local_notifications: ^13.0.0
+  animated_splash_screen: ^1.3.0
+  lottie: ^3.1.0
+  animated_text_kit: ^4.2.2
   # Y
   # Z
 
@@ -128,6 +131,7 @@ flutter:
   - assets/images/
   - assets/icons/
   - assets/lang/
+  - assets/lottie/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

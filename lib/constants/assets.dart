@@ -19,4 +19,5 @@ class Assets {
 
   static const String noData = "assets/images/img_nodata.png";
 
+  static const String splashScreen = "assets/lottie/splash_screen.json";
 }
