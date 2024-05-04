@@ -1,3 +1,5 @@
+import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
@@ -11,6 +13,8 @@ class PostProjectStepper extends StatefulWidget {
 }
 
 class _PostProjectStepperState extends State<PostProjectStepper> {
+  final ThemeStore _themeStore = getIt<ThemeStore>();
+
   @override
   Widget build(BuildContext context) {
     return EasyStepper(
@@ -22,7 +26,9 @@ class _PostProjectStepperState extends State<PostProjectStepper> {
         defaultLineColor: Colors.white,
         finishedLineColor: Theme.of(context).colorScheme.primary,
       ),
-      activeStepTextColor: Colors.black87,
+      activeStepTextColor: _themeStore.darkMode
+          ? Theme.of(context).colorScheme.primary
+          : Colors.black87,
       finishedStepTextColor: Colors.black87,
       internalPadding: 0,
       showLoadingAnimation: false,

@@ -6,6 +6,7 @@ import 'package:boilerplate/domain/entity/proposal/proposal-type-no-project.dart
 // import 'package:boilerplate/domain/entity/proposal/proposal.dart';
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/update_proposal_usecase.dart';
+import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/message/message_detail.dart';
 import 'package:boilerplate/presentation/profile/company_review_profile_student.dart';
@@ -26,6 +27,7 @@ class Candidate extends StatefulWidget {
 
 class _CandidateState extends State<Candidate> {
   final UserStore _userStore = getIt<UserStore>();
+  final ThemeStore _themeStore = getIt<ThemeStore>();
   bool isOfferSent = false;
 
   @override
@@ -72,7 +74,7 @@ class _CandidateState extends State<Candidate> {
         );
       },
       child: Card(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.onBackground,
         // constraints: BoxConstraints.expand(height: 20),
         margin: const EdgeInsets.all(8.0),
         child: Padding(
@@ -160,7 +162,11 @@ class _CandidateState extends State<Candidate> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
-                      style: ElevatedButton.styleFrom(),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.surface,
+                          foregroundColor:
+                              Theme.of(context).colorScheme.primary),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -177,12 +183,17 @@ class _CandidateState extends State<Candidate> {
                           AppLocalizations.of(context).translate('message'))),
                   if (widget.proposal.statusFlag != ProposalType.HIRED.value)
                     ElevatedButton(
-                      style:
-                          widget.proposal.statusFlag == ProposalType.OFFER.value
-                              ? ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.grey,
-                                  foregroundColor: Colors.white)
-                              : ElevatedButton.styleFrom(),
+                      style: widget.proposal.statusFlag ==
+                              ProposalType.OFFER.value
+                          ? ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.onBackground,
+                              foregroundColor: Colors.grey)
+                          : ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.surface,
+                              foregroundColor:
+                                  Theme.of(context).colorScheme.primary),
                       onPressed: () {
                         if (widget.proposal.statusFlag ==
                             ProposalType.OFFER.value) {

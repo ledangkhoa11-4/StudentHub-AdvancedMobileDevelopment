@@ -5,6 +5,7 @@ import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/presentation/6_company_review_proposals/dashboard.dart';
+import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/post_project/components/gradient_divider.dart';
 import 'package:boilerplate/presentation/post_project/components/post_project_stepper.dart';
@@ -63,6 +64,7 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeStore _themeStore = getIt<ThemeStore>();
     final _tooltipController = JustTheController();
     QuillController _controller = QuillController(
         document: Document.fromJson(jsonDecode(widget.formStore.description)),
@@ -71,7 +73,9 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context,
           titleWidget: widget.projectEdit != null
-              ? Text(AppLocalizations.of(context).translate('edit')+ "\"${widget.projectEdit!.title}\""+ AppLocalizations.of(context).translate('project'))
+              ? Text(AppLocalizations.of(context).translate('edit') +
+                  "\"${widget.projectEdit!.title}\"" +
+                  AppLocalizations.of(context).translate('project'))
               : Text(AppLocalizations.of(context).translate('post_new_pr'))),
       body: Stack(
         children: [
@@ -108,7 +112,8 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                         content: Padding(
                           padding: EdgeInsets.all(8.0),
                           child: UnorderedList([
-                            AppLocalizations.of(context).translate('post_project_step4_text_1'),
+                            AppLocalizations.of(context)
+                                .translate('post_project_step4_text_1'),
                           ], AppLocalizations.of(context).translate('note')),
                         ),
                       )
@@ -133,7 +138,8 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                     ),
                   ),
                   Text(
-                    AppLocalizations.of(context).translate('Description') + ": ",
+                    AppLocalizations.of(context).translate('Description') +
+                        ": ",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   QuillProvider(
@@ -167,7 +173,8 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                         width: 10,
                       ),
                       Text(
-                        AppLocalizations.of(context).translate('Proj_scope') + ": ",
+                        AppLocalizations.of(context).translate('Proj_scope') +
+                            ": ",
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                       Text(
@@ -190,11 +197,13 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                         width: 10,
                       ),
                       Text(
-                        AppLocalizations.of(context).translate('Stu_req') +": ",
+                        AppLocalizations.of(context).translate('Stu_req') +
+                            ": ",
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                       Text(
-                        '${widget.formStore.numberOfStudents} '+ AppLocalizations.of(context).translate('stu_s'),
+                        '${widget.formStore.numberOfStudents} ' +
+                            AppLocalizations.of(context).translate('stu_s'),
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                     ],
@@ -204,10 +213,11 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                   ),
                   RoundedButtonWidget(
                     buttonText: widget.projectEdit != null
-                        ?  AppLocalizations.of(context).translate('Upd_proj')
-                        :  AppLocalizations.of(context).translate('post_proj'),
+                        ? AppLocalizations.of(context).translate('Upd_proj')
+                        : AppLocalizations.of(context).translate('post_proj'),
                     buttonColor: Theme.of(context).colorScheme.primary,
-                    textColor: Colors.white,
+                    textColor:
+                        _themeStore.darkMode ? Colors.black : Colors.white,
                     onPressed: () {
                       DeviceUtils.hideKeyboard(context);
                       if (_userStore.user?.company != null) {
@@ -219,8 +229,8 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                           _projectStore.insert(project);
                         }
                       } else {
-                        ToastHelper.error(
-                            AppLocalizations.of(context).translate('com_pro_dash_text'));
+                        ToastHelper.error(AppLocalizations.of(context)
+                            .translate('com_pro_dash_text'));
                       }
                     },
                   ),
@@ -259,9 +269,11 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
       );
     });
     if (widget.projectEdit != null) {
-      ToastHelper.success(AppLocalizations.of(context).translate('update_proj_suc'));
+      ToastHelper.success(
+          AppLocalizations.of(context).translate('update_proj_suc'));
     } else {
-      ToastHelper.success(AppLocalizations.of(context).translate('create_proj_suc'));
+      ToastHelper.success(
+          AppLocalizations.of(context).translate('create_proj_suc'));
     }
     return SizedBox.shrink();
   }

@@ -48,6 +48,7 @@ class UserNavigationBar {
           screen: AlertScreen()),
     ];
     return AnimatedBottomNavigationBar.builder(
+      backgroundColor: Theme.of(context).colorScheme.background,
       height: 80,
       itemCount: iconList.length,
       gapLocation: GapLocation.center,
