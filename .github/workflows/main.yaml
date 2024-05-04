@@ -1,9 +1,8 @@
 name: Android Release.
 on:
-  push:
-    branches: ["main"]
+   push:
     tags:
-      - '*'
+    - '*'
   workflow_dispatch:
 jobs:
   build:
