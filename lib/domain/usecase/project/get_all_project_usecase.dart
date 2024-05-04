@@ -12,12 +12,16 @@ class GetAllProjectParams {
   final int? projectScopeFlag;
   final int? numberOfStudents;
   final int? proposalsLessThan;
+  int? page;
+  int? perPage;
 
   GetAllProjectParams({
     this.title,
     this.projectScopeFlag,
     this.numberOfStudents,
     this.proposalsLessThan,
+    this.page,
+    this.perPage,
   });
 
   factory GetAllProjectParams.fromJson(Map<String, dynamic> json) =>

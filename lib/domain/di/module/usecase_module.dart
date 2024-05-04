@@ -8,6 +8,7 @@ import 'package:boilerplate/domain/usecase/post/find_post_by_id_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/get_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/insert_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/udpate_post_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/get_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/remove_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
@@ -22,6 +23,7 @@ import 'package:boilerplate/domain/usecase/user/create_update_student_profile_us
 import 'package:boilerplate/domain/usecase/user/get_all_chat_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_all_chat_by_projectid_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_all_chat_with_userId_in_projectid_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_notification_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
@@ -144,8 +146,12 @@ mixin UseCaseModule {
       GetAllChatWithUserInProjectUseCase(getIt<UserRepository>()),
     );
 
-     getIt.registerSingleton<CheckRoomAvailabilityUseCase>(
+    getIt.registerSingleton<CheckRoomAvailabilityUseCase>(
       CheckRoomAvailabilityUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<GetAllNotificationsUseCase>(
+      GetAllNotificationsUseCase(getIt<UserRepository>()),
     );
 
     // post:--------------------------------------------------------------------
@@ -168,6 +174,10 @@ mixin UseCaseModule {
     // Registering use cases related to the "project" domain
     getIt.registerSingleton<GetProjectUseCase>(
       GetProjectUseCase(getIt<ProjectRepository>()),
+    );
+
+    getIt.registerSingleton<GetFavoriteProjectUseCase>(
+      GetFavoriteProjectUseCase(getIt<ProjectRepository>()),
     );
     // getIt.registerSingleton<FindProjectByIdUseCase>(
     //   FindProjectByIdUseCase(getIt<ProjectRepository>()),
