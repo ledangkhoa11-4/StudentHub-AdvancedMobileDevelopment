@@ -318,8 +318,10 @@ mixin _$ProjectStore on _ProjectStore, Store {
       AsyncAction('_ProjectStore.getAllProjects', context: context);
 
   @override
-  Future<dynamic> getAllProjects(GetAllProjectParams param) {
-    return _$getAllProjectsAsyncAction.run(() => super.getAllProjects(param));
+  Future<dynamic> getAllProjects(GetAllProjectParams param,
+      {bool reload = false}) {
+    return _$getAllProjectsAsyncAction
+        .run(() => super.getAllProjects(param, reload: reload));
   }
 
   late final _$removeAsyncAction =
@@ -328,6 +330,15 @@ mixin _$ProjectStore on _ProjectStore, Store {
   @override
   Future<dynamic> remove(int id) {
     return _$removeAsyncAction.run(() => super.remove(id));
+  }
+
+  late final _$getLikedProjectListAsyncAction =
+      AsyncAction('_ProjectStore.getLikedProjectList', context: context);
+
+  @override
+  Future<dynamic> getLikedProjectList() {
+    return _$getLikedProjectListAsyncAction
+        .run(() => super.getLikedProjectList());
   }
 
   late final _$updateLikeProkectAsyncAction =
@@ -374,6 +385,28 @@ mixin _$ProjectStore on _ProjectStore, Store {
   }
 
   @override
+  void getMoreProject() {
+    final _$actionInfo = _$_ProjectStoreActionController.startAction(
+        name: '_ProjectStore.getMoreProject');
+    try {
+      return super.getMoreProject();
+    } finally {
+      _$_ProjectStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void reloadProjectList() {
+    final _$actionInfo = _$_ProjectStoreActionController.startAction(
+        name: '_ProjectStore.reloadProjectList');
+    try {
+      return super.reloadProjectList();
+    } finally {
+      _$_ProjectStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setFilter(
       int? numberOfStudents, int? projectScopeFlag, int? proposalsLessThan) {
     final _$actionInfo = _$_ProjectStoreActionController.startAction(
@@ -392,17 +425,6 @@ mixin _$ProjectStore on _ProjectStore, Store {
         name: '_ProjectStore.setShowLike');
     try {
       return super.setShowLike(isLike);
-    } finally {
-      _$_ProjectStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void getLikedProjectList(ProjectList? value) {
-    final _$actionInfo = _$_ProjectStoreActionController.startAction(
-        name: '_ProjectStore.getLikedProjectList');
-    try {
-      return super.getLikedProjectList(value);
     } finally {
       _$_ProjectStoreActionController.endAction(_$actionInfo);
     }

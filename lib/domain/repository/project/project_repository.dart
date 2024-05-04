@@ -27,5 +27,6 @@ abstract class ProjectRepository {
 
   Future<List<Proposal>> getSubmitProposal(GetSubmitProposalParams params);
 
+  Future<ProjectList> getFavoriteProjects();
 
 }

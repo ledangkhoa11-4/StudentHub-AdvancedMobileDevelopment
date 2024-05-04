@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:boilerplate/domain/entity/chat/chat.dart';
+import 'package:boilerplate/domain/entity/notification/notification.dart';
 import 'package:boilerplate/domain/entity/user/profile_company.dart';
 import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
 import 'package:boilerplate/domain/entity/user/profile_student.dart';
@@ -85,4 +86,7 @@ abstract class UserRepository {
   Future<List<ChatEntity>> getAllChat();
 
   Future<bool> checkRoomAvailability(CheckRoomAvailabilityParams params);
+
+  Future<List<AppNotification>> getAllNotification();
+
 }

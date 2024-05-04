@@ -6,6 +6,7 @@ import 'package:boilerplate/data/network/constants/endpoints.dart';
 import 'package:boilerplate/data/network/rest_client.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/chat/chat.dart';
+import 'package:boilerplate/domain/entity/notification/notification.dart';
 import 'package:boilerplate/domain/entity/user/profile_company.dart';
 import 'package:boilerplate/domain/entity/user/profile_student.dart';
 import 'package:boilerplate/domain/entity/user/skillset.dart';
@@ -365,11 +366,9 @@ class UserApi {
     try {
       final res = await _dioClient.dio.get(Endpoints.getAllChatByProjectId
           .replaceFirst(":projectId", "${param.projectId}"));
-           final result = jsonDecode(res.toString());
+      final result = jsonDecode(res.toString());
       List<dynamic> chatObj = result["result"];
-      return chatObj
-          .map((chat) => ChatEntity.fromMap(chat))
-          .toList();
+      return chatObj.map((chat) => ChatEntity.fromMap(chat)).toList();
     } catch (e) {
       print("---------------------------");
       print(e.toString());
@@ -377,15 +376,15 @@ class UserApi {
     }
   }
 
-  Future<List<ChatEntity>> getAllChatWithUserInProject(ProjectUserIdParam param) async {
+  Future<List<ChatEntity>> getAllChatWithUserInProject(
+      ProjectUserIdParam param) async {
     try {
       final res = await _dioClient.dio.get(Endpoints.getAllChatWithUserInProject
-          .replaceFirst(":projectId", "${param.projectId}").replaceFirst(":userId", "${param.userId}"));
-           final result = jsonDecode(res.toString());
+          .replaceFirst(":projectId", "${param.projectId}")
+          .replaceFirst(":userId", "${param.userId}"));
+      final result = jsonDecode(res.toString());
       List<dynamic> chatObj = result["result"];
-      return chatObj
-          .map((chat) => ChatEntity.fromMap(chat))
-          .toList();
+      return chatObj.map((chat) => ChatEntity.fromMap(chat)).toList();
     } catch (e) {
       print("---------------------------");
       print(e.toString());
@@ -393,14 +392,12 @@ class UserApi {
     }
   }
 
-   Future<List<ChatEntity>> getAllChat() async {
+  Future<List<ChatEntity>> getAllChat() async {
     try {
       final res = await _dioClient.dio.get(Endpoints.getAllChat);
-           final result = jsonDecode(res.toString());
+      final result = jsonDecode(res.toString());
       List<dynamic> chatObj = result["result"];
-      return chatObj
-          .map((chat) => ChatEntity.fromMap(chat))
-          .toList();
+      return chatObj.map((chat) => ChatEntity.fromMap(chat)).toList();
     } catch (e) {
       print("---------------------------");
       print(e.toString());
@@ -410,9 +407,11 @@ class UserApi {
 
   Future<bool> checkRoomAvailability(CheckRoomAvailabilityParams params) async {
     try {
-      var query = "?&meeting_room_code=${params.meeting_room_code}&meeting_room_id=${params.meeting_room_id}";
-      final res = await _dioClient.dio.get(Endpoints.checkRoomAvailability + query);
-           final result = jsonDecode(res.toString());
+      var query =
+          "?&meeting_room_code=${params.meeting_room_code}&meeting_room_id=${params.meeting_room_id}";
+      final res =
+          await _dioClient.dio.get(Endpoints.checkRoomAvailability + query);
+      final result = jsonDecode(res.toString());
       return result["result"] as bool;
     } catch (e) {
       print("---------------------------");
@@ -420,5 +419,21 @@ class UserApi {
       throw e;
     }
   }
-  
+
+  Future<List<AppNotification>> getAllNotifications() async {
+    try {
+      final UserStore userStore = getIt<UserStore>();
+      final res = await _dioClient.dio.get(Endpoints.getAllNotifications
+          .replaceAll(":userId", "${userStore.user!.id}"));
+      final result = jsonDecode(res.toString());
+      List<dynamic> notificationObj = result["result"];
+      return notificationObj
+          .map((noti) => AppNotification.fromJson(noti))
+          .toList();
+    } catch (e) {
+      print("---------------------------");
+      print(e.toString());
+      throw e;
+    }
+  }
 }

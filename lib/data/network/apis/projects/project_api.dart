@@ -41,6 +41,25 @@ class ProjectApi {
     }
   }
 
+  Future<ProjectList> getFavoriteProjects() async {
+    try {
+      final UserStore _userStore = getIt<UserStore>();
+      final res = await _dioClient.dio.get(Endpoints.getFavoriteProject
+          .replaceAll(":studentId", "${_userStore.user!.student!.id}"));
+      List<dynamic> projectObj = res.data["result"];
+      final projectList = projectObj
+          .map((project) {
+            project["project"]["isFavorite"] = true;
+            return Project.fromMap(project["project"]);
+          })
+          .toList();
+      return ProjectList(projects: projectList);
+    } catch (e) {
+      print(e.toString());
+      throw e;
+    }
+  }
+
   /// Company posts a project
   Future<Project> insert(InsertProjectParams params) async {
     try {
@@ -77,6 +96,8 @@ class ProjectApi {
       query += "&numberOfStudents=${params.numberOfStudents}";
     if (params.proposalsLessThan != null)
       query += "&proposalsLessThan=${params.proposalsLessThan}";
+    query += "&page=${params.page ?? 1}";
+    query += "&perPage=${params.perPage ?? 10}";
     try {
       final res = await _dioClient.dio.get(Endpoints.getAllProject + query);
       final result = jsonDecode(res.toString());

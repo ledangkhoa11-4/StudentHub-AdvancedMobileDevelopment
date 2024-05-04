@@ -4,6 +4,7 @@ import 'package:boilerplate/core/stores/error/error_store.dart';
 import 'package:boilerplate/domain/entity/project/project.dart'; // Import Project entity
 import 'package:boilerplate/domain/entity/proposal/proposal.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/get_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
@@ -33,7 +34,8 @@ abstract class _ProjectStore with Store {
       this._updateProjectUseCase,
       this._removeProjectUseCase,
       this._updateFavoriteProjectUseCase,
-      this._getSubmitProposalUseCase) {
+      this._getSubmitProposalUseCase,
+      this._getFavoriteProjectUseCase) {
     _setupValidations();
   } // Add _projectRepository
 
@@ -41,12 +43,12 @@ abstract class _ProjectStore with Store {
   void _setupValidations() {
     _disposers = [
       reaction((_) => globalGetAllProjectParams, getAllProjects),
-      reaction((_) => allProjectList, getLikedProjectList),
     ];
   }
 
   // use cases:-----------------------------------------------------------------
   final GetProjectUseCase _getProjectUseCase;
+  final GetFavoriteProjectUseCase _getFavoriteProjectUseCase;
   final InsertProjectUseCase _insertProjectUseCase;
   final UpdateProjectUseCase _updateProjectUseCase;
   final UpdateFavoriteProjectUseCase _updateFavoriteProjectUseCase;
@@ -128,7 +130,8 @@ abstract class _ProjectStore with Store {
   final GetAllProjectUseCase _getAllProjectUseCase;
 
   @observable
-  GetAllProjectParams globalGetAllProjectParams = GetAllProjectParams();
+  GetAllProjectParams globalGetAllProjectParams =
+      GetAllProjectParams(page: 1, perPage: 10);
 
 /* KHOA */
   @computed
@@ -237,21 +240,53 @@ abstract class _ProjectStore with Store {
   }
 
   @action
-  Future getAllProjects(GetAllProjectParams param) async {
+  Future getAllProjects(GetAllProjectParams param,
+      {bool reload = false}) async {
     final future = _getAllProjectUseCase.call(params: param);
     fetchProjectsFuture = ObservableFuture(future);
 
     await future.then((projectList) {
-      this.allProjectList = projectList;
+      final totalProject = this.allProjectList == null || reload
+          ? projectList.projects
+          : [...this.allProjectList!.projects!, ...projectList.projects!];
+      this.allProjectList = ProjectList(projects: totalProject);
       this.apiResponseSuccess = true;
     }).catchError((e) {
-      this.allProjectList = ProjectList(projects: []);
+      final List<Project> totalProject = this.allProjectList == null || reload
+          ? []
+          : this.allProjectList!.projects!;
+
+      this.allProjectList = ProjectList(projects: totalProject);
       String message = e.response.toString();
       final response = jsonDecode(message);
       this.apiResponseSuccess = false;
       this.apiResponseMessage = response["errorDetails"].toString();
     });
     this.manualLoading = false;
+  }
+
+  @action
+  void getMoreProject() {
+    this.globalGetAllProjectParams = GetAllProjectParams(
+        title: this.globalGetAllProjectParams.title,
+        projectScopeFlag: this.globalGetAllProjectParams.projectScopeFlag,
+        numberOfStudents: this.globalGetAllProjectParams.numberOfStudents,
+        proposalsLessThan: this.globalGetAllProjectParams.proposalsLessThan,
+        page: this.globalGetAllProjectParams.page != null
+            ? this.globalGetAllProjectParams.page! + 1
+            : 1,
+        perPage: this.globalGetAllProjectParams.perPage);
+  }
+
+  @action
+  void reloadProjectList() {
+    this.globalGetAllProjectParams.page = 1;
+    this.globalGetAllProjectParams.perPage =
+        this.globalGetAllProjectParams.page != null &&
+                this.globalGetAllProjectParams.perPage != null
+            ? this.globalGetAllProjectParams.page! *
+                this.globalGetAllProjectParams.perPage!
+            : 10;
   }
 
   @action
@@ -274,25 +309,32 @@ abstract class _ProjectStore with Store {
   }
 
   void setSearch(String value) {
+    this.allProjectList = ProjectList(projects: []);
+    this.showLikedOnly = false;
     this.globalGetAllProjectParams = GetAllProjectParams(
         title: !value.isEmpty ? value : null,
         numberOfStudents:
             !value.isEmpty ? globalGetAllProjectParams.numberOfStudents : null,
         projectScopeFlag:
             !value.isEmpty ? globalGetAllProjectParams.projectScopeFlag : null,
-        proposalsLessThan: !value.isEmpty
-            ? globalGetAllProjectParams.proposalsLessThan
-            : null);
+        proposalsLessThan:
+            !value.isEmpty ? globalGetAllProjectParams.proposalsLessThan : null,
+        page: 1,
+        perPage: 10);
   }
 
   @action
   void setFilter(
       int? numberOfStudents, int? projectScopeFlag, int? proposalsLessThan) {
+    this.allProjectList = ProjectList(projects: []);
+    this.showLikedOnly = false;
     this.globalGetAllProjectParams = GetAllProjectParams(
         title: globalGetAllProjectParams.title,
         numberOfStudents: numberOfStudents,
         projectScopeFlag: projectScopeFlag,
-        proposalsLessThan: proposalsLessThan);
+        proposalsLessThan: proposalsLessThan,
+        page: 1,
+        perPage: 10);
   }
 
   @action
@@ -302,15 +344,20 @@ abstract class _ProjectStore with Store {
   }
 
   @action
-  void getLikedProjectList(ProjectList? value) {
-    if (value != null && value.projects!.length > 0) {
-      this.onlyLikeProject = ProjectList(
-          projects: value.projects!
-              .where((element) => element.isFavorite == true)
-              .toList());
-    } else {
+  Future getLikedProjectList() async {
+    final future = _getFavoriteProjectUseCase.call(params: null);
+    fetchProjectsFuture = ObservableFuture(future);
+
+    await future.then((projectList) {
+      this.onlyLikeProject = projectList;
+      this.apiResponseSuccess = true;
+    }).catchError((e) {
       this.onlyLikeProject = ProjectList(projects: []);
-    }
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.apiResponseSuccess = false;
+      this.apiResponseMessage = response["errorDetails"].toString();
+    });
   }
 
   @action
@@ -325,6 +372,20 @@ abstract class _ProjectStore with Store {
             .projects!
             .map((e) => e.id == project.id ? updatedProject : e)
             .toList());
+
+    if (status) {
+      final addedProject = [...this.onlyLikeProject!.projects!, updatedProject];
+      this.onlyLikeProject = ProjectList(projects: addedProject);
+    } else {
+      final updated2 = ProjectList(
+          projects: this
+              .onlyLikeProject!
+              .projects!
+              .where((e) => e.id == project.id && !status ? false : true)
+              .toList());
+      this.onlyLikeProject = updated2;
+    }
+
     this.allProjectList = updated;
     try {
       final future = _updateFavoriteProjectUseCase.call(params: params);
@@ -350,6 +411,19 @@ abstract class _ProjectStore with Store {
               .projects!
               .map((e) => e.id == project.id ? reverseProject : e)
               .toList());
+      if (status) {
+        final updated2 = ProjectList(
+            projects: this
+                .onlyLikeProject!
+                .projects!
+                .where((e) => e.id != project.id)
+                .toList());
+        this.onlyLikeProject = updated2;
+      } else {
+        final reverted2 = [...this.onlyLikeProject!.projects!, reverseProject];
+        this.onlyLikeProject = ProjectList(projects: reverted2);
+      }
+
       this.allProjectList = reverted;
     }
   }

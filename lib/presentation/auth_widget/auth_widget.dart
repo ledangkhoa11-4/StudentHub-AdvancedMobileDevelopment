@@ -3,6 +3,7 @@ import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/chat/chat.dart';
 import 'package:boilerplate/domain/entity/chat/chatUser.dart';
+import 'package:boilerplate/domain/entity/notification/notification.dart';
 import 'package:boilerplate/domain/entity/user/user.dart';
 import 'package:boilerplate/presentation/5_browse_project_flow/project_list.dart';
 import 'package:boilerplate/presentation/5_browse_project_flow/student_dashboard.dart';
@@ -75,7 +76,17 @@ class _AuthWidgetState extends State<AuthWidget> {
 
         if (socket != null) {
           socket.on('NOTI_${_userStore.user!.id}', (data) {
-          
+            try {
+              final notification =
+                  AppNotification.fromJson(data["notification"]);
+              _userStore.setReadChat(notification.message.projectId,
+                  notification.message.senderId);
+            } catch (e) {
+              print(e);
+            }
+
+            _userStore.getAllNotifications();
+
             if (data["notification"]["messageId"] != null) {
               _userStore.getAllChatList(loading: false);
             }
@@ -113,7 +124,7 @@ class _AuthWidgetState extends State<AuthWidget> {
           MaterialPageRoute(builder: (context) => LoginScreen()),
           (Route<dynamic> route) => false);
 
-          ToastHelper.error(AppLocalizations.of(context).translate('unk_err'));
+      ToastHelper.error(AppLocalizations.of(context).translate('unk_err'));
     });
 
     return Container();
