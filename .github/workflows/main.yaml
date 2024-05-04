@@ -1,6 +1,6 @@
 name: Android Release.
 on:
-   push:
+  push:
     tags:
     - '*'
   workflow_dispatch:
