@@ -34,15 +34,19 @@ class UserNavigationBar {
           screen: isStudent ? ProjectList() : DashBoardCompany()),
       TabData(
           icon: BootstrapIcons.clipboard_data,
-          text:  AppLocalizations.of(context).translate('dashboard'),
+          text: AppLocalizations.of(context).translate('dashboard'),
           screen: isStudent ? DashBoardStudent() : DashBoardCompany()),
       TabData(
           icon: BootstrapIcons.chat_dots,
           text: AppLocalizations.of(context).translate('message'),
           screen: MessageScreen()),
-      TabData(icon: BootstrapIcons.bell, text: AppLocalizations.of(context).translate('alert'), screen: AlertScreen()),
+      TabData(
+          icon: BootstrapIcons.bell,
+          text: AppLocalizations.of(context).translate('alert'),
+          screen: AlertScreen()),
     ];
     return AnimatedBottomNavigationBar.builder(
+      backgroundColor: Theme.of(context).colorScheme.background,
       height: 80,
       itemCount: iconList.length,
       gapLocation: GapLocation.center,
