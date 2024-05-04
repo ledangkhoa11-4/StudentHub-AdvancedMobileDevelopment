@@ -2,6 +2,7 @@ import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/presentation/5_browse_project_flow/filter_table.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
+import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
 import 'package:boilerplate/presentation/post_project/store/post_project_store.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +20,8 @@ class ProjectList extends StatefulWidget {
 
 class _ProjectListState extends State<ProjectList> {
   final ProjectStore _projectStore = getIt<ProjectStore>();
-  TextEditingController _controller = new TextEditingController();
   final _scrollController = ScrollController();
+  final ThemeStore _themeStore = getIt<ThemeStore>();
 
   @override
   void didChangeDependencies() {
@@ -28,7 +29,7 @@ class _ProjectListState extends State<ProjectList> {
     if (_projectStore.allProjectList == null) {
       _projectStore.getAllProjects(_projectStore.globalGetAllProjectParams);
     }
-     if (_projectStore.onlyLikeProject == null) {
+    if (_projectStore.onlyLikeProject == null) {
       _projectStore.getLikedProjectList();
     }
   }
@@ -78,8 +79,9 @@ class _ProjectListState extends State<ProjectList> {
             onRefresh: () {
               _projectStore.manualLoading = true;
               _projectStore.reloadProjectList();
-              return _projectStore
-                  .getAllProjects(_projectStore.globalGetAllProjectParams, reload: true);
+              return _projectStore.getAllProjects(
+                  _projectStore.globalGetAllProjectParams,
+                  reload: true);
             },
             child: Column(
               children: [
@@ -96,10 +98,11 @@ class _ProjectListState extends State<ProjectList> {
                           ),
                           child: Form(
                             child: InputHistoryTextField(
-                              textEditingController: _controller,
                               textInputAction: TextInputAction.search,
                               historyKey: "01",
                               listStyle: ListStyle.List,
+                              textColor: Colors.black,
+                              historyIconColor: Colors.grey.shade700,
                               listRowDecoration: BoxDecoration(
                                 border: Border(
                                   left: BorderSide(
@@ -135,6 +138,13 @@ class _ProjectListState extends State<ProjectList> {
                                 : _projectStore.showLikedOnly
                                     ? Icons.favorite
                                     : Icons.favorite_border,
+                            color:
+                                _projectStore.globalGetAllProjectParams.title !=
+                                        null
+                                    ? _themeStore.darkMode
+                                        ? Colors.white
+                                        : Colors.black
+                                    : null,
                           ),
                           onPressed: () {
                             if (_projectStore.globalGetAllProjectParams.title !=
