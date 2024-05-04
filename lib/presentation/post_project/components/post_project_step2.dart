@@ -56,7 +56,9 @@ class _PostProjectStep2State extends State<PostProjectStep2> {
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context,
           titleWidget: widget.projectEdit != null
-              ? Text(AppLocalizations.of(context).translate('edit')+ "\"${widget.projectEdit!.title}\""+ AppLocalizations.of(context).translate('project'))
+              ? Text(AppLocalizations.of(context).translate('edit') +
+                  "\"${widget.projectEdit!.title}\"" +
+                  AppLocalizations.of(context).translate('project'))
               : Text(AppLocalizations.of(context).translate('post_new_pr'))),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -95,15 +97,20 @@ class _PostProjectStep2State extends State<PostProjectStep2> {
                           ),
                           content: Padding(
                             padding: EdgeInsets.all(8.0),
-                            child: UnorderedList([
-                              AppLocalizations.of(context).translate('con_timeline'),
-                            ], AppLocalizations.of(context).translate('Guidelines')),
+                            child: UnorderedList(
+                                [
+                                  AppLocalizations.of(context)
+                                      .translate('con_timeline'),
+                                ],
+                                AppLocalizations.of(context)
+                                    .translate('Guidelines')),
                           ),
                         )
                       ],
                     ),
                     Text(
-                      AppLocalizations.of(context).translate('time_pr_question'),
+                      AppLocalizations.of(context)
+                          .translate('time_pr_question'),
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     SizedBox(
@@ -141,7 +148,8 @@ class _PostProjectStep2State extends State<PostProjectStep2> {
                       height: 20,
                     ),
                     Text(
-                      AppLocalizations.of(context).translate('many_stu_pr_question'),
+                      AppLocalizations.of(context)
+                          .translate('many_stu_pr_question'),
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     TextFieldWidget(
@@ -160,9 +168,11 @@ class _PostProjectStep2State extends State<PostProjectStep2> {
                       },
                     ),
                     RoundedButtonWidget(
-                      buttonText: AppLocalizations.of(context).translate('next_des'),
+                      buttonText:
+                          AppLocalizations.of(context).translate('next_des'),
                       buttonColor: Theme.of(context).colorScheme.primary,
-                      textColor: Colors.white,
+                      textColor:
+                          _themeStore.darkMode ? Colors.black : Colors.white,
                       onPressed: () {
                         widget.formStore
                             .setDuration(currentOption.value.toString());
@@ -177,7 +187,8 @@ class _PostProjectStep2State extends State<PostProjectStep2> {
                             'project': widget.projectEdit,
                           });
                         } else {
-                          ToastHelper.error(AppLocalizations.of(context).translate('pls_en_re_fi'));
+                          ToastHelper.error(AppLocalizations.of(context)
+                              .translate('pls_en_re_fi'));
                         }
                       },
                     )

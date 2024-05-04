@@ -18,7 +18,8 @@ class PostProjectStep1 extends StatefulWidget {
   final FormPostProjectStore formStore;
   final Project? projectEdit;
 
-  PostProjectStep1({Key? key, required this.formStore, this.projectEdit}) : super(key: key);
+  PostProjectStep1({Key? key, required this.formStore, this.projectEdit})
+      : super(key: key);
 
   @override
   State<PostProjectStep1> createState() => _PostProjectStep1State();
@@ -52,7 +53,8 @@ class _PostProjectStep1State extends State<PostProjectStep1> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                AppLocalizations.of(context).translate('post_project_step1_text_1'),
+                AppLocalizations.of(context)
+                    .translate('post_project_step1_text_1'),
                 style: Theme.of(context).textTheme.labelLarge,
               ),
               JustTheTooltip(
@@ -70,8 +72,10 @@ class _PostProjectStep1State extends State<PostProjectStep1> {
                 content: Padding(
                   padding: EdgeInsets.all(8.0),
                   child: UnorderedList([
-                    AppLocalizations.of(context).translate('post_project_step1_text_2'),
-                    AppLocalizations.of(context).translate('post_project_step1_text_3')
+                    AppLocalizations.of(context)
+                        .translate('post_project_step1_text_2'),
+                    AppLocalizations.of(context)
+                        .translate('post_project_step1_text_3')
                   ], AppLocalizations.of(context).translate('example_til')),
                 ),
               )
@@ -81,7 +85,7 @@ class _PostProjectStep1State extends State<PostProjectStep1> {
             height: 10,
           ),
           Text(
-           AppLocalizations.of(context).translate('post_project_step1_text_4'),
+            AppLocalizations.of(context).translate('post_project_step1_text_4'),
             style: Theme.of(context).textTheme.labelSmall,
           ),
           TextFieldWidget(
@@ -98,10 +102,10 @@ class _PostProjectStep1State extends State<PostProjectStep1> {
           RoundedButtonWidget(
             buttonText: AppLocalizations.of(context).translate('next_scope'),
             buttonColor: Theme.of(context).colorScheme.primary,
-            textColor: Colors.white,
+            textColor: _themeStore.darkMode ? Colors.black : Colors.white,
             onPressed: () {
               widget.formStore.validateTitle(_titleController.text);
-              
+
               if (widget.formStore.formErrorStore.title == null) {
                 Navigator.of(context)
                     .pushNamed(Routes.postProjectStep2, arguments: {
@@ -109,7 +113,8 @@ class _PostProjectStep1State extends State<PostProjectStep1> {
                   'project': widget.projectEdit,
                 });
               } else {
-                ToastHelper.error(AppLocalizations.of(context).translate('pls_en_re_fi'));
+                ToastHelper.error(
+                    AppLocalizations.of(context).translate('pls_en_re_fi'));
               }
               // Navigator.of(context).pushNamed(Routes.companyWelcome);
             },

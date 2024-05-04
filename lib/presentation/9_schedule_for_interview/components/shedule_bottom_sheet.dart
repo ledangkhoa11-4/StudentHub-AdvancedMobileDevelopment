@@ -147,6 +147,9 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                     });
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.onBackground,
+                ),
                 child: Text(
                   '${startTime.year}-${startTime.month}-${startTime.day}',
                 ),
@@ -175,6 +178,9 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                     });
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.onBackground,
+                ),
                 child: Text(
                     '${startTime.hour.toString().padLeft(2, '0')}:${startTime.minute.toString().padLeft(2, '0')}'),
               ),
@@ -211,6 +217,9 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                     });
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.onBackground,
+                ),
                 child: Text(
                   '${endTime.year}-${endTime.month}-${endTime.day}',
                 ),
@@ -239,6 +248,9 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                     });
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.onBackground,
+                ),
                 child: Text(
                     '${endTime.hour.toString().padLeft(2, '0')}:${endTime.minute.toString().padLeft(2, '0')}'),
               ),
@@ -252,10 +264,20 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                 onPressed: () {
                   Navigator.pop(context); // Close the bottom sheet
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _themeStore.darkMode
+                      ? const Color.fromARGB(255, 102, 90, 90)
+                      : Colors.white,
+                ),
                 child: Text(AppLocalizations.of(context).translate('cancel')),
               ),
               ElevatedButton(
                 onPressed: _handleScheduleMeeting,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _themeStore.darkMode
+                      ? const Color.fromARGB(255, 102, 90, 90)
+                      : Colors.white,
+                ),
                 child: Text(AppLocalizations.of(context).translate('send_i')),
               ),
             ],
