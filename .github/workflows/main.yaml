@@ -24,7 +24,7 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
       - name: Start release build
-        run: flutter build appbundle
+        run: flutter build apk --release --split-per-abi
       - name: Create a Release APK
         uses: ncipollo/release-action@v1
         with:
