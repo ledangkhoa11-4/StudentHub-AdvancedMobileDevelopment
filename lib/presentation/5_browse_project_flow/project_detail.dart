@@ -72,211 +72,213 @@ class _ProjectDetailState extends State<ProjectDetail> {
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context).translate('Proj_name') + ": ",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(width: 4,),
-                    Expanded(
-                      child: Text(
-                        widget.project.title,
-                        overflow: TextOverflow.fade,
-                        maxLines: 2,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context).translate('Proj_name') + ": ",
                         style: TextStyle(
-                          fontSize: 16,
-                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                    )
-                  ],
-                ),
-                SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: CustomPaint(
-                    painter: PointedLinePainter(
-                        MediaQuery.of(context).size.width - 40, context),
-                  ),
-                ),
-                SizedBox(height: 16),
-                Text(
-                  AppLocalizations.of(context).translate('stu_look_for') + ": ",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 8),
-                if (_controller != null)
-                  IgnorePointer(
-                    ignoring: true,
-                    child: QuillProvider(
-                      configurations: QuillConfigurations(
-                        controller: _controller,
-                        sharedConfigurations: const QuillSharedConfigurations(
-                          locale: Locale('en'),
+                      SizedBox(width: 4,),
+                      Expanded(
+                        child: Text(
+                          widget.project.title,
+                          overflow: TextOverflow.fade,
+                          maxLines: 2,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      child: QuillEditor.basic(
-                        configurations: const QuillEditorConfigurations(
-                          readOnly: true,
-                        ),
-                      ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    child: CustomPaint(
+                      painter: PointedLinePainter(
+                          MediaQuery.of(context).size.width - 40, context),
                     ),
                   ),
-                if (_controller == null)
+                  SizedBox(height: 16),
                   Text(
-                    widget.project.description,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(),
-                  ),
-                SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: CustomPaint(
-                    painter: PointedLinePainter(
-                        MediaQuery.of(context).size.width - 40, context),
-                  ),
-                ),
-                SizedBox(height: 16),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(BootstrapIcons.calendar2_week, size: 25),
-                        ],
-                      ),
+                    AppLocalizations.of(context).translate('stu_look_for'),
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
                     ),
-                    SizedBox(width: 8),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          AppLocalizations.of(context).translate('pr_scope') + ": ",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                  ),
+                  SizedBox(height: 8),
+                  if (_controller != null)
+                    IgnorePointer(
+                      ignoring: true,
+                      child: QuillProvider(
+                        configurations: QuillConfigurations(
+                          controller: _controller,
+                          sharedConfigurations: const QuillSharedConfigurations(
+                            locale: Locale('en'),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: Text(
-                              '• ${ProjectScopeType.fromValue(widget.project.projectScopeFlag)}',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              )),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(BootstrapIcons.people_fill, size: 25),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          AppLocalizations.of(context).translate('num_s') +": ",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                        child: QuillEditor.basic(
+                          configurations: const QuillEditorConfigurations(
+                            readOnly: true,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: Text(
-                              '• ${widget.project.numberOfStudents} '+ AppLocalizations.of(context).translate('students'),
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              )),
-                        ),
-                      ],
+                      ),
                     ),
-                  ],
-                ),
-                Spacer(), // Add spacer to push buttons to the bottom
-                Observer(builder: (context) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  if (_controller == null)
+                    Text(
+                      widget.project.description,
+                      style: Theme.of(context).textTheme.bodyText1?.copyWith(),
+                    ),
+                  SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    child: CustomPaint(
+                      painter: PointedLinePainter(
+                          MediaQuery.of(context).size.width - 40, context),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Row(
                     children: [
-                      RoundedButtonWidget(
-                        buttonText:
-                            widget._projectStore.submitProposals != null &&
-                                    widget._projectStore.submitProposals!.any(
-                                        (proposal) =>
-                                            proposal.project.id ==
-                                            widget.project.id)
-                                ?  AppLocalizations.of(context).translate('alr_sub')
-                                :  AppLocalizations.of(context).translate('apl_pro'),
-                        buttonColor: widget._projectStore.submitProposals !=
-                                    null &&
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(BootstrapIcons.calendar2_week, size: 25),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context).translate('pr_scope') + ": ",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16.0),
+                            child: Text(
+                                '• ${ProjectScopeType.fromValue(widget.project.projectScopeFlag)}',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(BootstrapIcons.people_fill, size: 25),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context).translate('num_s') +": ",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 16.0),
+                            child: Text(
+                                '• ${widget.project.numberOfStudents} '+ AppLocalizations.of(context).translate('students'),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 30),
+                  Observer(builder: (context) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        RoundedButtonWidget(
+                          buttonText:
+                              widget._projectStore.submitProposals != null &&
+                                      widget._projectStore.submitProposals!.any(
+                                          (proposal) =>
+                                              proposal.project.id ==
+                                              widget.project.id)
+                                  ?  AppLocalizations.of(context).translate('alr_sub')
+                                  :  AppLocalizations.of(context).translate('apl_pro'),
+                          buttonColor: widget._projectStore.submitProposals !=
+                                      null &&
+                                  widget._projectStore.submitProposals!.any(
+                                      (proposal) =>
+                                          proposal.project.id ==
+                                          widget.project.id)
+                              ? Colors.grey
+                              : Theme.of(context).colorScheme.primary,
+                          textColor: Colors.white,
+                          onPressed: () {
+                            if (widget._projectStore.submitProposals != null &&
                                 widget._projectStore.submitProposals!.any(
                                     (proposal) =>
                                         proposal.project.id ==
-                                        widget.project.id)
-                            ? Colors.grey
-                            : Theme.of(context).colorScheme.primary,
-                        textColor: Colors.white,
-                        onPressed: () {
-                          if (widget._projectStore.submitProposals != null &&
-                              widget._projectStore.submitProposals!.any(
-                                  (proposal) =>
-                                      proposal.project.id ==
-                                      widget.project.id)) {
-                          } else {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SubmitScreen(
-                                  project: widget.project,
+                                        widget.project.id)) {
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SubmitScreen(
+                                    project: widget.project,
+                                  ),
                                 ),
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          widget._projectStore
-                              .updateLikeProkect(widget.project, !isLiked);
-                          setState(() {
-                            isLiked = !isLiked;
-                          });
-                        },
-                        child: Text(widget.project.isFavorite == true
-                            ? AppLocalizations.of(context).translate('unk_like')
-                            : AppLocalizations.of(context).translate('Like')),
-                      ),
-                    ],
-                  );
-                }),
-                SizedBox(height: 16),
-              ],
+                              );
+                            }
+                          },
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            widget._projectStore
+                                .updateLikeProkect(widget.project, !isLiked);
+                            setState(() {
+                              isLiked = !isLiked;
+                            });
+                          },
+                          child: Text(widget.project.isFavorite == true
+                              ? AppLocalizations.of(context).translate('unk_like')
+                              : AppLocalizations.of(context).translate('Like')),
+                        ),
+                      ],
+                    );
+                  }),
+                  SizedBox(height: 16),
+                ],
+              ),
             ),
           ),
           Observer(builder: (context) {
