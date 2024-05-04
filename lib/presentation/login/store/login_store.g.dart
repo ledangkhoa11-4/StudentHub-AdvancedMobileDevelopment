@@ -951,9 +951,9 @@ mixin _$UserStore on _UserStore, Store {
       AsyncAction('_UserStore.getAllNotifications', context: context);
 
   @override
-  Future<dynamic> getAllNotifications() {
+  Future<dynamic> getAllNotifications({bool loading = true}) {
     return _$getAllNotificationsAsyncAction
-        .run(() => super.getAllNotifications());
+        .run(() => super.getAllNotifications(loading: loading));
   }
 
   late final _$setReadChatAsyncAction =

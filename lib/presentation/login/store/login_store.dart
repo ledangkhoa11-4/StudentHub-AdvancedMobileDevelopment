@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:boilerplate/core/stores/error/error_store.dart';
 import 'package:boilerplate/core/stores/form/form_store.dart';
@@ -51,7 +50,6 @@ import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mobx/mobx.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../domain/entity/user/user.dart';
 import '../../../domain/usecase/user/get_student_profile_usecase.dart';
@@ -1071,9 +1069,11 @@ abstract class _UserStore with Store {
   }
 
   @action
-  Future getAllNotifications() async {
+  Future getAllNotifications({bool loading = true}) async {
     final future = _getAllNotificationsUseCase.call(params: null);
-    apiCallingFeature = ObservableFuture(future);
+    if (loading) {
+      apiCallingFeature = ObservableFuture(future);
+    }
     await future.then((value) async {
       this.listNotifications = value;
     }).catchError((e) {

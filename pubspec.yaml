@@ -89,6 +89,7 @@ dependencies:
   flutter_chat_ui: ^1.6.12
   zego_uikit_prebuilt_video_conference: ^2.6.4
   wakelock_plus: ^1.2.4
+  flutter_local_notifications: ^13.0.0
   # Y
   # Z
 
