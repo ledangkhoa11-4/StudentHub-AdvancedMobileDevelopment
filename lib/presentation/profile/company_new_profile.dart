@@ -7,6 +7,7 @@ import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class CompanyNewProfile extends StatefulWidget {
   @override
@@ -29,8 +30,8 @@ class _CompanyNewProfileState extends State<CompanyNewProfile> {
       appBar: UserAppBar.buildAppBar(context,
           disableSettingAccount: true,
           titleWidget: isEdit
-              ? Text("Edit company profile")
-              : Text("Create new profile")),
+              ? Text(AppLocalizations.of(context).translate('Edit_comp_prof'))
+              : Text(AppLocalizations.of(context).translate('create_comp_prof'))),
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -45,7 +46,7 @@ class _CompanyNewProfileState extends State<CompanyNewProfile> {
                   SizedBox(height: 20),
                   Center(
                       child: Text(
-                    "Welcome to StudentHub",
+                    AppLocalizations.of(context).translate('wellcome'),
                     style: Theme.of(context)
                         .textTheme
                         .labelLarge
@@ -54,7 +55,7 @@ class _CompanyNewProfileState extends State<CompanyNewProfile> {
                   SizedBox(height: 10),
                   Center(
                       child: Text(
-                          "Tell us about your company and you will be on your way connect with high-skilled students",
+                          AppLocalizations.of(context).translate('company_new_profile_text_1'),
                           textAlign: TextAlign.center,
                           style: Theme.of(context)
                               .textTheme
@@ -95,7 +96,7 @@ class _CompanyNewProfileState extends State<CompanyNewProfile> {
         Navigator.of(context).pushNamed(Routes.companyWelcome);
         _userStore.resetCreateProfileState();
       } else {
-        ToastHelper.success("Update profile successfully");
+        ToastHelper.success(AppLocalizations.of(context).translate('update_profile_suc'));
         Navigator.of(context).pop();
       }
     });

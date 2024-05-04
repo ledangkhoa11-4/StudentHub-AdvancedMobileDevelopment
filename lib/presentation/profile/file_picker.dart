@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+import '../../utils/locale/app_localization.dart';
 
 typedef OnPickedCallback = void Function(PlatformFile file, String name);
 typedef OnRemoveCallback = void Function(String name);
@@ -95,7 +96,7 @@ class _FilePickerState extends State<FilePickerWidget> {
                                   height: 5,
                                 ),
                                 Text(
-                                  'Allowed: ${widget.allowedExtensions.join(',').toUpperCase()}',
+                                  AppLocalizations.of(context).translate('Allowed') + ': ${widget.allowedExtensions.join(',').toUpperCase()}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .displaySmall
@@ -147,7 +148,7 @@ class _FilePickerState extends State<FilePickerWidget> {
       PlatformFile file = result.files.first;
       if (widget.allowedExtensions.indexOf(file.extension ?? '') == -1) {
         ToastHelper.error(
-            'Only allow: ${widget.allowedExtensions.join(',').toUpperCase()} file.');
+            AppLocalizations.of(context).translate('Only_allow') + ' : ${widget.allowedExtensions.join(',').toUpperCase()} ' + AppLocalizations.of(context).translate('Educfileation'));
       } else {
         widget.onPicked(file, widget.name);
       }

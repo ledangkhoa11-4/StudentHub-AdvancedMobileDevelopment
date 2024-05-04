@@ -1,7 +1,7 @@
 import 'package:boilerplate/domain/entity/project/project.dart';
 import 'package:boilerplate/presentation/5_browse_project_flow/project_item_type2.dart';
 import 'package:flutter/material.dart';
-
+import 'package:boilerplate/utils/locale/app_localization.dart';
 class ProjectListType2 extends StatefulWidget {
   ProjectListType2({Key? key}) : super(key: key);
 

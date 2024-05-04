@@ -11,6 +11,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
+import '../../utils/locale/app_localization.dart';
 
 class ProjectWidget extends StatefulWidget {
   final FormStudentProfileStore formStore;
@@ -104,7 +105,7 @@ class _ProjectWidgetState extends State<ProjectWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Projects:",
+                  AppLocalizations.of(context).translate('Projects') + ": ",
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
                 IconButton.outlined(
@@ -259,10 +260,10 @@ class NewTextField extends StatelessWidget {
                                           .experiences![formIndex]
                                           .title
                                           .isNotEmpty
-                                  ? "errors"
+                                  ? AppLocalizations.of(context).translate('errors')
                                   : null,
                           contentPadding: EdgeInsets.zero,
-                          label: Text('Project name'),
+                          label: Text(AppLocalizations.of(context).translate('Proj_name')),
                           errorStyle: Theme.of(context)
                               .textTheme
                               .bodySmall!
@@ -278,7 +279,7 @@ class NewTextField extends StatelessWidget {
                       key: key2,
                       initialValue: initialValue2,
                       name: name2,
-                      label: "Date",
+                      label: AppLocalizations.of(context).translate('Date'),
                       error: formStore.formErrorStore.experiences != null &&
                               formStore.formErrorStore.experiences!.length >=
                                   formIndex + 1 &&
@@ -286,7 +287,7 @@ class NewTextField extends StatelessWidget {
                                       .startMonth.isEmpty ||
                                   !formStore.formErrorStore
                                       .experiences![formIndex].endMonth.isEmpty)
-                          ? "error"
+                          ? AppLocalizations.of(context).translate('err')
                           : null,
                       onSubmit: ({required range}) {
                         if (range != null &&
@@ -347,10 +348,10 @@ class NewTextField extends StatelessWidget {
                                           .experiences![formIndex]
                                           .description
                                           .isNotEmpty
-                                  ? "errors"
+                                  ? AppLocalizations.of(context).translate('errors')
                                   : null,
                           contentPadding: EdgeInsets.all(10),
-                          label: Text('Description'),
+                          label: Text(AppLocalizations.of(context).translate('Description')),
                           errorStyle: Theme.of(context)
                               .textTheme
                               .bodySmall!
@@ -392,7 +393,7 @@ class NewTextField extends StatelessWidget {
                               formStore.formErrorStore.experiences![formIndex]
                                       .skillSets.length <=
                                   0
-                          ? "errors"
+                          ? AppLocalizations.of(context).translate('errors')
                           : null,
                     )
                   ],

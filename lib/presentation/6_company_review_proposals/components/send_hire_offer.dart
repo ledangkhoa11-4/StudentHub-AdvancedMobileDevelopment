@@ -7,11 +7,12 @@ import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:flutter/material.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'candidate_list.dart';
 import 'detail.dart';
-
+import 'package:boilerplate/utils/locale/app_localization.dart';
 class SendHireOffer extends StatefulWidget {
   final Project project;
   final int initialTabIndex;
@@ -62,16 +63,16 @@ class _SendHireOffer extends State<SendHireOffer>
             controller: _tabController,
             tabs: [
               Tab(
-                text: "Proposals",
+                text: AppLocalizations.of(context).translate('proposals'),
               ),
               Tab(
-                text: "Detail",
+                text: AppLocalizations.of(context).translate('Detail'),
               ),
               Tab(
-                text: "Message",
+                text: AppLocalizations.of(context).translate('message'),
               ),
               Tab(
-                text: "Hired",
+                text: AppLocalizations.of(context).translate('hired'),
               ),
             ],
             labelStyle: TextStyle(fontSize: 12),

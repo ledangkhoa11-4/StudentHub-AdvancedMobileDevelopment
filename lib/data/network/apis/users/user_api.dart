@@ -11,6 +11,7 @@ import 'package:boilerplate/domain/entity/user/profile_student.dart';
 import 'package:boilerplate/domain/entity/user/skillset.dart';
 import 'package:boilerplate/domain/entity/user/tech_stack.dart';
 import 'package:boilerplate/domain/entity/user/user.dart';
+import 'package:boilerplate/domain/usecase/user/check_room_available_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
@@ -406,4 +407,18 @@ class UserApi {
       throw e;
     }
   }
+
+  Future<bool> checkRoomAvailability(CheckRoomAvailabilityParams params) async {
+    try {
+      var query = "?&meeting_room_code=${params.meeting_room_code}&meeting_room_id=${params.meeting_room_id}";
+      final res = await _dioClient.dio.get(Endpoints.checkRoomAvailability + query);
+           final result = jsonDecode(res.toString());
+      return result["result"] as bool;
+    } catch (e) {
+      print("---------------------------");
+      print(e.toString());
+      throw e;
+    }
+  }
+  
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class VideoCall extends StatefulWidget {
   @override
@@ -10,14 +11,14 @@ class _VideoCallState extends State<VideoCall> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Video Call'),
+        title: Text(AppLocalizations.of(context).translate('vd_call')),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Video Call Screen',
+              AppLocalizations.of(context).translate('vd_call_scr'),
               style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20.0),
@@ -31,7 +32,7 @@ class _VideoCallState extends State<VideoCall> {
               onPressed: () {
                 // Implement end call functionality here
               },
-              child: Text('End Call'),
+              child: Text(AppLocalizations.of(context).translate('end_call')),
             ),
           ],
         ),

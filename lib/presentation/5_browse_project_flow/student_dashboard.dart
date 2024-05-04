@@ -14,6 +14,7 @@ import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'project_list.dart';
@@ -45,18 +46,22 @@ class _DashBoardState extends State<DashBoardStudent>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context,
-          titleWidget: Text("Your Projects"),
+          titleWidget: Text(AppLocalizations.of(context).translate('your_pr')),
           tabBar: TabBar(
             controller: _tabController,
             tabs: [
-              Tab(icon: Icon(Icons.dashboard), text: "All Projects"),
-              Tab(icon: Icon(Icons.settings), text: "Working"),
+              Tab(
+                  icon: Icon(Icons.dashboard),
+                  text: AppLocalizations.of(context).translate('all_pr')),
+              Tab(
+                  icon: Icon(Icons.settings),
+                  text: AppLocalizations.of(context).translate('working')),
               Tab(
                   icon: Icon(
                     BootstrapIcons.archive_fill,
                     size: 20,
                   ),
-                  text: "Archieved"),
+                  text: AppLocalizations.of(context).translate('archieved')),
             ],
           )),
       bottomNavigationBar:

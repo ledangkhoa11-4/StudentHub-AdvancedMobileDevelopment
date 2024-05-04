@@ -14,6 +14,7 @@ import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:boilerplate/utils/socket/socket.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class AuthWidget extends StatefulWidget {
@@ -75,9 +76,14 @@ class _AuthWidgetState extends State<AuthWidget> {
         if (socket != null) {
           socket.on('NOTI_${_userStore.user!.id}', (data) {
           
-            if (data["messageId"] != null) {
+            if (data["notification"]["messageId"] != null) {
               _userStore.getAllChatList(loading: false);
             }
+          });
+
+          socket.on('ERROR', (data) {
+            print(data.toString());
+            ToastHelper.error(data["content"]);
           });
         }
       }
@@ -107,7 +113,7 @@ class _AuthWidgetState extends State<AuthWidget> {
           MaterialPageRoute(builder: (context) => LoginScreen()),
           (Route<dynamic> route) => false);
 
-      ToastHelper.error("Unknow Error");
+          ToastHelper.error(AppLocalizations.of(context).translate('unk_err'));
     });
 
     return Container();

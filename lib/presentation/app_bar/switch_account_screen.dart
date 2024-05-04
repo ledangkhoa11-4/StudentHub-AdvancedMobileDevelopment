@@ -18,7 +18,6 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
-import '../video_call/home.dart';
 
 class Account {
   final int value;
@@ -70,7 +69,7 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
     if (_userStore.user?.roles != null && _userStore.user!.roles!.length < 2) {
       if (_userStore.user!.roles!.first == UserRole.COMPANY.value) {
         accounts.add(Account(
-          name: "Create student profile",
+          name: AppLocalizations.of(context).translate('Cre_stu_profi'),
           nickname: "",
           value: -1,
           avatar: ClipRRect(
@@ -177,7 +176,7 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
   Widget _buildChangePassButton() {
     return ListTile(
       leading: Icon(BootstrapIcons.person_lines_fill),
-      title: Text("Change Password",
+      title: Text(AppLocalizations.of(context).translate('change_pass'),
           style: TextStyle(
             fontSize: 16,
           )),
@@ -255,7 +254,7 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Account settings'),
+        title: Text(AppLocalizations.of(context).translate('acc_set')),
       ),
       body: SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),

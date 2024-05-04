@@ -5,6 +5,7 @@ import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class CompanyWelcome extends StatefulWidget {
   @override
@@ -31,7 +32,7 @@ class _CompanyWelcomeState extends State<CompanyWelcome> {
             height: 20,
           ),
           Text(
-              '''Welcome ${_userStore.user?.fullname}!,\nLet's start with your first project post ''',
+              AppLocalizations.of(context).translate('welcome') + ''' ${_userStore.user?.fullname}!, '''+ AppLocalizations.of(context).translate('welcome_text_1'),
               textAlign: TextAlign.center,
               style: Theme.of(context)
                   .textTheme
@@ -43,7 +44,7 @@ class _CompanyWelcomeState extends State<CompanyWelcome> {
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.65,
             child: RoundedButtonWidget(
-              buttonText: "Get started!",
+              buttonText: AppLocalizations.of(context).translate('get_started'),
               buttonColor: Theme.of(context).colorScheme.primary,
               textColor: Colors.white,
               onPressed: () {

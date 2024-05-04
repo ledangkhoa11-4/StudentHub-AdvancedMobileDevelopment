@@ -1,20 +1,21 @@
 // Flutter imports:
 
+import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
+import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/entity/interview/interview.dart';
+import 'package:boilerplate/domain/entity/user/user.dart';
+import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:flutter/material.dart';
-
-// Package imports:
 import 'package:zego_uikit_prebuilt_video_conference/zego_uikit_prebuilt_video_conference.dart';
-
-import 'const.dart';
-
-// Project imports:
 
 class VideoConferencePage extends StatefulWidget {
   final String conferenceID;
+  final Interview interview;
 
   const VideoConferencePage({
     super.key,
     required this.conferenceID,
+    required this.interview,
   });
 
   @override
@@ -23,6 +24,8 @@ class VideoConferencePage extends StatefulWidget {
 
 class VideoConferencePageState extends State<VideoConferencePage> {
   final controller = ZegoUIKitPrebuiltVideoConferenceController();
+  final UserStore _userStore = getIt<UserStore>();
+  final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -32,19 +35,24 @@ class VideoConferencePageState extends State<VideoConferencePage> {
         appSign:
             "8f09796184ed6a1c74005b54f19cacde780cd4dbde7f0a763f6ef528e7702699",
         conferenceID: widget.conferenceID,
-        userID: localUserID,
-        userName: "user_$localUserID",
+        userID: "${_userStore.user!.id}",
+        userName: "${_userStore.user!.fullname}",
         config: ZegoUIKitPrebuiltVideoConferenceConfig(
           turnOnCameraWhenJoining: false,
+          topMenuBarConfig: ZegoTopMenuBarConfig(
+            title: "Meeting for ${widget.interview.title}"
+          ),
           avatarBuilder: (BuildContext context, Size size, ZegoUIKitUser? user,
               Map extraInfo) {
             return user != null
                 ? Container(
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
                         image: NetworkImage(
-                          'https://media.istockphoto.com/id/1302783988/vector/the-embarrassed-man.jpg?s=612x612&w=0&k=20&c=bIPvdEHEGAP0RnSH5n45dvHfsqvZKv8NwG5qjRWCNTg=',
+                          currentProfile == UserRole.COMPANY.value
+                              ? "https://i.imgur.com/SR6SaqF.png"
+                              : "https://i.imgur.com/ugcoGNH.png",
                         ),
                       ),
                     ),
@@ -52,36 +60,6 @@ class VideoConferencePageState extends State<VideoConferencePage> {
                 : const SizedBox();
           },
         ),
-        // config: ZegoUIKitPrebuiltVideoConferenceConfig(
-        //   turnOnCameraWhenJoining: false,
-        //   audioVideoViewConfig:
-        //       ZegoPrebuiltAudioVideoViewConfig(showCameraStateOnView: false),
-        //   topMenuBarConfig: ZegoTopMenuBarConfig(
-        //     buttons: [ZegoMenuBarButtonName.showMemberListButton],
-        //   ),
-        //   bottomMenuBarConfig: ZegoBottomMenuBarConfig(
-        //     buttons: [
-        //       ZegoMenuBarButtonName.toggleMicrophoneButton,
-        //       ZegoMenuBarButtonName.leaveButton,
-        //       ZegoMenuBarButtonName.switchAudioOutputButton,
-        //     ],
-        //   ),
-        //   avatarBuilder: (BuildContext context, Size size,
-        //       ZegoUIKitUser? user, Map extraInfo) {
-        //     return user != null
-        //         ? Container(
-        //             decoration: const BoxDecoration(
-        //               shape: BoxShape.circle,
-        //               image: DecorationImage(
-        //                 image: NetworkImage(
-        //                   'https://media.istockphoto.com/id/1302783988/vector/the-embarrassed-man.jpg?s=612x612&w=0&k=20&c=bIPvdEHEGAP0RnSH5n45dvHfsqvZKv8NwG5qjRWCNTg=',
-        //                 ),
-        //               ),
-        //             ),
-        //           )
-        //         : const SizedBox();
-        //   },
-        // )
       ),
     );
   }

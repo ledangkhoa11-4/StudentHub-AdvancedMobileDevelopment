@@ -10,6 +10,7 @@ import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/message/message_detail.dart';
 import 'package:boilerplate/presentation/profile/company_review_profile_student.dart';
 import 'package:flutter/material.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
 class Candidate extends StatefulWidget {
@@ -120,7 +121,7 @@ class _CandidateState extends State<Candidate> {
                 children: [
                   Text(widget.proposal.student.techStack!.name.toString(),
                       style: Theme.of(context).textTheme.labelLarge),
-                  Text('Excellent',
+                  Text(AppLocalizations.of(context).translate('excellent'),
                       style: Theme.of(context)
                           .textTheme
                           .labelLarge!
@@ -164,11 +165,16 @@ class _CandidateState extends State<Candidate> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MessageDetail(projectId: widget.proposal.projectId, userId: widget.proposal.student.userId, userName: widget.proposal.student.fullname!,),
+                            builder: (context) => MessageDetail(
+                              projectId: widget.proposal.projectId,
+                              userId: widget.proposal.student.userId,
+                              userName: widget.proposal.student.fullname!,
+                            ),
                           ),
                         );
                       },
-                      child: Text('Message')),
+                      child: Text(
+                          AppLocalizations.of(context).translate('message'))),
                   if (widget.proposal.statusFlag != ProposalType.HIRED.value)
                     ElevatedButton(
                       style:
@@ -186,13 +192,16 @@ class _CandidateState extends State<Candidate> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Center(child: Text("Hired offer")),
+                              title: Center(
+                                  child: Text(AppLocalizations.of(context)
+                                      .translate('hired_offer'))),
                               content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Center(
                                     child: Text(
-                                      "Do you really want to send hired offer for student to do this project?",
+                                      AppLocalizations.of(context)
+                                          .translate('candi_q'),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -206,7 +215,8 @@ class _CandidateState extends State<Candidate> {
                                           Navigator.of(context)
                                               .pop(); // Close the dialog
                                         },
-                                        child: Text("Cancel"),
+                                        child: Text(AppLocalizations.of(context)
+                                            .translate('cancel')),
                                       ),
                                       ElevatedButton(
                                         onPressed: () {
@@ -222,7 +232,8 @@ class _CandidateState extends State<Candidate> {
                                           Navigator.of(context)
                                               .pop(); // Close the dialog
                                         },
-                                        child: Text("Send"),
+                                        child: Text(AppLocalizations.of(context)
+                                            .translate('send')),
                                       ),
                                     ],
                                   ),
@@ -234,8 +245,10 @@ class _CandidateState extends State<Candidate> {
                       },
                       child: Text(
                           widget.proposal.statusFlag == ProposalType.OFFER.value
-                              ? 'Sent hired offer'
-                              : 'Offer'),
+                              ? AppLocalizations.of(context)
+                                  .translate('sent_hired_offer')
+                              : AppLocalizations.of(context)
+                                  .translate('hired_offer')),
                     )
                 ],
               )

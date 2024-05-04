@@ -20,6 +20,7 @@ import 'package:just_the_tooltip/just_the_tooltip.dart';
 
 import '../../../domain/entity/project/project.dart';
 import '../store/post_project_store.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class PostProjectStep4 extends StatefulWidget {
   final FormPostProjectStore formStore;
@@ -70,8 +71,8 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context,
           titleWidget: widget.projectEdit != null
-              ? Text("Edit \"${widget.projectEdit!.title}\" project ")
-              : Text("Post new project")),
+              ? Text(AppLocalizations.of(context).translate('edit')+ "\"${widget.projectEdit!.title}\""+ AppLocalizations.of(context).translate('project'))
+              : Text(AppLocalizations.of(context).translate('post_new_pr'))),
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -88,7 +89,7 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "PROJECT DETAILS",
+                        AppLocalizations.of(context).translate('PRJ_DETAILS'),
                         style: Theme.of(context).textTheme.labelLarge,
                         textAlign: TextAlign.center,
                       ),
@@ -107,14 +108,14 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                         content: Padding(
                           padding: EdgeInsets.all(8.0),
                           child: UnorderedList([
-                            "Review the project information carefully, you can return to the previous steps to edit",
-                          ], "Note:"),
+                            AppLocalizations.of(context).translate('post_project_step4_text_1'),
+                          ], AppLocalizations.of(context).translate('note')),
                         ),
                       )
                     ],
                   ),
                   Text(
-                    "Project title: ",
+                    AppLocalizations.of(context).translate('Proj_title') + ": ",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   Padding(
@@ -132,7 +133,7 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                     ),
                   ),
                   Text(
-                    "Description: ",
+                    AppLocalizations.of(context).translate('Description') + ": ",
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   QuillProvider(
@@ -166,7 +167,7 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                         width: 10,
                       ),
                       Text(
-                        "Project scope: ",
+                        AppLocalizations.of(context).translate('Proj_scope') + ": ",
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                       Text(
@@ -189,11 +190,11 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                         width: 10,
                       ),
                       Text(
-                        "Students required: ",
+                        AppLocalizations.of(context).translate('Stu_req') +": ",
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                       Text(
-                        '${widget.formStore.numberOfStudents} student(s)',
+                        '${widget.formStore.numberOfStudents} '+ AppLocalizations.of(context).translate('stu_s'),
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
                     ],
@@ -203,8 +204,8 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                   ),
                   RoundedButtonWidget(
                     buttonText: widget.projectEdit != null
-                        ? "Update project"
-                        : "Post project",
+                        ?  AppLocalizations.of(context).translate('Upd_proj')
+                        :  AppLocalizations.of(context).translate('post_proj'),
                     buttonColor: Theme.of(context).colorScheme.primary,
                     textColor: Colors.white,
                     onPressed: () {
@@ -219,7 +220,7 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
                         }
                       } else {
                         ToastHelper.error(
-                            "You have to create your profile compnay first");
+                            AppLocalizations.of(context).translate('com_pro_dash_text'));
                       }
                     },
                   ),
@@ -258,9 +259,9 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
       );
     });
     if (widget.projectEdit != null) {
-      ToastHelper.success("Update project successfully");
+      ToastHelper.success(AppLocalizations.of(context).translate('update_proj_suc'));
     } else {
-      ToastHelper.success("Create project successfully");
+      ToastHelper.success(AppLocalizations.of(context).translate('create_proj_suc'));
     }
     return SizedBox.shrink();
   }
