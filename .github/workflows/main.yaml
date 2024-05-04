@@ -1,5 +1,5 @@
 name: Android Release.
-on:
+on: 
   push:
     tags:
     - '*'
