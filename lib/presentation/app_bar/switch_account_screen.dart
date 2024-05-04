@@ -18,6 +18,7 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
+import '../video_call/home.dart';
 
 class Account {
   final int value;
@@ -156,6 +157,8 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
         if (currentProfile == UserRole.COMPANY.value) {
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => CompanyNewProfile()));
+          // Navigator.of(context)
+          //     .push(MaterialPageRoute(builder: (context) => HomePage()));
         }
 
         if (currentProfile == UserRole.STUDENT.value) {
@@ -181,8 +184,8 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
       onTap: () {
         final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
         print(currentProfile);
-        Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => ChangeScreen()));
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => ChangeScreen()));
         /*if (currentProfile == UserRole.COMPANY.value) {
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => CompanyNewProfile()));
