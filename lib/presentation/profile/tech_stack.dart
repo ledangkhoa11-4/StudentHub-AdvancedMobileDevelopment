@@ -6,6 +6,7 @@ import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import '../../utils/locale/app_localization.dart';
 
 class TechStackWiget extends StatefulWidget {
   final FormStudentProfileStore formStore;
@@ -20,6 +21,7 @@ class _TechStackWigetState extends State<TechStackWiget> {
   TechStack? selectedValue;
   final textEditingController = new TextEditingController();
   final UserStore _userStore = getIt<UserStore>();
+  bool isBind = false;
 
   @override
   void dispose() {
@@ -32,11 +34,12 @@ class _TechStackWigetState extends State<TechStackWiget> {
     final UserStore _userStore = getIt<UserStore>();
 
     return Observer(builder: (context) {
-      if (_userStore.user!.student != null &&
+      if ( !isBind && _userStore.user!.student != null &&
           _userStore.user!.student!.id != null &&
           _userStore.techstacks != null) {
         Future.delayed(Duration.zero, () async {
           setState(() {
+            isBind = true;
             selectedValue = _userStore.techstacks!.firstWhere(
                 (element) =>
                     element.id == _userStore.user!.student!.stechStackId,
@@ -54,7 +57,7 @@ class _TechStackWigetState extends State<TechStackWiget> {
         children: [
           // _userStore.techstacks!= null ? startEditMode() : SizedBox.shrink()
           Text(
-            "Your Techstack:",
+            AppLocalizations.of(context).translate('y_tech') + ": ",
             style: Theme.of(context).textTheme.labelLarge,
           ),
           SizedBox(
@@ -65,7 +68,7 @@ class _TechStackWigetState extends State<TechStackWiget> {
             isExpanded: true,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             hint: Text(
-              'Select your Techstack',
+              AppLocalizations.of(context).translate('sel_y_tech'),
               style: TextStyle(
                 fontSize: 14,
                 color: Theme.of(context).hintColor,
@@ -150,7 +153,7 @@ class _TechStackWigetState extends State<TechStackWiget> {
                       horizontal: 10,
                       vertical: 8,
                     ),
-                    hintText: 'Search for an item...',
+                    hintText: AppLocalizations.of(context).translate('search_item'),
                     hintStyle: const TextStyle(fontSize: 12),
                     enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey)),

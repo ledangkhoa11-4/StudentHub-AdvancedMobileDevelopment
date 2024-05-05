@@ -7,6 +7,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:uuid/uuid.dart';
+import '../../utils/locale/app_localization.dart';
 
 class LanguageWidget extends StatefulWidget {
   final FormStudentProfileStore formStore;
@@ -93,7 +94,7 @@ class _LanguageWidgetState extends State<LanguageWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Fluent Language:",
+                  AppLocalizations.of(context).translate('F_Language'),
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
                 IconButton.outlined(
@@ -178,7 +179,7 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                                             .languages![0].languageName
                                         : null,
                                 contentPadding: EdgeInsets.zero,
-                                label: Text('Language'),
+                                label: Text(AppLocalizations.of(context).translate('Language')),
                                 errorStyle: Theme.of(context)
                                     .textTheme
                                     .bodySmall!
@@ -220,7 +221,7 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                                             .languages![0].level
                                         : null,
                                 contentPadding: EdgeInsets.zero,
-                                label: Text('Level'),
+                                label: Text(AppLocalizations.of(context).translate('Level')),
                                 errorStyle: Theme.of(context)
                                     .textTheme
                                     .bodySmall!
@@ -317,7 +318,7 @@ class NewTextField extends StatelessWidget {
                                         .languages![formIndex].languageName
                                     : null,
                             contentPadding: EdgeInsets.zero,
-                            label: Text('Language'),
+                            label: Text(AppLocalizations.of(context).translate('Language')),
                             errorStyle: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
@@ -366,7 +367,7 @@ class NewTextField extends StatelessWidget {
                                         .languages![formIndex].level
                                     : null,
                             contentPadding: EdgeInsets.zero,
-                            label: Text('Level'),
+                            label: Text(AppLocalizations.of(context).translate('Level')),
                             errorStyle: Theme.of(context)
                                 .textTheme
                                 .bodySmall!

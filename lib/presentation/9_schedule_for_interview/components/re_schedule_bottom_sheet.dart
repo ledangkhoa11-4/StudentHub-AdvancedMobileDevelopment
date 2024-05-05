@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:boilerplate/presentation/9_schedule_for_interview/components/models.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class ReScheduleBottomSheet extends StatefulWidget {
   final Meeting meeting;
@@ -46,14 +47,14 @@ class _ReScheduleBottomSheetState extends State<ReScheduleBottomSheet> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Error'),
-            content: Text('End time must be after start time'),
+            title: Text(AppLocalizations.of(context).translate('err')),
+            content: Text(AppLocalizations.of(context).translate('end_time_alert')),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the dialog
                 },
-                child: Text('OK'),
+                child: Text(AppLocalizations.of(context).translate('ok')),
               ),
             ],
           );
@@ -73,14 +74,14 @@ class _ReScheduleBottomSheetState extends State<ReScheduleBottomSheet> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            'Schedule Interview',
+            AppLocalizations.of(context).translate('sche_inter'),
             style: TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.bold,
             ),
           ),
           SizedBox(height: 16.0),
-          Text('Title:'),
+          Text(AppLocalizations.of(context).translate('Title') + ':'),
           TextField(
             controller: _titleController,
             decoration: InputDecoration(
@@ -95,7 +96,7 @@ class _ReScheduleBottomSheetState extends State<ReScheduleBottomSheet> {
             },
           ),
           SizedBox(height: 16.0),
-          Text('Start Time:'),
+          Text(AppLocalizations.of(context).translate('start_time')),
           SizedBox(height: 8.0),
           Row(
             children: [
@@ -147,7 +148,7 @@ class _ReScheduleBottomSheetState extends State<ReScheduleBottomSheet> {
             ],
           ),
           SizedBox(height: 16.0),
-          Text('End Time:'),
+          Text(AppLocalizations.of(context).translate('end_time')),
           SizedBox(height: 8.0),
           Row(
             children: [
@@ -206,11 +207,11 @@ class _ReScheduleBottomSheetState extends State<ReScheduleBottomSheet> {
                 onPressed: () {
                   Navigator.pop(context); // Close the bottom sheet
                 },
-                child: Text('Cancel'),
+                child: Text(AppLocalizations.of(context).translate('cancel')),
               ),
               ElevatedButton(
                 onPressed: _handleScheduleMeeting,
-                child: Text('Save'),
+                child: Text(AppLocalizations.of(context).translate('save')),
               ),
             ],
           ),

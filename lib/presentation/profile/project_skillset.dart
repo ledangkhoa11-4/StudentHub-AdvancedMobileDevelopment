@@ -7,7 +7,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
-
+import '../../utils/locale/app_localization.dart';
 class ProjectSkillsetWidget extends StatefulWidget {
   final FormStudentProfileStore formStore;
   final Key key4;
@@ -87,7 +87,7 @@ class _SkillsetWidgetState extends State<ProjectSkillsetWidget> {
             ),
             MultiSelectDropDown<Skillset>(
               key: widget.key4,
-              hint: "Select your skillset",
+              hint: AppLocalizations.of(context).translate('sel_skill'),
               fieldBackgroundColor: Colors.transparent,
               borderColor: widget.error == null ? Colors.grey : Colors.red,
               borderWidth: 1,

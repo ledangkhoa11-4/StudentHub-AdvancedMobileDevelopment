@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:boilerplate/presentation/6_company_review_proposals/components/project_view_item.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class CompanyArchievedProjectList extends StatefulWidget {
   CompanyArchievedProjectList({Key? key}) : super(key: key);
@@ -89,7 +90,7 @@ class _ProjectListState extends State<CompanyArchievedProjectList> {
                 )
               : NoProject(
                   title:
-                      "No project found. \nLet's close your first project.\nClosed projects will be here.",
+                      AppLocalizations.of(context).translate('archieved_projects_list_text'),
                 );
         },
       ),

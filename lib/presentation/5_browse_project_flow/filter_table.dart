@@ -10,6 +10,7 @@ import 'package:boilerplate/presentation/post_project/store/post_project_store.d
 import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class InitialFilter {
   final int? projectLength;
@@ -72,14 +73,16 @@ class _FilterTableState extends State<FilterTable> {
             // Project Length filter
             ListTile(
               title: Text(
-                'Project Length',
+                AppLocalizations.of(context).translate('project_Length'),
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               contentPadding: EdgeInsets.zero,
               subtitle: Column(
                 children: <Widget>[
                   RadioListTile<int>(
-                    title: Text('Less than one month'),
+                    title: Text(
+                      AppLocalizations.of(context).translate('Less_one_month'),
+                    ),
                     value: ProjectScope.LessThanOneMonth.value,
                     toggleable: true,
                     groupValue: _projectLength,
@@ -90,7 +93,9 @@ class _FilterTableState extends State<FilterTable> {
                     },
                   ),
                   RadioListTile<int>(
-                    title: Text('1-3 months'),
+                    title: Text(
+                      AppLocalizations.of(context).translate('1_3_month'),
+                    ),
                     toggleable: true,
                     value: ProjectScope.OneToThreeMonth.value,
                     groupValue: _projectLength,
@@ -101,7 +106,9 @@ class _FilterTableState extends State<FilterTable> {
                     },
                   ),
                   RadioListTile<int>(
-                    title: Text('3-6 months'),
+                    title: Text(
+                      AppLocalizations.of(context).translate('3_6_month'),
+                    ),
                     toggleable: true,
                     value: ProjectScope.ThreeToSixMonth.value,
                     groupValue: _projectLength,
@@ -112,7 +119,7 @@ class _FilterTableState extends State<FilterTable> {
                     },
                   ),
                   RadioListTile<int>(
-                    title: Text('More than 6 months'),
+                    title: Text(AppLocalizations.of(context).translate('more_6_month'),),
                     toggleable: true,
                     value: ProjectScope.MoreThanSixMonth.value,
                     groupValue: _projectLength,
@@ -127,7 +134,7 @@ class _FilterTableState extends State<FilterTable> {
             ),
             // Students Needed filter
             TextFieldWidget(
-              hint: "Students need more",
+              hint: AppLocalizations.of(context).translate('s_need_more'),
               icon: BootstrapIcons.person_badge,
               iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
               textController: _studentsNeededController,
@@ -139,7 +146,7 @@ class _FilterTableState extends State<FilterTable> {
               height: 20,
             ),
             TextFieldWidget(
-              hint: "Proposals less than",
+              hint: AppLocalizations.of(context).translate('pro_less'),
               icon: BootstrapIcons.file_text,
               iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
               textController: _proposalsLessThanController,
@@ -157,10 +164,10 @@ class _FilterTableState extends State<FilterTable> {
                   onPressed: () {
                     _clearFilters();
                   },
-                  child: Text('Clear Filters'),
+                  child: Text(AppLocalizations.of(context).translate('clear_f')),
                 ),
                 RoundedButtonWidget(
-                  buttonText: "Apply",
+                  buttonText: AppLocalizations.of(context).translate('apply'),
                   buttonColor: Theme.of(context).colorScheme.primary,
                   textColor: Colors.white,
                   onPressed: () {

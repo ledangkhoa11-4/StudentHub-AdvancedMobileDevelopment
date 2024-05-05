@@ -7,6 +7,10 @@ import 'package:boilerplate/core/stores/form/form_student_profile_store.dart'
     as FormStudent;
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/entity/chat/chat.dart';
+import 'package:boilerplate/domain/entity/chat/chatUser.dart';
+import 'package:boilerplate/domain/entity/project/project_list.dart';
+import 'package:boilerplate/domain/entity/proposal/proposal-type-no-project.dart';
 import 'package:boilerplate/domain/entity/user/education.dart';
 import 'package:boilerplate/domain/entity/user/experience.dart';
 import 'package:boilerplate/domain/entity/user/language.dart';
@@ -14,11 +18,15 @@ import 'package:boilerplate/domain/entity/user/profile_student.dart';
 import 'package:boilerplate/domain/entity/user/skillset.dart';
 import 'package:boilerplate/domain/entity/user/tech_stack.dart';
 import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/check_room_available_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_student_profile_usercase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_by_projectid_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_with_userId_in_projectid_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
@@ -35,6 +43,7 @@ import 'package:boilerplate/domain/usecase/user/update_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_resume_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/upload_transcript_usecase.dart';
 import 'package:boilerplate/presentation/post_project/store/post_project_store.dart';
+import 'package:boilerplate/utils/socket/socket.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http_parser/http_parser.dart';
@@ -52,31 +61,34 @@ class UserStore = _UserStore with _$UserStore;
 abstract class _UserStore with Store {
   // constructor:---------------------------------------------------------------
   _UserStore(
-    this._isLoggedInUseCase,
-    this._saveLoginStatusUseCase,
-    this._saveAuthTokenUseCase,
-    this._saveCurrentProfileUseCase,
-    this._loginUseCase,
-    this._changeUseCase,
-    this._forgotUseCase,
-    this._signupUseCase,
-    this.formErrorStore,
-    this.errorStore,
-    this._getMeUseCase,
-    this._createCompanyProfileUseCase,
-    this._getAllTechStackUseCase,
-    this._getAllSkillSetUseCase,
-    this._uploadResumeUseCase,
-    this._uploadTranscriptUseCase,
-    this._createLanguageUseCase,
-    this._createEducationUseCase,
-    this._createExperiencesUseCase,
-    this._createStudentProfileUseCase,
-    this._getProfileFileUseCase,
-    this._submitProposalUseCase,
-    this._getStudentProfileUseCase,
-    this._updateProposalUseCase,
-  ) {
+      this._isLoggedInUseCase,
+      this._saveLoginStatusUseCase,
+      this._saveAuthTokenUseCase,
+      this._saveCurrentProfileUseCase,
+      this._loginUseCase,
+      this._changeUseCase,
+      this._forgotUseCase,
+      this._signupUseCase,
+      this.formErrorStore,
+      this.errorStore,
+      this._getMeUseCase,
+      this._createCompanyProfileUseCase,
+      this._getAllTechStackUseCase,
+      this._getAllSkillSetUseCase,
+      this._uploadResumeUseCase,
+      this._uploadTranscriptUseCase,
+      this._createLanguageUseCase,
+      this._createEducationUseCase,
+      this._createExperiencesUseCase,
+      this._createStudentProfileUseCase,
+      this._getProfileFileUseCase,
+      this._submitProposalUseCase,
+      this._getStudentProfileUseCase,
+      this._updateProposalUseCase,
+      this._getAllChatUseCase,
+      this._getAllChatByProjectUseCase,
+      this._getAllChatWithUserInProjectUseCase,
+      this._checkRoomAvailabilityUseCase) {
     // setting up disposers
     _setupDisposers();
 
@@ -109,6 +121,10 @@ abstract class _UserStore with Store {
   final SubmitProposalUseCase _submitProposalUseCase;
   final GetStudentProfileUseCase _getStudentProfileUseCase;
   final UpdateProposalUseCase _updateProposalUseCase;
+  final GetAllChatByProjectUseCase _getAllChatByProjectUseCase;
+  final GetAllChatUseCase _getAllChatUseCase;
+  final GetAllChatWithUserInProjectUseCase _getAllChatWithUserInProjectUseCase;
+  final CheckRoomAvailabilityUseCase _checkRoomAvailabilityUseCase;
 
   // stores:--------------------------------------------------------------------
   // for handling form errors
@@ -124,6 +140,14 @@ abstract class _UserStore with Store {
     _disposers = [
       reaction((_) => success, (_) => success = false, delay: 200),
       reaction((_) => changeSuccess, (_) => changeSuccess = false, delay: 200),
+      reaction((_) => [apiResponseMessage, apiResponseSuccess], (_) {
+        apiResponseSuccess = null;
+        apiResponseMessage = "";
+      }, delay: 200),
+      reaction((_) => [currentChatProjectId, currentChatUserId],
+          (_) => getCurrentChat()),
+      reaction((_) => currentChatProjectId, (_) => getChatListByProjectId()),
+      reaction((_) => currentChat, (_) => getAllChatList(loading: false)),
     ];
   }
 
@@ -247,6 +271,21 @@ abstract class _UserStore with Store {
 
   @observable
   ObservableFuture<dynamic> apiUpdateProfile = emptyLoginResponse;
+
+  @observable
+  int? currentChatProjectId = null;
+
+  @observable
+  int? currentChatUserId = null;
+
+  @observable
+  List<ChatEntity> currentChat = [];
+
+  @observable
+  List<ChatEntity> chatList = [];
+
+  @observable
+  List<ChatEntity>? allChatList;
 
   @computed
   bool get isLoading =>
@@ -719,56 +758,49 @@ abstract class _UserStore with Store {
 
   // [PHONG] -----------------------------------------------------------
   @action
-  Future getStudentTranscriptFile() async {
-    this.resetStudentFile();
-    if (this.studentTranscriptFile.isEmpty) {
-      GetProfileFileParams param = GetProfileFileParams(
-          studentId: int.parse(this.profileStudent!.id.toString()),
-          type: "transcript");
-      final future = _getProfileFileUseCase.call(params: param);
-      apiCallingFeature = ObservableFuture(future);
-      await future.then((value) async {
-        if (value != null) {
-          // print("88888888888888888888888888888888");
-          // print(value.toString());
-          this.studentTranscriptFile = value;
-          this.apiResponseSuccess = true;
-        }
-      }).catchError((e) {
-        print("---------------");
-        print(e);
-        String message = e.response.toString();
-        final response = jsonDecode(message);
-        this.apiResponseSuccess = false;
-        this.apiResponseMessage = response["errorDetails"].toString();
-      });
-    }
+  Future getTranscriptFileByStudentId(int studentId) async {
+    // if (this.transcriptFile.isEmpty) {
+    GetProfileFileParams param =
+        GetProfileFileParams(studentId: studentId, type: "transcript");
+    final future = _getProfileFileUseCase.call(params: param);
+    apiCallingFeature = ObservableFuture(future);
+    await future.then((value) async {
+      if (value != null) {
+        this.studentTranscriptFile = value;
+        this.apiResponseSuccess = true;
+      }
+    }).catchError((e) {
+      print("---------------");
+      print(e);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.apiResponseSuccess = false;
+      this.apiResponseMessage = response["errorDetails"].toString();
+    });
+    // }
   }
 
   @action
-  Future getStudentResumeFile() async {
-    this.resetStudentFile();
-    if (this.studentResumeFile.isEmpty) {
-      GetProfileFileParams param = GetProfileFileParams(
-          studentId: int.parse(this.profileStudent!.id.toString()),
-          type: "resume");
-      final future = _getProfileFileUseCase.call(params: param);
-      apiCallingFeature = ObservableFuture(future);
-
-      await future.then((value) async {
-        if (value != null) {
-          this.studentResumeFile = value;
-          this.apiResponseSuccess = true;
-        }
-      }).catchError((e) {
-        print("---------------");
-        print(e);
-        String message = e.response.toString();
-        final response = jsonDecode(message);
-        this.apiResponseSuccess = false;
-        this.apiResponseMessage = response["errorDetails"].toString();
-      });
-    }
+  Future getResumeFileByStudentId(int studentId) async {
+    // if (this.resumeFile.isEmpty) {
+    GetProfileFileParams param =
+        GetProfileFileParams(studentId: studentId, type: "resume");
+    final future = _getProfileFileUseCase.call(params: param);
+    apiCallingFeature = ObservableFuture(future);
+    await future.then((value) async {
+      if (value != null) {
+        this.studentResumeFile = value;
+        this.apiResponseSuccess = true;
+      }
+    }).catchError((e) {
+      print("---------------");
+      print(e);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.apiResponseSuccess = false;
+      this.apiResponseMessage = response["errorDetails"].toString();
+    });
+    // }
   }
 
   // ----------------------------------------------------------------------------
@@ -800,50 +832,238 @@ abstract class _UserStore with Store {
   }
 
   // [PHONG] ---------------------------------------------------------------
-  @action
-  Future getStudentProfile(int student_id) async {
-    final GetStudentProfileParams getStudentProfileParams =
-        GetStudentProfileParams(studentId: student_id);
-    final future =
-        _getStudentProfileUseCase.call(params: getStudentProfileParams);
-    apiStudentProfileResponse = ObservableFuture(future);
+  // @action
+  // Future getStudentProfile(int student_id) async {
+  //   final GetStudentProfileParams getStudentProfileParams =
+  //       GetStudentProfileParams(studentId: student_id);
+  //   final future =
+  //       _getStudentProfileUseCase.call(params: getStudentProfileParams);
+  //   apiStudentProfileResponse = ObservableFuture(future);
 
-    await future.then((value) async {
-      if (value != null) {
-        // print("============================");
-        // print(value);
-        // resetProfileStudent();
-        this.profileStudent = value;
-        apiStudentResponseSuccess = true;
-        // print(value.toMap());
-      }
-    }).catchError((e) {
-      this.profileStudent = null;
-      this.apiStudentResponseSuccess = false;
-      print(e);
-    });
+  //   await future.then((value) async {
+  //     if (value != null) {
+  //       // print("============================");
+  //       // print(value);
+  //       // resetProfileStudent();
+  //       this.profileStudent = value;
+  //       apiStudentResponseSuccess = true;
+  //       // print(value.toMap());
+  //     }
+  //   }).catchError((e) {
+  //     this.profileStudent = null;
+  //     this.apiStudentResponseSuccess = false;
+  //     print(e);
+  //   });
 
-    return null;
-  }
+  //   return null;
+  // }
 
-  Future<dynamic> updateProposal(UpdateProposalParam params) async {
-    final future = _updateProposalUseCase.call(params: params);
-    apiUpdateProfile = ObservableFuture(future);
-  }
+  // Future<dynamic> updateProposal(UpdateProposalParam params) async {
+  //   final future = _updateProposalUseCase.call(params: params);
+  //   apiUpdateProfile = ObservableFuture(future);
+  // }
 
   Future<dynamic> updateProposalById(
       int proposalId, UpdateProposalParam params) async {
+    final projectStore = getIt<ProjectStore>();
+
     final future = _updateProposalUseCase.updateProposalById(
         proposalId: proposalId, params: params);
-    apiUpdateProfile = ObservableFuture(future);
+    apiCallingFeature = ObservableFuture(future);
+    await future.then((value) {
+      if (projectStore.projectList != null) {
+        final assignProjects = projectStore.projectList!.projects!.map((pj) {
+          if (pj.id == params.projectId) {
+            final newProposal = pj.proposals.map((proposal) {
+              if (proposal.id == proposalId) {
+                proposal.statusFlag = params.statusFlag;
+              }
+              return proposal;
+            }).toList();
+
+            pj.proposals = newProposal;
+          }
+          return pj;
+        }).toList();
+        projectStore.setProjectList(ProjectList(projects: assignProjects));
+      }
+      this.apiResponseSuccess = true;
+      this.apiResponseMessage = params.statusFlag == ProposalType.OFFER.value
+          ? "Offer message has been sent to student"
+          : params.statusFlag == ProposalType.HIRED.value
+              ? "Congratulations, you have joined to the project"
+              : "Update successfully";
+    }).catchError((e) {
+      this.apiStudentResponseSuccess = false;
+      this.apiResponseMessage = "Error";
+      print(e);
+    });
   }
 
   // ----------------------------------------------------------------------------
+
+  @action
+  void setCurrentChat(int? projectId, int? userId) {
+    this.currentChatProjectId = projectId;
+    this.currentChatUserId = userId;
+  }
+
+  dynamic messageHandler(data) {
+    try {
+      final senderId = data["notification"]["senderId"];
+      if (senderId != this.user!.id) {
+        final newChat = ChatEntity(
+            id: data["notification"]["messageId"],
+            createdAt: DateTime.now(),
+            content: data["notification"]["message"]["content"],
+            sender:
+                ChatUser(id: data["notification"]["senderId"], fullname: ""),
+            receiver:
+                ChatUser(id: this.user!.id!, fullname: this.user!.fullname!));
+        this.addCurrentChat(newChat);
+      }
+    } catch (e) {
+      print("SOCKET ERROR ${e}");
+    }
+  }
+
+  dynamic interviewHandler(data) {
+    this.getCurrentChat(loading: false);
+  }
+
+  @action
+  Future getCurrentChat({bool loading = true}) async {
+    if (this.currentChatProjectId != null && this.currentChatUserId != null) {
+      getIt<SharedPreferenceHelper>().authToken.then((value) {
+        if (value != null) {
+          final socket = SocketService.socket;
+          if (socket?.io.options?['query'] == null) {
+            SocketService.connectWithQuery(this.currentChatProjectId!, value);
+          }
+          if (socket != null) {
+            socket.off('RECEIVE_MESSAGE', messageHandler);
+            socket.off('RECEIVE_INTERVIEW', interviewHandler);
+            socket.on('RECEIVE_MESSAGE', messageHandler);
+            socket.on('RECEIVE_INTERVIEW', interviewHandler);
+          }
+        }
+      });
+
+      final future = _getAllChatWithUserInProjectUseCase.call(
+          params: ProjectUserIdParam(
+              projectId: this.currentChatProjectId!,
+              userId: this.currentChatUserId!));
+      if (loading) {
+        apiCallingFeature = ObservableFuture(future);
+      }
+      await future.then((value) async {
+        this.currentChat = value;
+        this.apiResponseSuccess = true;
+      }).catchError((e) {
+        print("---------------");
+        print(e);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
+        this.apiResponseSuccess = false;
+        this.apiResponseMessage = response["errorDetails"].toString();
+      });
+    } else {
+      this.currentChat = [];
+      final socket = SocketService.socket;
+      if (socket != null) {
+        socket.off("RECEIVE_MESSAGE", messageHandler);
+        socket.off('RECEIVE_INTERVIEW', interviewHandler);
+      }
+    }
+  }
+
+  dynamic messageProjectHandler(data) {
+    this.getChatListByProjectId(loading: false);
+  }
+
+  @action
+  Future getChatListByProjectId({bool loading = true}) async {
+    if (this.currentChatProjectId != null) {
+      if (loading) {
+        getIt<SharedPreferenceHelper>().authToken.then((value) {
+          if (value != null) {
+            SocketService.connectWithQuery(this.currentChatProjectId!, value);
+            final socket = SocketService.socket;
+            if (socket != null) {
+              socket.on('RECEIVE_MESSAGE', messageProjectHandler);
+              socket.on('RECEIVE_INTERVIEW', messageProjectHandler);
+            }
+          }
+        });
+      }
+
+      final future = _getAllChatByProjectUseCase.call(
+          params: ProjectIdParam(projectId: this.currentChatProjectId!));
+      if (loading) {
+        apiCallingFeature = ObservableFuture(future);
+      }
+      await future.then((value) async {
+        this.chatList = value;
+      }).catchError((e) {
+        print("---------------");
+        print(e);
+        String message = e.response.toString();
+        final response = jsonDecode(message);
+        this.apiResponseSuccess = false;
+        this.apiResponseMessage = response["errorDetails"].toString();
+      });
+    } else {
+      this.chatList = [];
+      final socket = SocketService.socket;
+      if (socket != null) {
+        socket.off("RECEIVE_MESSAGE", messageProjectHandler);
+        socket.off("RECEIVE_INTERVIEW", messageProjectHandler);
+      }
+    }
+  }
+
+  @action
+  Future getAllChatList({bool loading = true}) async {
+    final future = _getAllChatUseCase.call(params: null);
+    if (loading) {
+      apiCallingFeature = ObservableFuture(future);
+    }
+    await future.then((value) async {
+      this.allChatList = value;
+    }).catchError((e) {
+      print("---------------");
+      print(e);
+      String message = e.response.toString();
+      final response = jsonDecode(message);
+      this.apiResponseSuccess = false;
+      this.apiResponseMessage = response["errorDetails"].toString();
+    });
+  }
+
+  @action
+  void addCurrentChat(ChatEntity chat) {
+    final newChat = List.of(this.currentChat);
+    newChat.add(chat);
+    this.currentChat = newChat;
+  }
+
+  @action
+  Future<bool> checkRoomAvailability(CheckRoomAvailabilityParams params) async {
+    final future = _checkRoomAvailabilityUseCase.call(params: params);
+    apiCallingFeature = ObservableFuture(future);
+    final isAvailable = await future.then((value) async {
+      return value;
+    }).catchError((e) {
+      return false;
+    });
+    return isAvailable;
+  }
 
   logout() async {
     final projectStore = getIt<ProjectStore>();
 
     this.user = null;
+    this.allChatList = null;
     this.transcriptFile = "";
     this.resumeFile = "";
     this.isLoggedIn = false;
@@ -853,6 +1073,9 @@ abstract class _UserStore with Store {
     await _saveLoginStatusUseCase.call(params: false);
     getIt<SharedPreferenceHelper>().removeAuthToken();
     getIt<SharedPreferenceHelper>().removeCurrentProfile();
+    if (SocketService.socket != null) {
+      SocketService.socket!.dispose();
+    }
   }
 
   resetSigninState() {

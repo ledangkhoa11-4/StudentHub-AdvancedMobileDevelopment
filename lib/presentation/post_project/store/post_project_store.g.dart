@@ -409,6 +409,17 @@ mixin _$ProjectStore on _ProjectStore, Store {
   }
 
   @override
+  void setProjectList(ProjectList projectList) {
+    final _$actionInfo = _$_ProjectStoreActionController.startAction(
+        name: '_ProjectStore.setProjectList');
+    try {
+      return super.setProjectList(projectList);
+    } finally {
+      _$_ProjectStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 fetchProjectsFuture: ${fetchProjectsFuture},

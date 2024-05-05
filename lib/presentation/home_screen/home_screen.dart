@@ -5,6 +5,7 @@ import 'package:boilerplate/utils/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class Homescreen extends StatefulWidget {
   @override
@@ -35,7 +36,7 @@ class _HomescreenState extends State<Homescreen> {
               ),
               Center(
                   child: Text(
-                "Build your product with high-skilled student",
+                 AppLocalizations.of(context).translate('home_scr_text_1'),
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
@@ -45,7 +46,7 @@ class _HomescreenState extends State<Homescreen> {
               SizedBox(height: 10),
               Center(
                   child: Text(
-                      "Find and onboard best-skilled  student for your product Student works to gain experience & skills form real-world projects",
+                      AppLocalizations.of(context).translate('home_scr_text_2'),
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
@@ -56,7 +57,7 @@ class _HomescreenState extends State<Homescreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   RoundedButtonWidget(
-                    buttonText: "Company",
+                    buttonText:  AppLocalizations.of(context).translate('Company'),
                     buttonColor: Theme.of(context).colorScheme.primary,
                     textColor: Colors.white,
                     onPressed: () {
@@ -67,7 +68,7 @@ class _HomescreenState extends State<Homescreen> {
                     width: 30,
                   ),
                   RoundedButtonWidget(
-                    buttonText: "Student",
+                    buttonText: AppLocalizations.of(context).translate('stu'),
                     buttonColor: Theme.of(context).colorScheme.primary,
                     textColor: Colors.white,
                     onPressed: () {
@@ -79,7 +80,7 @@ class _HomescreenState extends State<Homescreen> {
               SizedBox(height: 15),
               Center(
                   child: Text(
-                      "StudentHub is university market place to connect high-skilled student and company on a real-world project",
+                     AppLocalizations.of(context).translate('home_scr_text_3'),
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme

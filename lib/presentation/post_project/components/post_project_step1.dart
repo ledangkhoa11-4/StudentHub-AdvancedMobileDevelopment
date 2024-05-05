@@ -12,6 +12,7 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class PostProjectStep1 extends StatefulWidget {
   final FormPostProjectStore formStore;
@@ -51,7 +52,7 @@ class _PostProjectStep1State extends State<PostProjectStep1> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Let's start with a strong title.",
+                AppLocalizations.of(context).translate('post_project_step1_text_1'),
                 style: Theme.of(context).textTheme.labelLarge,
               ),
               JustTheTooltip(
@@ -69,9 +70,9 @@ class _PostProjectStep1State extends State<PostProjectStep1> {
                 content: Padding(
                   padding: EdgeInsets.all(8.0),
                   child: UnorderedList([
-                    "Build responsive WordPress site with booking/payment functionality",
-                    "Facebook ad specialist need for product launch"
-                  ], "Example title"),
+                    AppLocalizations.of(context).translate('post_project_step1_text_2'),
+                    AppLocalizations.of(context).translate('post_project_step1_text_3')
+                  ], AppLocalizations.of(context).translate('example_til')),
                 ),
               )
             ],
@@ -80,11 +81,11 @@ class _PostProjectStep1State extends State<PostProjectStep1> {
             height: 10,
           ),
           Text(
-            "This helps your post stand out to the right students. It's the first thing they'll see, so make it impressive!",
+           AppLocalizations.of(context).translate('post_project_step1_text_4'),
             style: Theme.of(context).textTheme.labelSmall,
           ),
           TextFieldWidget(
-            hint: "Your project title",
+            hint: AppLocalizations.of(context).translate('your_pr_til'),
             padding: EdgeInsets.only(top: 15, bottom: 15),
             icon: BootstrapIcons.alphabet,
             iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
@@ -95,7 +96,7 @@ class _PostProjectStep1State extends State<PostProjectStep1> {
             },
           ),
           RoundedButtonWidget(
-            buttonText: "Next: Scope",
+            buttonText: AppLocalizations.of(context).translate('next_scope'),
             buttonColor: Theme.of(context).colorScheme.primary,
             textColor: Colors.white,
             onPressed: () {
@@ -108,7 +109,7 @@ class _PostProjectStep1State extends State<PostProjectStep1> {
                   'project': widget.projectEdit,
                 });
               } else {
-                ToastHelper.error("Please enter required fields");
+                ToastHelper.error(AppLocalizations.of(context).translate('pls_en_re_fi'));
               }
               // Navigator.of(context).pushNamed(Routes.companyWelcome);
             },

@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
-
+import 'package:boilerplate/utils/locale/app_localization.dart';
 class SubmitScreen extends StatelessWidget {
   final Project project;
   final UserStore _userStore = getIt<UserStore>();
@@ -25,7 +25,6 @@ class SubmitScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     QuillController _quillController = QuillController.basic();
     final _tooltipController = JustTheController();
-
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context,
           titleWidget: Text("Submit proposal to ${project.title}")),
@@ -49,7 +48,7 @@ class SubmitScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Project description:",
+                          AppLocalizations.of(context).translate('pr_des'),
                           style: Theme.of(context).textTheme.labelLarge,
                         ),
                         JustTheTooltip(
@@ -67,10 +66,10 @@ class SubmitScreen extends StatelessWidget {
                           content: Padding(
                             padding: EdgeInsets.all(8.0),
                             child: UnorderedList([
-                              "Describe why do you fit to this project",
-                              "State your strengths",
-                              "Experience that you have had",
-                            ], "Hint:"),
+                              AppLocalizations.of(context).translate('des_1'),
+                            AppLocalizations.of(context).translate('des_2'),
+                            AppLocalizations.of(context).translate('des_3'),
+                            ],  AppLocalizations.of(context).translate('pr_des')),
                           ),
                         )
                       ],
@@ -101,12 +100,12 @@ class SubmitScreen extends StatelessWidget {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: Text('Cancel'),
+                          child: Text(AppLocalizations.of(context).translate('cancel')),
                         ),
                         ElevatedButton(
                           onPressed: () {
                             if (_quillController.document.isEmpty()) {
-                              ToastHelper.error("Please enter cover letter");
+                              ToastHelper.error( AppLocalizations.of(context).translate('pls_en_cov_let'));
                             } else {
                               _userStore.submitProposal(
                                   project.id!,
@@ -115,7 +114,7 @@ class SubmitScreen extends StatelessWidget {
                                       .toJson()));
                             }
                           },
-                          child: Text('Submit proposal'),
+                          child: Text(AppLocalizations.of(context).translate('sub_propasal')),
                         ),
                       ],
                     ),
@@ -157,7 +156,7 @@ class SubmitScreen extends StatelessWidget {
     Future.delayed(Duration(milliseconds: 0), () {
       Navigator.pop(context);
     });
-    ToastHelper.success("Your proposal has been submitted");
+    ToastHelper.success( AppLocalizations.of(context).translate('y_pro_subed'));
     _userStore.resetApiResponse();
     return SizedBox.shrink();
   }

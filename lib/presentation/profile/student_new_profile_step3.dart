@@ -13,6 +13,7 @@ import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import '../../utils/locale/app_localization.dart';
 
 class StudentNewProfileStep3 extends StatefulWidget {
   final FormStudentProfileStore formStore;
@@ -52,7 +53,7 @@ class _StudentNewProfileStep3State extends State<StudentNewProfileStep3> {
                     StudentFormStepper(activeStep: 2),
                     Center(
                         child: Text(
-                      "CV & Transcript",
+                      AppLocalizations.of(context).translate('CV_Trans'),
                       style: Theme.of(context)
                           .textTheme
                           .labelLarge
@@ -61,7 +62,7 @@ class _StudentNewProfileStep3State extends State<StudentNewProfileStep3> {
                     SizedBox(height: 10),
                     Center(
                         child: Text(
-                            "Tell us about your self and you will be on your \nway connect with real-world project",
+                            AppLocalizations.of(context).translate('tel_us_about'),
                             textAlign: TextAlign.center,
                             style: Theme.of(context)
                                 .textTheme
@@ -72,8 +73,8 @@ class _StudentNewProfileStep3State extends State<StudentNewProfileStep3> {
                     ),
                     FilePickerWidget(
                       formStore: widget.formStore,
-                      label: "Resume / CV: ",
-                      name: "resume",
+                      label: AppLocalizations.of(context).translate('resume_cv'),
+                      name: "resume" ,
                       allowedExtensions: ['pdf'],
                       onPicked: onPicked,
                       onLoading: onLoading,
@@ -85,7 +86,7 @@ class _StudentNewProfileStep3State extends State<StudentNewProfileStep3> {
                     ),
                     FilePickerWidget(
                       formStore: widget.formStore,
-                      label: "Transcript:",
+                      label: AppLocalizations.of(context).translate('trans'),
                       name: "transcript",
                       allowedExtensions: ['pdf'],
                       onPicked: onPicked,
@@ -97,14 +98,14 @@ class _StudentNewProfileStep3State extends State<StudentNewProfileStep3> {
                       height: 20,
                     ),
                     RoundedButtonWidget(
-                      buttonText: "Finish",
+                      buttonText: AppLocalizations.of(context).translate('Finish'),
                       buttonColor: Theme.of(context).colorScheme.primary,
                       textColor: Colors.white,
                       onPressed: () {
                         if (widget.formStore.resume == null ||
                             widget.formStore.transcript == null) {
                           ToastHelper.error(
-                              "Please attatch your resume and transcript");
+                              AppLocalizations.of(context).translate('pls_att_re_trans'));
                         } else {
                           _userStore
                               .bulkCreateUpdateStudentProfile(widget.formStore);
@@ -152,9 +153,9 @@ class _StudentNewProfileStep3State extends State<StudentNewProfileStep3> {
         getIt<SharedPreferenceHelper>()
             .saveCurrentProfile(UserRole.STUDENT.value);
         _userStore.resetCreateProfileState();
-        ToastHelper.success("Create profile successfully");
+        ToastHelper.success(AppLocalizations.of(context).translate('create_prof_suc'));
       }
-      ToastHelper.success("Updated profile successfully");
+      ToastHelper.success(AppLocalizations.of(context).translate('update_prof_suc'));
 
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => AuthWidget()),

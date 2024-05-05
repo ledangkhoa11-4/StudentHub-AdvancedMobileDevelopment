@@ -355,8 +355,7 @@ abstract class _ProjectStore with Store {
   }
 
   @action
-  Future getSubmitProposal(
-      GetSubmitProposalParams param) async {
+  Future getSubmitProposal(GetSubmitProposalParams param) async {
     final future = _getSubmitProposalUseCase.call(params: param);
     fetchSubmitProposal = ObservableFuture(future);
 
@@ -371,6 +370,11 @@ abstract class _ProjectStore with Store {
       this.apiResponseMessage = response["errorDetails"].toString();
     });
     this.manualLoading = false;
+  }
+
+  @action
+  void setProjectList(ProjectList projectList) {
+    this.projectList = projectList;
   }
 
   setSlideToIndex(int? value) {

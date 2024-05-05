@@ -621,6 +621,87 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$currentChatProjectIdAtom =
+      Atom(name: '_UserStore.currentChatProjectId', context: context);
+
+  @override
+  int? get currentChatProjectId {
+    _$currentChatProjectIdAtom.reportRead();
+    return super.currentChatProjectId;
+  }
+
+  @override
+  set currentChatProjectId(int? value) {
+    _$currentChatProjectIdAtom.reportWrite(value, super.currentChatProjectId,
+        () {
+      super.currentChatProjectId = value;
+    });
+  }
+
+  late final _$currentChatUserIdAtom =
+      Atom(name: '_UserStore.currentChatUserId', context: context);
+
+  @override
+  int? get currentChatUserId {
+    _$currentChatUserIdAtom.reportRead();
+    return super.currentChatUserId;
+  }
+
+  @override
+  set currentChatUserId(int? value) {
+    _$currentChatUserIdAtom.reportWrite(value, super.currentChatUserId, () {
+      super.currentChatUserId = value;
+    });
+  }
+
+  late final _$currentChatAtom =
+      Atom(name: '_UserStore.currentChat', context: context);
+
+  @override
+  List<ChatEntity> get currentChat {
+    _$currentChatAtom.reportRead();
+    return super.currentChat;
+  }
+
+  @override
+  set currentChat(List<ChatEntity> value) {
+    _$currentChatAtom.reportWrite(value, super.currentChat, () {
+      super.currentChat = value;
+    });
+  }
+
+  late final _$chatListAtom =
+      Atom(name: '_UserStore.chatList', context: context);
+
+  @override
+  List<ChatEntity> get chatList {
+    _$chatListAtom.reportRead();
+    return super.chatList;
+  }
+
+  @override
+  set chatList(List<ChatEntity> value) {
+    _$chatListAtom.reportWrite(value, super.chatList, () {
+      super.chatList = value;
+    });
+  }
+
+  late final _$allChatListAtom =
+      Atom(name: '_UserStore.allChatList', context: context);
+
+  @override
+  List<ChatEntity>? get allChatList {
+    _$allChatListAtom.reportRead();
+    return super.allChatList;
+  }
+
+  @override
+  set allChatList(List<ChatEntity>? value) {
+    _$allChatListAtom.reportWrite(value, super.allChatList, () {
+      super.allChatList = value;
+    });
+  }
+
   late final _$loginAsyncAction =
       AsyncAction('_UserStore.login', context: context);
 
@@ -771,22 +852,22 @@ mixin _$UserStore on _UserStore, Store {
     return _$getResumeFileAsyncAction.run(() => super.getResumeFile());
   }
 
-  late final _$getStudentTranscriptFileAsyncAction =
-      AsyncAction('_UserStore.getStudentTranscriptFile', context: context);
+  late final _$getTranscriptFileByStudentIdAsyncAction =
+      AsyncAction('_UserStore.getTranscriptFileByStudentId', context: context);
 
   @override
-  Future<dynamic> getStudentTranscriptFile() {
-    return _$getStudentTranscriptFileAsyncAction
-        .run(() => super.getStudentTranscriptFile());
+  Future<dynamic> getTranscriptFileByStudentId(int studentId) {
+    return _$getTranscriptFileByStudentIdAsyncAction
+        .run(() => super.getTranscriptFileByStudentId(studentId));
   }
 
-  late final _$getStudentResumeFileAsyncAction =
-      AsyncAction('_UserStore.getStudentResumeFile', context: context);
+  late final _$getResumeFileByStudentIdAsyncAction =
+      AsyncAction('_UserStore.getResumeFileByStudentId', context: context);
 
   @override
-  Future<dynamic> getStudentResumeFile() {
-    return _$getStudentResumeFileAsyncAction
-        .run(() => super.getStudentResumeFile());
+  Future<dynamic> getResumeFileByStudentId(int studentId) {
+    return _$getResumeFileByStudentIdAsyncAction
+        .run(() => super.getResumeFileByStudentId(studentId));
   }
 
   late final _$submitProposalAsyncAction =
@@ -798,13 +879,65 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.submitProposal(projectId, coverLetter));
   }
 
-  late final _$getStudentProfileAsyncAction =
-      AsyncAction('_UserStore.getStudentProfile', context: context);
+  late final _$getCurrentChatAsyncAction =
+      AsyncAction('_UserStore.getCurrentChat', context: context);
 
   @override
-  Future<dynamic> getStudentProfile(int student_id) {
-    return _$getStudentProfileAsyncAction
-        .run(() => super.getStudentProfile(student_id));
+  Future<dynamic> getCurrentChat({bool loading = true}) {
+    return _$getCurrentChatAsyncAction
+        .run(() => super.getCurrentChat(loading: loading));
+  }
+
+  late final _$getChatListByProjectIdAsyncAction =
+      AsyncAction('_UserStore.getChatListByProjectId', context: context);
+
+  @override
+  Future<dynamic> getChatListByProjectId({bool loading = true}) {
+    return _$getChatListByProjectIdAsyncAction
+        .run(() => super.getChatListByProjectId(loading: loading));
+  }
+
+  late final _$getAllChatListAsyncAction =
+      AsyncAction('_UserStore.getAllChatList', context: context);
+
+  @override
+  Future<dynamic> getAllChatList({bool loading = true}) {
+    return _$getAllChatListAsyncAction
+        .run(() => super.getAllChatList(loading: loading));
+  }
+
+  late final _$checkRoomAvailabilityAsyncAction =
+      AsyncAction('_UserStore.checkRoomAvailability', context: context);
+
+  @override
+  Future<bool> checkRoomAvailability(CheckRoomAvailabilityParams params) {
+    return _$checkRoomAvailabilityAsyncAction
+        .run(() => super.checkRoomAvailability(params));
+  }
+
+  late final _$_UserStoreActionController =
+      ActionController(name: '_UserStore', context: context);
+
+  @override
+  void setCurrentChat(int? projectId, int? userId) {
+    final _$actionInfo = _$_UserStoreActionController.startAction(
+        name: '_UserStore.setCurrentChat');
+    try {
+      return super.setCurrentChat(projectId, userId);
+    } finally {
+      _$_UserStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void addCurrentChat(ChatEntity chat) {
+    final _$actionInfo = _$_UserStoreActionController.startAction(
+        name: '_UserStore.addCurrentChat');
+    try {
+      return super.addCurrentChat(chat);
+    } finally {
+      _$_UserStoreActionController.endAction(_$actionInfo);
+    }
   }
 
   @override
@@ -847,6 +980,11 @@ changeFuture: ${changeFuture},
 apiCallingFeature: ${apiCallingFeature},
 apiStudentProfileResponse: ${apiStudentProfileResponse},
 apiUpdateProfile: ${apiUpdateProfile},
+currentChatProjectId: ${currentChatProjectId},
+currentChatUserId: ${currentChatUserId},
+currentChat: ${currentChat},
+chatList: ${chatList},
+allChatList: ${allChatList},
 isLoading: ${isLoading},
 isSignin: ${isSignin}
     ''';

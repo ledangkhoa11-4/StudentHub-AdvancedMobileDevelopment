@@ -1,6 +1,7 @@
 import 'package:boilerplate/presentation/9_schedule_for_interview/components/video_call.dart';
 import 'package:flutter/material.dart';
 import 'package:boilerplate/presentation/9_schedule_for_interview/components/models.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class MeetingObj extends StatefulWidget {
   final Meeting meeting;
@@ -40,14 +41,14 @@ class _MeetingObjState extends State<MeetingObj> {
           ),
           SizedBox(height: 8),
           Text(
-            'Start time: ${widget.meeting.startTime.day}/${widget.meeting.startTime.month}/${widget.meeting.startTime.year} ${widget.meeting.startTime.hour.toString().padLeft(2, '0')}:${widget.meeting.startTime.minute.toString().padLeft(2, '0')}',
+            AppLocalizations.of(context).translate('start_time') +' ${widget.meeting.startTime.day}/${widget.meeting.startTime.month}/${widget.meeting.startTime.year} ${widget.meeting.startTime.hour.toString().padLeft(2, '0')}:${widget.meeting.startTime.minute.toString().padLeft(2, '0')}',
             style: TextStyle(
               fontSize: 16,
             ),
           ),
           SizedBox(height: 4),
           Text(
-            'End time: ${widget.meeting.endTime.day}/${widget.meeting.endTime.month}/${widget.meeting.endTime.year} ${widget.meeting.endTime.hour.toString().padLeft(2, '0')}:${widget.meeting.endTime.minute.toString().padLeft(2, '0')}',
+            AppLocalizations.of(context).translate('end_time')+ ' ${widget.meeting.endTime.day}/${widget.meeting.endTime.month}/${widget.meeting.endTime.year} ${widget.meeting.endTime.hour.toString().padLeft(2, '0')}:${widget.meeting.endTime.minute.toString().padLeft(2, '0')}',
             style: TextStyle(
               fontSize: 16,
             ),
@@ -69,7 +70,7 @@ class _MeetingObjState extends State<MeetingObj> {
                                 builder: (context) => VideoCall()),
                           );
                         },
-                        child: Text('Join'),
+                        child: Text(AppLocalizations.of(context).translate('join')),
                       ),
                       PopupMenuButton<String>(
                         onSelected: (value) {
@@ -86,11 +87,11 @@ class _MeetingObjState extends State<MeetingObj> {
                             <PopupMenuEntry<String>>[
                           PopupMenuItem<String>(
                             value: 're-schedule',
-                            child: Text('Re-schedule the meeting'),
+                            child: Text(AppLocalizations.of(context).translate('re_schedule_meeting')),
                           ),
                           PopupMenuItem<String>(
                             value: 'cancel',
-                            child: Text('Cancel the meeting'),
+                            child: Text(AppLocalizations.of(context).translate('cancel_meeting')),
                           ),
                         ],
                         icon: Icon(Icons.more_vert),
@@ -99,7 +100,7 @@ class _MeetingObjState extends State<MeetingObj> {
                   ),
                 if (_isCancelled)
                   Text(
-                    'The meeting is cancelled',
+                    AppLocalizations.of(context).translate('meeting_cancel'),
                     style: TextStyle(
                       color: Colors.red,
                       fontStyle: FontStyle.italic,

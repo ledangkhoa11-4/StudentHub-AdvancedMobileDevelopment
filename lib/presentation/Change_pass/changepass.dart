@@ -120,7 +120,7 @@ class _ChangeScreenState extends State<ChangeScreen> {
           children: <Widget>[
             SizedBox(height: 24.0),
             Text(
-              'Change Password with StudentHub',
+               AppLocalizations.of(context).translate('change_pass_title'),
               style: TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
@@ -144,7 +144,7 @@ class _ChangeScreenState extends State<ChangeScreen> {
     return Observer(
       builder: (context) {
         return TextFieldWidget(
-          hint:"Enter Old Password",
+          hint: AppLocalizations.of(context).translate('en_old_pass'),
           padding: EdgeInsets.only(top: 16.0),
           icon: Icons.lock,
           iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
@@ -163,7 +163,7 @@ class _ChangeScreenState extends State<ChangeScreen> {
     return Observer(
       builder: (context) {
         return TextFieldWidget(
-          hint:"Enter New Password",
+          hint: AppLocalizations.of(context).translate('en_new_pass'),
           padding: EdgeInsets.only(top: 16.0),
           icon: Icons.lock,
           iconColor: _themeStore.darkMode ? Colors.white70 : Colors.black54,
@@ -182,7 +182,7 @@ class _ChangeScreenState extends State<ChangeScreen> {
 
   Widget _buildChangeInButton() {
   return RoundedButtonWidget(
-    buttonText: "Change Password",
+    buttonText:  AppLocalizations.of(context).translate('change_pass'),
     buttonColor: Theme.of(context).colorScheme.primary,
     textColor: Colors.white,
     onPressed: () async {
@@ -194,8 +194,8 @@ class _ChangeScreenState extends State<ChangeScreen> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Confirm'),
-              content: Text('Are you sure you want to change your password?'),
+              title: Text(AppLocalizations.of(context).translate('Confirm')),
+              content: Text( AppLocalizations.of(context).translate('q_change_pass')),
               actionsPadding: EdgeInsets.symmetric(horizontal: 16),
               contentPadding: EdgeInsets.fromLTRB(24, 20, 24, 20), 
               shape: RoundedRectangleBorder(
@@ -207,23 +207,23 @@ class _ChangeScreenState extends State<ChangeScreen> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Cancel'),
+                  child: Text(AppLocalizations.of(context).translate('cancel')),
                 ),
                 ElevatedButton(
                   onPressed: () async {
                     Navigator.of(context).pop();
                     await _userStore.change(_passwordController.text, _newpasswordController.text);
                   },
-                  child: Text('Confirm'),
+                  child: Text(AppLocalizations.of(context).translate('Confirm')),
                 ),
               ],
             );
           },
         );
       } else if(_passwordController.text == _newpasswordController.text){
-        _showErrorMessage('The new password must not be the same as the old password');
+        _showErrorMessage(AppLocalizations.of(context).translate('err_dup_pass_change'));
       }else{
-        _showErrorMessage("Please fill in all fields ");
+        _showErrorMessage(AppLocalizations.of(context).translate('pls_fill_all'));
       }
     },
   );

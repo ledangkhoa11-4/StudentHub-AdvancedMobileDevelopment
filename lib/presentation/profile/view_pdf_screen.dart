@@ -3,6 +3,7 @@ import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import '../../utils/locale/app_localization.dart';
 
 class ViewPdfScreen extends StatefulWidget {
   final String title;
@@ -44,7 +45,7 @@ class _ViewPdfScreenState extends State<ViewPdfScreen> {
         ),
         body: Container(
             child: SfPdfViewer.network(onDocumentLoadFailed: (details) {
-          ToastHelper.error("Error on load ${widget.title}");
+          ToastHelper.error(AppLocalizations.of(context).translate('err_in_load_pdf') + " ${widget.title}");
         }, controller: _pdfViewerController, '${widget.url}')));
   }
 }

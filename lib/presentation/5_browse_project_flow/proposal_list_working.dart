@@ -12,6 +12,7 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class ProposalListWorking extends StatefulWidget {
   ProposalListWorking({Key? key}) : super(key: key);
@@ -106,7 +107,7 @@ class _ProjectListState extends State<ProposalListWorking> {
                               ),
                               Center(
                                 child: Text(
-                                  "There are no ongoing project",
+                                  AppLocalizations.of(context).translate('ther_on_goi_proj'),
                                   style: Theme.of(context).textTheme.labelLarge,
                                   textAlign: TextAlign.center,
                                 ),

@@ -12,6 +12,7 @@ import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:moment_dart/moment_dart.dart';
 // import 'project_detail.dart'; // Import the ProjectDetail page
 import '../../domain/entity/project/project.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 
 class ProjectItemType2 extends StatelessWidget {
   final Proposal proposal;
@@ -60,15 +61,22 @@ class ProjectItemType2 extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Submitted ${Moment(DateTime.parse(proposal.createdAt)).fromNow()}', // Placeholder for created date
+                    proposal.statusFlag == ProposalType.HIRED.value
+                        ? AppLocalizations.of(context).translate('joined')
+                        : "",
+                    style: Theme.of(context).textTheme.labelSmall!.copyWith(color: Colors.grey.shade600),
+                  ),
+                  Text(
+                    '${AppLocalizations.of(context).translate('sub')} ${Moment(DateTime.parse(proposal.createdAt)).fromNow()}', // Placeholder for created date
                     style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
                     textAlign: TextAlign.right,
                   ),
                 ],
               ),
+              SizedBox(height: 10,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -84,7 +92,7 @@ class ProjectItemType2 extends StatelessWidget {
               ),
               SizedBox(height: 8.0),
               Text(
-                'Students are looking for:',
+                AppLocalizations.of(context).translate('stu_look'),
                 style: Theme.of(context)
                     .textTheme
                     .labelSmall!
@@ -123,7 +131,7 @@ class ProjectItemType2 extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         RoundedButtonWidget(
-                          buttonText: "Accept hire request",
+                          buttonText: AppLocalizations.of(context).translate('acp_hi_req'),
                           buttonColor: Theme.of(context).colorScheme.primary,
                           textColor: Colors.white,
                           onPressed: () {
@@ -132,13 +140,13 @@ class ProjectItemType2 extends StatelessWidget {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: Center(
-                                      child: Text("Accept hire request")),
+                                      child: Text(AppLocalizations.of(context).translate('acp_hi_req'))),
                                   content: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Center(
                                         child: Text(
-                                          "Do you really want to accept this hire request?",
+                                          AppLocalizations.of(context).translate('candi_q2'),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -152,7 +160,7 @@ class ProjectItemType2 extends StatelessWidget {
                                               Navigator.of(context)
                                                   .pop(); // Close the dialog
                                             },
-                                            child: Text("Cancel"),
+                                            child: Text(AppLocalizations.of(context).translate('cancel')),
                                           ),
                                           ElevatedButton(
                                             onPressed: () {
@@ -166,7 +174,7 @@ class ProjectItemType2 extends StatelessWidget {
                                                   updatedProposal);
                                               Navigator.of(context).pop();
                                             },
-                                            child: Text("Yes"),
+                                            child: Text(AppLocalizations.of(context).translate('yes')),
                                           ),
                                         ],
                                       ),
@@ -194,14 +202,14 @@ class ProjectItemType2 extends StatelessWidget {
                           content: Padding(
                             padding: EdgeInsets.all(8.0),
                             child: UnorderedList([
-                              "Congratulations, you have been invited by the company to join the project, click this button to agree to participate",
-                            ], "Note:"),
+                              AppLocalizations.of(context).translate('Congr_inv'),
+                            ], AppLocalizations.of(context).translate('note')),
                           ),
                         )
                       ],
                     )
                   ],
-                )
+                ),
             ],
           ),
         ),

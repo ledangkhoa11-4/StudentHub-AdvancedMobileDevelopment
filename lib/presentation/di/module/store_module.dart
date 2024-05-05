@@ -24,11 +24,15 @@ import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/remove_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/check_room_available_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_language_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_by_projectid_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_chat_with_userId_in_projectid_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_student_profile_usercase.dart';
@@ -124,6 +128,10 @@ mixin StoreModule {
         getIt<SubmitProposalUseCase>(),
         getIt<GetStudentProfileUseCase>(),
         getIt<UpdateProposalUseCase>(),
+        getIt<GetAllChatUseCase>(),
+        getIt<GetAllChatByProjectUseCase>(),
+        getIt<GetAllChatWithUserInProjectUseCase>(),
+        getIt<CheckRoomAvailabilityUseCase>(),
       ),
     );
 
