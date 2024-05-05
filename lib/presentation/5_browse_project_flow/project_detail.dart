@@ -10,6 +10,7 @@ import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/post_project/components/gradient_divider.dart';
 import 'package:boilerplate/presentation/post_project/store/post_project_store.dart';
+import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
@@ -250,6 +251,9 @@ class _ProjectDetailState extends State<ProjectDetail> {
                                         proposal.project.id ==
                                         widget.project.id)) {
                             } else {
+                              if (widget._userStore.user!.student == null) {
+                                return ToastHelper.error(AppLocalizations.of(context).translate('stu_pro_dash_text'));
+                              }
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
