@@ -14,7 +14,7 @@ class _AlertScreenState extends State<AlertScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: UserAppBar.buildAppBar(context),
+      appBar: UserAppBar.buildAppBar(context, titleWidget: Text("Notifications")),
       bottomNavigationBar:
           UserNavigationBar.buildNavigationBar(context, setState: setState),
       body: SingleChildScrollView(

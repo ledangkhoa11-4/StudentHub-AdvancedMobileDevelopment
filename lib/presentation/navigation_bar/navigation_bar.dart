@@ -1,7 +1,10 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/entity/user/user.dart';
 import 'package:boilerplate/presentation/5_browse_project_flow/project_list.dart';
 import 'package:boilerplate/presentation/5_browse_project_flow/student_dashboard.dart';
+import 'package:boilerplate/presentation/6_company_review_proposals/dashboard.dart';
 import 'package:boilerplate/presentation/alert/alert.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/message/message.dart';
@@ -20,13 +23,18 @@ class UserNavigationBar {
   static var bottomNavIndex = 0;
   static AnimatedBottomNavigationBar buildNavigationBar(BuildContext context,
       {void Function(void Function())? setState = null}) {
+    final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
+    final isStudent = currentProfile == UserRole.STUDENT.value;
+
     final iconList = <TabData>[
       TabData(
-          icon: BootstrapIcons.kanban, text: "Project", screen: ProjectList()),
+          icon: BootstrapIcons.kanban,
+          text: "Project",
+          screen: isStudent ? ProjectList() : DashBoardCompany()),
       TabData(
           icon: BootstrapIcons.clipboard_data,
           text: "Dashboard",
-          screen: DashBoardStudent()),
+          screen: isStudent ? DashBoardStudent() : DashBoardCompany()),
       TabData(
           icon: BootstrapIcons.chat_dots,
           text: "Message",

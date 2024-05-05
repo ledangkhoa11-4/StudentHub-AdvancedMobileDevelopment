@@ -5,10 +5,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 class ToastHelper {
 
   
-  static void error(String msg) {
+  static void error(String msg, {Toast? length = null}) {
     Fluttertoast.showToast(
         msg: msg,
-        toastLength: Toast.LENGTH_SHORT,
+        toastLength: length != null ? length : Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.red,
@@ -17,10 +17,10 @@ class ToastHelper {
     );
   }
  
-   static void success(String msg) {
+   static void success(String msg, {Toast? length = null}) {
     Fluttertoast.showToast(
         msg: msg,
-        toastLength: Toast.LENGTH_SHORT,
+        toastLength: length != null ? length : Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.green,

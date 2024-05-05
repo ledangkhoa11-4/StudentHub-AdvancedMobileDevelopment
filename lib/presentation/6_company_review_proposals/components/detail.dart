@@ -1,19 +1,38 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import '../../../domain/entity/project/project.dart';
 
 class Detail extends StatelessWidget {
-  final descriptions = [
-    'Seeking a UX/UI design intern with a good eye for modern app design.',
-    'Portfolio of past design projects preferred.'
-  ];
+  final Project project;
+
+  Detail({required this.project});
+
   @override
   Widget build(BuildContext context) {
+    QuillController? _controller;
+
+    try {
+      final controller = QuillController(
+          document: Document.fromJson(jsonDecode(project.description)),
+          selection: const TextSelection.collapsed(offset: 0));
+
+      _controller = controller;
+    } catch (e) {
+      _controller = null;
+    }
+
+    final projectScopeEnum = ProjectScope.values[project.projectScopeFlag];
+    final formattedProjectScope = projectScopeEnum.nameFormatted;
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Divider(color: Colors.black),
+            // Divider(color: Colors.black),
             SizedBox(height: 16),
             Text(
               'Students are looking for:',
@@ -23,15 +42,30 @@ class Detail extends StatelessWidget {
               ),
             ),
             SizedBox(height: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: descriptions
-                  .map((description) => Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: Text('• $description'),
-                      ))
-                  .toList(),
-            ),
+            if (_controller != null)
+              IgnorePointer(
+                ignoring: true,
+                child: QuillProvider(
+                  configurations: QuillConfigurations(
+                    controller: _controller,
+                    sharedConfigurations: const QuillSharedConfigurations(
+                      locale: Locale('en'),
+                    ),
+                  ),
+                  child: QuillEditor.basic(
+                    configurations: const QuillEditorConfigurations(
+                      readOnly: true,
+                    ),
+                  ),
+                ),
+              ),
+            if (_controller == null)
+              Text(
+                project.description,
+                style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                      fontStyle: FontStyle.italic,
+                    ),
+              ),
             SizedBox(height: 16),
             Divider(color: Colors.black),
             SizedBox(height: 16),
@@ -48,16 +82,13 @@ class Detail extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Project scope:',
+                      'Project scope',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
-                      child: Text('• 4 - 5 months'),
-                    ),
+                    Text(formattedProjectScope),
                   ],
                 ),
               ],
@@ -76,32 +107,29 @@ class Detail extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Number of Students:',
+                      'Number of Students',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
-                      child: Text('• 3 - 5 students'),
-                    ),
+                    Text('${project.numberOfStudents}'),
                   ],
                 ),
               ],
             ),
-            Spacer(), // Add spacer to push buttons to the bottom
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Apply button pressed
-                  },
-                  child: Text('Post job'),
-                ),
-              ],
-            ),
+            // Spacer(),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.end,
+            //   children: [
+            //     ElevatedButton(
+            //       onPressed: () {
+            //         // Apply button pressed
+            //       },
+            //       child: Text('Post job'),
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ),

@@ -15,20 +15,12 @@ class CustomProgressIndicatorWidget extends StatelessWidget {
         child: FittedBox(
           fit: BoxFit.none,
           child: SizedBox(
-            height: 100,
-            width: 100,
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(25.0),
-                child: CircularProgressIndicator(),
-              ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)),
-            ),
+            height: 40,
+            width: 40,
+            child: CircularProgressIndicator(),
           ),
         ),
-        decoration: BoxDecoration(
-            color: Color.fromARGB(100, 105, 105, 105)),
+        decoration: BoxDecoration(color: Colors.transparent),
       ),
     );
   }

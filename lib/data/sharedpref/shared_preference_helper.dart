@@ -20,6 +20,17 @@ class SharedPreferenceHelper {
     return _sharedPreference.setString(Preferences.auth_token, authToken);
   }
 
+  Future<bool> saveCurrentProfile(int value) async {
+    return _sharedPreference.setInt(Preferences.current_profile, value);
+  }
+
+  int? get currentProfile {
+    return _sharedPreference.getInt(Preferences.current_profile);
+  }
+
+  Future<bool> removeCurrentProfile() async {
+    return _sharedPreference.remove(Preferences.current_profile);
+  }
   Future<bool> removeAuthToken() async {
     return _sharedPreference.remove(Preferences.auth_token);
   }

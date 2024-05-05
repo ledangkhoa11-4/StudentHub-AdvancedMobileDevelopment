@@ -1,22 +1,17 @@
 import 'package:boilerplate/core/stores/form/form_company_profile_store.dart';
-import 'package:boilerplate/core/stores/form/form_store.dart';
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/core/widgets/textfield_widget.dart';
 import 'package:boilerplate/di/service_locator.dart';
-import 'package:boilerplate/presentation/company_welcome/company_welcome.dart';
+import 'package:boilerplate/domain/entity/user/profile_company.dart';
+import 'package:boilerplate/domain/usecase/user/create_update_company_profile_usercase.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
-import 'package:boilerplate/utils/routes/routes.dart';
+import 'package:boilerplate/presentation/login/store/login_store.dart';
+import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
-List<String> options = [
-  "It's just me",
-  "2-9 employees",
-  "10-99 employees",
-  "100-1000 employees",
-  "More than 1000 employees"
-];
+import '../../utils/locale/app_localization.dart';
 
 class CompanyProfileForm extends StatefulWidget {
   @override
@@ -25,12 +20,40 @@ class CompanyProfileForm extends StatefulWidget {
 
 class _CompanyProfileFormState extends State<CompanyProfileForm> {
   final ThemeStore _themeStore = getIt<ThemeStore>();
+  final UserStore _userStore = getIt<UserStore>();
   final FormCompanyProfileStore _formStore = getIt<FormCompanyProfileStore>();
   final TextEditingController _companyNameController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
 
-  String currentOption = options[0];
+  int currentOption = CompanySizeList[0].value;
+
+  late final bool isEdit;
+
+  @override
+  void initState() {
+    isEdit = _userStore.user?.company?.id != null;
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_userStore.user?.company != null) {
+      _formStore.setCompanyName(_userStore.user!.company!.companyName);
+      _companyNameController.text = _userStore.user!.company!.companyName;
+
+      _formStore.setWebsite(_userStore.user!.company!.website);
+      _websiteController.text = _userStore.user!.company!.website;
+
+      _formStore.setDescription(_userStore.user!.company!.description);
+      _descController.text = _userStore.user!.company!.description;
+
+      currentOption = _userStore.user!.company!.size;
+
+      print(_userStore.user!.company!.id);
+    }
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,24 +73,24 @@ class _CompanyProfileFormState extends State<CompanyProfileForm> {
           SizedBox(
             height: 10,
           ),
-          for (var option in options)
+          for (var option in CompanySizeList)
             InkWell(
               onTap: () {
                 setState(() {
-                  currentOption = option;
+                  currentOption = option.value;
                 });
               },
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
                 dense: true,
                 visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-                title: Text(option),
+                title: Text(option.title),
                 leading: Radio(
-                  value: option,
+                  value: option.value,
                   groupValue: currentOption,
                   onChanged: ((value) {
                     setState(() {
-                      currentOption = value.toString();
+                      currentOption = value ?? -1;
                     });
                   }),
                 ),
@@ -123,11 +146,25 @@ class _CompanyProfileFormState extends State<CompanyProfileForm> {
             },
           ),
           RoundedButtonWidget(
-            buttonText: "Continue",
+            buttonText: isEdit ? "Update" : "Continue",
             buttonColor: Theme.of(context).colorScheme.primary,
             textColor: Colors.white,
             onPressed: () {
-              Navigator.of(context).pushNamed(Routes.companyWelcome);
+              _formStore.validateAll();
+              if (_formStore.formErrorStore.companyName == null &&
+                  _formStore.formErrorStore.website == null &&
+                  _formStore.formErrorStore.description == null) {
+                _userStore.createUpdateCompanyProfile(
+                    CreateUpdateCompanyProfileParams(
+                        uid: _userStore.user?.company?.id ?? null,
+                        companyName: _formStore.companyName,
+                        website: _formStore.website,
+                        description: _formStore.description,
+                        size: currentOption));
+              } else {
+                ToastHelper.error(AppLocalizations.of(context)
+                    .translate('login_error_fill_fields'));
+              }
             },
           )
         ],

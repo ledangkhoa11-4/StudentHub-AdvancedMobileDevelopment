@@ -1,4 +1,5 @@
 import 'package:boilerplate/core/stores/error/error_store.dart';
+import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:mobx/mobx.dart';
 import 'package:validators/validators.dart';
 
@@ -43,7 +44,9 @@ abstract class _FormStore with Store {
 
   @computed
   bool get canLogin =>
-      !formErrorStore.hasErrorsInLogin && userEmail.isNotEmpty && password.isNotEmpty;
+      !formErrorStore.hasErrorsInLogin &&
+      userEmail.isNotEmpty &&
+      password.isNotEmpty;
 
   @computed
   bool get canRegister =>
@@ -87,8 +90,9 @@ abstract class _FormStore with Store {
   void validatePassword(String value) {
     if (value.isEmpty) {
       formErrorStore.password = "Password can't be empty";
-    } else if (value.length < 6) {
-      formErrorStore.password = "Password must be at-least 6 characters long";
+    } else if (!DeviceUtils.validatePassword(value)) {
+      formErrorStore.password =
+          "Password length at least 8 characters, one number, one letter and a special one";
     } else {
       formErrorStore.password = null;
     }
