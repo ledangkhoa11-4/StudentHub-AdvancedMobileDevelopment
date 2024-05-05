@@ -20,6 +20,7 @@ import 'package:boilerplate/domain/usecase/post/get_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/get_proposals_by_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
@@ -134,7 +135,8 @@ mixin StoreModule {
           getIt<GetAllChatByProjectUseCase>(),
           getIt<GetAllChatWithUserInProjectUseCase>(),
           getIt<CheckRoomAvailabilityUseCase>(),
-          getIt<GetAllNotificationsUseCase>()),
+          getIt<GetAllNotificationsUseCase>(),
+          getIt<GetProposalsByProjectUseCase>()),
     );
 
     getIt.registerSingleton<PostStore>(

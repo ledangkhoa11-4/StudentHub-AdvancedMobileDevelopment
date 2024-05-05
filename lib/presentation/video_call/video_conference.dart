@@ -39,9 +39,8 @@ class VideoConferencePageState extends State<VideoConferencePage> {
         userName: "${_userStore.user!.fullname}",
         config: ZegoUIKitPrebuiltVideoConferenceConfig(
           turnOnCameraWhenJoining: false,
-          topMenuBarConfig: ZegoTopMenuBarConfig(
-            title: "Meeting for ${widget.title}"
-          ),
+          topMenuBarConfig:
+              ZegoTopMenuBarConfig(title: "Meeting for ${widget.title}"),
           avatarBuilder: (BuildContext context, Size size, ZegoUIKitUser? user,
               Map extraInfo) {
             return user != null
@@ -50,10 +49,13 @@ class VideoConferencePageState extends State<VideoConferencePage> {
                       shape: BoxShape.circle,
                       image: DecorationImage(
                         image: NetworkImage(
-                          currentProfile == UserRole.COMPANY.value
-                              ? "https://i.imgur.com/SR6SaqF.png"
-                              : "https://i.imgur.com/ugcoGNH.png",
-                        ),
+                            user.id == _userStore.user!.id!.toString()
+                                ? currentProfile == UserRole.COMPANY.value
+                                    ? "https://i.imgur.com/SR6SaqF.png"
+                                    : "https://i.imgur.com/ugcoGNH.png"
+                                : currentProfile == UserRole.COMPANY.value
+                                    ? "https://i.imgur.com/ugcoGNH.png"
+                                    : "https://i.imgur.com/SR6SaqF.png"),
                       ),
                     ),
                   )

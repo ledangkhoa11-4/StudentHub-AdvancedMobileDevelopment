@@ -292,9 +292,13 @@ class _MessageDetailState extends State<MessageDetail> {
 
   void _handleSendPressed(types.PartialText message) {
     final socket = SocketService.socket;
+    final currentProfile =
+                      getIt<SharedPreferenceHelper>().currentProfile;
     if (socket != null) {
       _addMessage(message);
-
+      if( currentProfile == UserRole.COMPANY.value) {
+        _userStore.setFirstActiveProposal(widget.projectId, widget.userId);
+      }
       socket.emit(EMessageFlag.MESSAGE.eventName, {
         "projectId": widget.projectId,
         "senderId": _userStore.user!.id,

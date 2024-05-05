@@ -18,6 +18,7 @@ import 'package:boilerplate/domain/entity/user/language.dart';
 import 'package:boilerplate/domain/entity/user/profile_student.dart';
 import 'package:boilerplate/domain/entity/user/skillset.dart';
 import 'package:boilerplate/domain/entity/user/tech_stack.dart';
+import 'package:boilerplate/domain/usecase/project/get_proposals_by_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/check_room_available_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
@@ -90,7 +91,8 @@ abstract class _UserStore with Store {
       this._getAllChatByProjectUseCase,
       this._getAllChatWithUserInProjectUseCase,
       this._checkRoomAvailabilityUseCase,
-      this._getAllNotificationsUseCase) {
+      this._getAllNotificationsUseCase,
+      this._getProposalsByProjectUseCase) {
     // setting up disposers
     _setupDisposers();
 
@@ -128,6 +130,7 @@ abstract class _UserStore with Store {
   final GetAllChatWithUserInProjectUseCase _getAllChatWithUserInProjectUseCase;
   final CheckRoomAvailabilityUseCase _checkRoomAvailabilityUseCase;
   final GetAllNotificationsUseCase _getAllNotificationsUseCase;
+  final GetProposalsByProjectUseCase _getProposalsByProjectUseCase;
 
   // stores:--------------------------------------------------------------------
   // for handling form errors
@@ -1091,6 +1094,32 @@ abstract class _UserStore with Store {
     } else {
       this.readChat = ReadChat(projectId: projectId, senderId: senderId);
     }
+  }
+
+  Future setFirstActiveProposal(int projectId, int userId) async {
+    final future = _getProposalsByProjectUseCase.call(
+        params: GetProposalsByProjectParams(projectId: projectId));
+
+    await future.then((value) async {
+      final proposals = value
+          .where((propos) =>
+              propos.student.userId == userId &&
+              propos.projectId == projectId &&
+              propos.statusFlag == ProposalType.WAITING.value)
+          .toList();
+      if (proposals.length > 0) {
+        await this.updateProposalById(
+            proposals[0].id,
+            UpdateProposalParam(
+                projectId: projectId,
+                studentId: proposals[0].studentId,
+                coverLetter: proposals[0].coverLetter,
+                statusFlag: ProposalType.ACTIVE.value,
+                disableFlag: proposals[0].disableFlag));
+      }
+    }).catchError((e) {
+      print(e);
+    });
   }
 
   logout() async {
