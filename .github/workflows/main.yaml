@@ -1,8 +1,7 @@
 name: Android Release.
 on: 
   push:
-    tags:
-    - '*'
+    branches: ["main"]
   workflow_dispatch:
 jobs:
   build:
@@ -30,4 +29,5 @@ jobs:
         with:
           artifacts: "build/app/outputs/apk/release/*.apk"
           token: ${{ secrets.TOKEN }}
+          tag: v1.0.${{ github.run_number }}
 
