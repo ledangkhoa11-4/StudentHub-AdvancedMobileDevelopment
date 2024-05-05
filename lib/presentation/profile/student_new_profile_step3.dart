@@ -129,7 +129,7 @@ class _StudentNewProfileStep3State extends State<StudentNewProfileStep3> {
           Observer(
             builder: (context) {
               return !_userStore.isLoading &&
-                      _userStore.apiResponseSuccess == true
+                      _userStore.onFinishStudentProfile == true
                   ? navigate(context)
                   : SizedBox.shrink();
             },
@@ -137,7 +137,7 @@ class _StudentNewProfileStep3State extends State<StudentNewProfileStep3> {
           Observer(
             builder: (context) {
               return !_userStore.isLoading &&
-                      _userStore.apiResponseSuccess == false
+                      _userStore.onFinishStudentProfile == false
                   ? _showErrorMessage(_userStore.apiResponseMessage)
                   : SizedBox.shrink();
             },

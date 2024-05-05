@@ -19,7 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
 
-
 class Account {
   final int value;
   final String name;
@@ -48,7 +47,9 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
   late List<Account> accounts;
 
   @override
-  void initState() {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
     _fullname = _userStore?.user?.fullname ?? "";
     accounts = (_userStore?.user?.roles?.map((e) => Account(
                   name: _fullname,
@@ -70,7 +71,7 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
     if (_userStore.user?.roles != null && _userStore.user!.roles!.length < 2) {
       if (_userStore.user!.roles!.first == UserRole.COMPANY.value) {
         accounts.add(Account(
-          name:  AppLocalizations.of(context).translate('Cre_stu_profi'),
+          name: AppLocalizations.of(context).translate('Cre_stu_profi'),
           nickname: "",
           value: -1,
           avatar: ClipRRect(
@@ -102,8 +103,6 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
     _selectedAccount = accounts.firstWhere(
         (element) => element.value == currentProfile,
         orElse: () => accounts[0]);
-
-    super.initState();
   }
 
   Widget _buildThemeButton() {
@@ -175,15 +174,15 @@ class _SwitchAccountScreenState extends State<SwitchAccountScreen> {
   Widget _buildChangePassButton() {
     return ListTile(
       leading: Icon(BootstrapIcons.person_lines_fill),
-      title: Text( AppLocalizations.of(context).translate('change_pass'),
+      title: Text(AppLocalizations.of(context).translate('change_pass'),
           style: TextStyle(
             fontSize: 16,
           )),
       onTap: () {
         final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
         print(currentProfile);
-        Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => ChangeScreen()));
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => ChangeScreen()));
         /*if (currentProfile == UserRole.COMPANY.value) {
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => CompanyNewProfile()));

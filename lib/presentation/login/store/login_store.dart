@@ -694,8 +694,10 @@ abstract class _UserStore with Store {
         this.uploadTranscript(formStore.transcript!),
       ]).then((value) {
         print(value);
+        this.onFinishStudentProfile = true;
         print("++++++++++++++++++++++++");
       }).catchError((e) {
+        this.onFinishStudentProfile = false;
         print(e);
       });
     } else {
@@ -714,6 +716,7 @@ abstract class _UserStore with Store {
 
         this.onFinishStudentProfile = true;
       }).catchError((e) {
+        this.onFinishStudentProfile = false;
         print(e);
       });
     }
