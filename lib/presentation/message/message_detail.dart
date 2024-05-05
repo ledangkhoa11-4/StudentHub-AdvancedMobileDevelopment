@@ -141,7 +141,7 @@ class _MessageDetailState extends State<MessageDetail> {
                       getIt<SharedPreferenceHelper>().currentProfile;
 
                   final Interview interview = Interview.fromJson(p0.metadata!);
-                  final bool isDeleted = interview.deletedAt != null;
+                  final bool isDeleted = interview.deletedAt != null || interview.disableFlag == 1 || Moment(interview.meetingRoom.expiredAt ?? interview.endTime).isPast;
                   final senderName =
                       p0.author.id == _userStore.user!.id!.toString()
                           ? AppLocalizations.of(context).translate('you')
