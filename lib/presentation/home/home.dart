@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -23,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: UserAppBar.buildAppBar(context),
       body: PostListScreen(),
     );
   }
@@ -31,49 +32,33 @@ class _HomeScreenState extends State<HomeScreen> {
   // app bar methods:-----------------------------------------------------------
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      title: Text(AppLocalizations.of(context).translate('home_tv_posts')),
+      title: Text("StudentHub"),
       actions: _buildActions(context),
     );
   }
 
   List<Widget> _buildActions(BuildContext context) {
     return <Widget>[
-      _buildLanguageButton(),
-      _buildThemeButton(),
       _buildLogoutButton(),
     ];
   }
 
-  Widget _buildThemeButton() {
-    return Observer(
-      builder: (context) {
-        return IconButton(
-          onPressed: () {
-            _themeStore.changeBrightnessToDark(!_themeStore.darkMode);
-          },
-          icon: Icon(
-            _themeStore.darkMode ? Icons.brightness_5 : Icons.brightness_3,
-          ),
-        );
-      },
-    );
-  }
-
   Widget _buildLogoutButton() {
     return IconButton(
-      onPressed: () {
+      onPressed: null,
+      /*() {
         SharedPreferences.getInstance().then((preference) {
           preference.setBool(Preferences.is_logged_in, false);
           Navigator.of(context).pushReplacementNamed(Routes.login);
         });
-      },
+      }*/
       icon: Icon(
-        Icons.power_settings_new,
+        Icons.person,
       ),
     );
   }
 
-  Widget _buildLanguageButton() {
+  /*Widget _buildLanguageButton() {
     return IconButton(
       onPressed: () {
         _buildLanguageDialog();
@@ -82,9 +67,9 @@ class _HomeScreenState extends State<HomeScreen> {
         Icons.language,
       ),
     );
-  }
+  }*/
 
-  _buildLanguageDialog() {
+  /*_buildLanguageDialog() {
     _showDialog<String>(
       context: context,
       child: MaterialDialog(
@@ -130,14 +115,14 @@ class _HomeScreenState extends State<HomeScreen> {
             .toList(),
       ),
     );
-  }
+  }*/
 
-  _showDialog<T>({required BuildContext context, required Widget child}) {
+  /*_showDialog<T>({required BuildContext context, required Widget child}) {
     showDialog<T>(
       context: context,
       builder: (BuildContext context) => child,
     ).then<void>((T? value) {
       // The value passed to Navigator.pop() or null.
     });
-  }
+  }*/
 }

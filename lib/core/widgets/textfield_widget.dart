@@ -29,16 +29,29 @@ class TextFieldWidget extends StatelessWidget {
         autofocus: autoFocus,
         textInputAction: inputAction,
         obscureText: this.isObscure,
-        maxLength: 25,
         keyboardType: this.inputType,
-        style: Theme.of(context).textTheme.bodyText1,
+        maxLines: this.inputType == TextInputType.multiline ? 5 : 1,
+        minLines: this.inputType == TextInputType.multiline ? 3 : 1,
+        style: Theme.of(context).textTheme.bodyLarge,
         decoration: InputDecoration(
             hintText: this.hint,
-            hintStyle:
-                Theme.of(context).textTheme.bodyText1!.copyWith(color: hintColor),
-            errorText: errorText,
-            counterText: '',
-            icon: this.isIcon ? Icon(this.icon, color: iconColor) : null),
+            hintStyle: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .copyWith(color: hintColor),
+            errorStyle: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .copyWith(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 12),
+            counterText: null,
+            errorText: errorText != null && !errorText!.isEmpty ? errorText : null,
+            errorMaxLines: 2,
+            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+            focusedErrorBorder:  OutlineInputBorder(borderSide: BorderSide(color: Colors.red)) ,
+            errorBorder:   OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+            border:   OutlineInputBorder( borderSide: BorderSide(width: 1)),
+            icon: this.isIcon ? Icon(this.icon, color:   errorText != null && !errorText!.isEmpty ? Theme.of(context).colorScheme.error : iconColor) : null),
       ),
     );
   }
@@ -61,5 +74,4 @@ class TextFieldWidget extends StatelessWidget {
     this.autoFocus = false,
     this.inputAction,
   }) : super(key: key);
-
 }

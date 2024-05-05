@@ -1,14 +1,18 @@
 import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/core/stores/form/form_store.dart';
-import 'package:boilerplate/core/widgets/app_icon_widget.dart';
+// import 'package:boilerplate/core/widgets/app_icon_widget.dart';
 import 'package:boilerplate/core/widgets/empty_app_bar_widget.dart';
 import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/core/widgets/textfield_widget.dart';
 import 'package:boilerplate/data/sharedpref/constants/preferences.dart';
+import 'package:boilerplate/presentation/5_browse_project_flow/student_dashboard.dart';
+import 'package:boilerplate/presentation/6_company_review_proposals/dashboard.dart';
+import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
+import 'package:boilerplate/presentation/sign_up/sign_up_step1.dart';
 import 'package:boilerplate/utils/device/device_utils.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:boilerplate/utils/routes/routes.dart';
@@ -46,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       primary: true,
-      appBar: EmptyAppBar(),
+      appBar: UserAppBar.buildAppBar(context),
       body: _buildBody(),
     );
   }
@@ -69,7 +73,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 )
-              : Center(child: _buildRightSide()),
+              : Align(
+                  alignment: Alignment.topLeft,
+                  child: _buildRightSide(),
+                ),
           Observer(
             builder: (context) {
               return _userStore.success
@@ -106,14 +113,44 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            AppIconWidget(image: 'assets/icons/ic_appicon.png'),
+            SizedBox(height: 24.0),
+            Text(
+              'Login with StudentHub',
+              style: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            // AppIconWidget(image: 'assets/icons/ic_appicon.png'),
             SizedBox(height: 24.0),
             _buildUserIdField(),
             _buildPasswordField(),
             _buildForgotPasswordButton(),
-            _buildSignInButton()
+            SizedBox(height: 24.0),
+            _buildSignInButton(),
+            SizedBox(height: 274.0),
+            Column(
+              mainAxisSize:
+                  MainAxisSize.min, // Adjust this based on your design
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "Don't have a StudentHub Account?",
+                  style: TextStyle(fontSize: 14.0),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, Routes.signupStep1);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Colors.white),
+                  child: Text('Sign up'),
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -174,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
           style: Theme.of(context)
               .textTheme
               .caption
-              ?.copyWith(color: Colors.orangeAccent),
+              ?.copyWith(color: Theme.of(context).colorScheme.primary),
         ),
         onPressed: () {},
       ),
@@ -184,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildSignInButton() {
     return RoundedButtonWidget(
       buttonText: AppLocalizations.of(context).translate('login_btn_sign_in'),
-      buttonColor: Colors.orangeAccent,
+      buttonColor: Theme.of(context).colorScheme.primary,
       textColor: Colors.white,
       onPressed: () async {
         if (_formStore.canLogin) {
@@ -203,8 +240,9 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     Future.delayed(Duration(milliseconds: 0), () {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          Routes.home, (Route<dynamic> route) => false);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => DashBoardStudent()),
+          (Route<dynamic> route) => false);
     });
 
     return Container();
