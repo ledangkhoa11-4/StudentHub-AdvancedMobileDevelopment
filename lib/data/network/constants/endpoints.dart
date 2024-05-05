@@ -31,6 +31,8 @@ class Endpoints {
 
   static const String getCompanyProject = baseUrl + "/api/project/company";
 
+  static const String getFavoriteProject = baseUrl + "/api/favoriteProject/:studentId";
+  
   static const String createStudentProfile = baseUrl + "/api/profile/student";
 
   static const String getStudentProfile =
@@ -81,4 +83,7 @@ class Endpoints {
   static const String getAllChat = baseUrl + "/api/message";
 
   static const String checkRoomAvailability = baseUrl + "/meeting-room/check-availability";
+
+  static const String getAllNotifications = baseUrl + "/api/notification/getByReceiverId/:userId";
+
 }

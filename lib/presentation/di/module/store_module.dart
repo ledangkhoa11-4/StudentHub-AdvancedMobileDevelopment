@@ -18,6 +18,7 @@ import 'package:boilerplate/domain/repository/project/project_repository.dart';
 import 'package:boilerplate/domain/repository/setting/setting_repository.dart';
 import 'package:boilerplate/domain/usecase/post/get_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/get_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
@@ -33,6 +34,7 @@ import 'package:boilerplate/domain/usecase/user/forgot_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_all_chat_by_projectid_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_all_chat_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_all_chat_with_userId_in_projectid_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_notification_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_update_student_profile_usercase.dart';
@@ -104,35 +106,35 @@ mixin StoreModule {
     // stores:------------------------------------------------------------------
     getIt.registerSingleton<UserStore>(
       UserStore(
-        getIt<IsLoggedInUseCase>(),
-        getIt<SaveLoginStatusUseCase>(),
-        getIt<SaveAuthTokenUseCase>(),
-        getIt<SaveCurrentProfileUseCase>(),
-        getIt<LoginUseCase>(),
-        getIt<ChangeUseCase>(),
-        getIt<ForgotUseCase>(),
-        getIt<SignupUseCase>(),
-        getIt<FormErrorStore>(),
-        getIt<ErrorStore>(),
-        getIt<GetMeUseCase>(),
-        getIt<CreateUpdateCompanyProfileUseCase>(),
-        getIt<GetTechStackUseCase>(),
-        getIt<GetSkillSetUseCase>(),
-        getIt<UploadResumeUseCase>(),
-        getIt<UploadTranscriptUseCase>(),
-        getIt<CreateLanguageUseCase>(),
-        getIt<CreateEducationUseCase>(),
-        getIt<CreateExperiencesUseCase>(),
-        getIt<CreateUpdateStudentProfileUseCase>(),
-        getIt<GetProfileFileUseCase>(),
-        getIt<SubmitProposalUseCase>(),
-        getIt<GetStudentProfileUseCase>(),
-        getIt<UpdateProposalUseCase>(),
-        getIt<GetAllChatUseCase>(),
-        getIt<GetAllChatByProjectUseCase>(),
-        getIt<GetAllChatWithUserInProjectUseCase>(),
-        getIt<CheckRoomAvailabilityUseCase>(),
-      ),
+          getIt<IsLoggedInUseCase>(),
+          getIt<SaveLoginStatusUseCase>(),
+          getIt<SaveAuthTokenUseCase>(),
+          getIt<SaveCurrentProfileUseCase>(),
+          getIt<LoginUseCase>(),
+          getIt<ChangeUseCase>(),
+          getIt<ForgotUseCase>(),
+          getIt<SignupUseCase>(),
+          getIt<FormErrorStore>(),
+          getIt<ErrorStore>(),
+          getIt<GetMeUseCase>(),
+          getIt<CreateUpdateCompanyProfileUseCase>(),
+          getIt<GetTechStackUseCase>(),
+          getIt<GetSkillSetUseCase>(),
+          getIt<UploadResumeUseCase>(),
+          getIt<UploadTranscriptUseCase>(),
+          getIt<CreateLanguageUseCase>(),
+          getIt<CreateEducationUseCase>(),
+          getIt<CreateExperiencesUseCase>(),
+          getIt<CreateUpdateStudentProfileUseCase>(),
+          getIt<GetProfileFileUseCase>(),
+          getIt<SubmitProposalUseCase>(),
+          getIt<GetStudentProfileUseCase>(),
+          getIt<UpdateProposalUseCase>(),
+          getIt<GetAllChatUseCase>(),
+          getIt<GetAllChatByProjectUseCase>(),
+          getIt<GetAllChatWithUserInProjectUseCase>(),
+          getIt<CheckRoomAvailabilityUseCase>(),
+          getIt<GetAllNotificationsUseCase>()),
     );
 
     getIt.registerSingleton<PostStore>(
@@ -166,7 +168,8 @@ mixin StoreModule {
           getIt<UpdateProjectUseCase>(),
           getIt<RemoveProjectUseCase>(),
           getIt<UpdateFavoriteProjectUseCase>(),
-          getIt<GetSubmitProposalUseCase>()),
+          getIt<GetSubmitProposalUseCase>(),
+          getIt<GetFavoriteProjectUseCase>()),
     );
   }
 }

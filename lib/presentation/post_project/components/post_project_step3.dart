@@ -56,7 +56,9 @@ class _PostProjectStep3State extends State<PostProjectStep3> {
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context,
           titleWidget: widget.projectEdit != null
-              ? Text(AppLocalizations.of(context).translate('edit')+ "\"${widget.projectEdit!.title}\""+ AppLocalizations.of(context).translate('project'))
+              ? Text(AppLocalizations.of(context).translate('edit') +
+                  "\"${widget.projectEdit!.title}\"" +
+                  AppLocalizations.of(context).translate('project'))
               : Text(AppLocalizations.of(context).translate('post_new_pr'))),
       body: QuillProvider(
         configurations: QuillConfigurations(
@@ -94,11 +96,17 @@ class _PostProjectStep3State extends State<PostProjectStep3> {
                     ),
                     content: Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: UnorderedList([
-                        AppLocalizations.of(context).translate('post_project_step3_text_1'),
-                        AppLocalizations.of(context).translate('post_project_step3_text_2'),
-                        AppLocalizations.of(context).translate('post_project_step3_text_3'),
-                      ],AppLocalizations.of(context).translate('post_project_step3_text_4')),
+                      child: UnorderedList(
+                          [
+                            AppLocalizations.of(context)
+                                .translate('post_project_step3_text_1'),
+                            AppLocalizations.of(context)
+                                .translate('post_project_step3_text_2'),
+                            AppLocalizations.of(context)
+                                .translate('post_project_step3_text_3'),
+                          ],
+                          AppLocalizations.of(context)
+                              .translate('post_project_step3_text_4')),
                     ),
                   )
                 ],
@@ -123,9 +131,10 @@ class _PostProjectStep3State extends State<PostProjectStep3> {
                 ),
               ),
               RoundedButtonWidget(
-                buttonText: AppLocalizations.of(context).translate('final_pre_post'),
+                buttonText:
+                    AppLocalizations.of(context).translate('final_pre_post'),
                 buttonColor: Theme.of(context).colorScheme.primary,
-                textColor: Colors.white,
+                textColor: _themeStore.darkMode ? Colors.black : Colors.white,
                 onPressed: () {
                   widget.formStore.setDescription(
                       jsonEncode(_quillController.document.toDelta().toJson()));

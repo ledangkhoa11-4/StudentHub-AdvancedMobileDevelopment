@@ -58,6 +58,7 @@ class ProjectItem extends StatelessWidget {
         );
       },
       child: Card(
+        color: Theme.of(context).colorScheme.onBackground,
         margin: const EdgeInsets.all(8.0),
         child: Padding(
           padding:
@@ -97,7 +98,9 @@ class ProjectItem extends StatelessWidget {
                 ],
               ),
               Text(
-                AppLocalizations.of(context).translate('Created') + ' : ' + formatDate('${project!.createdAt}'),
+                AppLocalizations.of(context).translate('Created') +
+                    ' : ' +
+                    formatDate('${project!.createdAt}'),
                 style: TextStyle(
                     color: grayColor,
                     fontSize: 12,
@@ -105,7 +108,9 @@ class ProjectItem extends StatelessWidget {
               ),
               SizedBox(height: 8.0),
               Text(
-                AppLocalizations.of(context).translate('find') + ' ${project.numberOfStudents} '+ AppLocalizations.of(context).translate('students_cre'),
+                AppLocalizations.of(context).translate('find') +
+                    ' ${project.numberOfStudents} ' +
+                    AppLocalizations.of(context).translate('students_cre'),
                 style: Theme.of(context).textTheme.titleSmall,
               ),
               if (_controller != null)

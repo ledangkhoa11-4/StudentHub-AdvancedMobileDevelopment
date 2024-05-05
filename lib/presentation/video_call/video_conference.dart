@@ -10,12 +10,12 @@ import 'package:zego_uikit_prebuilt_video_conference/zego_uikit_prebuilt_video_c
 
 class VideoConferencePage extends StatefulWidget {
   final String conferenceID;
-  final Interview interview;
+  final String title;
 
   const VideoConferencePage({
     super.key,
     required this.conferenceID,
-    required this.interview,
+    required this.title,
   });
 
   @override
@@ -40,7 +40,7 @@ class VideoConferencePageState extends State<VideoConferencePage> {
         config: ZegoUIKitPrebuiltVideoConferenceConfig(
           turnOnCameraWhenJoining: false,
           topMenuBarConfig: ZegoTopMenuBarConfig(
-            title: "Meeting for ${widget.interview.title}"
+            title: "Meeting for ${widget.title}"
           ),
           avatarBuilder: (BuildContext context, Size size, ZegoUIKitUser? user,
               Map extraInfo) {

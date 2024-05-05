@@ -358,6 +358,22 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$listNotificationsAtom =
+      Atom(name: '_UserStore.listNotifications', context: context);
+
+  @override
+  List<AppNotification>? get listNotifications {
+    _$listNotificationsAtom.reportRead();
+    return super.listNotifications;
+  }
+
+  @override
+  set listNotifications(List<AppNotification>? value) {
+    _$listNotificationsAtom.reportWrite(value, super.listNotifications, () {
+      super.listNotifications = value;
+    });
+  }
+
   late final _$profileStudentAtom =
       Atom(name: '_UserStore.profileStudent', context: context);
 
@@ -702,6 +718,22 @@ mixin _$UserStore on _UserStore, Store {
     });
   }
 
+  late final _$readChatAtom =
+      Atom(name: '_UserStore.readChat', context: context);
+
+  @override
+  ReadChat? get readChat {
+    _$readChatAtom.reportRead();
+    return super.readChat;
+  }
+
+  @override
+  set readChat(ReadChat? value) {
+    _$readChatAtom.reportWrite(value, super.readChat, () {
+      super.readChat = value;
+    });
+  }
+
   late final _$loginAsyncAction =
       AsyncAction('_UserStore.login', context: context);
 
@@ -915,6 +947,24 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.checkRoomAvailability(params));
   }
 
+  late final _$getAllNotificationsAsyncAction =
+      AsyncAction('_UserStore.getAllNotifications', context: context);
+
+  @override
+  Future<dynamic> getAllNotifications({bool loading = true}) {
+    return _$getAllNotificationsAsyncAction
+        .run(() => super.getAllNotifications(loading: loading));
+  }
+
+  late final _$setReadChatAsyncAction =
+      AsyncAction('_UserStore.setReadChat', context: context);
+
+  @override
+  Future setReadChat(int? projectId, int? senderId) {
+    return _$setReadChatAsyncAction
+        .run(() => super.setReadChat(projectId, senderId));
+  }
+
   late final _$_UserStoreActionController =
       ActionController(name: '_UserStore', context: context);
 
@@ -964,6 +1014,7 @@ apiResponseMessage: ${apiResponseMessage},
 apiResponseSuccess: ${apiResponseSuccess},
 onFinishStudentProfile: ${onFinishStudentProfile},
 isCreateProfile: ${isCreateProfile},
+listNotifications: ${listNotifications},
 profileStudent: ${profileStudent},
 loginFuture: ${loginFuture},
 signinFuture: ${signinFuture},
@@ -985,6 +1036,7 @@ currentChatUserId: ${currentChatUserId},
 currentChat: ${currentChat},
 chatList: ${chatList},
 allChatList: ${allChatList},
+readChat: ${readChat},
 isLoading: ${isLoading},
 isSignin: ${isSignin}
     ''';

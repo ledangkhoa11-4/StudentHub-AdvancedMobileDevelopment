@@ -1,7 +1,9 @@
 // import 'package:boilerplate/presentation/9_schedule_for_interview/components/models.dart';
 import 'dart:math';
 
+import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/interview/interview.dart';
+import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/toast/toast.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +23,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   late DateTime startTime;
   late DateTime endTime;
   TextEditingController _titleController = TextEditingController();
+  final ThemeStore _themeStore = getIt<ThemeStore>();
 
   @override
   void initState() {
@@ -48,7 +51,8 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text(AppLocalizations.of(context).translate('err')),
-            content: Text(AppLocalizations.of(context).translate('end_time_alert')),
+            content:
+                Text(AppLocalizations.of(context).translate('end_time_alert')),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -88,7 +92,8 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
             ),
           ),
           SizedBox(height: 16.0),
-          Text(AppLocalizations.of(context).translate('Title') + ': ',  style: Theme.of(context).textTheme.labelSmall),
+          Text(AppLocalizations.of(context).translate('Title') + ': ',
+              style: Theme.of(context).textTheme.labelSmall),
           TextField(
             controller: _titleController,
             decoration: InputDecoration(
@@ -112,7 +117,8 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
             },
           ),
           SizedBox(height: 16.0),
-          Text(AppLocalizations.of(context).translate('start_time'), style: Theme.of(context).textTheme.labelSmall),
+          Text(AppLocalizations.of(context).translate('start_time'),
+              style: Theme.of(context).textTheme.labelSmall),
           SizedBox(height: 8.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -120,7 +126,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
             children: [
               Icon(
                 BootstrapIcons.calendar2_date, // Calendar icon
-                color: Theme.of(context).primaryColor,
+                color: _themeStore.darkMode ? Colors.white : Colors.black,
               ),
               SizedBox(
                 width: 10,
@@ -141,6 +147,9 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                     });
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.onBackground,
+                ),
                 child: Text(
                   '${startTime.year}-${startTime.month}-${startTime.day}',
                 ),
@@ -148,7 +157,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
               SizedBox(width: 8.0),
               Icon(
                 BootstrapIcons.clock_history, // Calendar icon
-                color: Theme.of(context).primaryColor,
+                color: _themeStore.darkMode ? Colors.white : Colors.black,
               ),
               SizedBox(width: 8.0),
               ElevatedButton(
@@ -169,13 +178,17 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                     });
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.onBackground,
+                ),
                 child: Text(
                     '${startTime.hour.toString().padLeft(2, '0')}:${startTime.minute.toString().padLeft(2, '0')}'),
               ),
             ],
           ),
           SizedBox(height: 16.0),
-          Text(AppLocalizations.of(context).translate('end_time'), style: Theme.of(context).textTheme.labelSmall),
+          Text(AppLocalizations.of(context).translate('end_time'),
+              style: Theme.of(context).textTheme.labelSmall),
           SizedBox(height: 8.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -183,7 +196,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
             children: [
               Icon(
                 BootstrapIcons.calendar2_date, // Calendar icon
-                color: Theme.of(context).primaryColor,
+                color: _themeStore.darkMode ? Colors.white : Colors.black,
               ),
               SizedBox(
                 width: 10,
@@ -204,6 +217,9 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                     });
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.onBackground,
+                ),
                 child: Text(
                   '${endTime.year}-${endTime.month}-${endTime.day}',
                 ),
@@ -211,7 +227,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
               SizedBox(width: 8.0),
               Icon(
                 BootstrapIcons.clock_history, // Calendar icon
-                color: Theme.of(context).primaryColor,
+                color: _themeStore.darkMode ? Colors.white : Colors.black,
               ),
               SizedBox(width: 8.0),
               ElevatedButton(
@@ -232,6 +248,9 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                     });
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.onBackground,
+                ),
                 child: Text(
                     '${endTime.hour.toString().padLeft(2, '0')}:${endTime.minute.toString().padLeft(2, '0')}'),
               ),
@@ -245,10 +264,20 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                 onPressed: () {
                   Navigator.pop(context); // Close the bottom sheet
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _themeStore.darkMode
+                      ? const Color.fromARGB(255, 102, 90, 90)
+                      : Colors.white,
+                ),
                 child: Text(AppLocalizations.of(context).translate('cancel')),
               ),
               ElevatedButton(
                 onPressed: _handleScheduleMeeting,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _themeStore.darkMode
+                      ? const Color.fromARGB(255, 102, 90, 90)
+                      : Colors.white,
+                ),
                 child: Text(AppLocalizations.of(context).translate('send_i')),
               ),
             ],

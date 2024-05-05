@@ -11,6 +11,7 @@ import 'package:boilerplate/presentation/message/message.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class TabData {
   const TabData({required this.icon, required this.text, required this.screen});
@@ -26,6 +27,7 @@ class UserNavigationBar {
       {void Function(void Function())? setState = null}) {
     final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
     final isStudent = currentProfile == UserRole.STUDENT.value;
+    final userStore = getIt<UserStore>();
 
     final iconList = <TabData>[
       TabData(
@@ -34,15 +36,19 @@ class UserNavigationBar {
           screen: isStudent ? ProjectList() : DashBoardCompany()),
       TabData(
           icon: BootstrapIcons.clipboard_data,
-          text:  AppLocalizations.of(context).translate('dashboard'),
+          text: AppLocalizations.of(context).translate('dashboard'),
           screen: isStudent ? DashBoardStudent() : DashBoardCompany()),
       TabData(
           icon: BootstrapIcons.chat_dots,
           text: AppLocalizations.of(context).translate('message'),
           screen: MessageScreen()),
-      TabData(icon: BootstrapIcons.bell, text: AppLocalizations.of(context).translate('alert'), screen: AlertScreen()),
+      TabData(
+          icon: BootstrapIcons.bell,
+          text: AppLocalizations.of(context).translate('alert'),
+          screen: AlertScreen()),
     ];
     return AnimatedBottomNavigationBar.builder(
+      backgroundColor: Theme.of(context).colorScheme.background,
       height: 80,
       itemCount: iconList.length,
       gapLocation: GapLocation.center,
@@ -67,13 +73,32 @@ class UserNavigationBar {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                iconList[index].icon,
-                size: 24,
-                color: isActive
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.onSurface,
-              ),
+              Observer(builder: (context) {
+                final isShowMessage = userStore.readChat != null;
+
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Icon(
+                      iconList[index].icon,
+                      size: 24,
+                      color: isActive
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.onSurface,
+                    ),
+                    if (isShowMessage == true && index == 2)
+                      Positioned(
+                          top: 0.0,
+                          right: -8,
+                          child: Text(
+                            "🔴",
+                            style: TextStyle(
+                              fontSize: 6,
+                            ),
+                          ))
+                  ],
+                );
+              }),
               const SizedBox(height: 4),
               Text(
                 iconList[index].text,

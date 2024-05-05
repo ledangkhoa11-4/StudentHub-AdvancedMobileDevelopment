@@ -88,4 +88,12 @@ class ProjectRepositoryImpl extends ProjectRepository {
       throw error;
     });
   }
+
+   @override
+  Future<ProjectList> getFavoriteProjects() async {
+    return await _projectApi.getFavoriteProjects().then((projectsList) {
+      return projectsList;
+    }).catchError((error) => throw error);
+  }
+
 }

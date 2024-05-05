@@ -72,6 +72,12 @@ class _MessageDetailState extends State<MessageDetail> {
       body: Stack(
         children: [
           Observer(builder: (context) {
+            if (_userStore.readChat != null) {
+              if (_userStore.readChat!.projectId == widget.projectId &&
+                  _userStore.readChat!.senderId == widget.userId) {
+                _userStore.setReadChat(null, null);
+              }
+            }
             List<types.Message> _messages = [];
             _userStore.currentChat.forEach((chat) {
               final String type = chat.interview != null ? "custom" : "text";
@@ -104,10 +110,7 @@ class _MessageDetailState extends State<MessageDetail> {
               l10n: ChatL10nEn(
                   emptyChatPlaceholder: _userStore.isLoading
                       ? AppLocalizations.of(context).translate('loading')
-                      : _userStore.currentChat.length > 0
-                          ? ""
-                          : AppLocalizations.of(context)
-                              .translate('no_message')),
+                      : ""),
               messages: _messages,
               user: _user,
               onSendPressed: _handleSendPressed,
@@ -437,7 +440,7 @@ class _MessageDetailState extends State<MessageDetail> {
             return VideoConferencePage(
               conferenceID:
                   interview.meetingRoom.meetingRoomId.replaceAll("-", "_"),
-              interview: interview,
+              title: interview.title,
             );
           }),
         );

@@ -3,6 +3,7 @@ import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/proposal/proposal-type-no-project.dart';
 import 'package:boilerplate/presentation/6_company_review_proposals/components/no-project.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
+import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/post_project/components/gradient_divider.dart';
 import 'package:boilerplate/presentation/profile/view_pdf_screen.dart';
@@ -23,6 +24,7 @@ class CompanyReviewStudentProfile extends StatefulWidget {
 
 class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
   final UserStore _userStore = getIt<UserStore>();
+  final ThemeStore _themeStore = getIt<ThemeStore>();
   int _nextNavigate = 0;
 
   @override
@@ -263,6 +265,10 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
                                     });
                                   }
                                 },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.surface,
+                                ),
                                 child: Text('View transcript'),
                               ),
                               ElevatedButton(

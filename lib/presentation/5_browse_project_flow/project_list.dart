@@ -2,6 +2,7 @@ import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/presentation/5_browse_project_flow/filter_table.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
+import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
 import 'package:boilerplate/presentation/post_project/store/post_project_store.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'project_item.dart';
 import 'package:input_history_text_field/input_history_text_field.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
+
 class ProjectList extends StatefulWidget {
   ProjectList({Key? key}) : super(key: key);
 
@@ -18,13 +20,17 @@ class ProjectList extends StatefulWidget {
 
 class _ProjectListState extends State<ProjectList> {
   final ProjectStore _projectStore = getIt<ProjectStore>();
-  TextEditingController _controller = new TextEditingController();
+  final _scrollController = ScrollController();
+  final ThemeStore _themeStore = getIt<ThemeStore>();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_projectStore.allProjectList == null) {
       _projectStore.getAllProjects(_projectStore.globalGetAllProjectParams);
+    }
+    if (_projectStore.onlyLikeProject == null) {
+      _projectStore.getLikedProjectList();
     }
   }
 
@@ -46,6 +52,21 @@ class _ProjectListState extends State<ProjectList> {
   }
 
   @override
+  void initState() {
+    _scrollController.addListener(() {
+      if (_scrollController.position.atEdge) {
+        bool isTop = _scrollController.position.pixels == 0;
+        if (isTop) {
+          print('At the top');
+        } else {
+          _projectStore.getMoreProject();
+        }
+      }
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: UserAppBar.buildAppBar(context,
@@ -57,8 +78,10 @@ class _ProjectListState extends State<ProjectList> {
           RefreshIndicator(
             onRefresh: () {
               _projectStore.manualLoading = true;
-              return _projectStore
-                  .getAllProjects(_projectStore.globalGetAllProjectParams);
+              _projectStore.reloadProjectList();
+              return _projectStore.getAllProjects(
+                  _projectStore.globalGetAllProjectParams,
+                  reload: true);
             },
             child: Column(
               children: [
@@ -75,10 +98,11 @@ class _ProjectListState extends State<ProjectList> {
                           ),
                           child: Form(
                             child: InputHistoryTextField(
-                              textEditingController: _controller,
                               textInputAction: TextInputAction.search,
                               historyKey: "01",
                               listStyle: ListStyle.List,
+                              textColor: Colors.black,
+                              historyIconColor: Colors.grey.shade700,
                               listRowDecoration: BoxDecoration(
                                 border: Border(
                                   left: BorderSide(
@@ -90,7 +114,8 @@ class _ProjectListState extends State<ProjectList> {
                               decoration: InputDecoration(
                                 prefixIcon:
                                     Icon(Icons.search, color: Colors.black),
-                                hintText: AppLocalizations.of(context).translate('search'),
+                                hintText: AppLocalizations.of(context)
+                                    .translate('search'),
                                 border: InputBorder.none,
                                 hintStyle: TextStyle(color: Colors.black),
                                 contentPadding:
@@ -113,6 +138,13 @@ class _ProjectListState extends State<ProjectList> {
                                 : _projectStore.showLikedOnly
                                     ? Icons.favorite
                                     : Icons.favorite_border,
+                            color:
+                                _projectStore.globalGetAllProjectParams.title !=
+                                        null
+                                    ? _themeStore.darkMode
+                                        ? Colors.white
+                                        : Colors.black
+                                    : null,
                           ),
                           onPressed: () {
                             if (_projectStore.globalGetAllProjectParams.title !=
@@ -151,7 +183,8 @@ class _ProjectListState extends State<ProjectList> {
                                     project: project,
                                     isLiked: project.isFavorite ?? false,
                                     onLikeChanged: (bool isLiked) {
-                                       _projectStore.updateLikeProkect(project, isLiked);
+                                      _projectStore.updateLikeProkect(
+                                          project, isLiked);
                                     },
                                   );
                                 },
@@ -159,12 +192,14 @@ class _ProjectListState extends State<ProjectList> {
                             : Center(
                                 child: Text(_projectStore.isLoading
                                     ? ""
-                                    : AppLocalizations.of(context).translate('no_pr_f')),
+                                    : AppLocalizations.of(context)
+                                        .translate('no_pr_f')),
                               )
                         : _projectStore.allProjectList != null &&
                                 _projectStore.allProjectList!.projects!.length >
                                     0
                             ? ListView.builder(
+                                controller: _scrollController,
                                 itemCount: _projectStore
                                         .allProjectList?.projects?.length ??
                                     0,
@@ -175,7 +210,8 @@ class _ProjectListState extends State<ProjectList> {
                                     project: project,
                                     isLiked: project.isFavorite ?? false,
                                     onLikeChanged: (bool isLiked) {
-                                      _projectStore.updateLikeProkect(project, isLiked);
+                                      _projectStore.updateLikeProkect(
+                                          project, isLiked);
                                     },
                                   );
                                 },
@@ -183,7 +219,8 @@ class _ProjectListState extends State<ProjectList> {
                             : Center(
                                 child: Text(_projectStore.isLoading
                                     ? ""
-                                    : AppLocalizations.of(context).translate('no_pr_f')),
+                                    : AppLocalizations.of(context)
+                                        .translate('no_pr_f')),
                               ),
                   ),
                 ),

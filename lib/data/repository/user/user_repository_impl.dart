@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:boilerplate/data/network/apis/users/user_api.dart';
 import 'package:boilerplate/domain/entity/chat/chat.dart';
+import 'package:boilerplate/domain/entity/notification/notification.dart';
 import 'package:boilerplate/domain/entity/user/profile_company.dart';
 import 'package:boilerplate/domain/entity/user/profile_student.dart';
 import 'package:boilerplate/domain/entity/user/skillset.dart';
@@ -227,9 +228,15 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<bool> checkRoomAvailability(
-      CheckRoomAvailabilityParams params) async {
+  Future<bool> checkRoomAvailability(CheckRoomAvailabilityParams params) async {
     return await _userApi.checkRoomAvailability(params).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<List<AppNotification>> getAllNotification() async {
+    return await _userApi.getAllNotifications().then((res) {
       return res;
     }).catchError((error) => throw error);
   }

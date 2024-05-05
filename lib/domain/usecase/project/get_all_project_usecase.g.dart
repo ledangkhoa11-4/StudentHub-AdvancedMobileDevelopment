@@ -12,6 +12,8 @@ GetAllProjectParams _$GetAllProjectParamsFromJson(Map<String, dynamic> json) =>
       projectScopeFlag: json['projectScopeFlag'] as int?,
       numberOfStudents: json['numberOfStudents'] as int?,
       proposalsLessThan: json['proposalsLessThan'] as int?,
+      page: json['page'] as int?,
+      perPage: json['perPage'] as int?,
     );
 
 Map<String, dynamic> _$GetAllProjectParamsToJson(
@@ -21,4 +23,6 @@ Map<String, dynamic> _$GetAllProjectParamsToJson(
       'projectScopeFlag': instance.projectScopeFlag,
       'numberOfStudents': instance.numberOfStudents,
       'proposalsLessThan': instance.proposalsLessThan,
+      'page': instance.page,
+      'perPage': instance.perPage,
     };

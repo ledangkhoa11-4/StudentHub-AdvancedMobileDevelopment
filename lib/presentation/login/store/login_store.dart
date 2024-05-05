@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:boilerplate/core/stores/error/error_store.dart';
 import 'package:boilerplate/core/stores/form/form_store.dart';
@@ -9,6 +8,8 @@ import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/chat/chat.dart';
 import 'package:boilerplate/domain/entity/chat/chatUser.dart';
+import 'package:boilerplate/domain/entity/chat/readChat.dart';
+import 'package:boilerplate/domain/entity/notification/notification.dart';
 import 'package:boilerplate/domain/entity/project/project_list.dart';
 import 'package:boilerplate/domain/entity/proposal/proposal-type-no-project.dart';
 import 'package:boilerplate/domain/entity/user/education.dart';
@@ -27,6 +28,7 @@ import 'package:boilerplate/domain/usecase/user/create_update_student_profile_us
 import 'package:boilerplate/domain/usecase/user/get_all_chat_by_projectid_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_all_chat_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_all_chat_with_userId_in_projectid_usecase.dart';
+import 'package:boilerplate/domain/usecase/user/get_all_notification_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_me_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_profile_file_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/get_skillset_usecase.dart';
@@ -48,7 +50,6 @@ import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mobx/mobx.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../domain/entity/user/user.dart';
 import '../../../domain/usecase/user/get_student_profile_usecase.dart';
@@ -88,7 +89,8 @@ abstract class _UserStore with Store {
       this._getAllChatUseCase,
       this._getAllChatByProjectUseCase,
       this._getAllChatWithUserInProjectUseCase,
-      this._checkRoomAvailabilityUseCase) {
+      this._checkRoomAvailabilityUseCase,
+      this._getAllNotificationsUseCase) {
     // setting up disposers
     _setupDisposers();
 
@@ -125,6 +127,7 @@ abstract class _UserStore with Store {
   final GetAllChatUseCase _getAllChatUseCase;
   final GetAllChatWithUserInProjectUseCase _getAllChatWithUserInProjectUseCase;
   final CheckRoomAvailabilityUseCase _checkRoomAvailabilityUseCase;
+  final GetAllNotificationsUseCase _getAllNotificationsUseCase;
 
   // stores:--------------------------------------------------------------------
   // for handling form errors
@@ -221,6 +224,9 @@ abstract class _UserStore with Store {
   @observable
   bool? isCreateProfile = null;
 
+  @observable
+  List<AppNotification>? listNotifications = null;
+
   // [PHONG] --------------------------------------------------
   @observable
   ProfileStudent? profileStudent = null;
@@ -286,6 +292,9 @@ abstract class _UserStore with Store {
 
   @observable
   List<ChatEntity>? allChatList;
+
+  @observable
+  ReadChat? readChat;
 
   @computed
   bool get isLoading =>
@@ -1059,6 +1068,28 @@ abstract class _UserStore with Store {
     return isAvailable;
   }
 
+  @action
+  Future getAllNotifications({bool loading = true}) async {
+    final future = _getAllNotificationsUseCase.call(params: null);
+    if (loading) {
+      apiCallingFeature = ObservableFuture(future);
+    }
+    await future.then((value) async {
+      this.listNotifications = value;
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  @action
+  setReadChat(int? projectId, int? senderId) async {
+    if (projectId == null || senderId == null) {
+      this.readChat = null;
+    } else {
+      this.readChat = ReadChat(projectId: projectId, senderId: senderId);
+    }
+  }
+
   logout() async {
     final projectStore = getIt<ProjectStore>();
 
@@ -1067,6 +1098,7 @@ abstract class _UserStore with Store {
     this.transcriptFile = "";
     this.resumeFile = "";
     this.isLoggedIn = false;
+    this.listNotifications = null;
     projectStore.projectList = null;
     projectStore.allProjectList = null;
 
