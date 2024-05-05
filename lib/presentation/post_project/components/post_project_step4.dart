@@ -57,7 +57,7 @@ class _PostProjectStep4State extends State<PostProjectStep4> {
       createdAt: "",
       companyId: _userStore.user!.company!.id!,
       typeFlag:
-          widget.projectEdit != null ? widget.projectEdit!.typeFlag : null,
+          widget.projectEdit != null ? widget.projectEdit!.typeFlag : ProjectType.NEW.value,
       projectScopeFlag: widget.formStore.projectScopeFlag,
     );
   }
