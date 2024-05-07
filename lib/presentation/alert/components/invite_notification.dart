@@ -1,6 +1,7 @@
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
 import 'package:boilerplate/di/service_locator.dart';
+import 'package:boilerplate/domain/entity/interview/interview.dart';
 import 'package:boilerplate/domain/entity/meeting_room/meeting_room.dart';
 import 'package:boilerplate/domain/entity/notification/notification.dart';
 import 'package:boilerplate/domain/usecase/user/check_room_available_usercase.dart';
@@ -25,6 +26,14 @@ class _InviteNotificationState extends State<InviteNotification> {
   final _userStore = getIt<UserStore>();
   @override
   Widget build(BuildContext context) {
+    final bool isDeleted = widget.noti.message.interview != null
+        ? widget.noti.message.interview!.deletedAt != null ||
+            widget.noti.message.interview!.disableFlag == 1 ||
+            Moment(widget.noti.message.interview!.meetingRoom.expiredAt ??
+                    widget.noti.message.interview!.endTime)
+                .isPast
+        : true;
+
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 10, top: 10),
       child: Row(
@@ -53,7 +62,7 @@ class _InviteNotificationState extends State<InviteNotification> {
                   textAlign: TextAlign.right,
                 ),
                 Text(
-                    "${AppLocalizations.of(context).translate('act_notif_text')} ${widget.noti.interview?.title ?? ""} at ${Moment(widget.noti.interview?.startTime ?? DateTime.now()).toLocal().formatDateTimeShort()}",
+                    "${AppLocalizations.of(context).translate('act_notif_text')} ${widget.noti.message.interview?.title ?? ""} at ${Moment(widget.noti.message.interview?.startTime ?? DateTime.now()).toLocal().formatDateTimeShort()}",
                     style: Theme.of(context).textTheme.labelSmall!),
                 const SizedBox(
                   height: 5,
@@ -61,12 +70,17 @@ class _InviteNotificationState extends State<InviteNotification> {
                 SizedBox(
                   width: 150,
                   child: RoundedButtonWidget(
-                    buttonText: AppLocalizations.of(context).translate('join'),
-                    buttonColor: Theme.of(context).colorScheme.primary,
+                    buttonText: isDeleted
+                        ? AppLocalizations.of(context).translate('cancelled')
+                        : AppLocalizations.of(context).translate('join'),
+                    buttonColor: isDeleted
+                        ? Colors.grey
+                        : Theme.of(context).colorScheme.primary,
                     textColor: Colors.white,
                     onPressed: () {
-                      _onJoinMeeting(
-                          widget.noti.interview, widget.noti.meetingRoom);
+                      if (!isDeleted) {
+                        _onJoinMeeting(widget.noti.message.interview);
+                      }
                     },
                   ),
                 )
@@ -78,19 +92,20 @@ class _InviteNotificationState extends State<InviteNotification> {
     );
   }
 
-  void _onJoinMeeting(NotificationInterview? interview, MeetingRoom? room) {
-    if (interview != null && room != null) {
+  void _onJoinMeeting(Interview? interview) {
+    if (interview != null) {
       _userStore
           .checkRoomAvailability(CheckRoomAvailabilityParams(
-              meeting_room_code: room.meetingRoomCode,
-              meeting_room_id: room.meetingRoomId))
+              meeting_room_code: interview.meetingRoom.meetingRoomCode,
+              meeting_room_id: interview.meetingRoom.meetingRoomId))
           .then((value) {
         if (value == true) {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) {
               return VideoConferencePage(
-                conferenceID: room.meetingRoomId.replaceAll("-", "_"),
+                conferenceID:
+                    interview.meetingRoom.meetingRoomId.replaceAll("-", "_"),
                 title: interview.title,
               );
             }),

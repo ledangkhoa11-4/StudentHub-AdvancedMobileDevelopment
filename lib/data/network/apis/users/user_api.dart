@@ -12,6 +12,10 @@ import 'package:boilerplate/domain/entity/user/profile_student.dart';
 import 'package:boilerplate/domain/entity/user/skillset.dart';
 import 'package:boilerplate/domain/entity/user/tech_stack.dart';
 import 'package:boilerplate/domain/entity/user/user.dart';
+import 'package:boilerplate/domain/usecase/project/delete_interview_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/send_interview_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/send_message_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/update_interview_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/check_room_available_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
@@ -430,6 +434,55 @@ class UserApi {
       return notificationObj
           .map((noti) => AppNotification.fromJson(noti))
           .toList();
+    } catch (e) {
+      print("---------------------------");
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<dynamic> sendMessage(SendMessageParams prms) async {
+    try {
+      final res = await _dioClient.dio.post(Endpoints.sendMessage, data: prms);
+      return res;
+    } catch (e) {
+      print("---------------------------");
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<dynamic> sendInterview(SendInterviewParams prms) async {
+    try {
+      final res =
+          await _dioClient.dio.post(Endpoints.sendInterview, data: prms);
+      return res;
+    } catch (e) {
+      print("---------------------------");
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<dynamic> updateInterview(UpdateInterviewParams prms) async {
+    try {
+      final res = await _dioClient.dio.patch(
+          Endpoints.patchDeleteInterview
+              .replaceAll(":interviewId", prms.id.toString()),
+          data: prms);
+      return res;
+    } catch (e) {
+      print("---------------------------");
+      print(e.toString());
+      throw e;
+    }
+  }
+
+  Future<dynamic> deleteInterview(DeleteInterviewParams prms) async {
+    try {
+      final res = await _dioClient.dio.patch(Endpoints.patchDisableInterview
+          .replaceAll(":interviewId", prms.id.toString()));
+      return res;
     } catch (e) {
       print("---------------------------");
       print(e.toString());

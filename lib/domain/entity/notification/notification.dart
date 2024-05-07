@@ -37,8 +37,6 @@ class AppNotification {
   final NotificationMessage message;
   final User sender;
   final User receiver;
-  final NotificationInterview? interview;
-  final MeetingRoom? meetingRoom;
 
   AppNotification({
     required this.id,
@@ -55,8 +53,6 @@ class AppNotification {
     required this.message,
     required this.sender,
     required this.receiver,
-    required this.interview,
-    required this.meetingRoom,
   });
 
   factory AppNotification.fromJson(Map<String, dynamic> json) {
@@ -76,12 +72,6 @@ class AppNotification {
       message: NotificationMessage.fromJson(json['message']),
       sender: User.fromMap(json['sender']),
       receiver: User.fromMap(json['receiver']),
-      interview: json['interview'] != null
-          ? NotificationInterview.fromJson(json['interview'])
-          : null,
-      meetingRoom: json['meetingRoom'] != null
-          ? MeetingRoom.fromJson(json['meetingRoom'])
-          : null,
     );
   }
 }
@@ -97,6 +87,8 @@ class NotificationMessage {
   final int? interviewId;
   final String content;
   final int messageFlag;
+  final Interview? interview;
+
 
   NotificationMessage({
     required this.id,
@@ -109,6 +101,8 @@ class NotificationMessage {
     required this.interviewId,
     required this.content,
     required this.messageFlag,
+    required this.interview,
+
   });
 
   factory NotificationMessage.fromJson(Map<String, dynamic> json) {
@@ -124,58 +118,7 @@ class NotificationMessage {
       interviewId: json['interviewId'],
       content: json['content'],
       messageFlag: json['messageFlag'],
+      interview: json['interview'] != null ? Interview.fromJson(json['interview']) : null,
     );
-  }
-}
-
-class NotificationInterview {
-  int id;
-  DateTime createdAt;
-  DateTime updatedAt;
-  DateTime? deletedAt;
-  String title;
-  DateTime startTime;
-  DateTime endTime;
-  int disableFlag;
-  int meetingRoomId;
-
-  NotificationInterview({
-    required this.id,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.title,
-    required this.startTime,
-    required this.endTime,
-    required this.disableFlag,
-    required this.meetingRoomId,
-    this.deletedAt,
-  });
-
-  factory NotificationInterview.fromJson(Map<String, dynamic> json) {
-    return NotificationInterview(
-      id: json['id'],
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
-      deletedAt: json['deletedAt'] != null ? DateTime.parse(json['deletedAt']) : null,
-      title: json['title'],
-      startTime: DateTime.parse(json['startTime']),
-      endTime: DateTime.parse(json['endTime']),
-      disableFlag: json['disableFlag'],
-      meetingRoomId: json['meetingRoomId'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
-      'deletedAt': deletedAt?.toIso8601String(),
-      'title': title,
-      'startTime': startTime.toIso8601String(),
-      'endTime': endTime.toIso8601String(),
-      'disableFlag': disableFlag,
-      'meetingRoomId': meetingRoomId,
-    };
   }
 }

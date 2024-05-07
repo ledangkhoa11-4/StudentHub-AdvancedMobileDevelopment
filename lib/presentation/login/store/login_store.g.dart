@@ -965,6 +965,39 @@ mixin _$UserStore on _UserStore, Store {
         .run(() => super.setReadChat(projectId, senderId));
   }
 
+  late final _$sendMessageAsyncAction =
+      AsyncAction('_UserStore.sendMessage', context: context);
+
+  @override
+  Future sendMessage(SendMessageParams param) {
+    return _$sendMessageAsyncAction.run(() => super.sendMessage(param));
+  }
+
+  late final _$sendInterviewAsyncAction =
+      AsyncAction('_UserStore.sendInterview', context: context);
+
+  @override
+  Future sendInterview(SendInterviewParams param) {
+    return _$sendInterviewAsyncAction.run(() => super.sendInterview(param));
+  }
+
+  late final _$updateInterviewAsyncAction =
+      AsyncAction('_UserStore.updateInterview', context: context);
+
+  @override
+  Future updateInterview(UpdateInterviewParams param) {
+    return _$updateInterviewAsyncAction.run(() => super.updateInterview(param));
+  }
+
+  late final _$disableInterviewAsyncAction =
+      AsyncAction('_UserStore.disableInterview', context: context);
+
+  @override
+  Future disableInterview(DeleteInterviewParams param) {
+    return _$disableInterviewAsyncAction
+        .run(() => super.disableInterview(param));
+  }
+
   late final _$_UserStoreActionController =
       ActionController(name: '_UserStore', context: context);
 
@@ -974,6 +1007,17 @@ mixin _$UserStore on _UserStore, Store {
         name: '_UserStore.setCurrentChat');
     try {
       return super.setCurrentChat(projectId, userId);
+    } finally {
+      _$_UserStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic interviewHandler(dynamic data) {
+    final _$actionInfo = _$_UserStoreActionController.startAction(
+        name: '_UserStore.interviewHandler');
+    try {
+      return super.interviewHandler(data);
     } finally {
       _$_UserStoreActionController.endAction(_$actionInfo);
     }

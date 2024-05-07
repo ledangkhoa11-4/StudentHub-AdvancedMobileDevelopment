@@ -18,8 +18,12 @@ import 'package:boilerplate/domain/entity/user/language.dart';
 import 'package:boilerplate/domain/entity/user/profile_student.dart';
 import 'package:boilerplate/domain/entity/user/skillset.dart';
 import 'package:boilerplate/domain/entity/user/tech_stack.dart';
+import 'package:boilerplate/domain/usecase/project/delete_interview_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_proposals_by_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/send_interview_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/send_message_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/update_interview_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/check_room_available_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
@@ -63,36 +67,41 @@ class UserStore = _UserStore with _$UserStore;
 abstract class _UserStore with Store {
   // constructor:---------------------------------------------------------------
   _UserStore(
-      this._isLoggedInUseCase,
-      this._saveLoginStatusUseCase,
-      this._saveAuthTokenUseCase,
-      this._saveCurrentProfileUseCase,
-      this._loginUseCase,
-      this._changeUseCase,
-      this._forgotUseCase,
-      this._signupUseCase,
-      this.formErrorStore,
-      this.errorStore,
-      this._getMeUseCase,
-      this._createCompanyProfileUseCase,
-      this._getAllTechStackUseCase,
-      this._getAllSkillSetUseCase,
-      this._uploadResumeUseCase,
-      this._uploadTranscriptUseCase,
-      this._createLanguageUseCase,
-      this._createEducationUseCase,
-      this._createExperiencesUseCase,
-      this._createStudentProfileUseCase,
-      this._getProfileFileUseCase,
-      this._submitProposalUseCase,
-      this._getStudentProfileUseCase,
-      this._updateProposalUseCase,
-      this._getAllChatUseCase,
-      this._getAllChatByProjectUseCase,
-      this._getAllChatWithUserInProjectUseCase,
-      this._checkRoomAvailabilityUseCase,
-      this._getAllNotificationsUseCase,
-      this._getProposalsByProjectUseCase) {
+    this._isLoggedInUseCase,
+    this._saveLoginStatusUseCase,
+    this._saveAuthTokenUseCase,
+    this._saveCurrentProfileUseCase,
+    this._loginUseCase,
+    this._changeUseCase,
+    this._forgotUseCase,
+    this._signupUseCase,
+    this.formErrorStore,
+    this.errorStore,
+    this._getMeUseCase,
+    this._createCompanyProfileUseCase,
+    this._getAllTechStackUseCase,
+    this._getAllSkillSetUseCase,
+    this._uploadResumeUseCase,
+    this._uploadTranscriptUseCase,
+    this._createLanguageUseCase,
+    this._createEducationUseCase,
+    this._createExperiencesUseCase,
+    this._createStudentProfileUseCase,
+    this._getProfileFileUseCase,
+    this._submitProposalUseCase,
+    this._getStudentProfileUseCase,
+    this._updateProposalUseCase,
+    this._getAllChatUseCase,
+    this._getAllChatByProjectUseCase,
+    this._getAllChatWithUserInProjectUseCase,
+    this._checkRoomAvailabilityUseCase,
+    this._getAllNotificationsUseCase,
+    this._getProposalsByProjectUseCase,
+    this._sendMessageUseCase,
+    this._sendInterviewUseCase,
+    this._updateInterviewUseCase,
+    this._deleteInterviewUseCase,
+  ) {
     // setting up disposers
     _setupDisposers();
 
@@ -131,6 +140,10 @@ abstract class _UserStore with Store {
   final CheckRoomAvailabilityUseCase _checkRoomAvailabilityUseCase;
   final GetAllNotificationsUseCase _getAllNotificationsUseCase;
   final GetProposalsByProjectUseCase _getProposalsByProjectUseCase;
+  final SendMessageUseCase _sendMessageUseCase;
+  final SendInterviewUseCase _sendInterviewUseCase;
+  final UpdateInterviewUseCase _updateInterviewUseCase;
+  final DeleteInterviewUseCase _deleteInterviewUseCase;
 
   // stores:--------------------------------------------------------------------
   // for handling form errors
@@ -942,8 +955,47 @@ abstract class _UserStore with Store {
     }
   }
 
+  @action
   dynamic interviewHandler(data) {
-    this.getCurrentChat(loading: false);
+    try {
+      print(data);
+      final notification = AppNotification.fromJson(data["notification"]);
+      final newChatList = [...this.currentChat];
+      var isCreate = true;
+      for (final (index, item) in newChatList.indexed) {
+        if (item.interview != null && notification.message.interview != null) {
+          if (item.interview!.id == notification.message.interview!.id) {
+            final chat = newChatList[index];
+            isCreate = false;
+            newChatList[index] = ChatEntity(
+                id: chat.id,
+                createdAt: chat.createdAt,
+                content: chat.content,
+                sender: chat.sender,
+                receiver: chat.receiver,
+                project: chat.project,
+                interview: notification.message.interview);
+          }
+        }
+      }
+      if (isCreate) {
+        newChatList.add(ChatEntity(
+            id: notification.messageId,
+            createdAt: notification.createdAt,
+            content: notification.message.content,
+            interview: notification.message.interview,
+            sender: ChatUser(
+                id: notification.sender.id!,
+                fullname: notification.sender.fullname!),
+            receiver: ChatUser(
+                id: notification.receiver.id!,
+                fullname: notification.receiver.fullname!)));
+      }
+      this.currentChat = newChatList;
+    } catch (e) {
+      print(e);
+      // this.getCurrentChat(loading: false);
+    }
   }
 
   @action
@@ -1119,6 +1171,57 @@ abstract class _UserStore with Store {
       }
     }).catchError((e) {
       print(e);
+    });
+  }
+
+  @action
+  sendMessage(SendMessageParams param) async {
+    final future = _sendMessageUseCase.call(params: param);
+    await future.then((value) async {
+      //do nothing
+    }).catchError((e) {
+      print(e);
+      this.apiResponseMessage = "Error";
+      this.apiResponseSuccess = false;
+    });
+  }
+
+  @action
+  sendInterview(SendInterviewParams param) async {
+    final future = _sendInterviewUseCase.call(params: param);
+    apiCallingFeature = ObservableFuture(future);
+    await future.then((value) async {
+      //do nothing
+    }).catchError((e) {
+      print(e);
+      this.apiResponseMessage = "Error";
+      this.apiResponseSuccess = false;
+    });
+  }
+
+  @action
+  updateInterview(UpdateInterviewParams param) async {
+    final future = _updateInterviewUseCase.call(params: param);
+    apiCallingFeature = ObservableFuture(future);
+    await future.then((value) async {
+      //do nothing
+    }).catchError((e) {
+      print(e);
+      this.apiResponseMessage = "Error";
+      this.apiResponseSuccess = false;
+    });
+  }
+
+  @action
+  disableInterview(DeleteInterviewParams param) async {
+    final future = _deleteInterviewUseCase.call(params: param);
+    apiCallingFeature = ObservableFuture(future);
+    await future.then((value) async {
+      //do nothing
+    }).catchError((e) {
+      print(e);
+      this.apiResponseMessage = "Error";
+      this.apiResponseSuccess = false;
     });
   }
 

@@ -38,7 +38,7 @@ class User {
   }
 
   factory User.fromMap(Map<String, dynamic> json) {
-    List<dynamic> rolesObj = json["roles"];
+    List<dynamic> rolesObj = json["roles"] != null ? json["roles"] : [];
     final roles =
         rolesObj.map((e) => int.tryParse(e.toString()) ?? -1).toList();
 

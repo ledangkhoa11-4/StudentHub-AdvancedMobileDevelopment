@@ -9,6 +9,10 @@ import 'package:boilerplate/domain/entity/user/skillset.dart';
 import 'package:boilerplate/domain/entity/user/tech_stack.dart';
 import 'package:boilerplate/domain/repository/user/user_repository.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
+import 'package:boilerplate/domain/usecase/project/delete_interview_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/send_interview_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/send_message_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/update_interview_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/change_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/check_room_available_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
@@ -237,6 +241,34 @@ class UserRepositoryImpl extends UserRepository {
   @override
   Future<List<AppNotification>> getAllNotification() async {
     return await _userApi.getAllNotifications().then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<dynamic> sendMessage(SendMessageParams param) async {
+    return await _userApi.sendMessage(param).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<dynamic> sendInterview(SendInterviewParams param) async {
+    return await _userApi.sendInterview(param).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<dynamic> updateInterview(UpdateInterviewParams param) async {
+    return await _userApi.updateInterview(param).then((res) {
+      return res;
+    }).catchError((error) => throw error);
+  }
+
+  @override
+  Future<dynamic> deleteInterview(DeleteInterviewParams param) async {
+    return await _userApi.deleteInterview(param).then((res) {
       return res;
     }).catchError((error) => throw error);
   }

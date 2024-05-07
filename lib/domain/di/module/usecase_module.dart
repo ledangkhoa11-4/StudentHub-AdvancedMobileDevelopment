@@ -8,13 +8,17 @@ import 'package:boilerplate/domain/usecase/post/find_post_by_id_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/get_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/insert_post_usecase.dart';
 import 'package:boilerplate/domain/usecase/post/udpate_post_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/delete_interview_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_proposals_by_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/remove_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/send_interview_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/send_message_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/update_interview_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/check_room_available_usercase.dart';
 import 'package:boilerplate/domain/usecase/user/create_educatuon_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/create_experience_usecase.dart';
@@ -153,6 +157,22 @@ mixin UseCaseModule {
 
     getIt.registerSingleton<GetAllNotificationsUseCase>(
       GetAllNotificationsUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<SendMessageUseCase>(
+      SendMessageUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<SendInterviewUseCase>(
+      SendInterviewUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<UpdateInterviewUseCase>(
+      UpdateInterviewUseCase(getIt<UserRepository>()),
+    );
+
+    getIt.registerSingleton<DeleteInterviewUseCase>(
+      DeleteInterviewUseCase(getIt<UserRepository>()),
     );
 
     // post:--------------------------------------------------------------------

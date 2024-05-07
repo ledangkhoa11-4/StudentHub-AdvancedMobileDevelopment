@@ -31,8 +31,9 @@ class Endpoints {
 
   static const String getCompanyProject = baseUrl + "/api/project/company";
 
-  static const String getFavoriteProject = baseUrl + "/api/favoriteProject/:studentId";
-  
+  static const String getFavoriteProject =
+      baseUrl + "/api/favoriteProject/:studentId";
+
   static const String createStudentProfile = baseUrl + "/api/profile/student";
 
   static const String getStudentProfile =
@@ -75,18 +76,30 @@ class Endpoints {
       baseUrl + "/api/proposal/project/:studentId";
 
   static const String getProposalByProjectId =
-    baseUrl + "/api/proposal/getByProjectId/:projectId";
+      baseUrl + "/api/proposal/getByProjectId/:projectId";
 
   static const String updateProposal = baseUrl + "/api/proposal/:proposalId";
 
-  static const String getAllChatByProjectId = baseUrl + "/api/message/:projectId";
+  static const String getAllChatByProjectId =
+      baseUrl + "/api/message/:projectId";
 
-  static const String getAllChatWithUserInProject = baseUrl + "/api/message/:projectId/user/:userId";
+  static const String getAllChatWithUserInProject =
+      baseUrl + "/api/message/:projectId/user/:userId";
 
   static const String getAllChat = baseUrl + "/api/message";
 
-  static const String checkRoomAvailability = baseUrl + "/meeting-room/check-availability";
+  static const String checkRoomAvailability =
+      baseUrl + "/meeting-room/check-availability";
 
-  static const String getAllNotifications = baseUrl + "/api/notification/getByReceiverId/:userId";
+  static const String getAllNotifications =
+      baseUrl + "/api/notification/getByReceiverId/:userId";
+
+  static const String sendMessage = baseUrl + "/api/message/sendMessage";
+
+  static const String sendInterview = baseUrl + "/api/interview";
+
+  static const String patchDeleteInterview = baseUrl + "/api/interview/:interviewId";
+
+  static const String patchDisableInterview = baseUrl + "/api/interview/:interviewId/disable";
 
 }

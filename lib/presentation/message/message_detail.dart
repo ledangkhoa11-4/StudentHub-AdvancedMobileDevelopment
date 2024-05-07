@@ -9,6 +9,10 @@ import 'package:boilerplate/domain/entity/chat/chatUser.dart';
 import 'package:boilerplate/domain/entity/interview/interview.dart';
 import 'package:boilerplate/domain/entity/meeting_room/meeting_room.dart';
 import 'package:boilerplate/domain/entity/user/user.dart';
+import 'package:boilerplate/domain/usecase/project/delete_interview_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/send_interview_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/send_message_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/update_interview_usecase.dart';
 import 'package:boilerplate/domain/usecase/user/check_room_available_usercase.dart';
 import 'package:boilerplate/presentation/9_schedule_for_interview/components/shedule_bottom_sheet.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
@@ -141,7 +145,11 @@ class _MessageDetailState extends State<MessageDetail> {
                       getIt<SharedPreferenceHelper>().currentProfile;
 
                   final Interview interview = Interview.fromJson(p0.metadata!);
-                  final bool isDeleted = interview.deletedAt != null || interview.disableFlag == 1 || Moment(interview.meetingRoom.expiredAt ?? interview.endTime).isPast;
+                  final bool isDeleted = interview.deletedAt != null ||
+                      interview.disableFlag == 1 ||
+                      Moment(interview.meetingRoom.expiredAt ??
+                              interview.endTime)
+                          .isPast;
                   final senderName =
                       p0.author.id == _userStore.user!.id!.toString()
                           ? AppLocalizations.of(context).translate('you')
@@ -219,7 +227,9 @@ class _MessageDetailState extends State<MessageDetail> {
                                                 backgroundColor: Colors.grey)
                                             : ElevatedButton.styleFrom(),
                                         onPressed: () {
-                                          _onJoinMeeting(interview);
+                                          if (!isDeleted) {
+                                            _onJoinMeeting(interview);
+                                          }
                                         },
                                         child: Text(
                                           isDeleted
@@ -291,24 +301,17 @@ class _MessageDetailState extends State<MessageDetail> {
   }
 
   void _handleSendPressed(types.PartialText message) {
-    final socket = SocketService.socket;
-    final currentProfile =
-                      getIt<SharedPreferenceHelper>().currentProfile;
-    if (socket != null) {
-      _addMessage(message);
-      if( currentProfile == UserRole.COMPANY.value) {
-        _userStore.setFirstActiveProposal(widget.projectId, widget.userId);
-      }
-      socket.emit(EMessageFlag.MESSAGE.eventName, {
-        "projectId": widget.projectId,
-        "senderId": _userStore.user!.id,
-        "receiverId": widget.userId,
-        "messageFlag": EMessageFlag.MESSAGE.value,
-        "content": message.text
-      });
-    } else {
-      ToastHelper.error("Cannot connect to socket service");
+    final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
+    _addMessage(message);
+    if (currentProfile == UserRole.COMPANY.value) {
+      _userStore.setFirstActiveProposal(widget.projectId, widget.userId);
     }
+    _userStore.sendMessage(SendMessageParams(
+        projectId: widget.projectId,
+        receiverId: widget.userId,
+        senderId: _userStore.user!.id!,
+        content: message.text,
+        messageFlag: 0));
   }
 
   void _addMessage(types.PartialText message) {
@@ -344,21 +347,12 @@ class _MessageDetailState extends State<MessageDetail> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                final socket = SocketService.socket;
-                if (socket != null) {
-                  socket.emit(EMessageFlag.UPDATE_INTERVIEW.eventName, {
-                    "projectId": widget.projectId,
-                    "senderId": _userStore.user!.id,
-                    "receiverId": widget.userId,
-                    "interviewId": interviewDelete.id,
-                    "deleteAction": true
-                  });
-                  ToastHelper.success(
-                      AppLocalizations.of(context).translate('wait_delete'),
-                      length: Toast.LENGTH_LONG);
-                } else {
-                  ToastHelper.error("Cannot connect to socket service");
-                }
+                _userStore.disableInterview(
+                    DeleteInterviewParams(id: interviewDelete.id));
+
+                ToastHelper.success(
+                    AppLocalizations.of(context).translate('wait_delete'),
+                    length: Toast.LENGTH_LONG);
               },
               child: Text('OK'),
             ),
@@ -375,45 +369,31 @@ class _MessageDetailState extends State<MessageDetail> {
   }
 
   void _emitMeetingCreated(String title, DateTime startTime, DateTime endTime) {
-    final socket = SocketService.socket;
-    if (socket != null) {
-      socket.emit(EMessageFlag.INTERVIEW.eventName, {
-        "projectId": widget.projectId,
-        "senderId": _userStore.user!.id,
-        "receiverId": widget.userId,
-        "content": "Schedule meeting for $title",
-        "title": title,
-        "startTime": Moment(startTime).toUtc().toIso8601String(),
-        "endTime": Moment(endTime).toUtc().toIso8601String(),
-        "meeting_room_code": Uuid().v4(),
-        "meeting_room_id": Uuid().v4()
-      });
-      ToastHelper.success(AppLocalizations.of(context).translate('wait_create'),
-          length: Toast.LENGTH_LONG);
-    } else {
-      ToastHelper.error("Cannot connect to socket service");
-    }
+    _userStore.sendInterview(SendInterviewParams(
+        projectId: widget.projectId,
+        receiverId: widget.userId,
+        senderId: _userStore.user!.id!,
+        content: "Schedule meeting for $title",
+        title: title,
+        startTime: Moment(startTime).toUtc(),
+        endTime: Moment(endTime).toUtc(),
+        meeting_room_code: Uuid().v4(),
+        meeting_room_id: Uuid().v4()));
+
+    ToastHelper.success(AppLocalizations.of(context).translate('wait_create'),
+        length: Toast.LENGTH_LONG);
   }
 
   void _emitMeetingEdit(Interview interviewEdit, String title,
       DateTime startTime, DateTime endTime) {
-    final socket = SocketService.socket;
-    if (socket != null) {
-      socket.emit(EMessageFlag.UPDATE_INTERVIEW.eventName, {
-        "projectId": widget.projectId,
-        "senderId": _userStore.user!.id,
-        "receiverId": widget.userId,
-        "interviewId": interviewEdit.id,
-        "title": title,
-        "startTime": Moment(startTime).toUtc().toIso8601String(),
-        "endTime": Moment(endTime).toUtc().toIso8601String(),
-        "updateAction": true
-      });
-      ToastHelper.success(AppLocalizations.of(context).translate('wait_edit'),
-          length: Toast.LENGTH_LONG);
-    } else {
-      ToastHelper.error("Cannot connect to socket service");
-    }
+    _userStore.updateInterview(UpdateInterviewParams(
+        id: interviewEdit.id,
+        title: title,
+        startTime: Moment(startTime).toUtc(),
+        endTime: Moment(endTime).toUtc()));
+
+    ToastHelper.success(AppLocalizations.of(context).translate('wait_edit'),
+        length: Toast.LENGTH_LONG);
   }
 
   void _handleEditMeeting(Interview interviewEdit) {

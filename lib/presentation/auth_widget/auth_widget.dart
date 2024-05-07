@@ -1,4 +1,3 @@
-
 import 'package:boilerplate/core/widgets/progress_indicator_widget.dart';
 import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
@@ -15,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:moment_dart/moment_dart.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 
 class AuthWidget extends StatefulWidget {
   @override
@@ -100,18 +100,19 @@ class _AuthWidgetState extends State<AuthWidget> {
                     payLoad:
                         "{'projectId':'${notification.message.projectId}', 'senderId':'${notification.message.senderId}', 'userName':'${notification.sender.fullname}'}");
 
-                if (notification.interview != null &&
-                    notification.meetingRoom != null) {
-                  final scheduleTime = Moment(notification.interview!.startTime
+                if (notification.message.interview != null) {
+                  final scheduleTime = Moment(notification
+                      .message.interview!.startTime
                       .subtract(const Duration(minutes: 10)));
                   if (scheduleTime.isFuture) {
                     print(
                         "scheduled at ${DateTime.parse(scheduleTime.toIso8601String())} ");
                     NotificationService().scheduleNotification(
-                        id: notification.id + notification.interview!.id,
+                        id: notification.id +
+                            notification.message.interview!.id,
                         title: 'Interview coming up',
                         body:
-                            'The interview for ${notification.interview!.title} is coming in 10 minutes',
+                            'The interview for ${notification.message.interview!.title} is coming in 10 minutes',
                         payLoad:
                             "{'projectId':'${notification.message.projectId}', 'senderId':'${notification.message.senderId}', 'userName':'${notification.sender.fullname}'}",
                         scheduledNotificationDateTime:
@@ -123,11 +124,11 @@ class _AuthWidgetState extends State<AuthWidget> {
               print(e);
             }
 
-            _userStore.getAllNotifications(loading: false);
-
-            if (data["notification"]["messageId"] != null) {
+            EasyDebounce.debounce(
+                'fetch-notification', Duration(milliseconds: 500), () {
+              _userStore.getAllNotifications(loading: false);
               _userStore.getAllChatList(loading: false);
-            }
+            });
           });
 
           socket.on('ERROR', (data) {
