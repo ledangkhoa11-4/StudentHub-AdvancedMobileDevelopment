@@ -7,7 +7,7 @@ Mocking UI - [Youtube Link](https://www.youtube.com/watch?v=cpLQGUNOjnk)
 Auth flow, profile flow, post project flow - [Youtube Link](https://www.youtube.com/watch?v=cuWcSlmp9Rw)
 
 **Phasing 3:**
-Auth flow, profile flow, post project flow - [Youtube Link](https://www.youtube.com/watch?v=YYZERkh0zTk)
+Apply proposal flow, chat flow, schedule interview flow - [Youtube Link](https://www.youtube.com/watch?v=YYZERkh0zTk)
 
 **Step 1:**
 
