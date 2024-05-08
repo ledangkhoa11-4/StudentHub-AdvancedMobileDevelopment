@@ -9,6 +9,9 @@ Auth flow, profile flow, post project flow - [Youtube Link](https://www.youtube.
 **Phasing 3:**
 Apply proposal flow, chat flow, schedule interview flow - [Youtube Link](https://www.youtube.com/watch?v=YYZERkh0zTk)
 
+**Phasing 4:**
+Notification flow - [Youtube Link](https://youtu.be/VaNdtJsSfi4)
+
 **Step 1:**
 
 Go to project root and execute the following command in console to get the required dependencies: 
