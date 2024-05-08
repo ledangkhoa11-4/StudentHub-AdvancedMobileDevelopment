@@ -1,43 +1,42 @@
 import 'package:boilerplate/constants/assets.dart';
 import 'package:boilerplate/core/widgets/rounded_button_widget.dart';
+import 'package:boilerplate/data/sharedpref/shared_preference_helper.dart';
 import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/domain/entity/notification/notification.dart';
+import 'package:boilerplate/domain/entity/user/user.dart';
+import 'package:boilerplate/presentation/5_browse_project_flow/student_dashboard.dart';
 import 'package:boilerplate/presentation/6_company_review_proposals/components/send_hire_offer.dart';
+import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
 import 'package:boilerplate/presentation/post_project/store/post_project_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:moment_dart/moment_dart.dart';
 
-class SubmittedNotification extends StatefulWidget {
+class OfferNotification extends StatefulWidget {
   final AppNotification noti;
 
-  const SubmittedNotification({Key? key, required this.noti}) : super(key: key);
+  const OfferNotification({Key? key, required this.noti}) : super(key: key);
 
   @override
-  State<SubmittedNotification> createState() => _SubmittedNotificationState();
+  State<OfferNotification> createState() => _OfferNotificationState();
 }
 
-class _SubmittedNotificationState extends State<SubmittedNotification> {
+class _OfferNotificationState extends State<OfferNotification> {
   final ProjectStore _projectStore = getIt<ProjectStore>();
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        _projectStore
-            .getProjectById(widget.noti.proposal!.projectId)
-            .then((value) {
-          if (value != null) {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => SendHireOffer(
-                project: value,
-                initialTabIndex:
-                    0, // Pass initialTabIndex indicating the index tab
-              ),
-            ));
-          }
-        });
+        final currentProfile = getIt<SharedPreferenceHelper>().currentProfile;
+        final isStudent = currentProfile == UserRole.STUDENT.value;
+        if (isStudent) {
+          UserNavigationBar.bottomNavIndex = 1;
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => DashBoardStudent(reload: true,)),
+              (Route<dynamic> route) => false);
+        }
       },
       child: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
@@ -47,7 +46,7 @@ class _SubmittedNotificationState extends State<SubmittedNotification> {
               borderRadius: BorderRadius.circular(8.0),
               child: Image.asset(
                 width: 40,
-                Assets.projectImage,
+                Assets.offerImage,
                 fit: BoxFit.cover,
               ),
             ),

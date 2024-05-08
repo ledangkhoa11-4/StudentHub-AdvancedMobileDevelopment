@@ -8,6 +8,7 @@ import 'package:boilerplate/domain/entity/proposal/proposal.dart';
 import 'package:boilerplate/domain/repository/project/project_repository.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_proposals_by_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/get_single_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
@@ -102,6 +103,15 @@ class ProjectRepositoryImpl extends ProjectRepository {
   Future<List<ProposalNoProjectVariable>> getProposalsByProject(
       GetProposalsByProjectParams params) async {
     return await _projectApi.getProposalsByProject(params).then((res) {
+      return res;
+    }).catchError((error) {
+      throw error;
+    });
+  }
+
+  @override
+  Future<Project?> getSingleProject(GetSingleProjectParams params) async {
+    return await _projectApi.getSingleProject(params).then((res) {
       return res;
     }).catchError((error) {
       throw error;

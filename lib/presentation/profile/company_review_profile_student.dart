@@ -7,6 +7,7 @@ import 'package:boilerplate/presentation/home/store/theme/theme_store.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/post_project/components/gradient_divider.dart';
 import 'package:boilerplate/presentation/profile/view_pdf_screen.dart';
+import 'package:boilerplate/utils/locale/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -41,6 +42,7 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.proposal.student.toMap());
     return Scaffold(
         appBar: UserAppBar.buildAppBar(context,
             titleWidget: Text(widget.proposal.student.fullname.toString()),
@@ -60,7 +62,9 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "Main techstack: ",
+                            AppLocalizations.of(context)
+                                    .translate('Main_techstack') +
+                                ": ",
                             style: Theme.of(context)
                                 .textTheme
                                 .labelLarge!
@@ -83,26 +87,113 @@ class _ReviewStudentProfileState extends State<CompanyReviewStudentProfile> {
                                   context),
                             ),
                           ),
-                          // Text(
-                          //   "Main skillsets: ",
-                          //   style: Theme.of(context)
-                          //       .textTheme
-                          //       .labelLarge!
-                          //       .copyWith(
-                          //           color: Theme.of(context)
-                          //               .colorScheme
-                          //               .primary),
-                          // ),
-                          // Padding(
-                          //   padding: const EdgeInsets.only(
-                          //       left: 20, top: 10),
-                          //   child: Text(
-                          //     '${_userStore.profileStudent!.skillSets!.map((e) => e.name).toList().join(", ")}.',
-                          //     style: Theme.of(context)
-                          //         .textTheme
-                          //         .labelLarge,
-                          //   ),
-                          // ),
+                          Text(
+                            AppLocalizations.of(context)
+                                    .translate('Languages') +
+                                ": ",
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                          ),
+                          ...widget.proposal.student.languages
+                                  ?.map(
+                                    (e) => Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20, top: 10),
+                                      child: Text(
+                                        '[${e.level}] - ${e.languageName} ',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge,
+                                      ),
+                                    ),
+                                  )
+                                  .toList() ??
+                              [
+                                Text(AppLocalizations.of(context)
+                                    .translate('empt'))
+                              ],
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20, bottom: 20),
+                            child: CustomPaint(
+                              painter: PointedLinePainter(
+                                  MediaQuery.of(context).size.width - 40,
+                                  context),
+                            ),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)
+                                    .translate('Experiences') +
+                                ": ",
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                          ),
+                          (widget.proposal.student.experiences?.length ?? 0) <=
+                                  0
+                              ? Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 20, top: 10),
+                                  child: Text(
+                                    AppLocalizations.of(context)
+                                        .translate('empt'),
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                )
+                              : SizedBox.shrink(),
+                          ...widget.proposal.student.experiences!
+                              .map(
+                                (e) => Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 20, top: 10),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '[${e.startMonth} / ${e.endMonth}] - ${e.title}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge,
+                                      ),
+                                      Text(
+                                        AppLocalizations.of(context)
+                                                .translate('Description') +
+                                            ': ${e.description}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium,
+                                      ),
+                                      Text(
+                                        AppLocalizations.of(context)
+                                                .translate('Skillsets') +
+                                            ': ${e.skillSets!.map((e) => e.name).toList().join(", ")}.',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20, bottom: 20),
+                            child: CustomPaint(
+                              painter: PointedLinePainter(
+                                  MediaQuery.of(context).size.width - 40,
+                                  context),
+                            ),
+                          ),
                           // Padding(
                           //   padding: const EdgeInsets.only(
                           //       top: 20, bottom: 20),

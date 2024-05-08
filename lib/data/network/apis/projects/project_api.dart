@@ -11,6 +11,7 @@ import 'package:boilerplate/domain/entity/proposal/proposal-type-no-project.dart
 import 'package:boilerplate/domain/entity/proposal/proposal.dart';
 import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_proposals_by_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/get_single_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
@@ -122,6 +123,27 @@ class ProjectApi {
     }
   }
 
+  Future<Project?> getSingleProject(GetSingleProjectParams prms) async {
+    try {
+      final proposalRes = await _dioClient.dio.get(Endpoints
+          .getProposalByProjectId
+          .replaceFirst(":projectId", prms.id.toString()));
+
+      final proposalListResult = jsonDecode(proposalRes.toString());
+      final extractProposals = proposalListResult["result"]["items"];
+      final res = await _dioClient.dio.get(
+        Endpoints.patchProject.replaceFirst(":projectId", prms.id.toString()),
+      );
+      final result = jsonDecode(res.toString());
+      result["result"]["proposals"] = extractProposals;
+      print(result["result"]);
+      return Project.fromMap(result["result"]);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   Future<dynamic> updateFavorite(UpdateFavoriteProjectParams params) async {
     try {
       final UserStore _userStore = getIt<UserStore>();
@@ -159,12 +181,14 @@ class ProjectApi {
       GetProposalsByProjectParams params) async {
     try {
       final res = await _dioClient.dio.get(Endpoints.getProposalByProjectId
-              .replaceFirst(":projectId", params.projectId.toString()));
+          .replaceFirst(":projectId", params.projectId.toString()));
       final result = jsonDecode(res.toString());
 
       List<dynamic> proposalObj =
           result["result"]["items"] != null ? result["result"]["items"] : [];
-      return proposalObj.map((e) => ProposalNoProjectVariable.fromJson(e)).toList();
+      return proposalObj
+          .map((e) => ProposalNoProjectVariable.fromJson(e))
+          .toList();
     } catch (e) {
       print(e.toString());
       throw e;

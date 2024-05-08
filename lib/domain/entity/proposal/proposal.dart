@@ -75,3 +75,44 @@ class Proposal {
     return data;
   }
 }
+
+
+class ProposalNoProject {
+  int id;
+  int projectId;
+  int studentId;
+  String coverLetter;
+  int statusFlag;
+  int disableFlag;
+  String createdAt;
+  String? updatedAt;
+  String? deletedAt;
+
+  ProposalNoProject({
+    required this.id,
+    required this.projectId,
+    required this.studentId,
+    required this.coverLetter,
+    required this.statusFlag,
+    required this.disableFlag,
+    required this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
+  });
+
+  factory ProposalNoProject.fromJson(Map<String, dynamic> json) {
+    return ProposalNoProject(
+      id: json['id'],
+      projectId: json['projectId'],
+      studentId: json['studentId'],
+      coverLetter: json['coverLetter'],
+      statusFlag: json['statusFlag'],
+      disableFlag: json['disableFlag'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
+      deletedAt: json['deletedAt'],
+    );
+  }
+
+ 
+}

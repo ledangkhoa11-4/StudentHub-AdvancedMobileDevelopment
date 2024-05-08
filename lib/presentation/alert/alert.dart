@@ -4,9 +4,11 @@ import 'package:boilerplate/domain/entity/notification/notification.dart';
 import 'package:boilerplate/presentation/alert/components/action_notification.dart';
 import 'package:boilerplate/presentation/alert/components/chat_notification.dart';
 import 'package:boilerplate/presentation/alert/components/invite_notification.dart';
+import 'package:boilerplate/presentation/alert/components/offer_notification.dart';
 import 'package:boilerplate/presentation/app_bar/app_bar.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/navigation_bar/navigation_bar.dart';
+import 'package:boilerplate/presentation/post_project/store/post_project_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -17,6 +19,7 @@ class AlertScreen extends StatefulWidget {
 
 class _AlertScreenState extends State<AlertScreen> {
   final UserStore _userStore = getIt<UserStore>();
+  final ProjectStore _projectStore = getIt<ProjectStore>();
 
   @override
   void initState() {
@@ -70,6 +73,16 @@ class _AlertScreenState extends State<AlertScreen> {
                       return true;
                     }
 
+                    if (e.typeNotifyFlag ==
+                        TypeNotifyFlag.SUBMITTED.value.toString()) {
+                      return true;
+                    }
+
+                    if (e.typeNotifyFlag ==
+                        TypeNotifyFlag.OFFER.value.toString()) {
+                      return true;
+                    }
+
                     return false;
                   }).map((e) {
                     if (e.typeNotifyFlag ==
@@ -80,6 +93,16 @@ class _AlertScreenState extends State<AlertScreen> {
                     } else if (e.typeNotifyFlag ==
                         TypeNotifyFlag.INTERVIEW.value.toString()) {
                       return InviteNotification(
+                        noti: e,
+                      );
+                    } else if (e.typeNotifyFlag ==
+                        TypeNotifyFlag.SUBMITTED.value.toString()) {
+                      return SubmittedNotification(
+                        noti: e,
+                      );
+                    } else if (e.typeNotifyFlag ==
+                        TypeNotifyFlag.OFFER.value.toString()) {
+                      return OfferNotification(
                         noti: e,
                       );
                     } else {
@@ -99,7 +122,7 @@ class _AlertScreenState extends State<AlertScreen> {
           Observer(
             builder: (context) {
               return Visibility(
-                visible: _userStore.isLoading,
+                visible: _userStore.isLoading || _projectStore.isLoading,
                 child: CustomProgressIndicatorWidget(),
               );
             },

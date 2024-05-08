@@ -20,6 +20,9 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'project_list.dart';
 
 class DashBoardStudent extends StatefulWidget {
+  final bool reload;
+
+  DashBoardStudent({super.key, this.reload = false});
   @override
   _DashBoardState createState() => _DashBoardState();
 }
@@ -34,6 +37,16 @@ class _DashBoardState extends State<DashBoardStudent>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (widget.reload) {
+      final GetSubmitProposalParams prms =
+          GetSubmitProposalParams(studentId: _userStore.user!.student!.id!);
+      _projectStore.getSubmitProposal(prms);
+    }
   }
 
   @override

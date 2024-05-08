@@ -26,11 +26,11 @@ class _InviteNotificationState extends State<InviteNotification> {
   final _userStore = getIt<UserStore>();
   @override
   Widget build(BuildContext context) {
-    final bool isDeleted = widget.noti.message.interview != null
-        ? widget.noti.message.interview!.deletedAt != null ||
-            widget.noti.message.interview!.disableFlag == 1 ||
-            Moment(widget.noti.message.interview!.meetingRoom.expiredAt ??
-                    widget.noti.message.interview!.endTime)
+    final bool isDeleted = widget.noti.message!.interview != null
+        ? widget.noti.message!.interview!.deletedAt != null ||
+            widget.noti.message!.interview!.disableFlag == 1 ||
+            Moment(widget.noti.message!.interview!.meetingRoom.expiredAt ??
+                    widget.noti.message!.interview!.endTime)
                 .isPast
         : true;
 
@@ -62,7 +62,7 @@ class _InviteNotificationState extends State<InviteNotification> {
                   textAlign: TextAlign.right,
                 ),
                 Text(
-                    "${AppLocalizations.of(context).translate('act_notif_text')} ${widget.noti.message.interview?.title ?? ""} at ${Moment(widget.noti.message.interview?.startTime ?? DateTime.now()).toLocal().formatDateTimeShort()}",
+                    "${AppLocalizations.of(context).translate('act_notif_text')} ${widget.noti.message!.interview?.title ?? ""} at ${Moment(widget.noti.message!.interview?.startTime ?? DateTime.now()).toLocal().formatDateTimeShort()}",
                     style: Theme.of(context).textTheme.labelSmall!),
                 const SizedBox(
                   height: 5,
@@ -79,7 +79,7 @@ class _InviteNotificationState extends State<InviteNotification> {
                     textColor: Colors.white,
                     onPressed: () {
                       if (!isDeleted) {
-                        _onJoinMeeting(widget.noti.message.interview);
+                        _onJoinMeeting(widget.noti.message!.interview);
                       }
                     },
                   ),

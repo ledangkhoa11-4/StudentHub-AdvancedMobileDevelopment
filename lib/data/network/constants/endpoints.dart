@@ -76,7 +76,7 @@ class Endpoints {
       baseUrl + "/api/proposal/project/:studentId";
 
   static const String getProposalByProjectId =
-      baseUrl + "/api/proposal/getByProjectId/:projectId";
+      baseUrl + "/api/proposal/getByProjectId/:projectId?&limit=100";
 
   static const String updateProposal = baseUrl + "/api/proposal/:proposalId";
 

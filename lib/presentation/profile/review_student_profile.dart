@@ -75,7 +75,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                           Padding(
                             padding: const EdgeInsets.only(left: 20, top: 10),
                             child: Text(
-                              '${_userStore.user!.student!.techStack!.name}.',
+                              '${_userStore.user?.student?.techStack?.name ?? AppLocalizations.of(context).translate('empt')}.',
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                           ),
@@ -99,7 +99,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                           Padding(
                             padding: const EdgeInsets.only(left: 20, top: 10),
                             child: Text(
-                              '${_userStore.user!.student!.skillSets!.map((e) => e.name).toList().join(", ")}.',
+                              '${_userStore.user?.student?.skillSets?.map((e) => e.name).toList().join(", ") ?? AppLocalizations.of(context).translate('empt')}.',
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                           ),
@@ -120,8 +120,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                                     color:
                                         Theme.of(context).colorScheme.primary),
                           ),
-                          ..._userStore.user!.student!.languages!
-                              .map(
+                          ..._userStore.user?.student?.languages?.map(
                                 (e) => Padding(
                                   padding:
                                       const EdgeInsets.only(left: 20, top: 10),
@@ -131,8 +130,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                                         Theme.of(context).textTheme.labelLarge,
                                   ),
                                 ),
-                              )
-                              .toList(),
+                              ).toList() ?? [],
                           Padding(
                             padding: const EdgeInsets.only(top: 20, bottom: 20),
                             child: CustomPaint(
@@ -150,8 +148,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                                     color:
                                         Theme.of(context).colorScheme.primary),
                           ),
-                          ..._userStore.user!.student!.educations!
-                              .map(
+                          ..._userStore.user?.student?.educations?.map(
                                 (e) => Padding(
                                   padding:
                                       const EdgeInsets.only(left: 20, top: 10),
@@ -162,7 +159,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                                   ),
                                 ),
                               )
-                              .toList(),
+                              .toList() ?? [],
                           Padding(
                             padding: const EdgeInsets.only(top: 20, bottom: 20),
                             child: CustomPaint(
@@ -180,7 +177,7 @@ class _ReviewStudentProfileState extends State<ReviewStudentProfile> {
                                     color:
                                         Theme.of(context).colorScheme.primary),
                           ),
-                          _userStore.user!.student!.experiences!.length <= 0
+                          (_userStore.user?.student?.experiences?.length ?? 0) <= 0
                               ? Padding(
                                   padding:
                                       const EdgeInsets.only(left: 20, top: 10),

@@ -22,6 +22,7 @@ import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart'
 import 'package:boilerplate/domain/usecase/project/get_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_proposals_by_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/get_single_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/send_interview_usecase.dart';
@@ -180,7 +181,8 @@ mixin StoreModule {
           getIt<RemoveProjectUseCase>(),
           getIt<UpdateFavoriteProjectUseCase>(),
           getIt<GetSubmitProposalUseCase>(),
-          getIt<GetFavoriteProjectUseCase>()),
+          getIt<GetFavoriteProjectUseCase>(),
+          getIt<GetSingleProjectUseCase>()),
     );
   }
 }

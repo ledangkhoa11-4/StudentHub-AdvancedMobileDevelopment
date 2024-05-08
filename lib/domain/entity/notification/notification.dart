@@ -1,6 +1,7 @@
 import 'package:boilerplate/domain/entity/chat/chat.dart';
 import 'package:boilerplate/domain/entity/interview/interview.dart';
 import 'package:boilerplate/domain/entity/meeting_room/meeting_room.dart';
+import 'package:boilerplate/domain/entity/proposal/proposal.dart';
 import 'package:boilerplate/domain/entity/user/user.dart';
 
 enum TypeNotifyFlag { OFFER, INTERVIEW, SUBMITTED, CHAT }
@@ -29,50 +30,56 @@ class AppNotification {
   final DateTime? deletedAt;
   final int receiverId;
   final int senderId;
-  final int messageId;
+  final int? messageId;
   final String title;
   final String notifyFlag;
   final String typeNotifyFlag;
   final String content;
-  final NotificationMessage message;
+  final NotificationMessage? message;
   final User sender;
   final User receiver;
+  final ProposalNoProject? proposal;
 
-  AppNotification({
-    required this.id,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.deletedAt,
-    required this.receiverId,
-    required this.senderId,
-    required this.messageId,
-    required this.title,
-    required this.notifyFlag,
-    required this.typeNotifyFlag,
-    required this.content,
-    required this.message,
-    required this.sender,
-    required this.receiver,
-  });
+  AppNotification(
+      {required this.id,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.deletedAt,
+      required this.receiverId,
+      required this.senderId,
+      required this.messageId,
+      required this.title,
+      required this.notifyFlag,
+      required this.typeNotifyFlag,
+      required this.content,
+      required this.message,
+      required this.sender,
+      required this.receiver,
+      required this.proposal});
 
   factory AppNotification.fromJson(Map<String, dynamic> json) {
     return AppNotification(
-      id: json['id'],
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
-      deletedAt:
-          json['deletedAt'] != null ? DateTime.parse(json['deletedAt']) : null,
-      receiverId: json['receiverId'],
-      senderId: json['senderId'],
-      messageId: json['messageId'],
-      title: json['title'],
-      notifyFlag: json['notifyFlag'],
-      typeNotifyFlag: json['typeNotifyFlag'],
-      content: json['content'],
-      message: NotificationMessage.fromJson(json['message']),
-      sender: User.fromMap(json['sender']),
-      receiver: User.fromMap(json['receiver']),
-    );
+        id: json['id'],
+        createdAt: DateTime.parse(json['createdAt']),
+        updatedAt: DateTime.parse(json['updatedAt']),
+        deletedAt: json['deletedAt'] != null
+            ? DateTime.parse(json['deletedAt'])
+            : null,
+        receiverId: json['receiverId'],
+        senderId: json['senderId'],
+        messageId: json['messageId'],
+        title: json['title'],
+        notifyFlag: json['notifyFlag'],
+        typeNotifyFlag: json['typeNotifyFlag'],
+        content: json['content'],
+        message: json['message'] != null
+            ? NotificationMessage.fromJson(json['message'])
+            : null,
+        sender: User.fromMap(json['sender']),
+        receiver: User.fromMap(json['receiver']),
+        proposal: json['proposal'] != null
+            ? ProposalNoProject.fromJson(json['proposal'])
+            : null);
   }
 }
 
@@ -89,7 +96,6 @@ class NotificationMessage {
   final int messageFlag;
   final Interview? interview;
 
-
   NotificationMessage({
     required this.id,
     required this.createdAt,
@@ -102,7 +108,6 @@ class NotificationMessage {
     required this.content,
     required this.messageFlag,
     required this.interview,
-
   });
 
   factory NotificationMessage.fromJson(Map<String, dynamic> json) {
@@ -118,7 +123,9 @@ class NotificationMessage {
       interviewId: json['interviewId'],
       content: json['content'],
       messageFlag: json['messageFlag'],
-      interview: json['interview'] != null ? Interview.fromJson(json['interview']) : null,
+      interview: json['interview'] != null
+          ? Interview.fromJson(json['interview'])
+          : null,
     );
   }
 }

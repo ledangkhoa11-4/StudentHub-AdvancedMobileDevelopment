@@ -7,6 +7,7 @@ import 'package:boilerplate/domain/usecase/project/get_all_project_usecase.dart'
 import 'package:boilerplate/domain/usecase/project/get_favorite_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_proposals_by_project_usecase.dart';
+import 'package:boilerplate/domain/usecase/project/get_single_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/get_submit_proposal_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/insert_project_usecase.dart';
 import 'package:boilerplate/domain/usecase/project/update_favorite_project_usecase.dart';
@@ -36,7 +37,8 @@ abstract class _ProjectStore with Store {
       this._removeProjectUseCase,
       this._updateFavoriteProjectUseCase,
       this._getSubmitProposalUseCase,
-      this._getFavoriteProjectUseCase) {
+      this._getFavoriteProjectUseCase,
+      this._getSingleProjectUseCase) {
     _setupValidations();
   } // Add _projectRepository
 
@@ -55,6 +57,7 @@ abstract class _ProjectStore with Store {
   final UpdateFavoriteProjectUseCase _updateFavoriteProjectUseCase;
   final RemoveProjectUseCase _removeProjectUseCase;
   final GetSubmitProposalUseCase _getSubmitProposalUseCase;
+  final GetSingleProjectUseCase _getSingleProjectUseCase;
 
   // stores:--------------------------------------------------------------------
   // store for handling errors
@@ -450,6 +453,20 @@ abstract class _ProjectStore with Store {
   @action
   void setProjectList(ProjectList projectList) {
     this.projectList = projectList;
+  }
+
+  Future<Project?> getProjectById(int id) async {
+    final future =
+        _getSingleProjectUseCase.call(params: GetSingleProjectParams(id: id));
+    updateProjectFuture = ObservableFuture(future);
+    final project = await future.then((project) {
+      return project;
+    }).catchError((e) {
+      print(e);
+      return null;
+    });
+
+    return project;
   }
 
   setSlideToIndex(int? value) {

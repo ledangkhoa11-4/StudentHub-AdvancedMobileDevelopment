@@ -101,11 +101,10 @@ class _CandidateState extends State<Candidate> {
                     children: [
                       Text(
                         widget.proposal.student.fullname.toString(),
-                        style: Theme.of(context).textTheme.headlineMedium,
+                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontSize: 18),
                       ),
                       Text(
-                        widget.proposal.student.educations![0]
-                            .schoolName, // 4th year student
+                        (widget.proposal.student.educations?.length ?? 0) > 0 ? widget.proposal.student.educations![widget.proposal.student.educations!.length - 1].schoolName : "", // 4th year student
                         style: Theme.of(context)
                             .textTheme
                             .labelMedium!

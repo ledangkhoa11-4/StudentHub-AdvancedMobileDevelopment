@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:boilerplate/presentation/post_project/components/gradient_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import '../../../domain/entity/project/project.dart';
@@ -38,7 +39,7 @@ class Detail extends StatelessWidget {
             Text(
               AppLocalizations.of(context).translate('stu_look_for'),
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -68,14 +69,20 @@ class Detail extends StatelessWidget {
                     ),
               ),
             SizedBox(height: 16),
-            Divider(color: Colors.black),
+            Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
+              child: CustomPaint(
+                painter: PointedLinePainter(
+                    MediaQuery.of(context).size.width - 40, context),
+              ),
+            ),
             SizedBox(height: 16),
             Row(
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Icons.access_alarm_rounded, size: 40),
+                    Icon(Icons.access_alarm_rounded, size: 30),
                   ],
                 ),
                 SizedBox(width: 8),
@@ -85,7 +92,7 @@ class Detail extends StatelessWidget {
                     Text(
                       AppLocalizations.of(context).translate('pr_scope'),
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -100,7 +107,7 @@ class Detail extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Icons.people, size: 40),
+                    Icon(Icons.people, size: 30),
                   ],
                 ),
                 SizedBox(width: 8),
@@ -110,7 +117,7 @@ class Detail extends StatelessWidget {
                     Text(
                       AppLocalizations.of(context).translate('num_s'),
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

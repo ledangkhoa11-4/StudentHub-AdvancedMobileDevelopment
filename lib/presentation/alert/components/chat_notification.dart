@@ -27,7 +27,7 @@ class _ChatNotificationState extends State<ChatNotification> {
           context,
           MaterialPageRoute(
             builder: (context) => MessageDetail(
-              projectId: widget.noti.message.projectId,
+              projectId: widget.noti.message!.projectId,
               userId: widget.noti.senderId,
               userName: widget.noti.sender.fullname ?? "Chat",
             ),
@@ -65,7 +65,7 @@ class _ChatNotificationState extends State<ChatNotification> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    Moment(widget.noti.message.createdAt)
+                    Moment(widget.noti.message!.createdAt)
                         .toLocal()
                         .formatDateShort(),
                     style: Theme.of(context)
@@ -82,7 +82,7 @@ class _ChatNotificationState extends State<ChatNotification> {
                   const SizedBox(
                     height: 5,
                   ),
-                  Text(widget.noti.message.content,
+                  Text(widget.noti.message!.content,
                       style: Theme.of(context).textTheme.labelSmall!),
                 ],
               ),

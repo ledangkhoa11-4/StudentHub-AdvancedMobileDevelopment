@@ -74,49 +74,74 @@ class _AuthWidgetState extends State<AuthWidget> {
 
         if (socket != null) {
           socket.on('NOTI_${_userStore.user!.id}', (data) {
+            print(data);
             try {
               final notification =
                   AppNotification.fromJson(data["notification"]);
-              _userStore.setReadChat(notification.message.projectId,
-                  notification.message.senderId);
-              if (notification.typeNotifyFlag ==
-                  TypeNotifyFlag.CHAT.value.toString()) {
-                NotificationService().showNotification(
-                    id: notification.id,
-                    title: 'New chat',
-                    body:
-                        '${notification.sender.fullname}: ${notification.message.content}',
-                    payLoad:
-                        "{'projectId':'${notification.message.projectId}', 'senderId':'${notification.message.senderId}', 'userName':'${notification.sender.fullname}'}");
+              if (notification.proposal != null) {
+                if (notification.typeNotifyFlag ==
+                    TypeNotifyFlag.SUBMITTED.value.toString()) {
+                  print("Khoa run");
+                  NotificationService().showNotification(
+                      id: notification.id,
+                      title: "Proposal submitted",
+                      body: '${notification.title}',
+                      payLoad:
+                          "{'projectId':'${notification.proposal!.projectId}'}");
+                }
+
+                if (notification.typeNotifyFlag ==
+                    TypeNotifyFlag.OFFER.value.toString()) {
+                  print("Khoa run");
+                  NotificationService().showNotification(
+                      id: notification.id,
+                      title: "New offer",
+                      body: '${notification.content}',
+                      payLoad: "{'projectId':'null'}");
+                }
               }
+              if (notification.message != null) {
+                _userStore.setReadChat(notification.message!.projectId,
+                    notification.message!.senderId);
+                if (notification.typeNotifyFlag ==
+                    TypeNotifyFlag.CHAT.value.toString()) {
+                  NotificationService().showNotification(
+                      id: notification.id,
+                      title: 'New chat',
+                      body:
+                          '${notification.sender.fullname}: ${notification.message!.content}',
+                      payLoad:
+                          "{'projectId':'${notification.message!.projectId}', 'senderId':'${notification.message!.senderId}', 'userName':'${notification.sender.fullname}'}");
+                }
 
-              if (notification.typeNotifyFlag ==
-                  TypeNotifyFlag.INTERVIEW.value.toString()) {
-                NotificationService().showNotification(
-                    id: notification.id,
-                    title: 'Interview scheduled',
-                    body:
-                        '${notification.sender.fullname}: ${notification.message.content}',
-                    payLoad:
-                        "{'projectId':'${notification.message.projectId}', 'senderId':'${notification.message.senderId}', 'userName':'${notification.sender.fullname}'}");
+                if (notification.typeNotifyFlag ==
+                    TypeNotifyFlag.INTERVIEW.value.toString()) {
+                  NotificationService().showNotification(
+                      id: notification.id,
+                      title: 'Interview scheduled',
+                      body:
+                          '${notification.sender.fullname}: ${notification.message!.content}',
+                      payLoad:
+                          "{'projectId':'${notification.message!.projectId}', 'senderId':'${notification.message!.senderId}', 'userName':'${notification.sender.fullname}'}");
 
-                if (notification.message.interview != null) {
-                  final scheduleTime = Moment(notification
-                      .message.interview!.startTime
-                      .subtract(const Duration(minutes: 10)));
-                  if (scheduleTime.isFuture) {
-                    print(
-                        "scheduled at ${DateTime.parse(scheduleTime.toIso8601String())} ");
-                    NotificationService().scheduleNotification(
-                        id: notification.id +
-                            notification.message.interview!.id,
-                        title: 'Interview coming up',
-                        body:
-                            'The interview for ${notification.message.interview!.title} is coming in 10 minutes',
-                        payLoad:
-                            "{'projectId':'${notification.message.projectId}', 'senderId':'${notification.message.senderId}', 'userName':'${notification.sender.fullname}'}",
-                        scheduledNotificationDateTime:
-                            DateTime.parse(scheduleTime.toIso8601String()));
+                  if (notification.message!.interview != null) {
+                    final scheduleTime = Moment(notification
+                        .message!.interview!.startTime
+                        .subtract(const Duration(minutes: 10)));
+                    if (scheduleTime.isFuture) {
+                      print(
+                          "scheduled at ${DateTime.parse(scheduleTime.toIso8601String())} ");
+                      NotificationService().scheduleNotification(
+                          id: notification.id +
+                              notification.message!.interview!.id,
+                          title: 'Interview coming up',
+                          body:
+                              'The interview for ${notification.message!.interview!.title} is coming in 10 minutes',
+                          payLoad:
+                              "{'projectId':'${notification.message!.projectId}', 'senderId':'${notification.message!.senderId}', 'userName':'${notification.sender.fullname}'}",
+                          scheduledNotificationDateTime:
+                              DateTime.parse(scheduleTime.toIso8601String()));
+                    }
                   }
                 }
               }

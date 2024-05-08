@@ -963,8 +963,8 @@ abstract class _UserStore with Store {
       final newChatList = [...this.currentChat];
       var isCreate = true;
       for (final (index, item) in newChatList.indexed) {
-        if (item.interview != null && notification.message.interview != null) {
-          if (item.interview!.id == notification.message.interview!.id) {
+        if (item.interview != null && notification.message!.interview != null) {
+          if (item.interview!.id == notification.message!.interview!.id) {
             final chat = newChatList[index];
             isCreate = false;
             newChatList[index] = ChatEntity(
@@ -974,16 +974,16 @@ abstract class _UserStore with Store {
                 sender: chat.sender,
                 receiver: chat.receiver,
                 project: chat.project,
-                interview: notification.message.interview);
+                interview: notification.message!.interview);
           }
         }
       }
       if (isCreate) {
         newChatList.add(ChatEntity(
-            id: notification.messageId,
+            id: notification.messageId!,
             createdAt: notification.createdAt,
-            content: notification.message.content,
-            interview: notification.message.interview,
+            content: notification.message!.content,
+            interview: notification.message!.interview,
             sender: ChatUser(
                 id: notification.sender.id!,
                 fullname: notification.sender.fullname!),
@@ -994,7 +994,7 @@ abstract class _UserStore with Store {
       this.currentChat = newChatList;
     } catch (e) {
       print(e);
-      // this.getCurrentChat(loading: false);
+      this.getCurrentChat(loading: false);
     }
   }
 

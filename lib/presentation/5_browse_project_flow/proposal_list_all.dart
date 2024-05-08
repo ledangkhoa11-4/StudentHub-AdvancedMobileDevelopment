@@ -86,6 +86,7 @@ class _ProjectListState extends State<ProposalListAll> {
                                   : true
                               : true,
                           child: ExpansionTile(
+                            initiallyExpanded: true,
                             leading: Icon(BootstrapIcons.person_workspace),
                             collapsedShape: RoundedRectangleBorder(
                               side: BorderSide.none,
