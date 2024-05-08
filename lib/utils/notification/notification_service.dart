@@ -42,24 +42,26 @@ class NotificationService {
             jsonDecode(notificationResponse.payload!.replaceAll("\'", "\""));
         print(data);
         try {
-          final int? projectId = int.tryParse(data["projectId"] != null ? data["projectId"] : null);
+          final int? projectId = int.tryParse(
+              data["projectId"] != null ? data["projectId"] : null);
           final int? senderId =
               int.tryParse(data["senderId"] != null ? data["senderId"] : "");
           final String? userName =
               data["userName"] != null ? data["userName"] : null;
 
           final UserStore _userStore = getIt<UserStore>();
-          if (senderId != null &&
-              userName != null &&
-              projectId != null &&
-              (_userStore.currentChatProjectId != projectId ||
-                  _userStore.currentChatUserId != senderId)) {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) {
-                return MessageDetail(
-                    projectId: projectId, userId: senderId, userName: userName);
-              }),
-            );
+          if (senderId != null && userName != null && projectId != null) {
+            if (_userStore.currentChatProjectId != projectId ||
+                _userStore.currentChatUserId != senderId) {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) {
+                  return MessageDetail(
+                      projectId: projectId,
+                      userId: senderId,
+                      userName: userName);
+                }),
+              );
+            }
           } else {
             if (projectId != null) {
               _projectStore.getProjectById(projectId).then((value) {
