@@ -92,12 +92,13 @@ class _MessageScreenState extends State<MessageScreen> {
 
                   final filteredChats = _userStore.allChatList != null
                       ? _userStore.allChatList!
-                          .where((chat) =>
-                              chat.sender.fullname.toLowerCase().contains(
-                                  (_searchController.text ?? '')
-                                      .toLowerCase()) ||
-                              chat.receiver.fullname.toLowerCase().contains(
-                                  (_searchController.text ?? '').toLowerCase()))
+                          .where((chat) => chat.sender.fullname
+                                  .toLowerCase()
+                                  .contains((_searchController.text ?? '')
+                                      .toLowerCase())
+                              // || chat.receiver.fullname.toLowerCase().contains(
+                              //     (_searchController.text ?? '').toLowerCase())
+                              )
                           .toList()
                       : <ChatEntity>[];
 
