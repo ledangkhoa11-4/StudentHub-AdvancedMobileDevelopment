@@ -92,13 +92,12 @@ class _MessageScreenState extends State<MessageScreen> {
 
                   final filteredChats = _userStore.allChatList != null
                       ? _userStore.allChatList!
-                          .where((chat) => chat.sender.fullname
-                                  .toLowerCase()
-                                  .contains((_searchController.text ?? '')
-                                      .toLowerCase())
-                              // || chat.receiver.fullname.toLowerCase().contains(
-                              //     (_searchController.text ?? '').toLowerCase())
-                              )
+                          .where((chat) =>
+                              // chat.sender.fullname.toLowerCase().contains(
+                              //     (_searchController.text ?? '')
+                              //         .toLowerCase()) ||
+                              chat.receiver.fullname.toLowerCase().contains(
+                                  (_searchController.text ?? '').toLowerCase()))
                           .toList()
                       : <ChatEntity>[];
 
@@ -120,6 +119,7 @@ class _MessageScreenState extends State<MessageScreen> {
                               .firstWhere((chat) => chat.project?.id == id)
                               .project;
                           return ExpansionTile(
+                            initiallyExpanded: true,
                             leading: Icon(BootstrapIcons.kanban),
                             collapsedShape: RoundedRectangleBorder(
                               side: BorderSide.none,
@@ -176,35 +176,100 @@ class _MessageScreenState extends State<MessageScreen> {
                         }).toList(),
                       ],
                     );
+                  } else {
+                    // PHONG ----------------------------------------------------------------------
+                    // final currentProfile =
+                    //     getIt<SharedPreferenceHelper>().currentProfile;
+                    // return ListView.builder(
+                    //   itemCount: filteredChats.length,
+                    //   shrinkWrap: true,
+                    //   physics: NeverScrollableScrollPhysics(),
+                    //   itemBuilder: (context, index) {
+                    //     final chat = filteredChats[index];
+                    //     return ConversationList(
+                    //       name: chat.sender.id == _userStore.user!.id
+                    //           ? chat.receiver.fullname
+                    //           : chat.sender.fullname,
+                    //       messageText: chat.sender.id == _userStore.user!.id
+                    //           ? "${AppLocalizations.of(context).translate('you')}: ${chat.content}"
+                    //           : chat.content,
+                    //       imageUrl: currentProfile == UserRole.COMPANY.value
+                    //           ? "https://i.imgur.com/ugcoGNH.png"
+                    //           : "https://i.imgur.com/SR6SaqF.png",
+                    //       time: "${Moment(chat.createdAt).fromNow()}",
+                    //       isMessageRead: false,
+                    //       projectId: chat.project!.id!,
+                    //       userId: chat.sender.id == _userStore.user!.id
+                    //           ? chat.receiver.id
+                    //           : chat.sender.id,
+                    //     );
+                    //   },
+                    // );
+                    return Column(
+                      children: [
+                        ...groupProject.map((id) {
+                          final project = filteredChats
+                              .firstWhere((chat) => chat.project?.id == id)
+                              .project;
+                          return ExpansionTile(
+                            initiallyExpanded: true,
+                            leading: Icon(BootstrapIcons.kanban),
+                            collapsedShape: RoundedRectangleBorder(
+                              side: BorderSide.none,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide.none,
+                            ),
+                            title: Text(
+                              "${AppLocalizations.of(context).translate('project')} ${project != null ? project.title : "N/A"}",
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                            children: [
+                              Observer(builder: (context) {
+                                final currentProfile =
+                                    getIt<SharedPreferenceHelper>()
+                                        .currentProfile;
+                                final chatsInProject = filteredChats
+                                    .where((chat) => chat.project?.id == id)
+                                    .toList();
+                                return ListView.builder(
+                                  itemCount: chatsInProject.length,
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    final chat = chatsInProject[index];
+                                    return ConversationList(
+                                      name:
+                                          chat.sender.id == _userStore.user!.id
+                                              ? chat.receiver.fullname
+                                              : chat.sender.fullname,
+                                      messageText: chat.sender.id ==
+                                              _userStore.user!.id
+                                          ? "${AppLocalizations.of(context).translate('you')}: ${chat.content}"
+                                          : chat.content,
+                                      imageUrl: currentProfile ==
+                                              UserRole.COMPANY.value
+                                          ? "https://i.imgur.com/ugcoGNH.png"
+                                          : "https://i.imgur.com/SR6SaqF.png",
+                                      time:
+                                          "${Moment(chat.createdAt).fromNow()}",
+                                      isMessageRead: false,
+                                      projectId: chat.project!.id!,
+                                      userId:
+                                          chat.sender.id == _userStore.user!.id
+                                              ? chat.receiver.id
+                                              : chat.sender.id,
+                                    );
+                                  },
+                                );
+                              })
+                            ],
+                          );
+                        }).toList(),
+                      ],
+                    );
                   }
-                  // PHONG ----------------------------------------------------------------------
-                  final currentProfile =
-                      getIt<SharedPreferenceHelper>().currentProfile;
-                  return ListView.builder(
-                    itemCount: filteredChats.length,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final chat = filteredChats[index];
-                      return ConversationList(
-                        name: chat.sender.id == _userStore.user!.id
-                            ? chat.receiver.fullname
-                            : chat.sender.fullname,
-                        messageText: chat.sender.id == _userStore.user!.id
-                            ? "${AppLocalizations.of(context).translate('you')}: ${chat.content}"
-                            : chat.content,
-                        imageUrl: currentProfile == UserRole.COMPANY.value
-                            ? "https://i.imgur.com/ugcoGNH.png"
-                            : "https://i.imgur.com/SR6SaqF.png",
-                        time: "${Moment(chat.createdAt).fromNow()}",
-                        isMessageRead: false,
-                        projectId: chat.project!.id!,
-                        userId: chat.sender.id == _userStore.user!.id
-                            ? chat.receiver.id
-                            : chat.sender.id,
-                      );
-                    },
-                  );
                   // ---------------------------------------------------------------------------------
                 }),
               ],
