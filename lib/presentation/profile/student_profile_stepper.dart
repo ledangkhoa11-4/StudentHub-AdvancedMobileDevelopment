@@ -23,7 +23,7 @@ class _StudentFormStepperState extends State<StudentFormStepper> {
           finishedLineColor: Theme.of(context).colorScheme.primary,
         ),
         activeStepTextColor: Colors.black87,
-        finishedStepTextColor: Colors.black87,
+        finishedStepTextColor: Colors.grey.shade700,
         internalPadding: 0,
         showLoadingAnimation: false,
         stepRadius: 8,

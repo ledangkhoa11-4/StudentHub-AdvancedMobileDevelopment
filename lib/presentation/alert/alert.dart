@@ -38,86 +38,92 @@ class _AlertScreenState extends State<AlertScreen> {
           UserNavigationBar.buildNavigationBar(context, setState: setState),
       body: Stack(
         children: [
-          SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Observer(builder: (context) {
-              final List<AppNotification> reverseNotification =
-                  _userStore.listNotifications != null
-                      ? _userStore.listNotifications!.reversed.toList()
-                      : [];
-              final List<int> alreadyChat = [];
-              final List<int> alreadyInvite = [];
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  ...reverseNotification.where((e) {
-                    if (e.typeNotifyFlag ==
-                            TypeNotifyFlag.CHAT.value.toString() &&
-                        alreadyChat.contains(e.senderId)) {
+          RefreshIndicator(
+            onRefresh: () {
+              return _userStore.getAllNotifications(loading: false);
+            },
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Observer(builder: (context) {
+                final List<AppNotification> reverseNotification =
+                    _userStore.listNotifications != null
+                        ? _userStore.listNotifications!.reversed.toList()
+                        : [];
+                final List<int> alreadyChat = [];
+                final List<int> alreadyInvite = [];
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    ...reverseNotification.where((e) {
+                      if (e.typeNotifyFlag ==
+                              TypeNotifyFlag.CHAT.value.toString() &&
+                          alreadyChat.contains(e.senderId)) {
+                        return false;
+                      }
+                      if (e.typeNotifyFlag ==
+                          TypeNotifyFlag.CHAT.value.toString()) {
+                        alreadyChat.add(e.senderId);
+                        return true;
+                      }
+            
+                      if (e.typeNotifyFlag ==
+                              TypeNotifyFlag.INTERVIEW.value.toString() &&
+                          alreadyInvite.contains(e.senderId)) {
+                        return false;
+                      }
+                      if (e.typeNotifyFlag ==
+                          TypeNotifyFlag.INTERVIEW.value.toString()) {
+                        alreadyInvite.add(e.senderId);
+                        return true;
+                      }
+            
+                      if (e.typeNotifyFlag ==
+                          TypeNotifyFlag.SUBMITTED.value.toString()) {
+                        return true;
+                      }
+            
+                      if (e.typeNotifyFlag ==
+                          TypeNotifyFlag.OFFER.value.toString()) {
+                        return true;
+                      }
+            
                       return false;
-                    }
-                    if (e.typeNotifyFlag ==
-                        TypeNotifyFlag.CHAT.value.toString()) {
-                      alreadyChat.add(e.senderId);
-                      return true;
-                    }
-
-                    if (e.typeNotifyFlag ==
-                            TypeNotifyFlag.INTERVIEW.value.toString() &&
-                        alreadyInvite.contains(e.senderId)) {
-                      return false;
-                    }
-                    if (e.typeNotifyFlag ==
-                        TypeNotifyFlag.INTERVIEW.value.toString()) {
-                      alreadyInvite.add(e.senderId);
-                      return true;
-                    }
-
-                    if (e.typeNotifyFlag ==
-                        TypeNotifyFlag.SUBMITTED.value.toString()) {
-                      return true;
-                    }
-
-                    if (e.typeNotifyFlag ==
-                        TypeNotifyFlag.OFFER.value.toString()) {
-                      return true;
-                    }
-
-                    return false;
-                  }).map((e) {
-                    if (e.typeNotifyFlag ==
-                        TypeNotifyFlag.CHAT.value.toString()) {
-                      return ChatNotification(
-                        noti: e,
-                      );
-                    } else if (e.typeNotifyFlag ==
-                        TypeNotifyFlag.INTERVIEW.value.toString()) {
-                      return InviteNotification(
-                        noti: e,
-                      );
-                    } else if (e.typeNotifyFlag ==
-                        TypeNotifyFlag.SUBMITTED.value.toString()) {
-                      return SubmittedNotification(
-                        noti: e,
-                      );
-                    } else if (e.typeNotifyFlag ==
-                        TypeNotifyFlag.OFFER.value.toString()) {
-                      return OfferNotification(
-                        noti: e,
-                      );
-                    } else {
-                      return SizedBox.shrink();
-                    }
-                  }).toList(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                ],
-              );
-            }),
+                    }).map((e) {
+                      if (e.typeNotifyFlag ==
+                          TypeNotifyFlag.CHAT.value.toString()) {
+                        return ChatNotification(
+                          noti: e,
+                        );
+                      } else if (e.typeNotifyFlag ==
+                          TypeNotifyFlag.INTERVIEW.value.toString()) {
+                        return InviteNotification(
+                          noti: e,
+                        );
+                      } else if (e.typeNotifyFlag ==
+                          TypeNotifyFlag.SUBMITTED.value.toString()) {
+                        return SubmittedNotification(
+                          noti: e,
+                        );
+                      } else if (e.typeNotifyFlag ==
+                          TypeNotifyFlag.OFFER.value.toString()) {
+                        return OfferNotification(
+                          noti: e,
+                        );
+                      } else {
+                        return SizedBox.shrink();
+                      }
+                    }).toList(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                );
+              }),
+            ),
           ),
           Observer(
             builder: (context) {

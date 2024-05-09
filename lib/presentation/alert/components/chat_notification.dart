@@ -67,7 +67,7 @@ class _ChatNotificationState extends State<ChatNotification> {
                   Text(
                     Moment(widget.noti.message!.createdAt)
                         .toLocal()
-                        .formatDateShort(),
+                        .formatDateTimeShort(),
                     style: Theme.of(context)
                         .textTheme
                         .subtitle1!

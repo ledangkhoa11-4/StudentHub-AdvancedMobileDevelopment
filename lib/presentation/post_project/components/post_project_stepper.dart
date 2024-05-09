@@ -29,7 +29,7 @@ class _PostProjectStepperState extends State<PostProjectStepper> {
       activeStepTextColor: _themeStore.darkMode
           ? Theme.of(context).colorScheme.primary
           : Colors.black87,
-      finishedStepTextColor: Colors.black87,
+      finishedStepTextColor: Colors.grey.shade700,
       internalPadding: 0,
       showLoadingAnimation: false,
       stepRadius: 8,

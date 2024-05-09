@@ -54,7 +54,7 @@ class _InviteNotificationState extends State<InviteNotification> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  Moment(widget.noti.createdAt).toLocal().formatDateShort(),
+                  Moment(widget.noti.createdAt).toLocal().formatDateTimeShort(),
                   style: Theme.of(context)
                       .textTheme
                       .subtitle1!
