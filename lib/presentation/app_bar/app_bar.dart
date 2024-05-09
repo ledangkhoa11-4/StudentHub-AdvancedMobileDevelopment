@@ -2,6 +2,7 @@ import 'package:boilerplate/di/service_locator.dart';
 import 'package:boilerplate/presentation/app_bar/switch_account_screen.dart';
 import 'package:boilerplate/presentation/login/store/login_store.dart';
 import 'package:boilerplate/presentation/profile/swicth_account.dart';
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 class UserAppBar {
@@ -46,7 +47,7 @@ class UserAppBar {
         ));
       },
       icon: Icon(
-        Icons.account_circle_rounded,
+        BootstrapIcons.person_circle,
       ),
     );
   }
