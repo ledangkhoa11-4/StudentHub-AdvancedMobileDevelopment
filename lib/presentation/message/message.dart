@@ -80,15 +80,10 @@ class _MessageScreenState extends State<MessageScreen> {
                 Observer(builder: (context) {
                   final Set<int> groupProject = _userStore.allChatList != null
                       ? _userStore.allChatList!
-                          .where((chat) =>
-                              chat.sender.fullname.toLowerCase().contains(
-                                  (_searchController.text ?? '')
-                                      .toLowerCase()) ||
-                              chat.receiver.fullname.toLowerCase().contains(
-                                  (_searchController.text ?? '').toLowerCase()))
+                          .where((chat) => chat.project != null)
                           .map((chat) => chat.project!.id!)
                           .toSet()
-                      : Set<int>();
+                      : Set.of([]);
 
                   final filteredChats = _userStore.allChatList != null
                       ? _userStore.allChatList!
