@@ -48,7 +48,7 @@ class _AlertScreenState extends State<AlertScreen> {
               child: Observer(builder: (context) {
                 final List<AppNotification> reverseNotification =
                     _userStore.listNotifications != null
-                        ? _userStore.listNotifications!.reversed.toList()
+                        ? _userStore.listNotifications!.toList()
                         : [];
                 final List<int> alreadyChat = [];
                 final List<int> alreadyInvite = [];
