@@ -12,6 +12,12 @@ Apply proposal flow, chat flow, schedule interview flow - [Youtube Link](https:/
 **Phasing 4:**
 Notification flow - [Youtube Link](https://youtu.be/VaNdtJsSfi4)
 
+**Deploy web:**
+Website version - [Vercel Link](https://student-hub-web-vert.vercel.app/)
+
+**Publish Google play store:**
+Google Play store - [CH Play](https://play.google.com/store/apps/details?id=com.iotecksolutions.advancedmobilestudenthub)
+
 **Step 1:**
 
 Go to project root and execute the following command in console to get the required dependencies: 
