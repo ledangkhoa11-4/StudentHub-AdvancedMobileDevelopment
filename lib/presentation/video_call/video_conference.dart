@@ -31,9 +31,10 @@ class VideoConferencePageState extends State<VideoConferencePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: ZegoUIKitPrebuiltVideoConference(
-        appID: 1913282325,
+        appID: 1945694952, // 1913282325,
         appSign:
-            "8f09796184ed6a1c74005b54f19cacde780cd4dbde7f0a763f6ef528e7702699",
+            "288448230ee26f3f7c0f986dc1cbec9d62bd01f5b58066f883d7d3012c11c069",
+        // "8f09796184ed6a1c74005b54f19cacde780cd4dbde7f0a763f6ef528e7702699",
         conferenceID: widget.conferenceID,
         userID: "${_userStore.user!.id}",
         userName: "${_userStore.user!.fullname}",
