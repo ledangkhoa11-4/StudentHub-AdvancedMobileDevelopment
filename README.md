@@ -18,6 +18,9 @@ Website version - [Vercel Link](https://student-hub-web-vert.vercel.app/)
 **Publish Google play store:**
 Google Play store - [CH Play](https://play.google.com/store/apps/details?id=com.iotecksolutions.advancedmobilestudenthub)
 
+**Report document:**
+Google Drive - https://drive.google.com/drive/folders/1qdGUZwVtjhQ-lnwhwet39lh-8KYiBnA3?fbclid=IwZXh0bgNhZW0CMTAAAR05PriNyjn09jNWV31BBKKQend4XNllsiiEin9FzXWnq0Rrzw8uFx29J5o_aem_AQdoi_TksgGetRCgP6X_YIP30rGJfUBDUuMgAN5zlxjhDLwdmgSa8vVcsEwYEN4tCidr8BR__41gxy_RRAlR_cXu
+
 **Step 1:**
 
 Go to project root and execute the following command in console to get the required dependencies: 
